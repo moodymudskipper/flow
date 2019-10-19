@@ -1,14 +1,39 @@
-fun_if_no_else <- function(x, y){
-  x <- x * 2
-  y <- y * 3
-  if(y > x){
-    print("y is big!")
+fun_if <- function(x){
+  ## com1
+  x <- 1
+  ## com2
+  x <- 2
+  x <- 2
+  if(x == 3) {
+    ## com3
+    x <- 3
   }
-  prod <- x * y
-  prod
+  x <- "foo"
+  ## com4
+  x <- 4
 }
 
-funflow(fun_if_no_else)
+view_flow(fun_if)
+
+
+fun_if_else <- function(x){
+  ## com1
+  x <- 1
+  ## com2
+  x <- 2
+  x <- 2
+  if(x == 3) {
+    ## com3
+    x <- 3
+  } else {
+    x <- "bar"
+  }
+  x <- "foo"
+  ## com4
+  x <- 4
+}
+
+funflow(fun_if_else)
 
 fun_if_else <- function(x, y){
   x <- x * 2
@@ -44,7 +69,7 @@ funflow(area)
 fun_for <- function(x){
   x <- paste0("a",x,"a")
   for(elt in x) {
-    print("--------------------")
+    print("--------------")
     print(paste("x contains",elt))
   }
   x
@@ -98,4 +123,31 @@ for(i in seq_len(nrow(nodes))){
 
 
 mermaid(mermaid_str)
+
+
+fun <- function(foo){
+  # some code
+  for(elt in foo){
+    bar <- elt
+    #if(browsed()) print(bar)
+    print(eval.parent(bquote(isdebugged(.(match.call()[[1]])))))
+  }
+  # some code
+}
+
+debugged <- function(n = 0){
+  fun_sym <- eval.parent(quote(match.call()), n +1)[[1]]
+  eval.parent(
+    substitute(isdebugged(FUN), list(FUN = fun_sym)),
+    n = n + 2)
+}
+
+fun <- function(){
+  # hello
+    debugged()
+}
+
+fun()
+debug(fun)
+fun()
 
