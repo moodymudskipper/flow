@@ -20,12 +20,12 @@ new_edge <- function(to, from = to-1L, edge_label = "", arrow = "->"){
 }
 
 add_node <- function(data, node){
-  data$node <- rbind(data$node, node)
+  data$nodes <- rbind(data$nodes, node)
   data
 }
 
 add_edge <- function(data, edge){
-  data$edge <- rbind(data$edge, edge)
+  data$edges <- rbind(data$edges, edge)
   data
 }
 
