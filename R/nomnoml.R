@@ -69,7 +69,7 @@ build_nomnoml_code <- function(
     "%s %s %s %s", node_data$box[from], edge_label, arrow, node_data$box[to]))
 
   # create the header
-  header <- trimws(sprintf(
+  header <- sprintf(
     "
     #arrowSize: %s
     #bendSize: %s
@@ -92,12 +92,12 @@ build_nomnoml_code <- function(
     #ranker: %s",
     arrowSize, bendSize, direction, gutter, edgeMargin, edges, fill, fillArrows,
     font, fontSize, leading, lineWidth, padding, spacing, stroke, title, zoom,
-    acyclicer, ranker))
-
+    acyclicer, ranker)
+  header <- gsub("\\n\\s+","\n", header)
 
   nomnoml_code <- paste(edge_data$nomnoml_code, collapse="\n")
   nomnoml_code <- paste0(header,"\n", nomnoml_code)
-  cat(nomnoml_code)
+  # cat(nomnoml_code)
   nomnoml_code
 }
 
