@@ -24,8 +24,8 @@ add_node <- function(data, node){
   data
 }
 
-add_edge <- function(data, node){
-  data$edge <- rbind(data$edge, node)
+add_edge <- function(data, edge){
+  data$edge <- rbind(data$edge, edge)
   data
 }
 
