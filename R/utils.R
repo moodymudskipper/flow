@@ -5,6 +5,9 @@ rbind_data <- function(x, y){
   )
 }
 
+get_last_id <- function(data) {
+  data$nodes$id[nrow(data)]
+}
 
 new_node <- function(id, block_type = "standard", code = substitute(), code_str = ""){
   node <- data.frame(id, block_type, code_str, stringsAsFactors = FALSE)
@@ -39,4 +42,36 @@ deparse2 <- function(x){
   x <- sub("^    ","",x)
   #}
   paste(x, collapse= "\n")
+}
+
+# controlflow ops with the addition of `#()` used to spot special comments
+control_flow_ops <- c("if", "for", "while", "repeat", "#")
+
+is_cfc_call <- function(x){
+  is.call(x) && as.character(x[[1]]) %in% control_flow_ops
+}
+
+`%call_in%` <- function(calls, constructs){
+  sapply(as.list(calls), function(x)
+    is.call(x) && as.character(x[[1]]) %in% constructs)
+}
+
+
+block_type <- function(x) {
+  attr(blocks[[i]], "block_type")
+}
+
+new_data <- function(){
+  data <- list(
+    nodes = data.frame(
+      id=integer(0),
+      block_type =character(0),
+      stringsAsFactors = FALSE),
+    edges = data.frame(
+      from =integer(0),
+      to = integer(0),
+      edge_label = character(0))
+  )
+  data$nodes$code <- list()
+  data
 }
