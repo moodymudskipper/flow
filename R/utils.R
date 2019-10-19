@@ -56,11 +56,6 @@ is_cfc_call <- function(x){
     is.call(x) && as.character(x[[1]]) %in% constructs)
 }
 
-
-block_type <- function(x) {
-  attr(blocks[[i]], "block_type")
-}
-
 new_data <- function(){
   data <- list(
     nodes = data.frame(
