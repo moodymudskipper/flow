@@ -1,4 +1,4 @@
-rbind_data <- function(x, y){
+add_data <- function(x, y){
   list(
     nodes = rbind(x$nodes, y$nodes),
     edges = rbind(x$edges, y$edges)
@@ -69,4 +69,12 @@ new_data <- function(){
   )
   data$nodes$code <- list()
   data
+}
+
+
+debugged <- function(n = 0){
+  fun_sym <- eval.parent(quote(match.call()), n +1)[[1]]
+  eval.parent(
+    substitute(isdebugged(FUN), list(FUN = fun_sym)),
+    n = n + 2)
 }

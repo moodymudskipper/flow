@@ -103,51 +103,38 @@ fun_repeat <- function(x){
 funflow(fun_repeat)
 
 
-mermaid_str <- "graph TB"
-
-for(i in seq_len(nrow(nodes))){
-  id        <- nodes$id[[i]]
-  construct <- nodes$construct[[i]]
-  label     <- nodes$label[[i]]
-  mermaid_str <- paste0(
-    mermaid_str,"\n",
-    switch(construct,
-           header = sprintf("%s(%s)", id, label),
-           none = sprintf("%s[%s]", id, label),
-           'if' = sprintf("%s{%s}", id, label),
-           'for' = sprintf("%s{%s}", id, label),
-           'while' = sprintf("%s{%s}", id, label),
-           'repeat' = sprintf("%s{%s}", id, label))
-  )
-}
 
 
-mermaid(mermaid_str)
 
 
-fun <- function(foo){
-  # some code
-  for(elt in foo){
-    bar <- elt
-    #if(browsed()) print(bar)
-    print(eval.parent(bquote(isdebugged(.(match.call()[[1]])))))
+# modify function so that control flow constructs use `{...}` AND keep comments in srcref
+
+# I would like to modify an input function, so that the expressions always calls
+# `` `{`()``, and doing so, keep the comments at the right place. Here is an example :
+
+input_fun <- function(){
+
+  if(TRUE)
+    foo
+  else
+    ## bar_com1
+    ## bar_com2
+    bar({
+      x({y})
+    }) %in% z
+
+  ## if
+  if(
+    FALSE) {
+    this
+    ## baz_com
+    baz
+    that
   }
-  # some code
-}
 
-debugged <- function(n = 0){
-  fun_sym <- eval.parent(quote(match.call()), n +1)[[1]]
-  eval.parent(
-    substitute(isdebugged(FUN), list(FUN = fun_sym)),
-    n = n + 2)
+  repeat
+    while(condition)
+      ## qux_com
+      qux
 }
-
-fun <- function(){
-  # hello
-    debugged()
-}
-
-fun()
-debug(fun)
-fun()
 

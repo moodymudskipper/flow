@@ -9,7 +9,7 @@ view_flow <- function(f, prefix = NULL, ...){
   # data$nodes$code <- NULL # so printing doesn't bug
   # return(data)
   # join to header
-  data <- rbind_data(list(nodes = nodes, edges = edges), data)
+  data <- add_data(list(nodes = nodes, edges = edges), data)
   # temp, for display
   data$nodes$code <- sapply(data$nodes$code, function(x) {
     paste(unlist(sapply(x, deparse)), collapse="\n")
