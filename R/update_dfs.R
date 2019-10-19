@@ -35,7 +35,7 @@ update_data_with_if_block <- function(data, block, id){
   data <- rbind_data(data, list(nodes = node_if, edges = edge_if_previous))
 
   # build data from "yes" expression
-  yes_data <-  build_data(block[[c(1 ,3)]], id)
+  yes_data <-  build_data(block[[c(1 ,3)]], id + 1)
   yes_data$edges$edge_label[1] <- "y"
 
   data <- rbind_data(data, yes_data)
@@ -44,7 +44,7 @@ update_data_with_if_block <- function(data, block, id){
 
   if(length(block[[1]]) == 4){
     # build data from "no" expression
-    no_data <-  build_data(block[[c(1 ,4)]], id_last_yes)
+    no_data <-  build_data(block[[c(1 ,4)]], id_last_yes + 1)
 
     # first edge needs to be corrected so it comes from if node
     no_data$edges$from[1] <- id
@@ -94,7 +94,7 @@ update_data_with_for_block <- function(data, block, id){
   data <- rbind_data(data, new_data)
 
   # build data from for's "body"
-  for_data <-  build_data(block[[c(1 ,4)]], id)
+  for_data <-  build_data(block[[c(1 ,4)]], id + 1)
   data <- rbind_data(data, for_data)
 
   id_end <- tail(data$nodes$id,1) + 1
@@ -126,7 +126,7 @@ update_data_with_while_block <- function(data, block, id){
   data <- rbind_data(data, new_data)
 
   # build data from while's "body"
-  for_data <-  build_data(block[[c(1 ,3)]], id)
+  for_data <-  build_data(block[[c(1 ,3)]], id + 1)
   data <- rbind_data(data, for_data)
 
   id_end <- tail(data$nodes$id,1) + 1
@@ -159,7 +159,7 @@ update_data_with_repeat_block <- function(data, block, id){
   data <- rbind_data(data, new_data)
 
   # build data from while's "body"
-  for_data <-  build_data(block[[c(1 ,2)]], id)
+  for_data <-  build_data(block[[c(1 ,2)]], id + 1)
   data <- rbind_data(data, for_data)
 
   id_end <- tail(data$nodes$id,1) + 1

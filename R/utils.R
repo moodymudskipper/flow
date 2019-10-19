@@ -6,7 +6,7 @@ rbind_data <- function(x, y){
 }
 
 get_last_id <- function(data) {
-  data$nodes$id[nrow(data)]
+  data$nodes$id[nrow(data$nodes)]
 }
 
 new_node <- function(id, block_type = "standard", code = substitute(), code_str = ""){

@@ -5,8 +5,8 @@ view_flow <- function(f, prefix = NULL, ...){
   # put comments in `#`() calls
   f <- add_comment_calls(f, prefix)
   # build data from the function body
-  data <- build_data(body(f), 1)
-  #data$nodes$code <- NULL # so printing doesn't bug
+  data <- build_data(body(f), 2)
+  # data$nodes$code <- NULL # so printing doesn't bug
   # return(data)
   # join to header
   data <- rbind_data(list(nodes = nodes, edges = edges), data)

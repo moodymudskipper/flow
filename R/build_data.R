@@ -1,3 +1,4 @@
+# id is the current max id
 build_data <-  function(fun_body, id){
   #browser()
   blocks <- build_blocks(fun_body)
@@ -9,7 +10,8 @@ build_data <-  function(fun_body, id){
   for (i in seq_along(blocks)){
     # data might have been just initiated, in which case we use id arg
     # else use max id from node df
-    id <- max(data$nodes$id,id) +1
+    if(nrow(data$nodes))
+      id <-get_last_id(data) + 1
     block <- blocks[[i]]
     block_type <- attr(block, "block_type")
     if (is.null(block_type)){
@@ -28,3 +30,19 @@ build_data <-  function(fun_body, id){
   }
   data
 }
+
+
+
+
+
+# add_comment_calls <- function(fun, prefix = "##"){
+#   if(is.null(prefix)) return(fun)
+#   fun <- deparse(fun, control = "useSource")
+#   pattern <- sprintf("\\s*(%s.*)", prefix)
+#   fun <- gsub(pattern,"`#`('\\1')", fun)
+#   fun <- paste(fun, collapse = "\n")
+#   eval(str2lang(fun))
+# }
+
+
+
