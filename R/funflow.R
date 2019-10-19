@@ -8,7 +8,7 @@ view_flow <- function(f, prefix = NULL, ...){
   # build data from the function body
   data <- build_data(body(f),1)
   # join to header
-  data <- rbind_dfs(list(nodes = nodes, edges = edges), data)
+  data <- rbind_data(list(nodes = nodes, edges = edges), data)
   # temp, for display
   data$nodes$code <- sapply(data$nodes$code, function(x) {
     paste(unlist(sapply(x, deparse)), collapse="\n")
@@ -42,22 +42,8 @@ build_blocks <- function(expr){
   blocks
 }
 
-# new_nodes <- function() {
-#   data.frame(
-#     id=integer(0),
-#     label = character(0),
-#     block_type =character(0),
-#     stringsAsFactors = FALSE)
-# }
-#
-# new_edges <- function(){
-#   data.frame(
-#     from =character(0),
-#     to = character(0))
-# }
-
-new_dfs <- function(){
-  dfs <- list(
+new_data <- function(){
+  data <- list(
     nodes = data.frame(
       id=integer(0),
       block_type =character(0),
@@ -67,8 +53,8 @@ new_dfs <- function(){
       to = integer(0),
       edge_label = character(0))
   )
-  dfs$nodes$code <- list()
-  dfs
+  data$nodes$code <- list()
+  data
 }
 
 build_data <-  function(fun_body, id){
@@ -77,29 +63,29 @@ build_data <-  function(fun_body, id){
 
   # nodes <- new_nodes()
   # edges <- new_edges()
-  dfs <- new_dfs()
+  data <- new_data()
 
   for (i in seq_along(blocks)){
-    # dfs might have been just initiated, in which case we use id arg
+    # data might have been just initiated, in which case we use id arg
     # else use max id from node df
-    id <- max(dfs$nodes$id,id) +1
+    id <- max(data$nodes$id,id) +1
     block <- blocks[[i]]
     block_type <- attr(block, "block_type")
     if (is.null(block_type)){
-      dfs <- update_dfs_with_standard_block(dfs, block, id)
+      data <- update_data_with_standard_block(data, block, id)
     } else if (block_type == "commented"){
-      dfs <- update_dfs_with_commented_block(dfs, block, id)
+      data <- update_data_with_commented_block(data, block, id)
     } else if (block_type == "if"){
-      dfs <- update_dfs_with_if_block(dfs, block, id)
+      data <- update_data_with_if_block(data, block, id)
     } else if (block_type == "for"){
-      dfs <- update_dfs_with_for_block(dfs, block, id)
+      data <- update_data_with_for_block(data, block, id)
     } else if (block_type == "while"){
-      dfs <- update_dfs_with_while_block(dfs, block, id)
+      data <- update_data_with_while_block(data, block, id)
     } else if (block_type == "repeat"){
-      dfs <- update_dfs_with_repeat_block(dfs, block, id)
+      data <- update_data_with_repeat_block(data, block, id)
     }
   }
-  dfs
+  data
 }
 
 block_type <- function(x) {

@@ -1,4 +1,4 @@
-rbind_dfs <- function(x, y){
+rbind_data <- function(x, y){
   list(
     nodes = rbind(x$nodes, y$nodes),
     edges = rbind(x$edges, y$edges)
@@ -15,6 +15,17 @@ new_node <- function(id, block_type = "standard", code = substitute(), code_str 
 new_edge <- function(to, from = to-1L, edge_label = "", arrow = "->"){
   data.frame(from , to, edge_label, arrow, stringsAsFactors = FALSE)
 }
+
+add_node <- function(data, node){
+  data$node <- rbind(data$node, node)
+  data
+}
+
+add_edge <- function(data, node){
+  data$edge <- rbind(data$edge, node)
+  data
+}
+
 
 rleid <- function(x){
   with(rle(x), rep(seq_along(lengths), lengths))
