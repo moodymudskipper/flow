@@ -91,7 +91,7 @@ fun_while <- function(x){
   x
 }
 
-funflow(fun_while)
+view_flow(fun_while)
 
 fun_repeat <- function(x){
   x <- paste0(x)
@@ -105,7 +105,7 @@ fun_repeat <- function(x){
 
 # issue with the last if (wrong link), these could be avoided by adding an empty elt
 # at the end of all cfc calls
-funflow(fun_repeat)
+view_flow(fun_repeat)
 
 
 

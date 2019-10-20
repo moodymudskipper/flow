@@ -217,7 +217,7 @@ add_data_from_while_block <- function(data, block){
 
   # build data from while's "body"
   while_expr = block[[3]]
-  while_data <-  add_data_from_expr(data, while_expr)
+  data <-  add_data_from_expr(data, while_expr)
 
   # add the end node
   id_last_while <- get_last_id(data)
@@ -240,11 +240,11 @@ add_data_from_repeat_block <- function(data, block, id){
     data,
     id,
     block_type = "repeat",
-    code = as.list(block[[1]][[1]]),
+    code = as.list(block[[1]]),
     code_str = "repeat")
 
   # add edge from repeat node to block
-  data <- add_edge(data, to = id)
+  data <- add_edge(data, from=id, to = id+1)
 
   # build data from repeat's "body"
   repeat_expr <- block[[2]]
