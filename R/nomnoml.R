@@ -33,7 +33,9 @@ build_nomnoml_code <- function(
   edge_data <- data$edges
 
   # escape pipes characters and square brackets
-  node_data$code_str <- gsub("([][]|])","\\\\\\1", node_data$code_str)
+  node_data$code_str <- gsub("]","\\]", node_data$code_str,fixed = TRUE)
+  node_data$code_str <- gsub("[","\\[", node_data$code_str,fixed = TRUE)
+  node_data$code_str <- gsub("|","\\|", node_data$code_str,fixed = TRUE)
 
   # create the box column containing the nomnoml box string
   node_data$box <- NA
@@ -87,7 +89,6 @@ build_nomnoml_code <- function(
 
   nomnoml_code <- paste(edge_data$nomnoml_code, collapse="\n")
   nomnoml_code <- paste0(header,"\n", nomnoml_code)
-  #cat(nomnoml_code)
   nomnoml_code
 }
 

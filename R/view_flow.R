@@ -17,10 +17,8 @@ view_flow <- function(f, prefix = NULL, ...){
   # add the final node
   id = get_last_id(data) + 1
   data <- add_node(data, id, "end")
-  data$nodes$code <- NULL # so printing doesn't bug
-  print(data)
 
   code <- build_nomnoml_code(data, ...)
-  cat(code,sep="\n")
   nomnoml::nomnoml(code)
 }
+# cat(paste(strsplit(code,"\n")[[1]][1:400],collapse = "\n"))
