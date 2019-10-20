@@ -21,16 +21,6 @@ add_data_from_expr <-  function(data, expr){
   data
 }
 
-
-#' Title
-#'
-#' @param data flow chart data
-#' @param block code block
-#'
-#' @return
-#' @export
-#'
-#' @examples
 add_data_from_standard_block <- function(data, block){
   # increment id
   id <-get_last_id(data) + 1
