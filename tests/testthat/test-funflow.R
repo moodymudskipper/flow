@@ -33,21 +33,25 @@ fun_if_else <- function(x){
   x <- 4
 }
 
-funflow(fun_if_else)
+view_flow(fun_if_else)
 
-fun_if_else <- function(x, y){
-  x <- x * 2
-  y <- y * 3
-  if(y > x){
-    print("y is big!")
+fun_if_else_stop <- function(x){
+  if(TRUE) {
+    foo
   } else {
-    print("y is small...")
+    stop("!!!!!")
   }
-  prod <- x * y
-  prod
+
+  if(TRUE) {
+    foo
+    return(bar)
+  } else {
+    baz
+  }
+  qux
 }
 
-funflow(fun_if_else)
+view_flow(fun_if_else_stop)
 
 
 
@@ -75,7 +79,8 @@ fun_for <- function(x){
   x
 }
 
-funflow(fun_for)
+
+view_flow(fun_for)
 
 fun_while <- function(x){
   x <- paste0(x)

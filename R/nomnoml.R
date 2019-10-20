@@ -37,32 +37,13 @@ build_nomnoml_code <- function(
 
   # create the box column containing the nomnoml box string
   node_data$box <- NA
-  node_data <- within(node_data,{
-    ind <- block_type == "header"
-    box[ind] <- sprintf("[<usecase>%s:;%s]", id[ind], code_str[ind])
-
-    ind <- block_type == "none"
-    box[ind] <- sprintf("[<abstract>%s:;%s]", id[ind], gsub("\\n",";",code_str[ind]))
-
-    ind <- block_type == "commented"
-    box[ind] <- sprintf("[<abstract>%s:;%s]", id[ind], gsub("\\n",";",code_str[ind]))
-
-    ind <- block_type == "if"
-    box[ind] <- sprintf("[<choice>%s:;%s]", id[ind], gsub("\\n",";",code_str[ind]))
-
-    ind <- block_type == "for"
-    box[ind] <- sprintf("[<choice>%s:;%s]", id[ind], gsub("\\n",";",code_str[ind]))
-
-    ind <- block_type == "while"
-    box[ind] <- sprintf("[<choice>%s:;%s]", id[ind], gsub("\\n",";",code_str[ind]))
-
-    ind <- block_type == "repeat"
-    box[ind] <- sprintf("[<choice>%s:;%s]", id[ind], gsub("\\n",";",code_str[ind]))
-
-    ind <- block_type == "end"
-    box[ind] <- sprintf("[<end>%s]",  id[ind], code_str[ind])
-    rm(ind)
-  })
+  node_data$box <- sprintf(
+    "[<%s> %s:;%s]",
+    node_data$block_type,
+    node_data$id,
+    node_data$code_str)
+  # cleanup last chars of the box in cases where no code (e.g. start and end)
+  node_data$box  <- gsub(":;\\]$","]", node_data$box)
 
   # create the nomnoml code for each edge
   edge_data <- transform(edge_data, nomnoml_code = sprintf(
@@ -71,6 +52,15 @@ build_nomnoml_code <- function(
   # create the header
   header <- sprintf(
     "
+    #.if: visual=rhomb fill=#e2efda align=center
+    #.for: visual=rhomb fill=#ddebf7 align=center
+    #.repeat: visual=rhomb fill=#fce4d6 align=center
+    #.while: visual=rhomb fill=#fff2cc align=center
+    #.none: visual=frame fill=#ededed
+    #.commented: visual=frame fill=#ededed
+    #.header: visual=ellipse fill=#d9e1f2 align=center
+    #.return: visual=end fill=#70ad47
+    #.stop: visual=end fill=#ed7d31
     #arrowSize: %s
     #bendSize: %s
     #direction: %s

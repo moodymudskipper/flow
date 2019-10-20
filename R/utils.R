@@ -1,33 +1,43 @@
-add_data <- function(x, y){
-  list(
-    nodes = rbind(x$nodes, y$nodes),
-    edges = rbind(x$edges, y$edges)
-  )
-}
+# add_data <- function(x, y){
+#   list(
+#     nodes = rbind(x$nodes, y$nodes),
+#     edges = rbind(x$edges, y$edges)
+#   )
+# }
 
 get_last_id <- function(data) {
   data$nodes$id[nrow(data$nodes)]
 }
 
-new_node <- function(id, block_type = "standard", code = substitute(), code_str = ""){
+add_node <- function(data, id, block_type = "standard", code = substitute(), code_str = ""){
   node <- data.frame(id, block_type, code_str, stringsAsFactors = FALSE)
   node$code <- list(code)
-  node
-}
-
-new_edge <- function(to, from = to-1L, edge_label = "", arrow = "->"){
-  data.frame(from , to, edge_label, arrow, stringsAsFactors = FALSE)
-}
-
-add_node <- function(data, node){
   data$nodes <- rbind(data$nodes, node)
   data
 }
 
-add_edge <- function(data, edge){
+# new_node <- function(id, block_type = "standard", code = substitute(), code_str = ""){
+#   node <- data.frame(id, block_type, code_str, stringsAsFactors = FALSE)
+#   node$code <- list(code)
+#   node
+# }
+
+
+add_edge <- function(data, to, from = to, edge_label = "", arrow = "->"){
+  edge <- data.frame(from , to, edge_label, arrow, stringsAsFactors = FALSE)
   data$edges <- rbind(data$edges, edge)
   data
 }
+
+
+# new_edge <- function(to, from = to-1L, edge_label = "", arrow = "->"){
+#   data.frame(from , to, edge_label, arrow, stringsAsFactors = FALSE)
+# }
+
+# remove_last_edge <- function(data){
+#   data$edges <- head(data$edges, -1)
+# }
+
 
 
 rleid <- function(x){
