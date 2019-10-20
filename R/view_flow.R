@@ -1,3 +1,11 @@
+#' View function as flow chart
+#'
+#' @param f
+#'
+#' @param prefix prefix to use for special comments, must start with `"#"` (not implemented yet)
+#' @param ... additional parameters passed to `build_nomnoml_code()`
+#'
+#' @export
 view_flow <- function(f, prefix = NULL, ...){
   f_sym <- substitute(f)
 
