@@ -4,8 +4,15 @@ build_blocks <- function(expr){
     calls <- as.list(expr[-1])
   else
     calls <- list(expr)
+
+  # support empty calls (`{}`)
+  if(!length(calls)){
+    blocks <- list(substitute())
+    return(blocks)
+  }
   # get logical indices of special calls
   cfc_lgl <- calls %call_in% c("if", "for", "while", "repeat")
+
   special_comment_lgl <- calls %call_in% c("#")
   # compute block indices
   block_ids <- interaction(

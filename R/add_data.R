@@ -2,10 +2,16 @@
 add_data_from_expr <-  function(data, expr){
   blocks <- build_blocks(expr)
   for (i in seq_along(blocks)){
+    id <- get_last_id(data)
+    #if(id >= 54) browser()
     block <- blocks[[i]]
-    block_type <- attr(block, "block_type")
+    if(missing(block)) # deal with empty expr (`{}`)
+      block_type <- NULL
+    else
+      block_type <- attr(block, "block_type")
     if (is.null(block_type)){
       data <- add_data_from_standard_block(data, block)
+      #if(id >= 54) browser()
     } else if (block_type == "commented"){
       data <- add_data_from_commented_block(data, block)
     } else if (block_type == "if"){
@@ -25,6 +31,14 @@ add_data_from_standard_block <- function(data, block){
   # increment id
   id <-get_last_id(data) + 1
   # build code string to display in node
+  if(missing(block)) {
+    data <- add_node(
+      data,
+      id,
+      block_type = "none",
+      code = substitute(),
+      code_str = "")
+  } else {
   code_str <- paste(unlist(sapply(as.list(block), deparse)), collapse=";")
   # add current node
   data <- add_node(
@@ -33,6 +47,7 @@ add_data_from_standard_block <- function(data, block){
     block_type = "none",
     code = block,
     code_str = code_str)
+  }
   # draw edge from current node to next (yet undefined) node
   data <- add_edge(data, from = id, to = id + 1)
   data
@@ -58,8 +73,10 @@ add_data_from_commented_block <- function(data, block){
 
 
 add_data_from_if_block <- function(data, block){
+
   # increment id
   id <-get_last_id(data) + 1
+  #if(id == 51) browser()
   # build code string to display in node
   code_str <- sprintf("if (%s)", deparse2(block[[2]]))
   # add IF node
@@ -139,11 +156,11 @@ add_data_from_if_block <- function(data, block){
   data <- add_edge(data, from = id_last_yes, to = id_end)
   }
 
-  # # add the end node
-  # data <- add_node(data, id_end, "end")
-  #
-  # # add edge from the end node to the next block
-  # data <- add_edge(data, from = id_end, to = id_end + 1)
+  # add the end node
+  data <- add_node(data, id_end, "end")
+
+  # add edge from the end node to the next block
+  data <- add_edge(data, from = id_end, to = id_end + 1)
 
   data
 }
