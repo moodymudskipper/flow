@@ -18,8 +18,6 @@ unnest_comments <- function(call) {
   call0 <- lapply(call, function(x) {
     call_str <- paste(deparse(x), collapse ="\n")
     if(startsWith(call_str, "`#`(")){
-      #is.call(x) && x[[1]] == quote(`#`) && length(x) == 3){
-      # browser()
       x <- list(extract_comment(x),
                 clean_call(x))
     }
