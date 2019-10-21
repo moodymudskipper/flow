@@ -9,8 +9,10 @@ get_last_id <- function(data) {
   data$nodes$id[nrow(data$nodes)]
 }
 
-add_node <- function(data, id, block_type = "standard", code = substitute(), code_str = ""){
-  node <- data.frame(id, block_type, code_str, stringsAsFactors = FALSE)
+add_node <- function(data, id, block_type = "standard", code = substitute(), code_str = "", label = ""){
+
+
+  node <- data.frame(id, block_type, code_str, stringsAsFactors = FALSE, label = label)
   node$code <- list(code)
   data$nodes <- rbind(data$nodes, node)
   data

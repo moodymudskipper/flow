@@ -33,7 +33,7 @@ fun_if_else <- function(x){
   x <- 4
 }
 
-view_flow(fun_if_else)
+view_flow(fun_if_else, prefix = "##")
 
 fun_if_else_stop <- function(x){
   if(TRUE) {

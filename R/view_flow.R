@@ -6,7 +6,7 @@
 #' @param ... additional parameters passed to `build_nomnoml_code()`
 #'
 #' @export
-view_flow <- function(f, prefix = NULL, png = NULL, width = NULL, height = NULL, ...){
+view_flow <- function(f, prefix = NULL, code = TRUE, png = NULL, width = NULL, height = NULL, ...){
   f_sym <- substitute(f)
 
   # put comments in `#`() calls
@@ -25,8 +25,12 @@ view_flow <- function(f, prefix = NULL, png = NULL, width = NULL, height = NULL,
   # add the final node
   id = get_last_id(data) + 1
   data <- add_node(data, id, "end")
+  if(!is.null(prefix)){
+    prefix <- paste0("^\\s*", prefix,"\\s*")
+    data$nodes$label <- sub(prefix, "", data$nodes$label)
+  }
 
-  code <- build_nomnoml_code(data, ...)
+  code <- build_nomnoml_code(data, code = code, ...)
   nomnoml::nomnoml(code, png = png, width = width, height = height)
 }
 # cat(paste(strsplit(code,"\n")[[1]][1:400],collapse = "\n"))

@@ -3,7 +3,6 @@ add_data_from_expr <-  function(data, expr){
   blocks <- build_blocks(expr)
   for (i in seq_along(blocks)){
     id <- get_last_id(data)
-    #if(id >= 54) browser()
     block <- blocks[[i]]
     if(missing(block)) # deal with empty expr (`{}`)
       block_type <- NULL
@@ -11,7 +10,6 @@ add_data_from_expr <-  function(data, expr){
       block_type <- attr(block, "block_type")
     if (is.null(block_type)){
       data <- add_data_from_standard_block(data, block)
-      #if(id >= 54) browser()
     } else if (block_type == "commented"){
       data <- add_data_from_commented_block(data, block)
     } else if (block_type == "if"){
@@ -65,7 +63,8 @@ add_data_from_commented_block <- function(data, block){
     id,
     block_type = "commented",
     code = block,
-    code_str = code_str)
+    code_str = code_str,
+    label = attr(block, "label"))
   # draw edge from current node to next (yet undefined) node
   data <- add_edge(data, from = id, to = id + 1)
   data
@@ -73,10 +72,8 @@ add_data_from_commented_block <- function(data, block){
 
 
 add_data_from_if_block <- function(data, block){
-
   # increment id
   id <-get_last_id(data) + 1
-  #if(id == 51) browser()
   # build code string to display in node
   code_str <- sprintf("if (%s)", deparse2(block[[2]]))
   # add IF node

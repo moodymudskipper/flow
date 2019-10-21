@@ -24,8 +24,13 @@ build_blocks <- function(expr){
   for (i in block_ids[cfc_lgl]) {
     attr(blocks[[i]], "block_type") <- as.character(blocks[[c(i,1,1)]])
   }
+
   for (i in block_ids[special_comment_lgl]) {
+    label <- blocks[[c(i,1,2)]]
+    blocks[[i]] <- blocks[[i]][-1]
     attr(blocks[[i]], "block_type") <- "commented"
+    attr(blocks[[i]], "label") <- label
+
   }
   blocks
 }
