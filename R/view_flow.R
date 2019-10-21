@@ -6,7 +6,7 @@
 #' @param ... additional parameters passed to `build_nomnoml_code()`
 #'
 #' @export
-view_flow <- function(f, prefix = NULL, ...){
+view_flow <- function(f, prefix = NULL, png = NULL, width = NULL, height = NULL, ...){
   f_sym <- substitute(f)
 
   # put comments in `#`() calls
@@ -27,6 +27,6 @@ view_flow <- function(f, prefix = NULL, ...){
   data <- add_node(data, id, "end")
 
   code <- build_nomnoml_code(data, ...)
-  nomnoml::nomnoml(code)
+  nomnoml::nomnoml(code, png = png, width = width, height = height)
 }
 # cat(paste(strsplit(code,"\n")[[1]][1:400],collapse = "\n"))
