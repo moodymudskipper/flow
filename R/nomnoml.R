@@ -61,8 +61,8 @@ build_nomnoml_code <- function(
     #.none: visual=frame fill=#ededed
     #.commented: visual=frame fill=#ededed
     #.header: visual=ellipse fill=#d9e1f2 align=center
-    #.return: visual=end fill=#70ad47
-    #.stop: visual=end fill=#ed7d31
+    #.return: visual=end fill=#70ad47  empty
+    #.stop: visual=end fill=#ed7d31  empty
     #arrowSize: %s
     #bendSize: %s
     #direction: %s
