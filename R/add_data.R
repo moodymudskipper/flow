@@ -77,7 +77,10 @@ add_data_from_if_block <- function(data, block){
   id_end <- -id_if
   id_yes <- id_if +1
   # build code string to display in node
+
   code_str <- sprintf("if (%s)", deparse2(block[[2]]))
+  code_str <- gsub("||","||\n", code_str,fixed = TRUE)
+  code_str <- gsub("&&","&&\n", code_str,fixed = TRUE)
 
   # add IF node
   data <- add_node(
