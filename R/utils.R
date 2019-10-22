@@ -6,12 +6,10 @@
 # }
 
 get_last_id <- function(data) {
-  data$nodes$id[nrow(data$nodes)]
+  max(data$nodes$id) # data$nodes$id[nrow(data$nodes)]
 }
 
 add_node <- function(data, id, block_type = "standard", code = substitute(), code_str = "", label = ""){
-
-
   node <- data.frame(id, block_type, code_str, stringsAsFactors = FALSE, label = label)
   node$code <- list(code)
   data$nodes <- rbind(data$nodes, node)
@@ -89,4 +87,14 @@ debugged <- function(n = 0){
   eval.parent(
     substitute(isdebugged(FUN), list(FUN = fun_sym)),
     n = n + 2)
+}
+
+get_last_call_type <- function(expr){
+  if(is.call(expr) && identical(expr[[1]], quote(`{`))){
+    expr <- expr[[length(expr)]] # could be a call or a symbol
+  }
+  if(is.call(expr))
+    deparse(expr[[1]])
+  else
+    "standard"
 }

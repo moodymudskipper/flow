@@ -52,11 +52,21 @@ build_nomnoml_code <- function(
     node_data$id,
     node_data$label,
     node_data$code_str)
-  # cleanup last chars of the box in cases where no code (e.g. start and end)
-  node_data$box  <- gsub(":?\\s*;\\]$","]", node_data$box)
+  # cleanup the first block
+  node_data$box[1]  <- sub("0: ;","", node_data$box[1], fixed = TRUE)
+  # cleanup last chars of the box in cases where no code (no code or start/end blocks)
+  node_data$box  <- sub(":?\\s*;\\]$","]", node_data$box)
   # create the nomnoml code for each edge
+  edge_data$order <- seq_len(nrow(edge_data))
+  edge_data <- merge(edge_data,node_data[c("id","box")], by.x = "from", by.y = "id", all.x = TRUE)
+  edge_data <- merge(edge_data,node_data[c("id","box")], by.x = "to", by.y = "id", all.x = TRUE)
   edge_data <- transform(edge_data, nomnoml_code = sprintf(
-    "%s %s %s %s", node_data$box[from], edge_label, arrow, node_data$box[to]))
+    "%s %s %s %s",
+    box.x,
+    edge_label,
+    arrow,
+    box.y))
+  edge_data <- edge_data[order(edge_data$order),]
 
   # create the header
   header <- sprintf(
@@ -95,8 +105,10 @@ build_nomnoml_code <- function(
   header <- gsub("\\n\\s+","\n", header)
 
   nomnoml_code <- paste(edge_data$nomnoml_code, collapse="\n")
+  # print(node_data[1:2])
+  # print(edge_data)
+  # cat(nomnoml_code)
   nomnoml_code <- paste0(header,"\n", nomnoml_code)
-  #cat(nomnoml_code)
   nomnoml_code
 }
 

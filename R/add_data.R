@@ -73,91 +73,100 @@ add_data_from_commented_block <- function(data, block){
 
 add_data_from_if_block <- function(data, block){
   # increment id
-  id <-get_last_id(data) + 1
+  id_if <- get_last_id(data) + 1
+  id_end <- -id_if
+  id_yes <- id_if +1
   # build code string to display in node
   code_str <- sprintf("if (%s)", deparse2(block[[2]]))
+
   # add IF node
   data <- add_node(
     data,
-    id,
+    id_if,
     "if",
     code = block[[2]],
     code_str = code_str)
 
   # add edge from IF node to yes branch
-  data <- add_edge(data, from=id, to = id + 1,edge_label = "y")
+  data <- add_edge(data, from=id_if, to = id_yes, edge_label = "y")
 
   # build data from "yes" expression
   yes_expr <- block[[3]]
   data <-  add_data_from_expr(data, yes_expr)
 
+  # end of yes will not be linked to incremented
+  # node id but either to stop/return/ or end of if
+
+
   id_last_yes <- get_last_id(data)
 
-  if(is.call(yes_expr) && identical(yes_expr[[1]], quote(`{`))){
-    last_call <- yes_expr[[length(yes_expr)]] # could be a call or a symbol
-  } else {
-    last_call <- yes_expr
-  }
+  last_call_type <- get_last_call_type(yes_expr)
 
-  if(is.call(last_call) && deparse(last_call[[1]]) %in% c("stop", "return")){
+  if(last_call_type %in% c("stop", "return")){
     # if yes branch ends with a stop or return call
-    data <- add_node(data, id_last_yes + 1, block_type = deparse(last_call[[1]]))
-    id_last_yes <- id_last_yes + 1
+    data <- add_node(data, -id_last_yes, block_type = last_call_type)
+    data$edges$to[nrow(data$edges)] <- -id_last_yes
     yes_stopped <- TRUE
-  } else if (data$nodes$block_type[nrow(data$nodes)] %in% c("stop", "return")) {
+  } else if (last_call_type == "if" && with(data$edges,(to+from)[length(to)] == 0)) {
+    # note : last condition means that we finished on a dead end
     # if yes branch is dead end
-    yes_stopped <- TRUE
-  } else {
-    # if yes branch is regular we must remove the last edge, as the end of
-    # yes branch will go to the next step, not to the start of the no branch
     data$edges <- head(data$edges, -1)
+     yes_stopped <- TRUE
+  } else {
+    # if yes branch is regular the end of yes branch will go to the end node,
+    data$edges$to[nrow(data$edges)] <- id_end
     yes_stopped <- FALSE
   }
 
   if(length(block) == 4){
     # if there is an `else` statement
+    id_no <- id_last_yes + 1
 
     # add edge from IF node to no branch
-    data <- add_edge(data, from=id, to = id_last_yes + 1, edge_label = "n")
+    data <- add_edge(data, from=id_if, to = id_no, edge_label = "n")
 
     # build data from "no" expression
     no_expr <- block[[4]]
     data <-  add_data_from_expr(data, no_expr)
 
-    id_last_no <- get_last_id(data)
-    if(is.call(no_expr) && identical(no_expr[[1]], quote(`{`))){
-      last_call <- no_expr[[length(no_expr)]] # could be a call or a symbol
-    } else {
-      last_call <- no_expr
-    }
+    # end of no will not be linked to incremented
+    # node id but either to stop/return/ or end of if
 
-    if(is.call(last_call) && deparse(last_call[[1]]) %in% c("stop", "return")){
-      data <- add_node(data, id_last_no + 1, block_type = deparse(last_call[[1]]))
-      id_end <- id_last_no + 2
+
+    id_last_no <- get_last_id(data)
+
+    last_call_type <- get_last_call_type(no_expr)
+
+    if(last_call_type %in% c("stop", "return")){
+      # if yes branch ends with a stop or return call
+      data <- add_node(data, -id_last_no, block_type = last_call_type)
+      data$edges$to[nrow(data$edges)] <- -id_last_no
+      no_stopped <- TRUE
+    } else if (last_call_type == "if" && with(data$edges,(to+from)[length(to)] == 0)) {
+      # note : last condition means that we finished on a dead end
+      # if yes branch is dead end
+      data$edges <- head(data$edges, -1)
       no_stopped <- TRUE
     } else {
-      id_end <- id_last_no + 1
+      # if 'no' branch is regular the end of 'no' branch will go to the end node,
+      data$edges$to[nrow(data$edges)] <- id_end
       no_stopped <- FALSE
     }
-
   } else {
-    # there is no else, so link if to end
-    id_end <- id_last_yes + 1
-
-    # link end of if to start of if
-    data <- add_edge(data, from = id, to = id_end, edge_label = "n")
+    # add edge from IF node to end node
+    data <- add_edge(data, from=id_if, to = id_end, edge_label = "n")
+    no_stopped <- FALSE
   }
 
-  if(!yes_stopped){
-  # link end of yes to end
-  data <- add_edge(data, from = id_last_yes, to = id_end)
+  is_dead_end <- yes_stopped && no_stopped
+
+  if(!is_dead_end){
+  # materialize end_node
+    data <- add_node(data, id_end, "end")
+    # add edge from the end node to the next block
+    id_next <- get_last_id(data) + 1
+    data <- add_edge(data, from = id_end, to = id_next)
   }
-
-  # add the end node
-  data <- add_node(data, id_end, "end")
-
-  # add edge from the end node to the next block
-  data <- add_edge(data, from = id_end, to = id_end + 1)
 
   data
 }
@@ -166,7 +175,7 @@ add_data_from_if_block <- function(data, block){
 add_data_from_for_block <- function(data, block, id){
   # increment id
   id <-get_last_id(data) + 1
-
+  id_end <- -id
   # add node for `for` statement
   code_str = sprintf(
     "for (%s in %s)",
@@ -186,17 +195,20 @@ add_data_from_for_block <- function(data, block, id){
   for_expr <- block[[4]] # the 4th item contains the code
   data <-  add_data_from_expr(data, for_expr)
 
+  # we edit last edge because last of loop
+  # node id but to end
+  data$edges$to[nrow(data$edges)] <- id_end
+
   # add the end node
-  id_last_for <- get_last_id(data)
-  id_end <- id_last_for + 1
   data <- add_node(data, id_end, "start")
 
   # add loop edge
   data <- add_edge(data, from = id, to = id_end, edge_label = "next", arrow = "<-")
 
   # link end to next block
-  data <- add_edge(data, from= id_end, to = id_end+1)
 
+  id_next <- get_last_id(data) + 1
+  data <- add_edge(data, from= id_end, to = id_next)
 
   data
 }
@@ -207,6 +219,7 @@ add_data_from_for_block <- function(data, block, id){
 add_data_from_while_block <- function(data, block){
   # increment id
   id <-get_last_id(data) + 1
+  id_end <- -id
 
   # add node for `while`
   data <- add_node(
@@ -223,21 +236,28 @@ add_data_from_while_block <- function(data, block){
   while_expr = block[[3]]
   data <-  add_data_from_expr(data, while_expr)
 
+  # we edit last edge because last of loop
+  # node id but to end
+  data$edges$to[nrow(data$edges)] <- id_end
+
   # add the end node
-  id_last_while <- get_last_id(data)
-  id_end <- id_last_while + 1
   data <- add_node(data, id_end, "start")
 
   # add loop edge
   data <- add_edge(data, from = id, to = id_end, edge_label = "next", arrow = "<-")
 
   # link end to next block
-  data <- add_edge(data, from= id_end, to = id_end+1)
+
+  id_next <- get_last_id(data) + 1
+  data <- add_edge(data, from= id_end, to = id_next)
+
+  data
 }
 
 add_data_from_repeat_block <- function(data, block, id){
   # increment id
   id <-get_last_id(data) + 1
+  id_end <- -id
 
   # add repeat node
   data <- add_node(
@@ -251,19 +271,23 @@ add_data_from_repeat_block <- function(data, block, id){
   data <- add_edge(data, from=id, to = id+1)
 
   # build data from repeat's "body"
-  repeat_expr <- block[[2]]
-  data <-  add_data_from_expr(data, repeat_expr)
+  while_expr = block[[2]]
+  data <-  add_data_from_expr(data, while_expr)
+
+  # we edit last edge because last of loop
+  # node id but to end
+  data$edges$to[nrow(data$edges)] <- id_end
 
   # add the end node
-  id_last_repeat <- get_last_id(data)
-  id_end <- id_last_repeat + 1
   data <- add_node(data, id_end, "start")
 
   # add loop edge
   data <- add_edge(data, from = id, to = id_end, edge_label = "next", arrow = "<-")
 
   # link end to next block
-  data <- add_edge(data, from= id_end, to = id_end+1)
+
+  id_next <- get_last_id(data) + 1
+  data <- add_edge(data, from= id_end, to = id_next)
 
   data
 }
