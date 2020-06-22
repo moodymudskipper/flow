@@ -15,4 +15,4 @@ Suggests:
     testthat (>= 2.1.0)
 Imports: 
     nomnoml
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0

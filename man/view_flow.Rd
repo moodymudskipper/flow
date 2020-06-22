@@ -4,12 +4,22 @@
 \alias{view_flow}
 \title{View function as flow chart}
 \usage{
-view_flow(f, prefix = NULL, ...)
+view_flow(
+  f,
+  prefix = NULL,
+  code = TRUE,
+  png = NULL,
+  width = NULL,
+  height = NULL,
+  output = c("view", "nomnoml", "data"),
+  ...,
+  svg = FALSE
+)
 }
 \arguments{
 \item{f}{}
 
-\item{prefix}{prefix to use for special comments, must start with `"#"` (not implemented yet)}
+\item{prefix}{prefix to use for special comments, must start with `"#"`}
 
 \item{...}{additional parameters passed to `build_nomnoml_code()`}
 }

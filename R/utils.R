@@ -6,6 +6,7 @@
 # }
 
 get_last_id <- function(data) {
+  if(!nrow(data$nodes)) return(0)
   max(data$nodes$id) # data$nodes$id[nrow(data$nodes)]
 }
 

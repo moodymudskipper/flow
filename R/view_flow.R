@@ -2,12 +2,12 @@
 #'
 #' @param f
 #'
-#' @param prefix prefix to use for special comments, must start with `"#"` (not implemented yet)
+#' @param prefix prefix to use for special comments, must start with `"#"`
 #' @param ... additional parameters passed to `build_nomnoml_code()`
 #'
 #' @export
 view_flow <- function(f, prefix = NULL, code = TRUE, png = NULL, width = NULL,
-                      height = NULL, output = c("view", "nomnoml", "data"),...){
+                      height = NULL, output = c("view", "nomnoml", "data"),..., svg = FALSE){
   output <- match.arg(output)
   f_sym <- substitute(f)
 
@@ -31,9 +31,14 @@ view_flow <- function(f, prefix = NULL, code = TRUE, png = NULL, width = NULL,
     prefix <- paste0("^\\s*", prefix,"\\s*")
     data$nodes$label <- sub(prefix, "", data$nodes$label)
   }
+  class(data) <- c("funflow", class(data))
   if (output == "data") return(data)
   code <- build_nomnoml_code(data, code = code, ...)
   if (output == "nomnoml") return(code)
-  nomnoml::nomnoml(code, png = png, width = width, height = height)
+  nomnoml::nomnoml(code, png = png, width = width, height = height, svg = svg)
 }
 # cat(paste(strsplit(code,"\n")[[1]][1:400],collapse = "\n"))
+
+# tmp <- tempfile(fileext = ".pdf")
+# view_flow(data.table::fread, png = tmp)
+# br

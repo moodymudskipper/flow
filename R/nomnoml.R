@@ -1,25 +1,65 @@
+#' build nomnoml code from data
+#'
+#' This functions builds the nomnoml code to render from the data built by
+#' `flow_data()`. It's not very useful for the average user to call it directly
+#' but its arguments can be set through flow_view so their definitions are useful.
+#'
+#' All arguments, with the exception of `data` and `code`, are
+#' nomnoml directives, enumerated at https://openbase.io/js/nomnoml/documentation .
+#'
+#' Some of those don't seem to do anything in the context of this package,
+#' but given the sparsity of nomnoml documentation, we
+#' decided to keep all of them to be safe.
+#'
+#' @param data A data frame built by `flow_data()`
+#' @param code Whether to the code in code blocks or only the identifier, to be
+#'   more compact, if `NA`, the code will be displayed only if not commented, so
+#'   comments can be used as pseudocode for chosen blocks.
+#' @param direction Whether to orient the chart from top to bottom or left to
+#' @param ranker ranker, set to "longest-path" to have all exit points alligned
+#'   at the bottom.
+#' @param arrowSize Arrow size
+#' @param edges Whether to keep edges `"straight"`, or have them `"rounded"`
+#' @param bendSize Bend size, if `edges` is `"rounded"`
+#' @param font Font
+#' @param fontSize Font size
+#' @param lineWidth Line Width
+#' @param padding Padding
+#' @param spacing Spacing between blocks
+#' @param leading distance between two baselines of lines of type
+#' @param stroke Stroke
+#' @param fill Default filling color
+#' @param title Title, no effect was observed
+#' @param zoom Zoom, no effect was observed
+#' @param fillArrows Whether to fill arrows, no effect was observed
+#' @param acyclicer Acyclicer, no effect was observed
+#' @param gutter Gutter, no effect was observed
+#' @param edgeMargin Edge margin, no effect was observed
+#'
+#' @return
+#' @export
 build_nomnoml_code <- function(
   data,
   code,
-  arrowSize = 1,
-  bendSize = 0.3,
   direction = c("down", "right"),
-  gutter = 5,
-  edgeMargin = 0,
+  ranker = c("network-simplex", "tight-tree", "longest-path"),
+  arrowSize = 1,
   edges = c("hard", "rounded"),
-  fill = "#eee8d5",
-  fillArrows = FALSE,
+  bendSize = 0.3,
   font = "Calibri",
   fontSize = 12,
-  leading = 1.25,
   lineWidth = 3,
   padding = 16,
   spacing = 40,
+  leading = 1.25,
   stroke = "#33322E",
+  fill = "#eee8d5",
   title = "filename",
   zoom = 1,
+  fillArrows = FALSE,
   acyclicer = "greedy",
-  ranker = c("network-simplex", "tight-tree", "longest-path")){
+  gutter = 5,
+  edgeMargin = 0){
 
   # check parameters
   direction <- match.arg(direction)
@@ -52,8 +92,9 @@ build_nomnoml_code <- function(
     node_data$id,
     node_data$label,
     node_data$code_str)
-  # cleanup the first block
-  node_data$box[1]  <- sub("0: ;","", node_data$box[1], fixed = TRUE)
+  # cleanup header block
+  headers_lgl <- node_data$block_type == "header"
+  node_data$box[headers_lgl]  <- sub("^\\[.*?: ;","[<header>", node_data$box[headers_lgl])
   # cleanup last chars of the box in cases where no code (no code or start/end blocks)
   node_data$box  <- sub(":?\\s*;\\]$","]", node_data$box)
   # create the nomnoml code for each edge
