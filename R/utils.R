@@ -99,3 +99,20 @@ get_last_call_type <- function(expr){
   else
     "standard"
 }
+
+find_funs <- function(call){
+  env <- new.env()
+  env$funs <- list()
+  find_funs0 <- function(x, env){
+    #print(x)
+    if(!is.call(x)) return(invisible())
+    if(identical(x[[1]], quote(`function`))){
+      env$funs <- append(env$funs, x)
+    }
+    lapply(x, find_funs0, env)
+  }
+  if(is.function(call)) call <- body(call)
+  find_funs0(call, env)
+  env$funs
+}
+find_funs(call)

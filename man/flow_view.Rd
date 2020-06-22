@@ -8,14 +8,15 @@
 \alias{flow_png}
 \title{View function as flow chart}
 \usage{
-flow_data(x, subset = NULL, prefix = NULL)
+flow_data(x, subset = NULL, prefix = NULL, sub_fun_id = NULL)
 
-flow_code(x, subset = NULL, prefix = NULL, code = TRUE, ...)
+flow_code(x, subset = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, ...)
 
 flow_view(
   x,
   subset = NULL,
   prefix = NULL,
+  sub_fun_id = NULL,
   code = TRUE,
   width = NULL,
   height = NULL,
@@ -26,6 +27,7 @@ flow_html(
   x,
   subset = NULL,
   prefix = NULL,
+  sub_fun_id = NULL,
   code = TRUE,
   width = NULL,
   height = NULL,
@@ -37,6 +39,7 @@ flow_png(
   x,
   subset = NULL,
   prefix = NULL,
+  sub_fun_id = NULL,
   code = TRUE,
   width = NULL,
   height = NULL,
@@ -50,6 +53,9 @@ flow_png(
 \item{subset}{The range of boxes to zoom in}
 
 \item{prefix}{Prefix to use for special comments, must start with `"#"`}
+
+\item{sub_fun_id}{if not NULL, the index of the function definition found in
+x that we wish to inspect.}
 
 \item{code}{Whether to the code in code blocks or only the identifier, to be
 more compact, if `NA`, the code will be displayed only if not commented, so

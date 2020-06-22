@@ -1,7 +1,7 @@
 #' @export
 #' @rdname flow_view
 flow_data <-
-  function(x, subset = NULL, prefix = NULL) {
+  function(x, subset = NULL, prefix = NULL, sub_fun_id = NULL) {
     f_sym <- substitute(x)
 
     # build data from the function body
@@ -10,8 +10,19 @@ flow_data <-
     # put comments in `#`() calls
     x <- add_comment_calls(x, prefix)
 
+    sub_funs <- find_funs(x)
+    if(!is.null(sub_fun_id)){
+      f_sym <- quote(fun)
+      x <- eval(sub_funs[[sub_fun_id]])
+    } else {
+      if(length(sub_funs)){
+        message("We found function definitions in this code, ",
+                "use the argument sub_fun_id to inspect them")
+        print(sub_funs)
+      }
+    }
     if(is.function(x)){
-      title <- head(deparse(args(x), -1))
+      title <- head(deparse(args(x)), -1)
       title <- paste(title, collapse = "\n  ")
       title <- sub("^function ", deparse(f_sym), title)
       data <- add_node(
@@ -81,18 +92,20 @@ data
 #' @export
 #' @rdname flow_view
 flow_code <-
-  function(x, subset = NULL, prefix = NULL,code = TRUE, ...) {
-    data <- eval.parent(substitute(flow_data(x, subset, prefix)))
+  function(x, subset = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, ...) {
+    data <- eval.parent(substitute(flow_data(x, subset, prefix, sub_fun_id)))
     code <- build_nomnoml_code(data, code = code, ...)
     code
   }
 
 #' View function as flow chart
 #'
+#' @param x A call or a function
 #' @param prefix Prefix to use for special comments, must start with `"#"`
 #' @param subset The range of boxes to zoom in
+#' @param sub_fun_id if not NULL, the index of the function definition found in
+#'   x that we wish to inspect.
 #' @param ... Additional parameters passed to `build_nomnoml_code()`
-#' @param x A call or a function
 #' @inheritParams build_nomnoml_code
 #' @param width Width in pixels
 #' @param height height in pixels
@@ -100,9 +113,9 @@ flow_code <-
 #'
 #' @export
 flow_view <-
-  function(x, subset = NULL, prefix = NULL, code = TRUE, width = NULL,
+  function(x, subset = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, width = NULL,
            height = NULL, ...) {
-    data <- eval.parent(substitute(flow_data(x, subset, prefix)))
+    data <- eval.parent(substitute(flow_data(x, subset, prefix, sub_fun_id)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = FALSE)
     htmlwidgets::createWidget(
@@ -118,10 +131,10 @@ flow_view <-
 #' @export
 #' @rdname flow_view
 flow_html <-
-  function(x, subset = NULL, prefix = NULL, code = TRUE, width = NULL,
+  function(x, subset = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, width = NULL,
            height = NULL,
            path = tempfile("flow", fileext = ".html"), ...) {
-    data <- eval.parent(substitute(flow_data(x, subset, prefix)))
+    data <- eval.parent(substitute(flow_data(x, subset, prefix, sub_fun_id)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = FALSE)
     widget <- htmlwidgets::createWidget(
@@ -157,10 +170,10 @@ flow_html <-
 #' @export
 #' @rdname flow_view
 flow_png <-
-  function(x, subset = NULL, prefix = NULL, code = TRUE, width = NULL,
+  function(x, subset = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, width = NULL,
            height = NULL,
            path = tempfile("flow", fileext = ".png"), ...) {
-    data <- eval.parent(substitute(flow_data(x, subset, prefix)))
+    data <- eval.parent(substitute(flow_data(x, subset, prefix, sub_fun_id)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = FALSE)
     path0 <- tempfile("flow", fileext = ".html")
