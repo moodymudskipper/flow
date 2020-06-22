@@ -11,7 +11,7 @@ regularize_comments <- function(fun) {
 }
 
 unnest_comments <- function(call) {
-  if(!is.call(call)) {
+  if(!is.call(call) || identical(call[[1]], quote(`function`))) {
     return(call)
   }
 
