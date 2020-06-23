@@ -5,16 +5,17 @@
 \alias{flow_code}
 \alias{flow_view}
 \alias{flow_html}
+\alias{flow_browse}
 \alias{flow_png}
 \title{View function as flow chart}
 \usage{
-flow_data(x, subset = NULL, prefix = NULL, sub_fun_id = NULL)
+flow_data(x, range = NULL, prefix = NULL, sub_fun_id = NULL)
 
-flow_code(x, subset = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, ...)
+flow_code(x, range = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, ...)
 
 flow_view(
   x,
-  subset = NULL,
+  range = NULL,
   prefix = NULL,
   sub_fun_id = NULL,
   code = TRUE,
@@ -25,7 +26,7 @@ flow_view(
 
 flow_html(
   x,
-  subset = NULL,
+  range = NULL,
   prefix = NULL,
   sub_fun_id = NULL,
   code = TRUE,
@@ -35,9 +36,20 @@ flow_html(
   ...
 )
 
+flow_browse(
+  x,
+  range = NULL,
+  prefix = NULL,
+  sub_fun_id = NULL,
+  code = TRUE,
+  width = NULL,
+  height = NULL,
+  ...
+)
+
 flow_png(
   x,
-  subset = NULL,
+  range = NULL,
   prefix = NULL,
   sub_fun_id = NULL,
   code = TRUE,
@@ -50,7 +62,7 @@ flow_png(
 \arguments{
 \item{x}{A call or a function}
 
-\item{subset}{The range of boxes to zoom in}
+\item{range}{The range of boxes to zoom in}
 
 \item{prefix}{Prefix to use for special comments, must start with `"#"`}
 
