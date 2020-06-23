@@ -35,7 +35,10 @@ flow_data <-
       data <- add_data_from_expr(data, body(x))
     } else if (is.call(x)) {
       data <- add_data_from_expr(data, x)
-    } else {
+    } else if (is.character(x) && length(x) == 1) {
+      x <- as.call(c(quote(`{`), parse(x)))
+      data <- add_data_from_expr(data, x)
+      } else {
       stop("x must be a function or a call")
     }
 
