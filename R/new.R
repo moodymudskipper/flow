@@ -1,7 +1,7 @@
 #' @export
 #' @rdname flow_view
 flow_data <-
-  function(x, subset = NULL, prefix = NULL, sub_fun_id = NULL) {
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL) {
     f_sym <- substitute(x)
 
     # build data from the function body
@@ -49,12 +49,12 @@ flow_data <-
       prefix <- paste0("^\\s*", prefix,"\\s*")
       data$nodes$label <- sub(prefix, "", data$nodes$label)
     }
-    if(!is.null(subset)){
-      matches <- which(data$nodes$id %in% subset)
+    if(!is.null(range)){
+      matches <- which(data$nodes$id %in% range)
       start <- min(matches)
       end   <- max(matches)
       data0 <- data
-      if(min(subset) <= 1) {
+      if(min(range) <= 1) {
         data$nodes <- data$nodes[1:end,]
         data$edges <- data$edges[
           data$edges$from %in% data$nodes$id &
@@ -75,7 +75,7 @@ flow_data <-
       }
 
       max_id <- max(data0$nodes$id)
-      if(max(subset) < max_id) {
+      if(max(range) < max_id) {
         data$nodes <- rbind(
           data$nodes,
           data.frame(id = max_id, block_type = "header", code_str = "...",
@@ -95,8 +95,8 @@ data
 #' @export
 #' @rdname flow_view
 flow_code <-
-  function(x, subset = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, ...) {
-    data <- eval.parent(substitute(flow_data(x, subset, prefix, sub_fun_id)))
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, ...) {
+    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id)))
     code <- build_nomnoml_code(data, code = code, ...)
     code
   }
@@ -105,7 +105,7 @@ flow_code <-
 #'
 #' @param x A call or a function
 #' @param prefix Prefix to use for special comments, must start with `"#"`
-#' @param subset The range of boxes to zoom in
+#' @param range The range of boxes to zoom in
 #' @param sub_fun_id if not NULL, the index of the function definition found in
 #'   x that we wish to inspect.
 #' @param ... Additional parameters passed to `build_nomnoml_code()`
@@ -116,9 +116,9 @@ flow_code <-
 #'
 #' @export
 flow_view <-
-  function(x, subset = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, width = NULL,
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, width = NULL,
            height = NULL, ...) {
-    data <- eval.parent(substitute(flow_data(x, subset, prefix, sub_fun_id)))
+    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = FALSE)
     htmlwidgets::createWidget(
@@ -134,10 +134,10 @@ flow_view <-
 #' @export
 #' @rdname flow_view
 flow_html <-
-  function(x, subset = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, width = NULL,
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, width = NULL,
            height = NULL,
            path = tempfile("flow", fileext = ".html"), ...) {
-    data <- eval.parent(substitute(flow_data(x, subset, prefix, sub_fun_id)))
+    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = FALSE)
     widget <- htmlwidgets::createWidget(
@@ -149,13 +149,31 @@ flow_html <-
     if(missing(path)) message(sprintf("The diagram was saved at '%s'", path))
   }
 
+#' @export
+#' @rdname flow_view
+flow_browse <-
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, width = NULL,
+           height = NULL, ...) {
+    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id)))
+    code <- build_nomnoml_code(data, code = code, ...)
+    x <- list(code = code, svg = FALSE)
+    widget <- htmlwidgets::createWidget(
+      name = "nomnoml", x,
+      width = width,
+      height = height,
+      package = "nomnoml")
+    path <- tempfile("flow", fileext = ".html")
+    htmlwidgets::saveWidget(widget, path)
+    system(path)
+  }
+
 # #' @export
 # #' @rdname flow_view
 # flow_svg <-
 #   function(x, prefix = NULL, code = TRUE, width = NULL,
 #            height = NULL,
 #            path = tempfile("flow", fileext = ".svg"), ...) {
-#     data <- eval.parent(substitute(flow_data(x, subset, prefix)))
+#     data <- eval.parent(substitute(flow_data(x, range, prefix)))
 #     code <- build_nomnoml_code(data, code = code, ...)
 #     x <- list(code = code, svg = TRUE)
 #     path0 <- tempfile("flow", fileext = ".html")
@@ -173,10 +191,10 @@ flow_html <-
 #' @export
 #' @rdname flow_view
 flow_png <-
-  function(x, subset = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, width = NULL,
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, width = NULL,
            height = NULL,
            path = tempfile("flow", fileext = ".png"), ...) {
-    data <- eval.parent(substitute(flow_data(x, subset, prefix, sub_fun_id)))
+    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = FALSE)
     path0 <- tempfile("flow", fileext = ".html")
