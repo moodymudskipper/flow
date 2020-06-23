@@ -121,6 +121,8 @@ build_nomnoml_code <- function(
     #.header: visual=ellipse fill=#d9e1f2 align=center
     #.return: visual=end fill=#70ad47  empty
     #.stop: visual=end fill=#ed7d31  empty
+    #.break: visual=receiver fill=#ffc000 empty
+    #.next: visual=transceiver fill=#5b9bd5  empty
     #arrowSize: %s
     #bendSize: %s
     #direction: %s
