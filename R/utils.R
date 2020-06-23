@@ -55,12 +55,7 @@ deparse2 <- function(x){
   paste(x, collapse= "\n")
 }
 
-# controlflow ops with the addition of `#()` used to spot special comments
-control_flow_ops <- c("if", "for", "while", "repeat", "#")
 
-is_cfc_call <- function(x){
-  is.call(x) && as.character(x[[1]]) %in% control_flow_ops
-}
 
 `%call_in%` <- function(calls, constructs){
   sapply(as.list(calls), function(x)
@@ -82,13 +77,6 @@ new_data <- function(){
   data
 }
 
-
-debugged <- function(n = 0){
-  fun_sym <- eval.parent(quote(match.call()), n +1)[[1]]
-  eval.parent(
-    substitute(isdebugged(FUN), list(FUN = fun_sym)),
-    n = n + 2)
-}
 
 get_last_call_type <- function(expr){
   if(is.call(expr) && identical(expr[[1]], quote(`{`))){
@@ -115,4 +103,19 @@ find_funs <- function(call){
   find_funs0(call, env)
   env$funs
 }
-find_funs(call)
+
+
+#
+# debugged <- function(n = 0){
+#   fun_sym <- eval.parent(quote(match.call()), n +1)[[1]]
+#   eval.parent(
+#     substitute(isdebugged(FUN), list(FUN = fun_sym)),
+#     n = n + 2)
+# }
+#
+# # controlflow ops with the addition of `#()` used to spot special comments
+# control_flow_ops <- c("if", "for", "while", "repeat", "#")
+#
+# is_cfc_call <- function(x){
+#   is.call(x) && as.character(x[[1]]) %in% control_flow_ops
+# }

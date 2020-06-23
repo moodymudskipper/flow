@@ -8,6 +8,7 @@
 #' @export
 view_flow <- function(f, prefix = NULL, code = TRUE, png = NULL, width = NULL,
                       height = NULL, output = c("view", "nomnoml", "data"),..., svg = FALSE){
+  ## nocov start
   output <- match.arg(output)
   f_sym <- substitute(f)
 
@@ -36,6 +37,7 @@ view_flow <- function(f, prefix = NULL, code = TRUE, png = NULL, width = NULL,
   code <- build_nomnoml_code(data, code = code, ...)
   if (output == "nomnoml") return(code)
   nomnoml::nomnoml(code, png = png, width = width, height = height, svg = svg)
+  ## nocov end
 }
 # cat(paste(strsplit(code,"\n")[[1]][1:400],collapse = "\n"))
 

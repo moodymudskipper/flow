@@ -32,18 +32,18 @@ dput2 <- function(x,
 
 ## empty function
 
-test_that("view_flow works with empty fun",{
+test_that("flow_data works with empty fun",{
   fun <- function(x) {}
-  # view_flow(fun)
+  # flow_data(fun)
   # dput2(data$nodes[1:4])
   # dput2(data$edges)
-  data <- view_flow(fun,output = "data")
+  data <- flow_data(fun)
   expect_equal(
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2),
-      block_type = c("header", "none", "end"),
-      code_str = c("fun", "", ""),
+      block_type = c("header", "none", "return"),
+      code_str = c("fun(x)", "", ""),
       label = c("", "", ""),
       stringsAsFactors = FALSE))
   expect_equal(
@@ -59,18 +59,18 @@ test_that("view_flow works with empty fun",{
 
 # function with one symbol
 
-test_that("view_flow works with one symbol in body",{
+test_that("flow_data works with one symbol in body",{
   fun <- function(x) {x}
-  # view_flow(fun)
+  # flow_data(fun)
   # dput2(data$nodes[1:4])
   # dput2(data$edges)
-  data <- view_flow(fun,output = "data")
+  data <- flow_data(fun)
   expect_equal(
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2),
-      block_type = c("header", "none", "end"),
-      code_str = c("fun", "x", ""),
+      block_type = c("header", "none", "return"),
+      code_str = c("fun(x)", "x", ""),
       label = c("", "", ""),
       stringsAsFactors = FALSE))
   expect_equal(
@@ -84,18 +84,18 @@ test_that("view_flow works with one symbol in body",{
 })
 
 # function with one call
-test_that("view_flow works with one call in body",{
+test_that("flow_data works with one call in body",{
   fun <- function(x) {x + y}
-  # view_flow(fun)
+  # flow_data(fun)
   # dput2(data$nodes[1:4])
   # dput2(data$edges)
-  data <- view_flow(fun,output = "data")
+  data <- flow_data(fun)
   expect_equal(
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2),
-      block_type = c("header", "none", "end"),
-      code_str = c("fun", "x + y", ""),
+      block_type = c("header", "none", "return"),
+      code_str = c("fun(x)", "x + y", ""),
       label = c("", "", ""),
       stringsAsFactors = FALSE))
   expect_equal(
@@ -109,21 +109,21 @@ test_that("view_flow works with one call in body",{
 })
 
 # function with 2 calls
-test_that("view_flow works with 2 calls in body",{
+test_that("flow_data works with 2 calls in body",{
   fun <- function(x) {
     x + y
     u + v
     }
-  # view_flow(fun)
+  # flow_data(fun)
   # dput2(data$nodes[1:4])
   # dput2(data$edges)
-  data <- view_flow(fun,output = "data")
+  data <- flow_data(fun)
   expect_equal(
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2),
-      block_type = c("header", "none", "end"),
-      code_str = c("fun", "x + y;u + v", ""),
+      block_type = c("header", "none", "return"),
+      code_str = c("fun(x)", "x + y;u + v", ""),
       label = c("", "", ""),
       stringsAsFactors = FALSE))
   expect_equal(
@@ -144,20 +144,20 @@ test_that("view_flow works with 2 calls in body",{
 #### IF ####
 
 # simple if call without else and empty body
-test_that("view_flow works with simple if and empty body",{
+test_that("flow_data works with simple if and empty body",{
   fun <- function(x) {
     if(x) {}
   }
-  data <- view_flow(fun,output = "data")
-  # view_flow(fun)
+  data <- flow_data(fun)
+  # flow_data(fun)
   # dput2(data$nodes[1:4])
   # dput2(data$edges)
   expect_equal(
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, -1, 3),
-      block_type = c("header", "if", "none", "end", "end"),
-      code_str = c("fun", "if (x)", "", "", ""),
+      block_type = c("header", "if", "none", "end", "return"),
+      code_str = c("fun(x)", "if (x)", "", "", ""),
       label = c("", "", "", "", ""),
       stringsAsFactors = FALSE))
   expect_equal(
@@ -171,20 +171,20 @@ test_that("view_flow works with simple if and empty body",{
 })
 
 # simple if call without else and a symbol in body
-test_that("view_flow works with simple if",{
+test_that("flow_data works with simple if",{
   fun <- function(x) {
     if(x) foo
   }
-  data <- view_flow(fun,output = "data")
-  # view_flow(fun)
+  data <- flow_data(fun)
+  # flow_data(fun)
   # dput2(data$nodes[1:4])
   # dput2(data$edges)
   expect_equal(
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, -1, 3),
-      block_type = c("header", "if", "none", "end", "end"),
-      code_str = c("fun", "if (x)", "foo", "", ""),
+      block_type = c("header", "if", "none", "end", "return"),
+      code_str = c("fun(x)", "if (x)", "foo", "", ""),
       label = c("", "", "", "", ""),
       stringsAsFactors = FALSE))
   expect_equal(
@@ -198,20 +198,20 @@ test_that("view_flow works with simple if",{
 })
 
 # simple if else call
-test_that("view_flow works with simple if else",{
+test_that("flow_data works with simple if else",{
   fun <- function(x) {
     if(x) foo else bar
   }
-  data <- view_flow(fun,output = "data")
-  # view_flow(fun)
+  data <- flow_data(fun)
+  # flow_data(fun)
   # dput2(data$nodes[1:4])
   # dput2(data$edges)
   expect_equal(
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, 3, -1, 4),
-      block_type = c("header", "if", "none", "none", "end", "end"),
-      code_str = c("fun", "if (x)", "foo", "bar", "", ""),
+      block_type = c("header", "if", "none", "none", "end", "return"),
+      code_str = c("fun(x)", "if (x)", "foo", "bar", "", ""),
       label = c("", "", "", "", "", ""),
       stringsAsFactors = FALSE))
   expect_equal(
@@ -228,20 +228,20 @@ test_that("view_flow works with simple if else",{
 # simple if else call without else and 2 calls in body
 
 # if else call returning on the left
-test_that("view_flow works returning on the yes branch",{
+test_that("flow_data works returning on the yes branch",{
   fun <- function(x) {
     if(x) return(foo) else bar
   }
-  data <- view_flow(fun,output = "data")
-  # view_flow(fun)
+  data <- flow_data(fun)
+  # flow_data(fun)
   # dput2(data$nodes[1:4])
   # dput2(data$edges)
   expect_equal(
     data$nodes[1:4],
     data.frame(
         id = c(0, 1, 2, -2, 3, -1, 4),
-        block_type = c("header", "if", "none", "return", "none", "end", "end"),
-        code_str = c("fun", "if (x)", "return(foo)", "", "bar", "", ""),
+        block_type = c("header", "if", "none", "return", "none", "end", "return"),
+        code_str = c("fun(x)", "if (x)", "return(foo)", "", "bar", "", ""),
         label = c("", "", "", "", "", "", ""),
         stringsAsFactors = FALSE))
   expect_equal(
@@ -256,20 +256,20 @@ test_that("view_flow works returning on the yes branch",{
 
 
 # if else call stopping on the right
-test_that("view_flow works stopping on the no branch",{
+test_that("flow_data works stopping on the no branch",{
     fun <- function(x) {
       if(x) foo else stop(bar)
     }
-    data <- view_flow(fun,output = "data")
-    # view_flow(fun)
+    data <- flow_data(fun)
+    # flow_data(fun)
     # dput2(data$nodes[1:4])
     # dput2(data$edges)
     expect_equal(
       data$nodes[1:4],
       data.frame(
         id = c(0, 1, 2, 3, -3, -1, 4),
-        block_type = c("header", "if", "none", "none", "stop", "end", "end"),
-        code_str = c("fun", "if (x)", "foo", "stop(bar)", "", "", ""),
+        block_type = c("header", "if", "none", "none", "stop", "end", "return"),
+        code_str = c("fun(x)", "if (x)", "foo", "stop(bar)", "", "", ""),
         label = c("", "", "", "", "", "", ""),
         stringsAsFactors = FALSE))
       expect_equal(
@@ -282,20 +282,20 @@ test_that("view_flow works stopping on the no branch",{
           stringsAsFactors = FALSE))
   })
 # if else call stopping on the left AND returning on the right
-test_that("view_flow works stopping on the yes branch and returning on the right branch",{
+test_that("flow_data works stopping on the yes branch and returning on the right branch",{
   fun <- function(x) {
     if(x) stop(foo) else return(bar)
   }
-  data <- view_flow(fun,output = "data")
-  # view_flow(fun)
+  data <- flow_data(fun)
+  # flow_data(fun)
   # dput2(data$nodes[1:4])
   # dput2(data$edges)
   expect_equal(
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, -2, 3, -3, 4),
-      block_type = c("header", "if", "none", "stop", "none", "return", "end"),
-      code_str = c("fun", "if (x)", "stop(foo)", "", "return(bar)", "", ""),
+      block_type = c("header", "if", "none", "stop", "none", "return", "return"),
+      code_str = c("fun(x)", "if (x)", "stop(foo)", "", "return(bar)", "", ""),
       label = c("", "", "", "", "", "", ""),
       stringsAsFactors = FALSE))
   expect_equal(
@@ -309,48 +309,49 @@ test_that("view_flow works stopping on the yes branch and returning on the right
 })
 
 # simple if call with a nested if else call
-test_that("view_flow works with nested if calls",{
+test_that("flow_data works with nested if calls",{
   fun <- function(x) {
     if(x) if(y) foo else bar
   }
-  data <- view_flow(fun,output = "data")
-  # view_flow(fun)
+  data <- flow_data(fun)
+  # flow_data(fun)
   # dput2(data$nodes[1:4])
   # dput2(data$edges)
   expect_equal(
     data$nodes[1:4],
     data.frame(
-      id = c(0, 1, 2, -2, 3, -3, 4),
-      block_type = c("header", "if", "none", "stop", "none", "return", "end"),
-      code_str = c("fun", "if (x)", "stop(foo)", "", "return(bar)", "", ""),
-      label = c("", "", "", "", "", "", ""),
+      id = c(0, 1, 2, 3, 4, -2, -1, 5),
+      block_type = c("header", "if", "if", "none", "none", "end", "end", "return"
+      ),
+      code_str = c("fun(x)", "if (x)", "if (y)", "foo", "bar", "", "", ""),
+      label = c("", "", "", "", "", "", "", ""),
       stringsAsFactors = FALSE))
   expect_equal(
     data$edges,
     data.frame(
-      from = c(0, 1, 2, 1, 3),
-      to = c(1, 2, -2, 3, -3),
-      edge_label = c("", "y", "", "n", ""),
-      arrow = c("->", "->", "->", "->", "->"),
+      from = c(0, 1, 2, 3, 2, 4, -2, 1, -1),
+      to = c(1, 2, 3, -2, 4, -2, -1, -1, 5),
+      edge_label = c("", "y", "y", "", "n", "", "", "n", ""),
+      arrow = c("->", "->", "->", "->", "->", "->", "->", "->", "->"),
       stringsAsFactors = FALSE))
 })
 
 #### FOR ####
 # empty for loop
-test_that("view_flow works with an empty  for loop",{
+test_that("flow_data works with an empty  for loop",{
   fun <- function(x) {
     for(x in foo) {}
   }
-  data <- view_flow(fun,output = "data")
-  # view_flow(fun)
+  data <- flow_data(fun)
+  # flow_data(fun)
   # dput2(data$nodes[1:4])
   # dput2(data$edges)
   expect_equal(
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, -1, 3),
-      block_type = c("header", "for", "none", "start", "end"),
-      code_str = c("fun", "for (x in foo)", "", "", ""),
+      block_type = c("header", "for", "none", "start", "return"),
+      code_str = c("fun(x)", "for (x in foo)", "", "", ""),
       label = c("", "", "", "", ""),
       stringsAsFactors = FALSE))
   expect_equal(
@@ -364,20 +365,20 @@ test_that("view_flow works with an empty  for loop",{
 })
 
 # simple for loop
-test_that("view_flow works with simple for loop",{
+test_that("flow_data works with simple for loop",{
   fun <- function(x) {
     for(x in foo) x
   }
-  data <- view_flow(fun,output = "data")
-  # view_flow(fun)
+  data <- flow_data(fun)
+  # flow_data(fun)
   # dput2(data$nodes[1:4])
   # dput2(data$edges)
   expect_equal(
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, -1, 3),
-      block_type = c("header", "for", "none", "start", "end"),
-      code_str = c("fun", "for (x in foo)", "x", "", ""),
+      block_type = c("header", "for", "none", "start", "return"),
+      code_str = c("fun(x)", "for (x in foo)", "x", "", ""),
       label = c("", "", "", "", ""),
       stringsAsFactors = FALSE))
   expect_equal(
@@ -391,204 +392,402 @@ test_that("view_flow works with simple for loop",{
 })
 
 # if else call with for loops on each side
-test_that("view_flow works with simple for loop",{
+test_that("flow_data works with simple for loop",{
   fun <- function(x) {
     if(foo)
       for(x in bar) baz
     else
       for(x in qux) quux
   }
-  data <- view_flow(fun,output = "data")
-  # view_flow(fun)
+  data <- flow_data(fun)
+  # flow_data(fun)
   # dput2(data$nodes[1:4])
   # dput2(data$edges)
   expect_equal(
     data$nodes[1:4],
     data.frame(
-      id = c(0, 1, 2, -1, 3),
-      block_type = c("header", "for", "none", "start", "end"),
-      code_str = c("fun", "for (x in foo)", "x", "", ""),
-      label = c("", "", "", "", ""),
+      id = c(0, 1, 2, 3, -2, 4, 5, -4, -1, 6),
+      block_type = c("header", "if", "for", "none", "start", "for", "none", "start",
+                     "end", "return"),
+      code_str = c("fun(x)", "if (foo)", "for (x in bar)", "baz", "", "for (x in qux)",
+                   "quux", "", "", ""),
+      label = c("", "", "", "", "", "", "", "", "", ""),
       stringsAsFactors = FALSE))
   expect_equal(
     data$edges,
     data.frame(
-      from = c(0, 1, 2, 1, -1),
-      to = c(1, 2, -1, -1, 3),
-      edge_label = c("", "", "", "next", ""),
-      arrow = c("->", "->", "->", "<-", "->"),
+      from = c(0, 1, 2, 3, 2, -2, 1, 4, 5, 4, -4, -1),
+      to = c(1, 2, 3, -2, -2, -1, 4, 5, -4, -4, -1, 6),
+      edge_label = c("", "y", "", "", "next", "", "n", "", "", "next", "", ""),
+      arrow = c("->", "->", "->", "->", "<-", "->", "->", "->", "->", "<-",
+                "->", "->"),
       stringsAsFactors = FALSE))
 })
 
-# -------------
-test_that("-------",{
+
+test_that("sub_fun_id works",{
   fun <- function(x) {
-    if(foo) {
-      if(bar) baz
-    }
-    for(x in qux) quux
+    x <- x*2
+    fun1 <- function(y) y
+    fun2 <- function(z) z
+    x
   }
-  data <- view_flow(fun,output = "data")
-  # view_flow(fun)
+  expect_message(flow_data(fun))
+  data <- flow_data(fun, sub_fun_id = 2)
+  # flow_data(fun)
   # dput2(data$nodes[1:4])
   # dput2(data$edges)
   expect_equal(
     data$nodes[1:4],
     data.frame(
-      id = c(0, 1, 2, -1, 3),
-      block_type = c("header", "for", "none", "start", "end"),
-      code_str = c("fun", "for (x in foo)", "x", "", ""),
-      label = c("", "", "", "", ""),
+      id = c(0, 1, 2),
+      block_type = c("header", "none", "return"),
+      code_str = c("fun(z)", "z", ""),
+      label = c("", "", ""),
       stringsAsFactors = FALSE))
   expect_equal(
     data$edges,
     data.frame(
-      from = c(0, 1, 2, 1, -1),
-      to = c(1, 2, -1, -1, 3),
-      edge_label = c("", "", "", "next", ""),
-      arrow = c("->", "->", "->", "<-", "->"),
+      from = c(0, 1),
+      to = c(1, 2),
+      edge_label = c("", ""),
+      arrow = c("->", "->"),
       stringsAsFactors = FALSE))
 })
 
-# simple while loop
-# if else call with while loops on each side
-# simple repeat loop
-# if else call with repeat loops on each side
+test_that("package works on calls",{
+  call <- quote({
+    x <- x*2
+    y <- x
+  })
+  data <- flow_data(call)
+  # flow_data(fun)
+  # dput2(data$nodes[1:4])
+  # dput2(data$edges)
+  expect_equal(
+    data$nodes[1:4],
+    data.frame(
+      id = c(1, 2),
+      block_type = c("none", "return"),
+      code_str = c("x <- x * 2;y <- x", ""),
+      label = c("", ""),
+      stringsAsFactors = FALSE))
+  expect_equal(
+    data$edges,
+    data.frame(
+      from = 1,
+      to = 2,
+      edge_label = "",
+      arrow = "->",
+      stringsAsFactors = FALSE))
+})
+
+test_that("package works on paths",{
+  tmp <- tempfile(fileext=".R")
+  write("x <- x*2\ny <- x", tmp)
+  data <- flow_data(tmp)
+  # flow_data(fun)
+  # dput2(data$nodes[1:4])
+  # dput2(data$edges)
+  expect_equal(
+    data$nodes[1:4],
+    data.frame(
+      id = c(1, 2),
+      block_type = c("none", "return"),
+      code_str = c("x <- x * 2;y <- x", ""),
+      label = c("", ""),
+      stringsAsFactors = FALSE))
+  expect_equal(
+    data$edges,
+    data.frame(
+      from = 1,
+      to = 2,
+      edge_label = "",
+      arrow = "->",
+      stringsAsFactors = FALSE))
+})
+
+test_that("flow_data fails if incorrect input", {
+  expect_error(flow_data(1), "must be a function")
+})
+
+test_that("flow_data works with prefixed comments",{
+  fun <- function(x) {
+    ## comment
+    x}
+  # flow_data(fun)
+  # dput2(data$nodes[1:4])
+  # dput2(data$edges)
+  data <- flow_data(fun, prefix = "##")
+  expect_equal(
+    data$nodes[1:4],
+    data.frame(
+      id = c(0, 1, 2),
+      block_type = c("header", "commented", "return"),
+      code_str = c("fun(x)", "x", ""),
+      label = c("", "comment", ""),
+      stringsAsFactors = FALSE))
+  expect_equal(
+    data$edges,
+    data.frame(
+      from = c(0, 1),
+      to = c(1, 2),
+      edge_label = c("", ""),
+      arrow = c("->", "->"),
+      stringsAsFactors = FALSE))
+})
 
 
 
-fun_if <- function(x){
-  ## com1
-  x <- 1
-  ## com2
-  x <- 2
-  x <- 2
-  if(x == 3) {
-    ## com3
-    x <- 3
+test_that("package works with range arg",{
+  fun <- function(x){
+    ## section 1
+    x <- x*2
+    ## section 2
+    x <- x*2
+    ## section 3
+    x <- x*2
+    ## section 4
+    x <- x*2
   }
-  x <- "foo"
-  ## com4
-  x <- 4
-}
+  data <- flow_data(fun, prefix = "##", range = 1:3)
+  # flow_data(fun)
+  # dput2(data$nodes[1:4])
+  # dput2(data$edges)
+  expect_equivalent(
+    data$nodes[1:4],
+    data.frame(
+      id = c(0, 1, 2, 3, 5),
+      block_type = c("header", "commented", "commented", "commented", "header"),
+      code_str = c("fun(x)", "x <- x * 2", "x <- x * 2", "x <- x * 2", "..."),
+      label = c("", "section 1", "section 2", "section 3", ""),
+      stringsAsFactors = FALSE))
+  expect_equivalent(
+    data$edges,
+    data.frame(
+      from = c(0, 1, 2, 3),
+      to = c(1, 2, 3, 5),
+      edge_label = c("", "", "", ""),
+      arrow = c("->", "->", "->", "--:>"),
+      stringsAsFactors = FALSE))
 
-view_flow(fun_if)
+  data <- flow_data(fun, prefix = "##", range = 2:3)
+  # flow_data(fun)
+  # dput2(data$nodes[1:4])
+  # dput2(data$edges)
+  expect_equivalent(
+    data$nodes[1:4],
+    data.frame(
+      id = c(0, 2, 3, 5),
+      block_type = c("header", "commented", "commented", "header"),
+      code_str = c(". . .", "x <- x * 2", "x <- x * 2", "..."),
+      label = c("", "section 2", "section 3", ""),
+      stringsAsFactors = FALSE))
+  expect_equivalent(
+    data$edges,
+    data.frame(
+      from = c(0, 2, 3),
+      to = c(2, 3, 5),
+      edge_label = c("", "", ""),
+      arrow = c("--:>", "->", "--:>"),
+      stringsAsFactors = FALSE))
 
+  # data <- flow_view(fun, prefix = "##", range = 2:4)
+  # # flow_data(fun)
+  # # dput2(data$nodes[1:4])
+  # # dput2(data$edges)
+  # expect_equal(
+  #   data$nodes[1:4],
+  #   data.frame(
+  #     id = c(1, 2),
+  #     block_type = c("none", "return"),
+  #     code_str = c("x <- x * 2;y <- x", ""),
+  #     label = c("", ""),
+  #     stringsAsFactors = FALSE))
+  # expect_equal(
+  #   data$edges,
+  #   data.frame(
+  #     from = 1,
+  #     to = 2,
+  #     edge_label = "",
+  #     arrow = "->",
+  #     stringsAsFactors = FALSE))
 
-fun_if_else <- function(x){
-  ## com1
-  x <- 1
-  ## com2
-  x <- 2
-  x <- 2
-  if(x == 3) {
-    ## com3
-    x <- 3
-  } else {
-    x <- "bar"
+})
+
+test_that("flow_code works",{
+  fun <- function(x){
+    x
   }
-  x <- "foo"
-  ## com4
-  x <- 4
-}
+  expect_equal(
+    flow_code(fun),
+    paste0("\n#.if: visual=rhomb fill=#e2efda align=center\n#.for: visual=rhomb",
+           " fill=#ddebf7 align=center\n#.repeat: visual=rhomb fill=#fce4d6",
+           " align=center\n#.while: visual=rhomb fill=#fff2cc align=center\n#.",
+           "none: visual=class fill=#ededed\n#.commented: visual=class",
+           " fill=#ededed\n#.header: visual=ellipse fill=#d9e1f2",
+           " align=center\n#.return: visual=end fill=#70ad47  ",
+           "empty\n#.stop: visual=end fill=#ed7d31  empty\n#arrowSize: 1",
+           "\n#bendSize: 0.3\n#direction: down\n#gutter: 5\n#edgeMargin: 0\n",
+           "#edges: hard\n#fill: #eee8d5\n#fillArrows: false\n#font: Calibri\n",
+           "#fontSize: 12\n#leading: 1.25\n#lineWidth: 3\n#padding: 16\n",
+           "#spacing: 40\n#stroke: #33322E\n#title: filename\n#zoom: 1\n",
+           "#acyclicer: greedy\n#ranker: network-simplex\n",
+           "[<header>fun(x)]  -> [<none> 1: ;x]\n[<none> 1: ;x]  -> [<return> 2]")
+  )
+})
 
-view_flow(fun_if_else, prefix = "##")
+# detach("package:funflow")
+# covr::report()
 
-fun_if_else_stop <- function(x){
-  if(TRUE) {
-    foo
-  } else {
-    stop("!!!!!")
-  }
-
-  if(TRUE) {
-    foo
-    return(bar)
-  } else {
-    baz
-  }
-  qux
-}
-
-view_flow(fun_if_else_stop)
-
-
-
-area <- function(radius, angle, check = TRUE){
-  radius_squared <- r^2
-  if(check){
-    if(angle < 0 || angle > 2*pi){
-      stop("incorrect angle value")
-    } else {
-      print("good angle value")
-    }
-  }
-  area <- angle * radius_squared
-  area
-}
-
-funflow(area)
-
-fun_for <- function(x){
-  for(elt in x) {
-    foo
-  }
-}
-
-
-view_flow(fun_for)
-
-fun_while <- function(x){
-  while(x) {
-    foo
-  }
-}
-
-view_flow(fun_while)
-
-fun_repeat <- function(x){
-  repeat {
-    foo
-  }
-}
-
-# issue with the last if (wrong link), these could be avoided by adding an empty elt
-# at the end of all cfc calls
-view_flow(fun_repeat)
-
-
-
-
-
-
-# modify function so that control flow constructs use `{...}` AND keep comments in srcref
-
-# I would like to modify an input function, so that the expressions always calls
-# `` `{`()``, and doing so, keep the comments at the right place. Here is an example :
-
-input_fun <- function(){
-
-  if(TRUE)
-    foo
-  else
-    ## bar_com1
-    ## bar_com2
-    bar({
-      x({y})
-    }) %in% z
-
-  ## if
-  if(
-    FALSE) {
-    this
-    ## baz_com
-    baz
-    that
-  }
-
-  repeat
-    while(condition)
-      ## qux_com
-      qux
-}
-
+#
+# fun_if <- function(x){
+#   ## com1
+#   x <- 1
+#   ## com2
+#   x <- 2
+#   x <- 2
+#   if(x == 3) {
+#     ## com3
+#     x <- 3
+#   }
+#   x <- "foo"
+#   ## com4
+#   x <- 4
+# }
+#
+# flow_data(fun_if)
+#
+#
+# fun_if_else <- function(x){
+#   ## com1
+#   x <- 1
+#   ## com2
+#   x <- 2
+#   x <- 2
+#   if(x == 3) {
+#     ## com3
+#     x <- 3
+#   } else {
+#     x <- "bar"
+#   }
+#   x <- "foo"
+#   ## com4
+#   x <- 4
+# }
+#
+# flow_data(fun_if_else, prefix = "##")
+#
+# fun_if_else_stop <- function(x){
+#   if(TRUE) {
+#     foo
+#   } else {
+#     stop("!!!!!")
+#   }
+#
+#   if(TRUE) {
+#     foo
+#     return(bar)
+#   } else {
+#     baz
+#   }
+#   qux
+# }
+#
+# flow_data(fun_if_else_stop)
+#
+#
+#
+# area <- function(radius, angle, check = TRUE){
+#   if(check){
+#     if(angle < 0 || angle > 2*pi){
+#       stop("incorrect angle value")
+#     } else {
+#       print("good angle value")
+#     }
+#   }
+#   radius_squared <- r^2
+#   angle * radius_squared
+# }
+#
+# flow_view(area)
+#
+# fun_for <- function(x){
+#   for(elt in x) {
+#     foo
+#   }
+# }
+#
+#
+# flow_view(fun_for)
+#
+# fun_while <- function(x){
+#   while(x) {
+#     foo
+#   }
+# }
+#
+# flow_view(fun_while)
+#
+# fun_repeat <- function(x){
+#   repeat {
+#     foo
+#   }
+# }
+#
+# # issue with the last if (wrong link), these could be avoided by adding an empty elt
+# # at the end of all cfc calls
+# flow_view(fun_repeat)
+#
+#
+#
+#
+#
+#
+# # modify function so that control flow constructs use `{...}` AND keep comments in srcref
+#
+# # I would like to modify an input function, so that the expressions always calls
+# # `` `{`()``, and doing so, keep the comments at the right place. Here is an example :
+#
+# input_fun <- function(){
+#
+#   if(TRUE)
+#     foo
+#   else
+#     ## bar_com1
+#     ## bar_com2
+#     bar({
+#       x({y})
+#     }) %in% z
+#
+#   ## if
+#   if(
+#     FALSE) {
+#     this
+#     ## baz_com
+#     baz
+#     that
+#   }
+#
+#   repeat
+#     while(condition)
+#       ## qux_com
+#       qux
+# }
+#
+# flow_view(input_fun, prefix = "##")
+#
+#
+#
+# fun <- function(x){
+#
+#   ## comment 1
+#   x <- x * 2
+#
+#   ## comment 2
+#   if(x > 3)
+#     print("big x!")
+#   x
+# }
+#
+# flow_view(fun, prefix = "##")

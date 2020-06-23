@@ -7,7 +7,7 @@ flow_data <-
     # build data from the function body
     data <- new_data()
 
-    # put comments in `#`() calls
+    # put comments in `#`() calls so we can manipulate them as code
     x <- add_comment_calls(x, prefix)
 
     sub_funs <- find_funs(x)
@@ -24,7 +24,7 @@ flow_data <-
     if(is.function(x)){
       title <- head(deparse(args(x)), -1)
       title <- paste(title, collapse = "\n  ")
-      title <- sub("^function ", deparse(f_sym), title)
+      title <- trimws(sub("^function ", deparse(f_sym), title))
       data <- add_node(
         data,
         id = 0L,

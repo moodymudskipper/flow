@@ -37,7 +37,7 @@ add_data_from_standard_block <- function(data, block){
       code = substitute(),
       code_str = "")
   } else {
-  code_str <- paste(unlist(sapply(as.list(block), deparse)), collapse=";")
+  code_str <- trimws(paste(unlist(sapply(as.list(block), deparse)), collapse=";"))
   # add current node
   data <- add_node(
     data,
