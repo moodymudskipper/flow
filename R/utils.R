@@ -106,7 +106,34 @@ find_funs <- function(call){
   env$funs
 }
 
+transpose_if_calls <- function(expr){
+  #browser()
+  if(!is.call(expr)) return(expr)
+  if(is.call(expr) && identical(expr[[1]], quote(`<-`)) &&
+     is.call(expr[[3]]) && identical(expr[[3]][[1]], quote(`if`))) {
+    var <- expr[[2]]
+    expr <- expr[[3]]
 
+    if(is.call(expr[[3]]) && identical(expr[[3]][[1]], quote(`{`)))
+      expr[[3]][[length(expr[[3]])]] <- call("<-", var, expr[[3]][[length(expr[[3]])]])
+    else
+      expr[[3]] <- call("<-", var, expr[[3]])
+
+    if(is.call(expr[[4]]) && identical(expr[[4]][[1]], quote(`{`)))
+      expr[[4]][[length(expr[[4]])]] <- call("<-", var, expr[[4]][[length(expr[[4]])]])
+    else
+      expr[[4]] <- call("<-", var, expr[[4]])
+    return(expr)
+  }
+  expr[] <- lapply(expr, transpose_if_calls)
+  expr
+}
+
+# fun <- function(x){
+#   res <- if(x>0) "pos" else "neg"
+#   res
+# }
+# transpose_if_calls(body(fun))
 #
 # debugged <- function(n = 0){
 #   fun_sym <- eval.parent(quote(match.call()), n +1)[[1]]
@@ -121,3 +148,35 @@ find_funs <- function(call){
 # is_cfc_call <- function(x){
 #   is.call(x) && as.character(x[[1]]) %in% control_flow_ops
 # }
+
+getS3methodSym <- function(fun, x){
+  s3methods <- sapply(class(x),getS3method, f = fun, optional = TRUE, envir = parent.frame())
+  s3methods <- Filter(Negate(is.null), s3methods)
+  suffix <- names(s3methods)[1]
+  if(is.na(suffix)) {
+    suffix <- "default"
+    fun_eval <- get0(fun, mode = "function")
+    nmspc <- getNamespaceName(environment(fun_eval))
+    nm <- paste0(fun,".",suffix)
+    if(!exists(nm, environment(fun_eval)))
+      stop("error when trying to guess S3 method")
+    nm <- paste0(nmspc,"::", nm)
+    test <- try(eval(str2lang(nm)), silent = TRUE)
+    if(inherits(test, "try-error")) nm <- sub("::", ":::", nm, fixed = TRUE)
+    #method <- get0(nm, mode = "function", envir = environment(fun_eval))
+  } else {
+    method <- s3methods[[1]]
+    nmspc <- getNamespaceName(environment(method))
+    nm <- paste0(fun,".",suffix)
+    if(!exists(nm, environment(method)))
+      stop("error when trying to guess S3 method")
+    nm <- paste0(nmspc,"::", nm)
+    test <- try(eval(str2lang(nm)), silent = TRUE)
+    if(inherits(test, "try-error")) nm <- sub("::", ":::", nm, fixed = TRUE)
+  }
+
+  nm
+}
+
+ # getS3methodSym("mutate", starwars)
+ # getS3methodSym("head", letters)

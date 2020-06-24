@@ -641,6 +641,13 @@ test_that("flow_code works",{
            "[<header>fun(x)]  -> [<standard> 1: ;x]\n[<standard> 1: ;x]  -> [<return> 2]")
   )
 })
+
+# have tests with break and next
+# have tests with repeat an while
+# have tests with code = NA and code = FALSE
+# have test where if call and yes is dead end (add_data_from_if_block 118:119)
+# have tests for other flow funs
+
 #.break: visual=receiver fill=#ffc000 empty
 #.next: visual=transceiver fill=#5b9bd5  empty
 

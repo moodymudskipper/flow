@@ -1,13 +1,14 @@
 #' @export
 #' @rdname flow_view
 flow_data <-
-  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL) {
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, transpose_if = FALSE) {
     f_sym <- substitute(x)
 
     # build data from the function body
     data <- new_data()
 
     # put comments in `#`() calls so we can manipulate them as code
+    # relevant only for functions
     x <- add_comment_calls(x, prefix)
 
     sub_funs <- find_funs(x)
@@ -32,11 +33,14 @@ flow_data <-
         code = f_sym,
         code_str = title)
       data <- add_edge(data, from=0L, to = 1L)
+      if(transpose_if) body(x) <- transpose_if_calls(body(x))
       data <- add_data_from_expr(data, body(x))
     } else if (is.call(x)) {
+      if(transpose_if)  x <- transpose_if_calls(x)
       data <- add_data_from_expr(data, x)
     } else if (is.character(x) && length(x) == 1) {
       x <- as.call(c(quote(`{`), parse(x)))
+      if(transpose_if) x <- transpose_if_calls(x)
       data <- add_data_from_expr(data, x)
       } else {
       stop("x must be a function or a call")
@@ -116,9 +120,10 @@ flow_code <-
 #'
 #' @export
 flow_view <-
-  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, width = NULL,
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL,
+           transpose_if = FALSE, code = TRUE, width = NULL,
            height = NULL, ...) {
-    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id)))
+    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id, transpose_if)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = FALSE)
     htmlwidgets::createWidget(
@@ -134,10 +139,11 @@ flow_view <-
 #' @export
 #' @rdname flow_view
 flow_html <-
-  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, width = NULL,
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL,
+           transpose_if = FALSE, code = TRUE, width = NULL,
            height = NULL,
            path = tempfile("flow", fileext = ".html"), ...) {
-    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id)))
+    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id, transpose_if)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = FALSE)
     widget <- htmlwidgets::createWidget(
@@ -152,9 +158,9 @@ flow_html <-
 #' @export
 #' @rdname flow_view
 flow_browse <-
-  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, width = NULL,
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, transpose_if = FALSE, code = TRUE, width = NULL,
            height = NULL, ...) {
-    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id)))
+    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id, transpose_if)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = FALSE)
     widget <- htmlwidgets::createWidget(
@@ -191,10 +197,10 @@ flow_browse <-
 #' @export
 #' @rdname flow_view
 flow_png <-
-  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, code = TRUE, width = NULL,
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, transpose_if = FALSE, code = TRUE, width = NULL,
            height = NULL,
            path = tempfile("flow", fileext = ".png"), ...) {
-    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id)))
+    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id, transpose_if)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = FALSE)
     path0 <- tempfile("flow", fileext = ".html")
