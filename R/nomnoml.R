@@ -81,7 +81,7 @@ build_nomnoml_code <- function(
   if(is.na(code)){
     node_data$code_str[node_data$label != ""] <- ""
   } else if(!code) {
-    node_data$code_str[node_data$block_type %in% c("none", "commented")] <- ""
+    node_data$code_str[node_data$block_type %in% c("standard", "commented")] <- ""
   }
 
   # create the box column containing the nomnoml box string
@@ -116,7 +116,7 @@ build_nomnoml_code <- function(
     #.for: visual=rhomb fill=#ddebf7 align=center
     #.repeat: visual=rhomb fill=#fce4d6 align=center
     #.while: visual=rhomb fill=#fff2cc align=center
-    #.none: visual=class fill=#ededed
+    #.standard: visual=class fill=#ededed
     #.commented: visual=class fill=#ededed
     #.header: visual=ellipse fill=#d9e1f2 align=center
     #.return: visual=end fill=#70ad47  empty

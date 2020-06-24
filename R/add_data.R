@@ -10,16 +10,16 @@ add_data_from_expr <-  function(data, expr){
       block_type <- attr(block, "block_type")
     if (is.null(block_type)){
       data <- add_data_from_standard_block(data, block)
-    } else if (block_type == "commented"){
-      data <- add_data_from_commented_block(data, block)
+    # } else if (block_type == "commented"){
+    #   data <- add_data_from_commented_block(data, block)
     } else if (block_type == "if"){
-      data <- add_data_from_if_block(data, block[[1]])
+      data <- add_data_from_if_block(data, block)
     } else if (block_type == "for"){
-      data <- add_data_from_for_block(data, block[[1]])
+      data <- add_data_from_for_block(data, block)
     } else if (block_type == "while"){
-      data <- add_data_from_while_block(data, block[[1]])
+      data <- add_data_from_while_block(data, block)
     } else if (block_type == "repeat"){
-      data <- add_data_from_repeat_block(data, block[[1]])
+      data <- add_data_from_repeat_block(data, block)
     }
   }
   data
@@ -33,7 +33,7 @@ add_data_from_standard_block <- function(data, block){
     data <- add_node(
       data,
       id,
-      block_type = "none",
+      block_type = "standard",
       code = substitute(),
       code_str = "")
   } else {
@@ -42,9 +42,10 @@ add_data_from_standard_block <- function(data, block){
   data <- add_node(
     data,
     id,
-    block_type = "none",
+    block_type = "standard",
     code = block,
-    code_str = code_str)
+    code_str = code_str,
+    label = attr(block, "label"))
   }
   # draw edge from current node to next (yet undefined) node
   data <- add_edge(data, from = id, to = id + 1)
@@ -52,23 +53,23 @@ add_data_from_standard_block <- function(data, block){
 }
 
 
-add_data_from_commented_block <- function(data, block){
-  # increment id
-  id <-get_last_id(data) + 1
-  # build code string to display in node
-  code_str <- paste(unlist(sapply(as.list(block), deparse)), collapse=";")
-  # add current node
-  data <- add_node(
-    data,
-    id,
-    block_type = "commented",
-    code = block,
-    code_str = code_str,
-    label = attr(block, "label"))
-  # draw edge from current node to next (yet undefined) node
-  data <- add_edge(data, from = id, to = id + 1)
-  data
-}
+# add_data_from_commented_block <- function(data, block){
+#   # increment id
+#   id <-get_last_id(data) + 1
+#   # build code string to display in node
+#   code_str <- paste(unlist(sapply(as.list(block), deparse)), collapse=";")
+#   # add current node
+#   data <- add_node(
+#     data,
+#     id,
+#     block_type = "commented",
+#     code = block,
+#     code_str = code_str,
+#     label = attr(block, "label"))
+#   # draw edge from current node to next (yet undefined) node
+#   data <- add_edge(data, from = id, to = id + 1)
+#   data
+# }
 
 
 add_data_from_if_block <- function(data, block){
@@ -88,7 +89,8 @@ add_data_from_if_block <- function(data, block){
     id_if,
     "if",
     code = block[[2]],
-    code_str = code_str)
+    code_str = code_str,
+    label = attr(block, "label"))
 
   # add edge from IF node to yes branch
   data <- add_edge(data, from=id_if, to = id_yes, edge_label = "y")
@@ -189,7 +191,8 @@ add_data_from_for_block <- function(data, block, id){
     data,
     id, "for",
     code = as.list(block[2:3]),
-    code_str = code_str)
+    code_str = code_str,
+    label = attr(block, "label"))
 
   # add edge from `for` statement
   data <- add_edge(data, from = id, to = id + 1)
@@ -230,7 +233,8 @@ add_data_from_while_block <- function(data, block){
     id,
     block_type = "while",
     code = as.list(block[[2]]),
-    code_str = sprintf("while (%s)", deparse2(block[[2]])))
+    code_str = sprintf("while (%s)", deparse2(block[[2]])),
+    label = attr(block, "label"))
 
   # add edge from while node to block
   data <- add_edge(data, from = id, to = id + 1)
@@ -268,7 +272,8 @@ add_data_from_repeat_block <- function(data, block, id){
     id,
     block_type = "repeat",
     code = as.list(block[[1]]),
-    code_str = "repeat")
+    code_str = "repeat",
+    label = attr(block, "label"))
 
   # add edge from repeat node to block
   data <- add_edge(data, from=id, to = id+1)

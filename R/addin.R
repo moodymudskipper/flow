@@ -17,4 +17,5 @@ flow_view_addin <- function() {
     print(flow_view(selection_lng))
   }
   invisible()
+  # nocov end
 }

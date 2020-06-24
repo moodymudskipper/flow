@@ -42,7 +42,7 @@ test_that("flow_data works with empty fun",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2),
-      block_type = c("header", "none", "return"),
+      block_type = c("header", "standard", "return"),
       code_str = c("fun(x)", "", ""),
       label = c("", "", ""),
       stringsAsFactors = FALSE))
@@ -69,7 +69,7 @@ test_that("flow_data works with one symbol in body",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2),
-      block_type = c("header", "none", "return"),
+      block_type = c("header", "standard", "return"),
       code_str = c("fun(x)", "x", ""),
       label = c("", "", ""),
       stringsAsFactors = FALSE))
@@ -94,7 +94,7 @@ test_that("flow_data works with one call in body",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2),
-      block_type = c("header", "none", "return"),
+      block_type = c("header", "standard", "return"),
       code_str = c("fun(x)", "x + y", ""),
       label = c("", "", ""),
       stringsAsFactors = FALSE))
@@ -122,7 +122,7 @@ test_that("flow_data works with 2 calls in body",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2),
-      block_type = c("header", "none", "return"),
+      block_type = c("header", "standard", "return"),
       code_str = c("fun(x)", "x + y;u + v", ""),
       label = c("", "", ""),
       stringsAsFactors = FALSE))
@@ -156,7 +156,7 @@ test_that("flow_data works with simple if and empty body",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, -1, 3),
-      block_type = c("header", "if", "none", "end", "return"),
+      block_type = c("header", "if", "standard", "end", "return"),
       code_str = c("fun(x)", "if (x)", "", "", ""),
       label = c("", "", "", "", ""),
       stringsAsFactors = FALSE))
@@ -183,7 +183,7 @@ test_that("flow_data works with simple if",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, -1, 3),
-      block_type = c("header", "if", "none", "end", "return"),
+      block_type = c("header", "if", "standard", "end", "return"),
       code_str = c("fun(x)", "if (x)", "foo", "", ""),
       label = c("", "", "", "", ""),
       stringsAsFactors = FALSE))
@@ -210,7 +210,7 @@ test_that("flow_data works with simple if else",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, 3, -1, 4),
-      block_type = c("header", "if", "none", "none", "end", "return"),
+      block_type = c("header", "if", "standard", "standard", "end", "return"),
       code_str = c("fun(x)", "if (x)", "foo", "bar", "", ""),
       label = c("", "", "", "", "", ""),
       stringsAsFactors = FALSE))
@@ -240,7 +240,7 @@ test_that("flow_data works returning on the yes branch",{
     data$nodes[1:4],
     data.frame(
         id = c(0, 1, 2, -2, 3, -1, 4),
-        block_type = c("header", "if", "none", "return", "none", "end", "return"),
+        block_type = c("header", "if", "standard", "return", "standard", "end", "return"),
         code_str = c("fun(x)", "if (x)", "return(foo)", "", "bar", "", ""),
         label = c("", "", "", "", "", "", ""),
         stringsAsFactors = FALSE))
@@ -268,7 +268,7 @@ test_that("flow_data works stopping on the no branch",{
       data$nodes[1:4],
       data.frame(
         id = c(0, 1, 2, 3, -3, -1, 4),
-        block_type = c("header", "if", "none", "none", "stop", "end", "return"),
+        block_type = c("header", "if", "standard", "standard", "stop", "end", "return"),
         code_str = c("fun(x)", "if (x)", "foo", "stop(bar)", "", "", ""),
         label = c("", "", "", "", "", "", ""),
         stringsAsFactors = FALSE))
@@ -294,7 +294,7 @@ test_that("flow_data works stopping on the yes branch and returning on the right
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, -2, 3, -3, 4),
-      block_type = c("header", "if", "none", "stop", "none", "return", "return"),
+      block_type = c("header", "if", "standard", "stop", "standard", "return", "return"),
       code_str = c("fun(x)", "if (x)", "stop(foo)", "", "return(bar)", "", ""),
       label = c("", "", "", "", "", "", ""),
       stringsAsFactors = FALSE))
@@ -321,7 +321,7 @@ test_that("flow_data works with nested if calls",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, 3, 4, -2, -1, 5),
-      block_type = c("header", "if", "if", "none", "none", "end", "end", "return"
+      block_type = c("header", "if", "if", "standard", "standard", "end", "end", "return"
       ),
       code_str = c("fun(x)", "if (x)", "if (y)", "foo", "bar", "", "", ""),
       label = c("", "", "", "", "", "", "", ""),
@@ -350,7 +350,7 @@ test_that("flow_data works with an empty  for loop",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, -1, 3),
-      block_type = c("header", "for", "none", "start", "return"),
+      block_type = c("header", "for", "standard", "start", "return"),
       code_str = c("fun(x)", "for (x in foo)", "", "", ""),
       label = c("", "", "", "", ""),
       stringsAsFactors = FALSE))
@@ -377,7 +377,7 @@ test_that("flow_data works with simple for loop",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, -1, 3),
-      block_type = c("header", "for", "none", "start", "return"),
+      block_type = c("header", "for", "standard", "start", "return"),
       code_str = c("fun(x)", "for (x in foo)", "x", "", ""),
       label = c("", "", "", "", ""),
       stringsAsFactors = FALSE))
@@ -407,7 +407,7 @@ test_that("flow_data works with simple for loop",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, 3, -2, 4, 5, -4, -1, 6),
-      block_type = c("header", "if", "for", "none", "start", "for", "none", "start",
+      block_type = c("header", "if", "for", "standard", "start", "for", "standard", "start",
                      "end", "return"),
       code_str = c("fun(x)", "if (foo)", "for (x in bar)", "baz", "", "for (x in qux)",
                    "quux", "", "", ""),
@@ -441,7 +441,7 @@ test_that("sub_fun_id works",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2),
-      block_type = c("header", "none", "return"),
+      block_type = c("header", "standard", "return"),
       code_str = c("fun(z)", "z", ""),
       label = c("", "", ""),
       stringsAsFactors = FALSE))
@@ -468,7 +468,7 @@ test_that("package works on calls",{
     data$nodes[1:4],
     data.frame(
       id = c(1, 2),
-      block_type = c("none", "return"),
+      block_type = c("standard", "return"),
       code_str = c("x <- x * 2;y <- x", ""),
       label = c("", ""),
       stringsAsFactors = FALSE))
@@ -493,7 +493,7 @@ test_that("package works on paths",{
     data$nodes[1:4],
     data.frame(
       id = c(1, 2),
-      block_type = c("none", "return"),
+      block_type = c("standard", "return"),
       code_str = c("x <- x * 2;y <- x", ""),
       label = c("", ""),
       stringsAsFactors = FALSE))
@@ -523,7 +523,7 @@ test_that("flow_data works with prefixed comments",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2),
-      block_type = c("header", "commented", "return"),
+      block_type = c("header", "standard", "return"),
       code_str = c("fun(x)", "x", ""),
       label = c("", "comment", ""),
       stringsAsFactors = FALSE))
@@ -558,7 +558,7 @@ test_that("package works with range arg",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 1, 2, 3, 5),
-      block_type = c("header", "commented", "commented", "commented", "header"),
+      block_type = c("header", "standard", "standard", "standard", "header"),
       code_str = c("fun(x)", "x <- x * 2", "x <- x * 2", "x <- x * 2", "..."),
       label = c("", "section 1", "section 2", "section 3", ""),
       stringsAsFactors = FALSE))
@@ -579,7 +579,7 @@ test_that("package works with range arg",{
     data$nodes[1:4],
     data.frame(
       id = c(0, 2, 3, 5),
-      block_type = c("header", "commented", "commented", "header"),
+      block_type = c("header", "standard", "standard", "header"),
       code_str = c(". . .", "x <- x * 2", "x <- x * 2", "..."),
       label = c("", "section 2", "section 3", ""),
       stringsAsFactors = FALSE))
@@ -600,7 +600,7 @@ test_that("package works with range arg",{
   #   data$nodes[1:4],
   #   data.frame(
   #     id = c(1, 2),
-  #     block_type = c("none", "return"),
+  #     block_type = c("standard", "return"),
   #     code_str = c("x <- x * 2;y <- x", ""),
   #     label = c("", ""),
   #     stringsAsFactors = FALSE))
@@ -624,7 +624,7 @@ test_that("flow_code works",{
     paste0("\n#.if: visual=rhomb fill=#e2efda align=center\n#.for: visual=rhomb",
            " fill=#ddebf7 align=center\n#.repeat: visual=rhomb fill=#fce4d6",
            " align=center\n#.while: visual=rhomb fill=#fff2cc align=center\n#.",
-           "none: visual=class fill=#ededed\n#.commented: visual=class",
+           "standard: visual=class fill=#ededed\n#.commented: visual=class",
            " fill=#ededed\n#.header: visual=ellipse fill=#d9e1f2",
            " align=center\n#.return: visual=end fill=#70ad47  ",
            "empty\n#.stop: visual=end fill=#ed7d31  empty\n",
@@ -638,7 +638,7 @@ test_that("flow_code works",{
            "#fontSize: 12\n#leading: 1.25\n#lineWidth: 3\n#padding: 16\n",
            "#spacing: 40\n#stroke: #33322E\n#title: filename\n#zoom: 1\n",
            "#acyclicer: greedy\n#ranker: network-simplex\n",
-           "[<header>fun(x)]  -> [<none> 1: ;x]\n[<none> 1: ;x]  -> [<return> 2]")
+           "[<header>fun(x)]  -> [<standard> 1: ;x]\n[<standard> 1: ;x]  -> [<return> 2]")
   )
 })
 #.break: visual=receiver fill=#ffc000 empty

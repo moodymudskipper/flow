@@ -41,9 +41,9 @@ add_edge <- function(data, to, from = to, edge_label = "", arrow = "->"){
 
 
 
-rleid <- function(x){
-  with(rle(x), rep(seq_along(lengths), lengths))
-}
+# rleid <- function(x){
+#   with(rle(x), rep(seq_along(lengths), lengths))
+# }
 
 deparse2 <- function(x){
   x <- as.call(c(quote(`{`),x))
