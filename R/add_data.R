@@ -8,8 +8,6 @@ add_data_from_expr <-  function(data, expr){
       block_type <- attr(block, "block_type")
     if (is.null(block_type)) {
       data <- add_data_from_standard_block(data, block)
-    # } else if (block_type == "commented"){
-    #   data <- add_data_from_commented_block(data, block)
     } else if (block_type == "if") {
       data <- add_data_from_if_block(data, block)
     } else if (block_type == "for") {
@@ -49,26 +47,6 @@ add_data_from_standard_block <- function(data, block){
   data <- add_edge(data, from = id, to = id + 1)
   data
 }
-
-
-# add_data_from_commented_block <- function(data, block){
-#   # increment id
-#   id <-get_last_id(data) + 1
-#   # build code string to display in node
-#   code_str <- paste(unlist(sapply(as.list(block), deparse)), collapse=";")
-#   # add current node
-#   data <- add_node(
-#     data,
-#     id,
-#     block_type = "commented",
-#     code = block,
-#     code_str = code_str,
-#     label = attr(block, "label"))
-#   # draw edge from current node to next (yet undefined) node
-#   data <- add_edge(data, from = id, to = id + 1)
-#   data
-# }
-
 
 add_data_from_if_block <- function(data, block){
   # increment id
