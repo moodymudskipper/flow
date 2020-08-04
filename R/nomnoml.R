@@ -101,6 +101,8 @@ build_nomnoml_code <- function(
   edge_data$order <- seq_len(nrow(edge_data))
   edge_data <- merge(edge_data,node_data[c("id","box")], by.x = "from", by.y = "id", all.x = TRUE)
   edge_data <- merge(edge_data,node_data[c("id","box")], by.x = "to", by.y = "id", all.x = TRUE)
+  # To appease cmd check
+  box.x <- edge_label <- arrow <- box.y <- NULL
   edge_data <- transform(edge_data, nomnoml_code = sprintf(
     "%s %s %s %s",
     box.x,
