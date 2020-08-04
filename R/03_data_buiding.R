@@ -29,7 +29,7 @@ add_edge <- function(data, to, from = to, edge_label = "", arrow = "->"){
   data
 }
 
-add_data_from_expr <-  function(data, expr){
+add_data_from_expr <-  function(data, expr, narrow = FALSE){
   blocks <- build_blocks(expr)
   for (i in seq_along(blocks)) {
     block <- blocks[[i]]
@@ -40,7 +40,7 @@ add_data_from_expr <-  function(data, expr){
     if (is.null(block_type)) {
       data <- add_data_from_standard_block(data, block)
     } else if (block_type == "if") {
-      data <- add_data_from_if_block(data, block)
+      data <- add_data_from_if_block(data, block, narrow = narrow)
     } else if (block_type == "for") {
       data <- add_data_from_for_block(data, block)
     } else if (block_type == "while") {
@@ -79,13 +79,13 @@ add_data_from_standard_block <- function(data, block){
   data
 }
 
-add_data_from_if_block <- function(data, block){
+add_data_from_if_block <- function(data, block, narrow = FALSE){
   # increment id
   id_if <- get_last_id(data) + 1
   id_end <- -id_if
   id_yes <- id_if + 1
-  # build code string to display in node
 
+  # build code string to display in node
   code_str <- sprintf("if (%s)", deparse2(block[[2]]))
   code_str <- gsub("||","||\n", code_str,fixed = TRUE)
   code_str <- gsub("&&","&&\n", code_str,fixed = TRUE)
@@ -104,7 +104,7 @@ add_data_from_if_block <- function(data, block){
 
   # build data from "yes" expression
   yes_expr <- block[[3]]
-  data <-  add_data_from_expr(data, yes_expr)
+  data <-  add_data_from_expr(data, yes_expr, narrow = narrow)
 
   # end of yes will not be linked to incremented
   # node id but either to stop/return/ or end of if
@@ -138,11 +138,10 @@ add_data_from_if_block <- function(data, block){
 
     # build data from "no" expression
     no_expr <- block[[4]]
-    data <-  add_data_from_expr(data, no_expr)
+    data <-  add_data_from_expr(data, no_expr, narrow = narrow)
 
     # end of no will not be linked to incremented
     # node id but either to stop/return/ or end of if
-
 
     id_last_no <- get_last_id(data)
 
@@ -163,10 +162,24 @@ add_data_from_if_block <- function(data, block){
       data$edges$to[nrow(data$edges)] <- id_end
       no_stopped <- FALSE
     }
+
+    if (narrow) {
+      if (yes_stopped && !no_stopped) {
+        data <- add_edge(data, from = -id_last_yes, to = id_end, arrow = "-/-")
+      }
+
+      if (no_stopped && !yes_stopped) {
+        data <- add_edge(data, from = -id_last_no, to = id_end, arrow = "-/-")
+      }
+    }
   } else {
     # add edge from IF node to end node
     data <- add_edge(data, from = id_if, to = id_end, edge_label = "n")
     no_stopped <- FALSE
+
+    if (yes_stopped && narrow) {
+      data <- add_edge(data, from = -id_last_yes, to = id_end, arrow = "-/-")
+    }
   }
 
   is_dead_end <- yes_stopped && no_stopped
@@ -205,7 +218,7 @@ add_data_from_for_block <- function(data, block){
 
   # build data from for's "body"
   for_expr <- block[[4]] # the 4th item contains the code
-  data <-  add_data_from_expr(data, for_expr)
+  data <-  add_data_from_expr(data, for_expr, narrow = narrow)
 
   # we edit last edge because last of loop
   # node id but to end
@@ -244,7 +257,7 @@ add_data_from_while_block <- function(data, block){
 
   # build data from while's "body"
   while_expr = block[[3]]
-  data <-  add_data_from_expr(data, while_expr)
+  data <-  add_data_from_expr(data, while_expr, narrow = narrow)
 
   # we edit last edge because last of loop
   # node id but to end
@@ -283,7 +296,7 @@ add_data_from_repeat_block <- function(data, block){
 
   # build data from repeat's "body"
   while_expr = block[[2]]
-  data <-  add_data_from_expr(data, while_expr)
+  data <-  add_data_from_expr(data, while_expr, narrow = narrow)
 
   # we edit last edge because last of loop
   # node id but to end

@@ -1,7 +1,8 @@
 #' @export
 #' @rdname flow_view
 flow_data <-
-  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, swap = FALSE) {
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, swap = FALSE,
+           narrow = FALSE) {
     f_sym <- substitute(x)
 
     # build data from the function body
@@ -34,14 +35,14 @@ flow_data <-
         code_str = title)
       data <- add_edge(data, from = 0L, to = 1L)
       if (swap) body(x) <- swap_calls(body(x))
-      data <- add_data_from_expr(data, body(x))
+      data <- add_data_from_expr(data, body(x), narrow = narrow)
     } else if (is.call(x)) {
       if (swap)  x <- swap_calls(x)
-      data <- add_data_from_expr(data, x)
+      data <- add_data_from_expr(data, x, narrow = narrow)
     } else if (is.character(x) && length(x) == 1) {
       x <- as.call(c(quote(`{`), parse(x)))
       if (swap) x <- swap_calls(x)
-      data <- add_data_from_expr(data, x)
+      data <- add_data_from_expr(data, x, narrow = narrow)
     } else {
       stop("x must be a function or a call")
     }
