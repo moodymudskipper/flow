@@ -1,18 +1,25 @@
 Package: funflow
-Title: What the Package Does (One Line, Title Case)
+Title: View and Browse Code Using Flow Diagrams
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Antoine",
+           family = "Fabri",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: What license it uses
+           email = "antoine.fabri@gmail.com")
+Description: 'flow_view' and its sister functions allow an intuitive overview of
+  functions or scripts by displaying them as flow diagrams. We also provide a 
+  debugging utility: 'flow_run', which displays the logical path taken
+  by a function call, and supports step by step browsing. 
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Suggests: 
     testthat (>= 2.1.0)
 Imports: 
-    nomnoml
+    nomnoml,
+    pryr,
+    utils,
+    htmlwidgets,
+    rstudioapi,
+    webshot
 RoxygenNote: 7.1.0
