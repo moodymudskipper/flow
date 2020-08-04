@@ -1,7 +1,7 @@
 #' @export
 #' @rdname flow_view
 flow_data <-
-  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, transpose_if = FALSE) {
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, swap = FALSE) {
     f_sym <- substitute(x)
 
     # build data from the function body
@@ -12,17 +12,17 @@ flow_data <-
     x <- add_comment_calls(x, prefix)
 
     sub_funs <- find_funs(x)
-    if(!is.null(sub_fun_id)){
+    if (!is.null(sub_fun_id)) {
       f_sym <- quote(fun)
       x <- eval(sub_funs[[sub_fun_id]])
     } else {
-      if(length(sub_funs)){
+      if (length(sub_funs)) {
         message("We found function definitions in this code, ",
                 "use the argument sub_fun_id to inspect them")
         print(sub_funs)
       }
     }
-    if(is.function(x)){
+    if (is.function(x)) {
       title <- head(deparse(args(x)), -1)
       title <- paste(title, collapse = "\n  ")
       title <- trimws(sub("^function ", deparse(f_sym), title))
@@ -32,15 +32,15 @@ flow_data <-
         "header",
         code = f_sym,
         code_str = title)
-      data <- add_edge(data, from=0L, to = 1L)
-      if(transpose_if) body(x) <- transpose_if_calls(body(x))
+      data <- add_edge(data, from = 0L, to = 1L)
+      if (swap) body(x) <- swap_calls(body(x))
       data <- add_data_from_expr(data, body(x))
     } else if (is.call(x)) {
-      if(transpose_if)  x <- transpose_if_calls(x)
+      if (swap)  x <- swap_calls(x)
       data <- add_data_from_expr(data, x)
     } else if (is.character(x) && length(x) == 1) {
       x <- as.call(c(quote(`{`), parse(x)))
-      if(transpose_if) x <- transpose_if_calls(x)
+      if (swap) x <- swap_calls(x)
       data <- add_data_from_expr(data, x)
       } else {
       stop("x must be a function or a call")
@@ -49,16 +49,16 @@ flow_data <-
     # add the final node
     id = get_last_id(data) + 1
     data <- add_node(data, id, "return")
-    if(!is.null(prefix)){
+    if (!is.null(prefix)) {
       prefix <- paste0("^\\s*", prefix,"\\s*")
       data$nodes$label <- sub(prefix, "", data$nodes$label)
     }
-    if(!is.null(range)){
+    if (!is.null(range)) {
       matches <- which(data$nodes$id %in% range)
       start <- min(matches)
       end   <- max(matches)
       data0 <- data
-      if(min(range) <= 1) {
+      if (min(range) <= 1) {
         data$nodes <- data$nodes[1:end,]
         data$edges <- data$edges[
           data$edges$from %in% data$nodes$id &
@@ -66,7 +66,7 @@ flow_data <-
       } else {
         data$nodes <- rbind(
           data.frame(id = 0, block_type = "header", code_str = ". . .",
-                     label = "", code = ""),
+                     label = "", code = "", stringsAsFactors =  FALSE),
           data$nodes[start:end,])
         data$edges <- data$edges[
           data$edges$from %in% data$nodes$id &
@@ -74,12 +74,13 @@ flow_data <-
         entry_points <- unique(
           data$edges$from[!data$edges$from %in% data$edges$to])
         data$edges <- rbind(
-          data.frame(from = 0, to = entry_points, edge_label = "", arrow = "--:>"),
+          data.frame(from = 0, to = entry_points, edge_label = "", arrow = "--:>",
+                     stringsAsFactors = FALSE),
           data$edges)
       }
 
       max_id <- max(data0$nodes$id)
-      if(max(range) < max_id) {
+      if (max(range) < max_id) {
         data$nodes <- rbind(
           data$nodes,
           data.frame(id = max_id, block_type = "header", code_str = "...",
@@ -107,23 +108,32 @@ flow_code <-
 
 #' View function as flow chart
 #'
+#' `flow_view()` shows the code of a function as a flow diagram, `flow_run()`
+#' runs a call and draws the logical path taken by the code. `flow_png()` and
+#' `flow_html()` are variants of `flow_view()` that allow to print to png or
+#'  html
+#'
+#'
 #' @param x A call or a function
 #' @param prefix Prefix to use for special comments, must start with `"#"`
 #' @param range The range of boxes to zoom in
 #' @param sub_fun_id if not NULL, the index of the function definition found in
 #'   x that we wish to inspect.
+#' @param swap whether to change `var <- if(cond) expr` into
+#'   `if(cond) var <- expr` so the diagram
 #' @param ... Additional parameters passed to `build_nomnoml_code()`
 #' @inheritParams build_nomnoml_code
 #' @param width Width in pixels
 #' @param height height in pixels
 #' @param path path to save to. By default saves to temp file and prints path.
+#' @param browse whether to debug step by step (block by block)
 #'
 #' @export
 flow_view <-
   function(x, range = NULL, prefix = NULL, sub_fun_id = NULL,
-           transpose_if = FALSE, code = TRUE, width = NULL,
+           swap = FALSE, code = TRUE, width = NULL,
            height = NULL, ...) {
-    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id, transpose_if)))
+    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id, swap)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = FALSE)
     htmlwidgets::createWidget(
@@ -131,8 +141,6 @@ flow_view <-
       width = width,
       height = height,
       package = "nomnoml")
-
-
     #nomnoml::nomnoml(code, png = png, width = width, height = height, svg = svg)
   }
 
@@ -140,10 +148,10 @@ flow_view <-
 #' @rdname flow_view
 flow_html <-
   function(x, range = NULL, prefix = NULL, sub_fun_id = NULL,
-           transpose_if = FALSE, code = TRUE, width = NULL,
+           swap = FALSE, code = TRUE, width = NULL,
            height = NULL,
            path = tempfile("flow", fileext = ".html"), ...) {
-    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id, transpose_if)))
+    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id, swap)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = FALSE)
     widget <- htmlwidgets::createWidget(
@@ -152,15 +160,15 @@ flow_html <-
       height = height,
       package = "nomnoml")
     htmlwidgets::saveWidget(widget, path)
-    if(missing(path)) message(sprintf("The diagram was saved at '%s'", path))
+    if (missing(path)) message(sprintf("The diagram was saved at '%s'", path))
   }
 
 #' @export
 #' @rdname flow_view
 flow_browse <-
-  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, transpose_if = FALSE, code = TRUE, width = NULL,
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, swap = FALSE, code = TRUE, width = NULL,
            height = NULL, ...) {
-    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id, transpose_if)))
+    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id, swap)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = FALSE)
     widget <- htmlwidgets::createWidget(
@@ -197,10 +205,10 @@ flow_browse <-
 #' @export
 #' @rdname flow_view
 flow_png <-
-  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, transpose_if = FALSE, code = TRUE, width = NULL,
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, swap = FALSE, code = TRUE, width = NULL,
            height = NULL,
            path = tempfile("flow", fileext = ".png"), ...) {
-    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id, transpose_if)))
+    data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id, swap)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = FALSE)
     path0 <- tempfile("flow", fileext = ".html")
@@ -212,5 +220,5 @@ flow_png <-
     htmlwidgets::saveWidget(widget, path0)
 
     webshot::webshot(path0, path, selector = "canvas")
-    if(missing(path)) message(sprintf("The diagram was saved at '%s'", path))
+    if (missing(path)) message(sprintf("The diagram was saved at '%s'", path))
   }
