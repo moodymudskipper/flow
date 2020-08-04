@@ -1,3 +1,7 @@
+# split code in blocks, divided by calls to control flow or special comments
+# the output is a list of calls where each element has a "label" attribute and
+# if relevant a block_type attribute
+
 build_blocks <- function(expr){
   # clean block from braces
   if (is.call(expr) && expr[[1]] == quote(`{`))

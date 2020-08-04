@@ -1,24 +1,21 @@
+# imports and lower level unexported functions
+
 #' @importFrom utils head isS3stdGeneric getS3method
 NULL
 
+add_comment_calls <- function(fun, prefix = "##"){
+  if (is.null(prefix)) return(fun)
+  src <- deparse(fun, width.cutoff = 500, control = "useSource")
+  pattern <- paste0("^\\s*(", prefix, ".*?)$")
+  src <- gsub(pattern, "`#`(\"\\1\")", src)
+  src <- paste(src, collapse = "\n")
+  src <- str2lang(src)
+  eval(src)
+}
 
 get_last_id <- function(data) {
   if (!nrow(data$nodes)) return(0)
   max(data$nodes$id)
-}
-
-add_node <- function(data, id, block_type = "standard", code = substitute(), code_str = "", label = ""){
-  node <- data.frame(id, block_type, code_str, stringsAsFactors = FALSE, label = label)
-  node$code <- list(code)
-  data$nodes <- rbind(data$nodes, node)
-  data
-}
-
-
-add_edge <- function(data, to, from = to, edge_label = "", arrow = "->"){
-  edge <- data.frame(from , to, edge_label, arrow, stringsAsFactors = FALSE)
-  data$edges <- rbind(data$edges, edge)
-  data
 }
 
 deparse2 <- function(x){
@@ -33,23 +30,6 @@ deparse2 <- function(x){
   sapply(as.list(calls), function(x)
     is.call(x) && as.character(x[[1]]) %in% constructs)
 }
-
-new_data <- function(){
-  data <- list(
-    nodes = data.frame(
-      id = integer(0),
-      block_type = character(0),
-      stringsAsFactors = FALSE),
-    edges = data.frame(
-      from = integer(0),
-      to = integer(0),
-      edge_label = character(0),
-      stringsAsFactors = FALSE)
-  )
-  data$nodes$code <- list()
-  data
-}
-
 
 get_last_call_type <- function(expr){
   if (is.call(expr) && identical(expr[[1]], quote(`{`))){
