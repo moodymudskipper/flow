@@ -4,29 +4,14 @@
 \alias{build_nomnoml_code}
 \title{build nomnoml code from data}
 \usage{
-build_nomnoml_code(
-  data,
-  code,
-  direction = c("down", "right"),
+build_nomnoml_code(data, code, direction = c("down", "right"),
   ranker = c("network-simplex", "tight-tree", "longest-path"),
-  arrowSize = 1,
-  edges = c("hard", "rounded"),
-  bendSize = 0.3,
-  font = "Calibri",
-  fontSize = 12,
-  lineWidth = 3,
-  padding = 16,
-  spacing = 40,
-  leading = 1.25,
-  stroke = "#33322E",
-  fill = "#eee8d5",
-  title = "filename",
-  zoom = 1,
-  fillArrows = FALSE,
-  acyclicer = "greedy",
-  gutter = 5,
-  edgeMargin = 0
-)
+  arrowSize = 1, edges = c("hard", "rounded"), bendSize = 0.3,
+  font = "Calibri", fontSize = 12, lineWidth = 3, padding = 16,
+  spacing = 40, leading = 1.25, stroke = "#33322E",
+  fill = "#eee8d5", title = "filename", zoom = 1,
+  fillArrows = FALSE, acyclicer = "greedy", gutter = 5,
+  edgeMargin = 0)
 }
 \arguments{
 \item{data}{A data frame built by `flow_data()`}
@@ -73,9 +58,6 @@ at the bottom.}
 \item{gutter}{Gutter, no effect was observed}
 
 \item{edgeMargin}{Edge margin, no effect was observed}
-}
-\value{
-
 }
 \description{
 This functions builds the nomnoml code to render from the data built by
