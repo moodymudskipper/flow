@@ -18,6 +18,8 @@
 #' @param height height in pixels
 #' @param path path to save to. By default saves to temp file and prints path.
 #' @param browse whether to debug step by step (block by block)
+#' @param trim wether to trim the head of the diagram, only relevant if browse
+#' is `TRUE`
 #' @param out a path to save the diagram to.
 #'   Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 #'   export the objec to a temp file of the relevant format and open it,
