@@ -30,6 +30,9 @@ x that we wish to inspect.}
 \item{swap}{whether to change `var <- if(cond) expr` into
 `if(cond) var <- expr` so the diagram}
 
+\item{narrow}{make sure diagrams stay centered on one column (they'll be
+longer but won't shift to the right)}
+
 \item{code}{Whether to the code in code blocks or only the identifier, to be
 more compact, if `NA`, the code will be displayed only if not commented, so
 comments can be used as pseudocode for chosen blocks.}
@@ -45,12 +48,14 @@ Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 export the objec to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
 
+\item{svg}{only for default or html outut, whether to use svg rendering, rendering
+is more robust without it, but it makes text selectable on output which is
+ sometimes useful.}
+
 \item{browse}{whether to debug step by step (block by block)}
 
 \item{trim}{wether to trim the head of the diagram, only relevant if browse
 is `TRUE`}
-
-\item{path}{path to save to. By default saves to temp file and prints path.}
 }
 \description{
 `flow_view()` shows the code of a function as a flow diagram, `flow_run()`
