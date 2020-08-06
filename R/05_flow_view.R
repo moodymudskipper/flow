@@ -32,7 +32,7 @@
 #' @export
 flow_view <-
   function(x, range = NULL, prefix = NULL, sub_fun_id = NULL,
-           swap = FALSE, narrow = FALSE, code = TRUE, width = NULL,
+           swap = TRUE, narrow = FALSE, code = TRUE, width = NULL,
            height = NULL, ..., out = NULL, svg = FALSE) {
     data <- eval.parent(substitute(flow_data(x, range, prefix, sub_fun_id, swap, narrow)))
     code <- build_nomnoml_code(data, code = code, ...)

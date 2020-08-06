@@ -1,7 +1,7 @@
 #' @export
 #' @rdname flow_view
 flow_data <-
-  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, swap = FALSE,
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, swap = TRUE,
            narrow = FALSE) {
     f_sym <- substitute(x)
 
