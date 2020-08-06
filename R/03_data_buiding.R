@@ -196,7 +196,7 @@ add_data_from_if_block <- function(data, block, narrow = FALSE){
 }
 
 
-add_data_from_for_block <- function(data, block){
+add_data_from_for_block <- function(data, block, narrow = FALSE){
   # increment id
   id <- get_last_id(data) + 1
   id_end <- -id
@@ -238,7 +238,7 @@ add_data_from_for_block <- function(data, block){
   data
 }
 
-add_data_from_while_block <- function(data, block){
+add_data_from_while_block <- function(data, block, narrow = FALSE){
   # increment id
   id <- get_last_id(data) + 1
   id_end <- -id
@@ -277,7 +277,7 @@ add_data_from_while_block <- function(data, block){
   data
 }
 
-add_data_from_repeat_block <- function(data, block){
+add_data_from_repeat_block <- function(data, block, narrow = FALSE){
   # increment id
   id <- get_last_id(data) + 1
   id_end <- -id
