@@ -62,7 +62,7 @@ at the bottom.}
 \description{
 This functions builds the nomnoml code to render from the data built by
 `flow_data()`. It's not very useful for the average user to call it directly
-but its arguments can be set through flow_view so their definitions are useful.
+but its arguments can be set through `flow_view()` so their definitions are useful.
 }
 \details{
 All arguments, with the exception of `data` and `code`, are
