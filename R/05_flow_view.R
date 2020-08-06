@@ -6,17 +6,18 @@
 #' `flow_view()` and `flow_run()`.
 #'
 #' @param x A call or a function
-#' @param prefix Prefix to use for special comments, must start with `"#"`
 #' @param range The range of boxes to zoom in
+#' @param prefix Prefix to use for special comments, must start with `"#"`
 #' @param sub_fun_id if not NULL, the index of the function definition found in
 #'   x that we wish to inspect.
 #' @param swap whether to change `var <- if(cond) expr` into
 #'   `if(cond) var <- expr` so the diagram
+#' @param narrow make sure diagrams stay centered on one column (they'll be
+#' longer but won't shift to the right)
 #' @param ... Additional parameters passed to `build_nomnoml_code()`
 #' @inheritParams build_nomnoml_code
 #' @param width Width in pixels
 #' @param height height in pixels
-#' @param path path to save to. By default saves to temp file and prints path.
 #' @param browse whether to debug step by step (block by block)
 #' @param trim wether to trim the head of the diagram, only relevant if browse
 #' is `TRUE`
@@ -24,7 +25,7 @@
 #'   Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 #'   export the objec to a temp file of the relevant format and open it,
 #'   if a regular path is used the format will be guessed from the extension.
-#' @svg only for default or html outut, whether to use svg rendering, rendering
+#' @param svg only for default or html outut, whether to use svg rendering, rendering
 #'   is more robust without it, but it makes text selectable on output which is
 #'    sometimes useful.
 #'
