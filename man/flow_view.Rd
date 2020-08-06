@@ -8,14 +8,14 @@
 \title{View function as flow chart}
 \usage{
 flow_data(x, range = NULL, prefix = NULL, sub_fun_id = NULL,
-  swap = FALSE, narrow = FALSE)
+  swap = TRUE, narrow = FALSE)
 
 flow_view(x, range = NULL, prefix = NULL, sub_fun_id = NULL,
-  swap = FALSE, narrow = FALSE, code = TRUE, width = NULL,
+  swap = TRUE, narrow = FALSE, code = TRUE, width = NULL,
   height = NULL, ..., out = NULL, svg = FALSE)
 
 flow_run(x, prefix = NULL, swap = TRUE, code = TRUE, ...,
-  browse = FALSE, trim = FALSE)
+  out = NULL, svg = FALSE, browse = FALSE, trim = FALSE)
 }
 \arguments{
 \item{x}{A call or a function}
