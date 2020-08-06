@@ -55,9 +55,7 @@ flow_data <-
       data$nodes$label <- sub(prefix, "", data$nodes$label)
     }
     if (!is.null(range)) {
-      if (length(range) != 2)
-        stop("`range` should be of length 2")
-      range <- sort(range)
+      range <- range(range)
       range[2] <- min(max(data$nodes$id), range[2])
       matches <- which(data$nodes$id %in% range)
       start <- min(matches)
