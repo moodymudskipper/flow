@@ -1,3 +1,14 @@
+# kept for convenience
+flow_code <-
+  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, swap = FALSE,
+           narrow = FALSE, code = TRUE, ...) {
+    data <- eval.parent(substitute(flow_data(
+      x, range, prefix, sub_fun_id, swap, narrow)))
+    code <- build_nomnoml_code(data, code = code, ...)
+    code
+  }
+
+
 #' build nomnoml code from data
 #'
 #' This functions builds the nomnoml code to render from the data built by
