@@ -1,0 +1,112 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# funflow
+
+Visualize as flow diagrams the logic of functions, expressions or scripts and ease debugging.
+
+* Call `flow_view()` on a function, a quoted expression, or the path of an R script
+to visualize it.
+
+* Call `flow_run()` on a call to a function to visualize which logical path in the
+code was taken. Set `browse = TRUE` to debug your function block by block 
+(similar to `base::browser()`) as the diagram updates.
+
+* Export to *html*, *png*, *jpeg*, or *pdf*.
+
+* Use the Rstudio addins to run `flow_view()` or `flow_run()` on your selection.
+
+## Installation
+
+Install with:
+
+``` r
+devtools::install_github("moodymudskipper/funflow")
+```
+## Example
+
+```{r, eval=FALSE}
+library(funflow)
+flow_view(median.default)
+```
+
+
+```{r, setup, include=FALSE}
+library(nomnoml)
+```
+
+```{nomnoml, echo=FALSE}
+#.if: visual=rhomb fill=#e2efda align=center
+#.for: visual=rhomb fill=#ddebf7 align=center
+#.repeat: visual=rhomb fill=#fce4d6 align=center
+#.while: visual=rhomb fill=#fff2cc align=center
+#.standard: visual=class fill=#ededed
+#.commented: visual=class fill=#ededed
+#.header: visual=ellipse fill=#d9e1f2 align=center
+#.return: visual=end fill=#70ad47  empty
+#.stop: visual=end fill=#ed7d31  empty
+#.break: visual=receiver fill=#ffc000 empty
+#.next: visual=transceiver fill=#5b9bd5  empty
+#arrowSize: 1
+#bendSize: 0.3
+#direction: down
+#gutter: 5
+#edgeMargin: 0
+#edges: hard
+#fill: #eee8d5
+#fillArrows: false
+#font: Calibri
+#fontSize: 12
+#leading: 1.25
+#lineWidth: 3
+#padding: 16
+#spacing: 40
+#stroke: #33322E
+#title: filename
+#zoom: 1
+#acyclicer: greedy
+#ranker: network-simplex
+[<header>median.default(x, na.rm = FALSE, ...)]  -> [<if> 1: ;if (is.factor(x) \|\|
+ is.data.frame(x))]
+[<if> 1: ;if (is.factor(x) \|\|
+ is.data.frame(x))] y -> [<standard> 2: ;stop("need numeric data")]
+[<standard> 2: ;stop("need numeric data")]  -> [<stop> -2]
+[<if> 1: ;if (is.factor(x) \|\|
+ is.data.frame(x))] n -> [<end> -1]
+[<end> -1]  -> [<if> 3: ;if (length(names(x)))]
+[<if> 3: ;if (length(names(x)))] y -> [<standard> 4: ;names(x) <- NULL]
+[<standard> 4: ;names(x) <- NULL]  -> [<end> -3]
+[<if> 3: ;if (length(names(x)))] n -> [<end> -3]
+[<end> -3]  -> [<if> 5: ;if (na.rm)]
+[<if> 5: ;if (na.rm)] y -> [<standard> 6: ;x <- x\[!is.na(x)\]]
+[<standard> 6: ;x <- x\[!is.na(x)\]]  -> [<end> -5]
+[<if> 5: ;if (na.rm)] n -> [<if> 7: ;if (any(is.na(x)))]
+[<if> 7: ;if (any(is.na(x)))] y -> [<standard> 8: ;return(x\[FALSE\]\[NA\])]
+[<standard> 8: ;return(x\[FALSE\]\[NA\])]  -> [<return> -8]
+[<if> 7: ;if (any(is.na(x)))] n -> [<end> -7]
+[<end> -7]  -> [<end> -5]
+[<end> -5]  -> [<standard> 9: ;n <- length(x)]
+[<standard> 9: ;n <- length(x)]  -> [<if> 10: ;if (n == 0L)]
+[<if> 10: ;if (n == 0L)] y -> [<standard> 11: ;return(x\[FALSE\]\[NA\])]
+[<standard> 11: ;return(x\[FALSE\]\[NA\])]  -> [<return> -11]
+[<if> 10: ;if (n == 0L)] n -> [<end> -10]
+[<end> -10]  -> [<standard> 12: ;half <- (n + 1L)%/%2L]
+[<standard> 12: ;half <- (n + 1L)%/%2L]  -> [<if> 13: ;if (n%%2L == 1L)]
+[<if> 13: ;if (n%%2L == 1L)] y -> [<standard> 14: ;sort(x, partial = half)\[half\]]
+[<standard> 14: ;sort(x, partial = half)\[half\]]  -> [<end> -13]
+[<if> 13: ;if (n%%2L == 1L)] n -> [<standard> 15: ;mean(sort(x, partial = half + 0L:1L)\[half + 0L:1L\])]
+[<standard> 15: ;mean(sort(x, partial = half + 0L:1L)\[half + 0L:1L\])]  -> [<end> -13]
+[<end> -13]  -> [<return> 16]
+```
+
