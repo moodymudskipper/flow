@@ -1,7 +1,8 @@
 #' @export
 #' @rdname flow_view
 flow_run <-
-  function(x, prefix = NULL, swap = TRUE, code = TRUE, ..., browse = FALSE, trim = FALSE) {
+  function(x, prefix = NULL, swap = TRUE, code = TRUE, ...,
+           out = NULL, svg = FALSE, browse = FALSE, trim = FALSE) {
     # capture call and function
     call <- substitute(x)
     if (!is.call(call)) stop("x must be a call")
@@ -45,10 +46,29 @@ flow_run <-
     update_diagram <- function() {
       # display updated diagram
       nomnoml_code  <- build_nomnoml_code(data, code = code, ...)
-      widget_params <- list(code = nomnoml_code, svg = FALSE)
-      widg <- htmlwidgets::createWidget(
+      widget_params <- list(code = nomnoml_code, svg = svg)
+      widget <- htmlwidgets::createWidget(
         name = "nomnoml", widget_params, package = "nomnoml")
-      print(widg)
+      if (is.null(out)) return(print(widget))
+
+      is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg")
+      if (is_tmp) {
+        out <- tempfile("flow_", fileext = paste0(".", out))
+      }
+      ext <- sub(".*?\\.([[:alnum:]]+)$", "\\1", out)
+      if (tolower(ext) %in% c("html", "htm"))
+        htmlwidgets::saveWidget(widget, out)
+      else {
+        html <- tempfile("flow_", fileext = ".html")
+        htmlwidgets::saveWidget(widget, html)
+        webshot::webshot(html, out, selector = "canvas")
+      }
+
+      if (is_tmp) {
+        message(sprintf("The diagram was saved to '%s'", gsub("\\\\","/", out)))
+        browseURL(out)
+      }
+      out
     }
 
     flow_browser <- function(id,e) {
