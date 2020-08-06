@@ -3,3 +3,8 @@ Description: View selection (function, script, or path) as a flow diagram
 Binding: flow_view_addin
 Interactive: false
 
+Name: flow_run
+Description: Run selection (a function call) as a flow diagram
+Binding: flow_run_addin
+Interactive: false
+
