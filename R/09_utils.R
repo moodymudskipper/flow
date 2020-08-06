@@ -1,6 +1,6 @@
 # imports and lower level unexported functions
 
-#' @importFrom utils head isS3stdGeneric getS3method
+#' @importFrom utils head isS3stdGeneric getS3method browseURL
 NULL
 
 add_comment_calls <- function(fun, prefix = "##"){
@@ -32,7 +32,7 @@ deparse2 <- function(x){
 }
 
 get_last_call_type <- function(expr){
-  if (is.call(expr) && identical(expr[[1]], quote(`{`))){
+  if (is.call(expr) && identical(expr[[1]], quote(`{`))) {
     expr <- expr[[length(expr)]] # could be a call or a symbol
   }
   if (is.call(expr))
@@ -48,7 +48,7 @@ find_funs <- function(call){
   env$funs <- list()
   find_funs0 <- function(x, env){
     if (!is.call(x)) return(invisible())
-    if (identical(x[[1]], quote(`function`))){
+    if (identical(x[[1]], quote(`function`))) {
       env$funs <- append(env$funs, x)
     }
     lapply(x, find_funs0, env)
