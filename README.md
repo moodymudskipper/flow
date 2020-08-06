@@ -33,3 +33,25 @@ flow_view(median.default)
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+
+There are way too many features to show them all on a README, check `?flow_view` for more,copy the following code to have a taste of the possibilities.
+
+``` r
+# exports (supports png, jpeg, pdf, html)
+# shortcuts are available to export to temp file and open 
+flow_view(median.default, out = "png")
+
+# visualize which path was taken (relevant S3 method is presented)
+vec <- c(1:3, NA)
+flow_run(median(vec, na.rm = TRUE))
+
+# works when code fails too (handy to debug!)
+flow_run(median(iris))
+
+# step by step exploration
+vec <- c(1:3, NA)
+flow_run(median(vec, na.rm = TRUE), browse = TRUE)
+
+# trim the head of the chart as you go
+flow_run(median(vec, na.rm = TRUE), browse = TRUE, trim = TRUE)
+```
