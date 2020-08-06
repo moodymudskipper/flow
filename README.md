@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-funflow
-=======
+flow
+====
 
 Visualize as flow diagrams the logic of functions, expressions or scripts and ease debugging.
 
@@ -19,14 +19,14 @@ Installation
 Install with:
 
 ``` r
-devtools::install_github("moodymudskipper/funflow")
+devtools::install_github("moodymudskipper/flow")
 ```
 
 Example
 -------
 
 ``` r
-library(funflow)
+library(flow)
 flow_view(median.default)
 ```
 

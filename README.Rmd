@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-# funflow
+# flow
 
 Visualize as flow diagrams the logic of functions, expressions or scripts and ease debugging.
 
@@ -32,12 +32,12 @@ code was taken. Set `browse = TRUE` to debug your function block by block
 Install with:
 
 ``` r
-devtools::install_github("moodymudskipper/funflow")
+devtools::install_github("moodymudskipper/flow")
 ```
 ## Example
 
 ```{r, eval=FALSE}
-library(funflow)
+library(flow)
 flow_view(median.default)
 ```
 

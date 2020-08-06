@@ -1,4 +1,4 @@
 library(testthat)
-library(funflow)
+library(flow)
 
-test_check("funflow")
+test_check("flow")
