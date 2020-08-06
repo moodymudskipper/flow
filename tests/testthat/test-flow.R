@@ -624,8 +624,6 @@ test_that("package works with range arg",{
 #.break: visual=receiver fill=#ffc000 empty
 #.next: visual=transceiver fill=#5b9bd5  empty
 
-
-# detach("package:funflow")
 # covr::report()
 
 #
