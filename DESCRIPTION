@@ -6,10 +6,7 @@ Authors@R:
            family = "Fabri",
            role = c("aut", "cre"),
            email = "antoine.fabri@gmail.com")
-Description: 'flow_view' and its sister functions allow an intuitive overview of
-  functions or scripts by displaying them as flow diagrams. We also provide a 
-  debugging utility: 'flow_run', which displays the logical path taken
-  by a function call, and supports step by step browsing. 
+Description: Visualize as flow diagrams the logic of functions, expressions or scripts and ease debugging.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
