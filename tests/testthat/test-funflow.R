@@ -615,33 +615,6 @@ test_that("package works with range arg",{
 
 })
 
-test_that("flow_code works",{
-  fun <- function(x){
-    x
-  }
-  expect_equal(
-    flow_code(fun),
-    paste0("\n#.if: visual=rhomb fill=#e2efda align=center\n#.for: visual=rhomb",
-           " fill=#ddebf7 align=center\n#.repeat: visual=rhomb fill=#fce4d6",
-           " align=center\n#.while: visual=rhomb fill=#fff2cc align=center\n#.",
-           "standard: visual=class fill=#ededed\n#.commented: visual=class",
-           " fill=#ededed\n#.header: visual=ellipse fill=#d9e1f2",
-           " align=center\n#.return: visual=end fill=#70ad47  ",
-           "empty\n#.stop: visual=end fill=#ed7d31  empty\n",
-           "#.break: visual=receiver fill=#ffc000 empty\n",
-           "#.next: visual=transceiver fill=#5b9bd5  empty\n",
-           "#arrowSize: 1\n",
-           "#bendSize: 0.3\n",
-           "#direction: down\n#gutter: 5\n",
-           "#edgeMargin: 0\n",
-           "#edges: hard\n#fill: #eee8d5\n#fillArrows: false\n#font: Calibri\n",
-           "#fontSize: 12\n#leading: 1.25\n#lineWidth: 3\n#padding: 16\n",
-           "#spacing: 40\n#stroke: #33322E\n#title: filename\n#zoom: 1\n",
-           "#acyclicer: greedy\n#ranker: network-simplex\n",
-           "[<header>fun(x)]  -> [<standard> 1: ;x]\n[<standard> 1: ;x]  -> [<return> 2]")
-  )
-})
-
 # have tests with break and next
 # have tests with repeat an while
 # have tests with code = NA and code = FALSE
