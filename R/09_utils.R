@@ -112,5 +112,3 @@ getS3methodSym <- function(fun, x){
  # getS3methodSym("mutate", starwars)
  # getS3methodSym("head", letters)
 
-is_promise2 <- getFromNamespace("is_promise2", "pryr")
-

@@ -14,8 +14,8 @@ flow_view(x, range = NULL, prefix = NULL, sub_fun_id = NULL,
   swap = FALSE, narrow = FALSE, code = TRUE, width = NULL,
   height = NULL, ..., out = NULL, svg = FALSE)
 
-flow_run(x, range = NULL, prefix = NULL, sub_fun_id = NULL,
-  swap = TRUE, code = TRUE, ..., browse = FALSE)
+flow_run(x, prefix = NULL, swap = TRUE, code = TRUE, ...,
+  browse = FALSE, trim = FALSE)
 }
 \arguments{
 \item{x}{A call or a function}
@@ -46,6 +46,9 @@ export the objec to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
 
 \item{browse}{whether to debug step by step (block by block)}
+
+\item{trim}{wether to trim the head of the diagram, only relevant if browse
+is `TRUE`}
 
 \item{path}{path to save to. By default saves to temp file and prints path.}
 }
