@@ -2,8 +2,8 @@
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.org/moodymudskipper/flow.svg?branch=master)](https://travis-ci.org/moodymudskipper/flow) [![Codecov test coverage](https://codecov.io/gh/moodymudskipper/flow/branch/master/graph/badge.svg)](https://codecov.io/gh/moodymudskipper/flow?branch=master) <!-- badges: end -->
 
-flow
-====
+flow <img src='man/figures/logo.png' align="right" height="139" />
+==================================================================
 
 Visualize as flow diagrams the logic of functions, expressions or scripts and ease debugging.
 
