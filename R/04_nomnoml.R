@@ -2,7 +2,7 @@
 #'
 #' This functions builds the nomnoml code to render from the data built by
 #' `flow_data()`. It's not very useful for the average user to call it directly
-#' but its arguments can be set through flow_view so their definitions are useful.
+#' but its arguments can be set through `flow_view()` so their definitions are useful.
 #'
 #' All arguments, with the exception of `data` and `code`, are
 #' nomnoml directives, enumerated at https://openbase.io/js/nomnoml/documentation .
@@ -78,9 +78,9 @@ build_nomnoml_code <- function(
   node_data$code_str <- gsub("[","\\[", node_data$code_str,fixed = TRUE)
   node_data$code_str <- gsub("|","\\|", node_data$code_str,fixed = TRUE)
 
-  if(is.na(code)){
+  if (is.na(code)) {
     node_data$code_str[node_data$label != ""] <- ""
-  } else if(!code) {
+  } else if (!code) {
     node_data$code_str[node_data$block_type %in% c("standard", "commented")] <- ""
   }
 
@@ -149,7 +149,7 @@ build_nomnoml_code <- function(
     acyclicer, ranker)
   header <- gsub("\\n\\s+","\n", header)
 
-  nomnoml_code <- paste(edge_data$nomnoml_code, collapse="\n")
+  nomnoml_code <- paste(edge_data$nomnoml_code, collapse = "\n")
   # print(node_data[1:2])
   # print(edge_data)
   # cat(nomnoml_code)
