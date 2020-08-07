@@ -20,13 +20,13 @@ flow_code <-
 #'
 #' Some of those don't seem to do anything in the context of this package,
 #' but given the sparsity of nomnoml documentation, we
-#' decided to keep all of them to be safe.
+#' decided to keep all of them for more flexibility.
 #'
 #' @param data A data frame built by `flow_data()`
-#' @param code Whether to the code in code blocks or only the identifier, to be
-#'   more compact, if `NA`, the code will be displayed only if not commented, so
-#'   comments can be used as pseudocode for chosen blocks.
-#' @param direction Whether to orient the chart from top to bottom or left to
+#' @param code Whether to display the code in code blocks or only the header, to be
+#'   more compact, if `NA`, the code will be displayed only if no header is
+#'   defined by special comments.
+#' @param direction Whether to orient the chart from top to bottom or left to right
 #' @param ranker ranker, set to "longest-path" to have all exit points alligned
 #'   at the bottom.
 #' @param arrowSize Arrow size

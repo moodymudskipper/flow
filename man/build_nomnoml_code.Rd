@@ -16,11 +16,11 @@ build_nomnoml_code(data, code, direction = c("down", "right"),
 \arguments{
 \item{data}{A data frame built by `flow_data()`}
 
-\item{code}{Whether to the code in code blocks or only the identifier, to be
-more compact, if `NA`, the code will be displayed only if not commented, so
-comments can be used as pseudocode for chosen blocks.}
+\item{code}{Whether to display the code in code blocks or only the header, to be
+more compact, if `NA`, the code will be displayed only if no header is
+defined by special comments.}
 
-\item{direction}{Whether to orient the chart from top to bottom or left to}
+\item{direction}{Whether to orient the chart from top to bottom or left to right}
 
 \item{ranker}{ranker, set to "longest-path" to have all exit points alligned
 at the bottom.}
@@ -70,5 +70,5 @@ nomnoml directives, enumerated at https://openbase.io/js/nomnoml/documentation .
 
 Some of those don't seem to do anything in the context of this package,
 but given the sparsity of nomnoml documentation, we
-decided to keep all of them to be safe.
+decided to keep all of them for more flexibility.
 }

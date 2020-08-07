@@ -6,19 +6,20 @@
 #' `flow_view()` and `flow_run()`.
 #'
 #' @param x A call or a function
-#' @param range The range of boxes to zoom in
-#' @param prefix Prefix to use for special comments, must start with `"#"`
+#' @param range numeric vector used to compute the range of boxes to zoom in
+#' @param prefix prefix to use for special comments in our code used as block headers,
+#'   must start with `"#"`
 #' @param sub_fun_id if not NULL, the index of the function definition found in
-#'   x that we wish to inspect.
+#'   x that we wish to inspect
 #' @param swap whether to change `var <- if(cond) expr` into
-#'   `if(cond) var <- expr` so the diagram
-#' @param narrow make sure diagrams stay centered on one column (they'll be
-#' longer but won't shift to the right)
+#'   `if(cond) var <- expr` so the diagram displays better
+#' @param narrow `TRUE` makes sure the diagram stays centered on one column
+#'   (they'll be longer but won't shift to the right)
 #' @param ... Additional parameters passed to `build_nomnoml_code()`
 #' @inheritParams build_nomnoml_code
-#' @param width Width in pixels
-#' @param height height in pixels
-#' @param browse whether to debug step by step (block by block)
+#' @param width,height Width and height in pixels, passed to `htmlwidgets::createWidget()`
+#' @param browse whether to debug step by step (block by block),
+#'   can also be a vector of block ids, in this case only those will be considered for browsing
 #' @param trim wether to trim the head of the diagram, only relevant if browse
 #' is `TRUE`
 #' @param out a path to save the diagram to.
@@ -27,7 +28,7 @@
 #'   if a regular path is used the format will be guessed from the extension.
 #' @param svg only for default or html outut, whether to use svg rendering, rendering
 #'   is more robust without it, but it makes text selectable on output which is
-#'    sometimes useful.
+#'    sometimes useful
 #'
 #' @export
 flow_view <-
