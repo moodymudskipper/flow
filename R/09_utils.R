@@ -1,6 +1,6 @@
 # imports and lower level unexported functions
 
-#' @importFrom utils head isS3stdGeneric getS3method browseURL
+#' @importFrom utils head getS3method browseURL
 NULL
 
 add_comment_calls <- function(fun, prefix = "##"){
@@ -80,6 +80,19 @@ swap_calls <- function(expr){
   expr
 }
 
+# a fixed version of utils::isS3stdGeneric
+isS3stdGeneric <- function(f) {
+  {
+    bdexpr <- body(f)
+    if(is.null(bdexpr) || !is.call(bdexpr)) return(FALSE) # The fix
+    while (as.character(bdexpr[[1L]]) == "{") bdexpr <- bdexpr[[2L]]
+    ret <- is.call(bdexpr) && identical(bdexpr[[1L]], as.name("UseMethod"))
+    if (ret)
+      names(ret) <- bdexpr[[2L]]
+    ret
+  }
+}
+
 getS3methodSym <- function(fun, x){
   s3methods <- sapply(class(x),getS3method, f = fun, optional = TRUE, envir = parent.frame())
   s3methods <- Filter(Negate(is.null), s3methods)
@@ -111,4 +124,3 @@ getS3methodSym <- function(fun, x){
 
  # getS3methodSym("mutate", starwars)
  # getS3methodSym("head", letters)
-
