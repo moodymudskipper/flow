@@ -5,6 +5,10 @@ flow_data <-
            narrow = FALSE) {
     f_sym <- substitute(x)
 
+    if(is.function(x) && is.null(body(x))) stop("`", as.character(f_sym),
+      "` doesn't have a body (try `body(", as.character(f_sym),
+      ")`). {flow}'s functions don't work on such inputs.")
+
     # build data from the function body
     data <- new_data()
 

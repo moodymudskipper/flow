@@ -9,6 +9,10 @@ flow_run <-
     fun_sym <- call[[1]]
     fun <- eval.parent(fun_sym)
 
+    if(is.null(body(fun))) stop("`", as.character(fun_sym),
+                              "` doesn't have a body (try `body(", as.character(fun_sym),
+                              ")`). {flow}'s functions don't work on such inputs.")
+
     # if function is a S3 standard generic, debug appropriate method
     if (isS3stdGeneric(fun)) {
       fun_sym <- str2lang(getS3methodSym(deparse(fun_sym), eval.parent(call[[2]])))
