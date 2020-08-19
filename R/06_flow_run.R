@@ -27,7 +27,7 @@ flow_run <-
 
     # build the diagram data from the function
     flow_data_call <- as.call(list(
-      quote(flow_data),
+      quote(flow::flow_data),
       fun_sym,
       range = NULL,
       prefix = substitute(prefix),
