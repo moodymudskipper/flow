@@ -6,6 +6,26 @@ NULL
 add_comment_calls <- function(fun, prefix = "##"){
   if (is.null(prefix)) return(fun)
   src <- deparse(fun, width.cutoff = 500, control = "useSource")
+
+  src <- paste(src, collapse = "\n")
+
+  # some header comments might be misplaced, i.e. placed before or after
+  # arguments to a function. arguments start or finish with parentheses or commas,
+  # so we wan remove those with regex
+
+  # remove comments after "("
+  src <- gsub("\\(\\n([\\s\\n]+#.*?\\n)+", "(", src, perl = TRUE)
+
+  # remove comments before ")"
+  src <- gsub("([\\s\\n]+#.*?\\n)+[\\s\\n]*\\)", ")", src, perl = TRUE)
+
+  # remove comments after ","
+  src <- gsub(",\\n([\\s\\n]+#.*?\\n)+", ",", src, perl = TRUE)
+
+  # remove comments before ","
+  src <- gsub("([\\s\\n]+#.*?\\n)+[\\s\\n]*,", ",", src, perl = TRUE)
+
+  src <- strsplit(src, "\\n")[[1]]
   pattern <- paste0("^\\s*(", prefix, ".*?)$")
   src <- gsub(pattern, "`#`(\"\\1\")", src)
   src <- paste(src, collapse = "\n")
