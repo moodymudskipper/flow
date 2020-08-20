@@ -12,22 +12,29 @@ flow_data <-
     # build data from the function body
     data <- new_data()
 
-    # put comments in `#`() calls so we can manipulate them as code
     # relevant only for functions
+    # put comments in `#`() calls so we can manipulate them as code,
+    # the function `build_blocks()`, called itself in `add_data_from_expr()`,
+    # will deal with them further down the line
     x <- add_comment_calls(x, prefix)
 
+    # deal with sub functions (function definitions found in the code)
     sub_funs <- find_funs(x)
     if (!is.null(sub_fun_id)) {
+      # if we gave a sub_fun_id, make this subfunction our new x
       f_sym <- quote(fun)
       x <- eval(sub_funs[[sub_fun_id]])
     } else {
       if (length(sub_funs)) {
+        # else print them for so user can choose a sub_fun_id if relevant
         message("We found function definitions in this code, ",
                 "use the argument sub_fun_id to inspect them")
         print(sub_funs)
       }
     }
+
     if (is.function(x)) {
+      # functions have a special primary node that we need to deal with
       title <- head(deparse(args(x)), -1)
       title <- paste(title, collapse = "\n  ")
       title <- trimws(sub("^function ", deparse(f_sym), title))
@@ -44,11 +51,12 @@ flow_data <-
       if (swap)  x <- swap_calls(x)
       data <- add_data_from_expr(data, x, narrow = narrow)
     } else if (is.character(x) && length(x) == 1) {
-      x <- as.call(c(quote(`{`), parse(x)))
+      # if the input is a string we assume it's a path
+      x <- as.call(c(quote(`{`), parse(file = x)))
       if (swap) x <- swap_calls(x)
       data <- add_data_from_expr(data, x, narrow = narrow)
     } else {
-      stop("x must be a function or a call")
+      stop("x must be a function, a call or a path to an R script")
     }
 
     # add the final node

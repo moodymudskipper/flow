@@ -11,7 +11,7 @@ build_blocks <- function(expr){
 
   # support empty calls (`{}`)
   if (!length(calls)) {
-    blocks <- list(substitute())
+    blocks <- list(substitute()) # substitute() returns an empty call
     return(blocks)
   }
   # logical indices of control flow calls
