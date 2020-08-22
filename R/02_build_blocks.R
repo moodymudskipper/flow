@@ -17,7 +17,7 @@ build_blocks <- function(expr){
   # logical indices of control flow calls
   cfc_lgl <- calls %call_in% c("if", "for", "while", "repeat")
 
-  # logical indices of control flow calls
+  # logical indices of comment calls `#`()
   special_comment_lgl <- calls %call_in% c("#")
 
   # there are 2 ways to start a block : be a cf not preceded by com, or be a com
