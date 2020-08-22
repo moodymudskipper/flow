@@ -22,7 +22,7 @@ build_blocks <- function(expr){
 
   # there are 2 ways to start a block : be a cf not preceded by com, or be a com
   # there are 2 ways to finish a block : be a cf (and finish on next one), or start another block and finish right there
-  special_comment_lgl
+
   # cf not preceded by com
   cfc_unpreceded_lgl <- cfc_lgl & !c(FALSE, head(special_comment_lgl, -1))
   # new_block (first or after cfc)
