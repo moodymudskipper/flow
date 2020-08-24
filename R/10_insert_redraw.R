@@ -1,4 +1,4 @@
-insert_redraw <- function(expr, env = as.environment(list(i=0))){
+insert_update <- function(expr, env = as.environment(list(i=0))){
   # clean block from braces
   if (is.call(expr) && expr[[1]] == quote(`{`))
     calls <- as.list(expr[-1])
@@ -30,39 +30,39 @@ insert_redraw <- function(expr, env = as.environment(list(i=0))){
   for (i in seq_along(blocks)) {
     # increment block number
     env$i <- env$i + 1
-    # precede block with redraw call
-    blocks[[i]] <- c(bquote(redraw(.(env$i))), blocks[[i]])
+    # precede block with flow:::update call
+    blocks[[i]] <- c(bquote(flow:::update(.(env$i))), blocks[[i]])
 
     if(blocks[[i]][2] %call_in% "if"){
-      #blocks[[i]] <- c(blocks[[i]], bquote(redraw(.(-env$i))))
+      #blocks[[i]] <- c(blocks[[i]], bquote(flow:::update(.(-env$i))))
       # yes clause of the if call of the i-th item
-      blocks[[c(i, 2, 3)]] <- insert_redraw(blocks[[c(i, 2, 3)]], env)
+      blocks[[c(i, 2, 3)]] <- insert_update(blocks[[c(i, 2, 3)]], env)
 
       # no clause of the if call of the i-th item
       if(length(blocks[[c(i, 2)]]) == 4) # if there is an "else"
-        blocks[[c(i, 2, 4)]] <- insert_redraw(blocks[[c(i, 2, 4)]], env)
+        blocks[[c(i, 2, 4)]] <- insert_update(blocks[[c(i, 2, 4)]], env)
 
       next
     }
 
     if(blocks[[i]][2] %call_in% "for"){
-      #blocks[[i]] <- c(blocks[[i]], bquote(redraw(.(-env$i))))
+      #blocks[[i]] <- c(blocks[[i]], bquote(flow:::update(.(-env$i))))
       # loop of the for call of the i-th item
-      blocks[[c(i, 2, 4)]] <- insert_redraw(blocks[[c(i, 2, 4)]], env)
+      blocks[[c(i, 2, 4)]] <- insert_update(blocks[[c(i, 2, 4)]], env)
       next
     }
 
     if(blocks[[i]][2] %call_in% "while"){
-      #blocks[[i]] <- c(blocks[[i]], bquote(redraw(.(-env$i))))
+      #blocks[[i]] <- c(blocks[[i]], bquote(flow:::update(.(-env$i))))
       # loop of the while call of the i-th item
-      blocks[[c(i, 2, 3)]] <- insert_redraw(blocks[[c(i, 2, 3)]], env)
+      blocks[[c(i, 2, 3)]] <- insert_update(blocks[[c(i, 2, 3)]], env)
       next
     }
 
     if(blocks[[i]][2] %call_in% "repeat"){
-      #blocks[[i]] <- c(blocks[[i]], bquote(redraw(.(-env$i))))
+      #blocks[[i]] <- c(blocks[[i]], bquote(flow:::update(.(-env$i))))
       # loop of the repeat call of the i-th item
-      blocks[[c(i, 2, 2)]] <- insert_redraw(blocks[[c(i, 2, 2)]], env)
+      blocks[[c(i, 2, 2)]] <- insert_update(blocks[[c(i, 2, 2)]], env)
       next
     }
   }
@@ -109,7 +109,7 @@ flow_run2 <-
     data$nodes$passes <- 0
 
     # move data to the global variable data_env, so we can access and modify
-    # values inside of our redraw function
+    # values inside of our flow:::update function
     # the id of our debugging layer is the time, so we know it's unique and
     # can be sorted
     layer_id <- as.character(Sys.time())
@@ -118,6 +118,7 @@ flow_run2 <-
     data_env[[layer_id]]$edges <- data$edges
     data_env[[layer_id]]$browse_at <- browse
     data_env[[layer_id]]$refresh <- FALSE
+    data_env[[layer_id]]$last_node <- 0
 
     update_diagram <- function() {
       #browser()
@@ -153,18 +154,21 @@ flow_run2 <-
     data_env[[layer_id]]$update_diagram <- update_diagram
 
     # the diagram is drawn in the end, error or not
+
+    message("defining on.exit: ", layer_id)
     on.exit({
+      message("exiting: ", layer_id)
       update_diagram()
       rm(list = layer_id, envir = data_env)
       })
 
     if (swap) body(fun) <- swap_calls(body(fun))
-    body(fun) <- insert_redraw(body(fun))
+    body(fun) <- insert_update(body(fun))
     #body(fun) <- as.call(c(quote(`{`), quote(browser()), as.list(body(fun)[-1])))
     call[[1]] <- fun
     res <- eval.parent(call)
 
-    # finish the flow to the end after last redraw call
+    # finish the flow to the end after last flow:::update call
     repeat {
       next_edge_lgl <- data_env[[layer_id]]$edges$from == data_env[[layer_id]]$last_node
       if(!any(next_edge_lgl)) break else {
@@ -180,31 +184,40 @@ flow_run2 <-
       }
     }
 
-    # and we should when we stop debugging we should be able to draw only in the end (check if is debugged before redrawing)
+    # and we should when we stop debugging we should be able to draw only in the end (check if is debugged before flow:::updateing)
     res
   }
 
-redraw <- function(n, rec = FALSE) {
-  #browser()
+update <- function(n, child = FALSE) {
+  # the last layer_id is the current one
   layer_id <- tail(ls(data_env), 1)
-  if(data_env[[layer_id]]$refresh) {
-    on.exit(data_env[[layer_id]]$update_diagram())
-  }
-  # message("------------------------------")
-  # message("last node: ", data_env[[layer_id]]$last_node)
-  # message("n: ", n)
 
-  # if we are at the right place for the first time, browse
-  if(data_env[[layer_id]]$browse_at == n &&
-     data_env[[layer_id]]$nodes$passes[data_env[[layer_id]]$nodes$id == n] == 0 &&
-     !rec) {
-    data_env[[layer_id]]$refresh <- TRUE
+  # we copy thes edges and nodes for convenience
+  nodes     <- data_env[[layer_id]]$nodes
+  edges     <- data_env[[layer_id]]$edges
+  browse_at <- data_env[[layer_id]]$browse_at
+  last_node <- data_env[[layer_id]]$last_node
+
+  # if(data_env[[layer_id]]$refresh) {
+  #   on.exit(data_env[[layer_id]]$update_diagram())
+  # }
+
+  # we start browsing after an update call directly called from the debugged
+  # function if we reach the the n == brows_at block, and if it hasn't been
+  # passed yet
+
+  start_browsing <-
+    !child &&
+    browse_at == n &&
+    nodes$passes[nodes$id == n] == 0
+
+  if(start_browsing) {
+    # data_env[[layer_id]]$refresh <- TRUE
     on.exit(eval.parent(quote(browser())), TRUE)
   }
 
   # position where last_node connects to new node
-  direct_edge_row_lgl <-
-    data_env[[layer_id]]$edges$from == data_env[[layer_id]]$last_node & data_env[[layer_id]]$edges$to == n
+  direct_edge_row_lgl <- edges$from == last_node & edges$to == n
   direct_edge_exists <- any(direct_edge_row_lgl)
 
   if(!direct_edge_exists) {
@@ -212,66 +225,67 @@ redraw <- function(n, rec = FALSE) {
 
     # if it doesn't connect, connect last_node to a negative node (end of control
     # flow), and make this new node te connection
-    edge_to_neg_node_lgl <-
-      data_env[[layer_id]]$edges$from == data_env[[layer_id]]$last_node & data_env[[layer_id]]$edges$to < 0
-
+    edge_to_neg_node_lgl <- edges$from == last_node & edges$to < 0
     edge_to_neg_node_exists <- any(edge_to_neg_node_lgl)
+
     if (edge_to_neg_node_exists) {
 
-      last_node_is_loop <- data_env[[layer_id]]$nodes$block_type[
-        data_env[[layer_id]]$nodes$id == data_env[[layer_id]]$last_node] %in% c("for", "while", "repeat")
+      last_node_is_loop <-
+        subset(nodes, id == last_node)$block_type %in% c("for", "while", "repeat")
 
-      # unless it's a loop call, undash the edge
       if(!last_node_is_loop) {
-      data_env[[layer_id]]$edges$arrow[edge_to_neg_node_lgl] <- "->"
+        # undash edge
+        data_env[[layer_id]]$edges$arrow[edge_to_neg_node_lgl] <- "->"
 
-      # increment edge passes
-      data_env[[layer_id]]$edges$passes[edge_to_neg_node_lgl] <-
-        data_env[[layer_id]]$edges$passes[edge_to_neg_node_lgl] + 1
+        # increment edge passes
+        data_env[[layer_id]]$edges$passes[edge_to_neg_node_lgl] <-
+          edges$passes[edge_to_neg_node_lgl] + 1
       }
 
       # update last node
-      data_env[[layer_id]]$last_node <- data_env[[layer_id]]$edges$to[edge_to_neg_node_lgl]
-
-      #message(data_env[[layer_id]]$last_node)
+      last_node <- data_env[[layer_id]]$edges$to[edge_to_neg_node_lgl]
+      data_env[[layer_id]]$last_node <- last_node
 
       # increment node passes
-      data_env[[layer_id]]$nodes$passes[data_env[[layer_id]]$nodes$id == data_env[[layer_id]]$last_node] <-
-        data_env[[layer_id]]$nodes$passes[data_env[[layer_id]]$nodes$id == data_env[[layer_id]]$last_node] + 1
-      # redraw to same n now that last_node was updated
-      return(redraw(n, TRUE))
+      node_index_lgl <- nodes$id == last_node
+      data_env[[layer_id]]$nodes$passes[node_index_lgl] <-
+        nodes$passes[node_index_lgl] + 1
+
+      # update to same n now that last_node was updated
+      return(flow:::update(n, TRUE))
     }
 
-    #browser()
     # if we don't have direct link nor link to neg node, it means we looped back up
 
     # change last node to direct parent
-    data_env[[layer_id]]$last_node <- n - 1
+    last_node <- n - 1
+    data_env[[layer_id]]$last_node <- last_node
 
     # undash the upward edge and add a pass to it as well as to loop head node
-    upward_edge_lgl <-
-      data_env[[layer_id]]$edges$from == data_env[[layer_id]]$last_node & data_env[[layer_id]]$edges$to == -data_env[[layer_id]]$last_node
+    upward_edge_lgl <- edges$from == last_node & edges$to == -last_node
 
     data_env[[layer_id]]$edges$arrow[upward_edge_lgl] <- "<-"
     data_env[[layer_id]]$edges$passes[upward_edge_lgl] <-
-      data_env[[layer_id]]$edges$passes[upward_edge_lgl] + 1
+      edges$passes[upward_edge_lgl] + 1
 
-    head_node_lgl <- data_env[[layer_id]]$nodes$id == data_env[[layer_id]]$last_node
+    head_node_lgl <- nodes$id == last_node
 
     data_env[[layer_id]]$nodes$passes[head_node_lgl] <-
-      data_env[[layer_id]]$nodes$passes[head_node_lgl] + 1
+      nodes$passes[head_node_lgl] + 1
 
-    # redraw to same n now that last_node was updated
-    return(redraw(n, TRUE))
+    # flow:::update to same n now that last_node was updated
+    return(flow:::update(n, TRUE))
 
   }
 
+  # undash
   data_env[[layer_id]]$edges[direct_edge_row_lgl, "arrow"] <- "->"
   # increment edge passes
-  data_env[[layer_id]]$edges[direct_edge_row_lgl, "passes"] <- data_env[[layer_id]]$edges[direct_edge_row_lgl, "passes"] + 1
+  data_env[[layer_id]]$edges[direct_edge_row_lgl, "passes"] <-
+    edges[direct_edge_row_lgl, "passes"] + 1
   # increment node passes
-  data_env[[layer_id]]$nodes$passes[data_env[[layer_id]]$nodes$id == n] <-
-    data_env[[layer_id]]$nodes$passes[data_env[[layer_id]]$nodes$id == n]+ 1
+  data_env[[layer_id]]$nodes$passes[nodes$id == n] <-
+    nodes$passes[nodes$id == n]+ 1
 
   data_env[[layer_id]]$last_node <- n
   invisible(NULL)
@@ -282,7 +296,6 @@ redraw <- function(n, rec = FALSE) {
 # each of this data lists serves for a layer of debugging, so it means we'll have
 # most of the time zero or one, but is flexible for nested debugging
 data_env <- new.env()
-data_env$last_node <- 0
 
 
 #rm(list=ls(data_env), envir = data_env)
