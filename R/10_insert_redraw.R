@@ -76,9 +76,13 @@ insert_update <- function(expr, env = as.environment(list(i=0)), n){
 }
 
 
+#' Experimental replacement for flow_run
+#'
+#' @inheritParams flow_run
+#' @export
 flow_run2 <-
   function(x, prefix = NULL, swap = TRUE, code = TRUE, ...,
-           out = NULL, svg = FALSE, browse = FALSE, trim = FALSE) {
+           out = NULL, svg = FALSE, browse = FALSE) {
     # capture call and function
     call <- substitute(x)
     if (!is.call(call)) stop("x must be a call")
@@ -129,7 +133,10 @@ flow_run2 <-
     update_diagram <- function() {
       #browser()
       # display updated diagram
-      nomnoml_code  <- build_nomnoml_code(data_env[[layer_id]], code = code, ...)
+
+      data <- data_env[[layer_id]]
+
+      nomnoml_code  <- build_nomnoml_code(data, code = code, ...)
       widget_params <- list(code = nomnoml_code, svg = svg)
       widget <- htmlwidgets::createWidget(
         name = "nomnoml", widget_params, package = "nomnoml")
