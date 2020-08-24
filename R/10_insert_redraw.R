@@ -1,4 +1,4 @@
-insert_update <- function(expr, env = as.environment(list(i=0))){
+insert_update <- function(expr, env = as.environment(list(i=0)), n){
   # clean block from braces
   if (is.call(expr) && expr[[1]] == quote(`{`))
     calls <- as.list(expr[-1])
@@ -31,38 +31,44 @@ insert_update <- function(expr, env = as.environment(list(i=0))){
     # increment block number
     env$i <- env$i + 1
     # precede block with flow:::update call
-    blocks[[i]] <- c(bquote(flow:::update(.(env$i))), blocks[[i]])
+    has_browser <- env$i %in% n
+    if(has_browser)
+      blocks[[i]] <- c(bquote(flow:::update(.(env$i))), quote(browser()), blocks[[i]])
+    else
+      blocks[[i]] <- c(bquote(flow:::update(.(env$i))), blocks[[i]])
 
-    if(blocks[[i]][2] %call_in% "if"){
+    j <- 2 + has_browser
+
+    if(blocks[[i]][j] %call_in% "if"){
       #blocks[[i]] <- c(blocks[[i]], bquote(flow:::update(.(-env$i))))
       # yes clause of the if call of the i-th item
-      blocks[[c(i, 2, 3)]] <- insert_update(blocks[[c(i, 2, 3)]], env)
+      blocks[[c(i, j, 3)]] <- insert_update(blocks[[c(i, j, 3)]], env, n)
 
       # no clause of the if call of the i-th item
-      if(length(blocks[[c(i, 2)]]) == 4) # if there is an "else"
-        blocks[[c(i, 2, 4)]] <- insert_update(blocks[[c(i, 2, 4)]], env)
+      if(length(blocks[[c(i, j)]]) == 4) # if there is an "else"
+        blocks[[c(i, j, 4)]] <- insert_update(blocks[[c(i, j, 4)]], env, n)
 
       next
     }
 
-    if(blocks[[i]][2] %call_in% "for"){
+    if(blocks[[i]][j] %call_in% "for"){
       #blocks[[i]] <- c(blocks[[i]], bquote(flow:::update(.(-env$i))))
       # loop of the for call of the i-th item
-      blocks[[c(i, 2, 4)]] <- insert_update(blocks[[c(i, 2, 4)]], env)
+      blocks[[c(i, j, 4)]] <- insert_update(blocks[[c(i, j, 4)]], env, n)
       next
     }
 
-    if(blocks[[i]][2] %call_in% "while"){
+    if(blocks[[i]][j] %call_in% "while"){
       #blocks[[i]] <- c(blocks[[i]], bquote(flow:::update(.(-env$i))))
       # loop of the while call of the i-th item
-      blocks[[c(i, 2, 3)]] <- insert_update(blocks[[c(i, 2, 3)]], env)
+      blocks[[c(i, j, 3)]] <- insert_update(blocks[[c(i, j, 3)]], env, n)
       next
     }
 
-    if(blocks[[i]][2] %call_in% "repeat"){
+    if(blocks[[i]][j] %call_in% "repeat"){
       #blocks[[i]] <- c(blocks[[i]], bquote(flow:::update(.(-env$i))))
       # loop of the repeat call of the i-th item
-      blocks[[c(i, 2, 2)]] <- insert_update(blocks[[c(i, 2, 2)]], env)
+      blocks[[c(i, j, 2)]] <- insert_update(blocks[[c(i, j, 2)]], env, n)
       next
     }
   }
@@ -116,7 +122,7 @@ flow_run2 <-
     data_env[[layer_id]] <- list()
     data_env[[layer_id]]$nodes <- data$nodes
     data_env[[layer_id]]$edges <- data$edges
-    data_env[[layer_id]]$browse_at <- browse
+    #data_env[[layer_id]]$browse_at <- browse
     data_env[[layer_id]]$refresh <- FALSE
     data_env[[layer_id]]$last_node <- 0
 
@@ -155,15 +161,15 @@ flow_run2 <-
 
     # the diagram is drawn in the end, error or not
 
-    message("defining on.exit: ", layer_id)
+    # message("defining on.exit: ", layer_id)
     on.exit({
-      message("exiting: ", layer_id)
+      # message("exiting: ", layer_id)
       update_diagram()
       rm(list = layer_id, envir = data_env)
       })
 
     if (swap) body(fun) <- swap_calls(body(fun))
-    body(fun) <- insert_update(body(fun))
+    body(fun) <- insert_update(body(fun), n = browse)
     #body(fun) <- as.call(c(quote(`{`), quote(browser()), as.list(body(fun)[-1])))
     call[[1]] <- fun
     res <- eval.parent(call)
@@ -172,6 +178,19 @@ flow_run2 <-
     repeat {
       next_edge_lgl <- data_env[[layer_id]]$edges$from == data_env[[layer_id]]$last_node
       if(!any(next_edge_lgl)) break else {
+        # there could be several candidate, standard blocks are dismissed as
+        # they would have been dealt with by previous update calls
+        if(sum(next_edge_lgl) > 1) {
+          candidate_nodes <- data_env[[layer_id]]$edges$to[next_edge_lgl]
+          chosen_candidate_lgl <-
+            with(data_env[[layer_id]]$nodes,
+            block_type[id %in% candidate_nodes] != "standard")
+          chosen_candidate <- candidate_nodes[chosen_candidate_lgl]
+          next_edge_lgl <-
+            with(data_env[[layer_id]],
+                 edges$from == last_node & edges$to == chosen_candidate)
+        }
+
         # undash
         data_env[[layer_id]]$edges$arrow[next_edge_lgl] <- "->"
 
@@ -192,34 +211,38 @@ update <- function(n, child = FALSE) {
   # the last layer_id is the current one
   layer_id <- tail(ls(data_env), 1)
 
-  # we copy thes edges and nodes for convenience
+  if(data_env[[layer_id]]$refresh) {
+    on.exit(data_env[[layer_id]]$update_diagram())
+  }
+
+  # we copy variables for convenience
   nodes     <- data_env[[layer_id]]$nodes
   edges     <- data_env[[layer_id]]$edges
-  browse_at <- data_env[[layer_id]]$browse_at
+  #browse_at <- data_env[[layer_id]]$browse_at
   last_node <- data_env[[layer_id]]$last_node
 
-  # if(data_env[[layer_id]]$refresh) {
-  #   on.exit(data_env[[layer_id]]$update_diagram())
-  # }
+
 
   # we start browsing after an update call directly called from the debugged
   # function if we reach the the n == brows_at block, and if it hasn't been
   # passed yet
 
-  start_browsing <-
-    !child &&
-    browse_at == n &&
-    nodes$passes[nodes$id == n] == 0
-
-  if(start_browsing) {
-    # data_env[[layer_id]]$refresh <- TRUE
-    on.exit(eval.parent(quote(browser())), TRUE)
-  }
+  # start_browsing <-
+  #   !child &&
+  #   browse_at == n &&
+  #   nodes$passes[nodes$id == n] == 0
+  #
+  # if(start_browsing) {
+  #   # data_env[[layer_id]]$refresh <- TRUE
+  #   on.exit({
+  #     message("exiting update")
+  #     eval.parent(quote(browser()))
+  #     })
+  # }
 
   # position where last_node connects to new node
   direct_edge_row_lgl <- edges$from == last_node & edges$to == n
   direct_edge_exists <- any(direct_edge_row_lgl)
-
   if(!direct_edge_exists) {
     #message("no direct edge, looking for a negative edge to link to")
 
@@ -299,3 +322,11 @@ data_env <- new.env()
 
 
 #rm(list=ls(data_env), envir = data_env)
+
+refresh <- function(always = FALSE) {
+  layer_id <- tail(ls(data_env), 1)
+  data_env[[layer_id]]$refresh <- always
+  data_env[[layer_id]]$update_diagram()
+  invisible(NULL)
+}
+
