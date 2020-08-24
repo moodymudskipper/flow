@@ -1,0 +1,288 @@
+insert_redraw <- function(expr, env = as.environment(list(i=0))){
+  # clean block from braces
+  if (is.call(expr) && expr[[1]] == quote(`{`))
+    calls <- as.list(expr[-1])
+  else
+    calls <- list(expr)
+
+  # support empty calls (`{}`)
+  if (!length(calls)) {
+    blocks <- list(substitute()) # substitute() returns an empty call
+    return(blocks)
+  }
+  # logical indices of control flow calls
+  cfc_lgl <- calls %call_in% c("if", "for", "while", "repeat")
+
+  # logical indices of control flow calls
+  special_comment_lgl <- calls %call_in% c("#")
+
+  # there are 2 ways to start a block : be a cf not preceded by com, or be a com
+  # there are 2 ways to finish a block : be a cf (and finish on next one), or start another block and finish right there
+
+  # cf not preceded by com
+  cfc_unpreceded_lgl <- cfc_lgl & !c(FALSE, head(special_comment_lgl, -1))
+  # new_block (first or after cfc)
+  new_block_lgl <- c(TRUE, head(cfc_lgl, -1))
+  block_ids <- cumsum(special_comment_lgl | cfc_unpreceded_lgl | new_block_lgl)
+
+  blocks <- split(calls, block_ids)
+
+  for (i in seq_along(blocks)) {
+    # increment block number
+    env$i <- env$i + 1
+    # precede block with redraw call
+    blocks[[i]] <- c(bquote(redraw(.(env$i))), blocks[[i]])
+
+    if(blocks[[i]][2] %call_in% "if"){
+      #blocks[[i]] <- c(blocks[[i]], bquote(redraw(.(-env$i))))
+      # yes clause of the if call of the i-th item
+      blocks[[c(i, 2, 3)]] <- insert_redraw(blocks[[c(i, 2, 3)]], env)
+
+      # no clause of the if call of the i-th item
+      if(length(blocks[[c(i, 2)]]) == 4) # if there is an "else"
+        blocks[[c(i, 2, 4)]] <- insert_redraw(blocks[[c(i, 2, 4)]], env)
+
+      next
+    }
+
+    if(blocks[[i]][2] %call_in% "for"){
+      #blocks[[i]] <- c(blocks[[i]], bquote(redraw(.(-env$i))))
+      # loop of the for call of the i-th item
+      blocks[[c(i, 2, 4)]] <- insert_redraw(blocks[[c(i, 2, 4)]], env)
+      next
+    }
+
+    if(blocks[[i]][2] %call_in% "while"){
+      #blocks[[i]] <- c(blocks[[i]], bquote(redraw(.(-env$i))))
+      # loop of the while call of the i-th item
+      blocks[[c(i, 2, 3)]] <- insert_redraw(blocks[[c(i, 2, 3)]], env)
+      next
+    }
+
+    if(blocks[[i]][2] %call_in% "repeat"){
+      #blocks[[i]] <- c(blocks[[i]], bquote(redraw(.(-env$i))))
+      # loop of the repeat call of the i-th item
+      blocks[[c(i, 2, 2)]] <- insert_redraw(blocks[[c(i, 2, 2)]], env)
+      next
+    }
+  }
+ as.call(c(quote(`{`), unlist(blocks)))
+}
+
+
+flow_run2 <-
+  function(x, prefix = NULL, swap = TRUE, code = TRUE, ...,
+           out = NULL, svg = FALSE, browse = FALSE, trim = FALSE) {
+    # capture call and function
+    call <- substitute(x)
+    if (!is.call(call)) stop("x must be a call")
+    fun_sym <- call[[1]]
+    fun <- eval.parent(fun_sym)
+
+    if(is.null(body(fun))) stop("`", as.character(fun_sym),
+                                "` doesn't have a body (try `body(", as.character(fun_sym),
+                                ")`). {flow}'s functions don't work on such inputs.")
+
+    # if function is a S3 standard generic, debug appropriate method
+    if (isS3stdGeneric(fun)) {
+      fun_sym <- str2lang(getS3methodSym(deparse(fun_sym), eval.parent(call[[2]])))
+      fun <- eval(fun_sym)
+    }
+
+    # build the diagram data from the function
+    flow_data_call <- as.call(list(
+      quote(flow::flow_data),
+      fun_sym,
+      range = NULL,
+      prefix = substitute(prefix),
+      sub_fun_id = NULL,
+      swap = substitute(swap)))
+    data <- eval.parent(flow_data_call)
+
+    # dash the edges
+    data$edges$arrow <- gsub("->", "--:>", data$edges$arrow, fixed = TRUE)
+    data$edges$arrow <- gsub("<-", "<:--", data$edges$arrow, fixed = TRUE)
+    data$edges$arrow[data$edges$from == 0] <- "->"
+
+    # initiates number of passes
+    data$edges$passes <- 0
+    data$nodes$passes <- 0
+
+    # move data to the global variable data_env, so we can access and modify
+    # values inside of our redraw function
+    # the id of our debugging layer is the time, so we know it's unique and
+    # can be sorted
+    layer_id <- as.character(Sys.time())
+    data_env[[layer_id]] <- list()
+    data_env[[layer_id]]$nodes <- data$nodes
+    data_env[[layer_id]]$edges <- data$edges
+    data_env[[layer_id]]$browse_at <- browse
+    data_env[[layer_id]]$refresh <- FALSE
+
+    update_diagram <- function() {
+      #browser()
+      # display updated diagram
+      nomnoml_code  <- build_nomnoml_code(data_env[[layer_id]], code = code, ...)
+      widget_params <- list(code = nomnoml_code, svg = svg)
+      widget <- htmlwidgets::createWidget(
+        name = "nomnoml", widget_params, package = "nomnoml")
+      if (is.null(out)) return(print(widget))
+
+      is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg")
+      if (is_tmp) {
+        out <- tempfile("flow_", fileext = paste0(".", out))
+      }
+      ext <- sub(".*?\\.([[:alnum:]]+)$", "\\1", out)
+      if (tolower(ext) %in% c("html", "htm"))
+        htmlwidgets::saveWidget(widget, out)
+      else {
+        html <- tempfile("flow_", fileext = ".html")
+        htmlwidgets::saveWidget(widget, html)
+        webshot::webshot(html, out, selector = "canvas")
+      }
+
+      if (is_tmp) {
+        message(sprintf("The diagram was saved to '%s'", gsub("\\\\","/", out)))
+        browseURL(out)
+      }
+      out
+    }
+
+    # we put update_diagram in our global environment this way so it posses
+    # all the parameter values in its enclosure
+    data_env[[layer_id]]$update_diagram <- update_diagram
+
+    # the diagram is drawn in the end, error or not
+    on.exit({
+      update_diagram()
+      rm(list = layer_id, envir = data_env)
+      })
+
+    if (swap) body(fun) <- swap_calls(body(fun))
+    body(fun) <- insert_redraw(body(fun))
+    #body(fun) <- as.call(c(quote(`{`), quote(browser()), as.list(body(fun)[-1])))
+    call[[1]] <- fun
+    res <- eval.parent(call)
+
+    # finish the flow to the end after last redraw call
+    repeat {
+      next_edge_lgl <- data_env[[layer_id]]$edges$from == data_env[[layer_id]]$last_node
+      if(!any(next_edge_lgl)) break else {
+        # undash
+        data_env[[layer_id]]$edges$arrow[next_edge_lgl] <- "->"
+
+        # increment edge passes
+        data_env[[layer_id]]$edges$passes[next_edge_lgl] <-
+          data_env[[layer_id]]$edges$passes[next_edge_lgl] + 1
+
+        # update last node
+        data_env[[layer_id]]$last_node <- data_env[[layer_id]]$edges$to[next_edge_lgl]
+      }
+    }
+
+    # and we should when we stop debugging we should be able to draw only in the end (check if is debugged before redrawing)
+    res
+  }
+
+redraw <- function(n, rec = FALSE) {
+  #browser()
+  layer_id <- tail(ls(data_env), 1)
+  if(data_env[[layer_id]]$refresh) {
+    on.exit(data_env[[layer_id]]$update_diagram())
+  }
+  # message("------------------------------")
+  # message("last node: ", data_env[[layer_id]]$last_node)
+  # message("n: ", n)
+
+  # if we are at the right place for the first time, browse
+  if(data_env[[layer_id]]$browse_at == n &&
+     data_env[[layer_id]]$nodes$passes[data_env[[layer_id]]$nodes$id == n] == 0 &&
+     !rec) {
+    data_env[[layer_id]]$refresh <- TRUE
+    on.exit(eval.parent(quote(browser())), TRUE)
+  }
+
+  # position where last_node connects to new node
+  direct_edge_row_lgl <-
+    data_env[[layer_id]]$edges$from == data_env[[layer_id]]$last_node & data_env[[layer_id]]$edges$to == n
+  direct_edge_exists <- any(direct_edge_row_lgl)
+
+  if(!direct_edge_exists) {
+    #message("no direct edge, looking for a negative edge to link to")
+
+    # if it doesn't connect, connect last_node to a negative node (end of control
+    # flow), and make this new node te connection
+    edge_to_neg_node_lgl <-
+      data_env[[layer_id]]$edges$from == data_env[[layer_id]]$last_node & data_env[[layer_id]]$edges$to < 0
+
+    edge_to_neg_node_exists <- any(edge_to_neg_node_lgl)
+    if (edge_to_neg_node_exists) {
+
+      last_node_is_loop <- data_env[[layer_id]]$nodes$block_type[
+        data_env[[layer_id]]$nodes$id == data_env[[layer_id]]$last_node] %in% c("for", "while", "repeat")
+
+      # unless it's a loop call, undash the edge
+      if(!last_node_is_loop) {
+      data_env[[layer_id]]$edges$arrow[edge_to_neg_node_lgl] <- "->"
+
+      # increment edge passes
+      data_env[[layer_id]]$edges$passes[edge_to_neg_node_lgl] <-
+        data_env[[layer_id]]$edges$passes[edge_to_neg_node_lgl] + 1
+      }
+
+      # update last node
+      data_env[[layer_id]]$last_node <- data_env[[layer_id]]$edges$to[edge_to_neg_node_lgl]
+
+      #message(data_env[[layer_id]]$last_node)
+
+      # increment node passes
+      data_env[[layer_id]]$nodes$passes[data_env[[layer_id]]$nodes$id == data_env[[layer_id]]$last_node] <-
+        data_env[[layer_id]]$nodes$passes[data_env[[layer_id]]$nodes$id == data_env[[layer_id]]$last_node] + 1
+      # redraw to same n now that last_node was updated
+      return(redraw(n, TRUE))
+    }
+
+    #browser()
+    # if we don't have direct link nor link to neg node, it means we looped back up
+
+    # change last node to direct parent
+    data_env[[layer_id]]$last_node <- n - 1
+
+    # undash the upward edge and add a pass to it as well as to loop head node
+    upward_edge_lgl <-
+      data_env[[layer_id]]$edges$from == data_env[[layer_id]]$last_node & data_env[[layer_id]]$edges$to == -data_env[[layer_id]]$last_node
+
+    data_env[[layer_id]]$edges$arrow[upward_edge_lgl] <- "<-"
+    data_env[[layer_id]]$edges$passes[upward_edge_lgl] <-
+      data_env[[layer_id]]$edges$passes[upward_edge_lgl] + 1
+
+    head_node_lgl <- data_env[[layer_id]]$nodes$id == data_env[[layer_id]]$last_node
+
+    data_env[[layer_id]]$nodes$passes[head_node_lgl] <-
+      data_env[[layer_id]]$nodes$passes[head_node_lgl] + 1
+
+    # redraw to same n now that last_node was updated
+    return(redraw(n, TRUE))
+
+  }
+
+  data_env[[layer_id]]$edges[direct_edge_row_lgl, "arrow"] <- "->"
+  # increment edge passes
+  data_env[[layer_id]]$edges[direct_edge_row_lgl, "passes"] <- data_env[[layer_id]]$edges[direct_edge_row_lgl, "passes"] + 1
+  # increment node passes
+  data_env[[layer_id]]$nodes$passes[data_env[[layer_id]]$nodes$id == n] <-
+    data_env[[layer_id]]$nodes$passes[data_env[[layer_id]]$nodes$id == n]+ 1
+
+  data_env[[layer_id]]$last_node <- n
+  invisible(NULL)
+}
+
+
+# data_env is an environment that will contain data lists
+# each of this data lists serves for a layer of debugging, so it means we'll have
+# most of the time zero or one, but is flexible for nested debugging
+data_env <- new.env()
+data_env$last_node <- 0
+
+
+#rm(list=ls(data_env), envir = data_env)
