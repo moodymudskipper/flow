@@ -181,6 +181,11 @@ flow_run2 <-
     call[[1]] <- fun
     res <- eval.parent(call)
 
+
+    # if(!isFALSE(browser)) {
+    #   update_diagram()
+    # }
+
     # finish the flow to the end after last flow:::update call
     repeat {
       next_edge_lgl <- data_env[[layer_id]]$edges$from == data_env[[layer_id]]$last_node
@@ -330,7 +335,11 @@ data_env <- new.env()
 
 #rm(list=ls(data_env), envir = data_env)
 
-refresh <- function(always = FALSE) {
+#' redraw
+#' @param always not implemented yet, set to TRUE to always redraw automatically during current run
+#'
+#' @export
+redraw <- function(always = FALSE) {
   layer_id <- tail(ls(data_env), 1)
   data_env[[layer_id]]$refresh <- always
   data_env[[layer_id]]$update_diagram()
