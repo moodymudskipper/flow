@@ -20,3 +20,4 @@ Imports:
     rstudioapi,
     webshot
 RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
