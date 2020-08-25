@@ -233,8 +233,6 @@ update <- function(n, child = FALSE) {
   #browse_at <- data_env[[layer_id]]$browse_at
   last_node <- data_env[[layer_id]]$last_node
 
-
-
   # we start browsing after an update call directly called from the debugged
   # function if we reach the the n == brows_at block, and if it hasn't been
   # passed yet
@@ -341,6 +339,7 @@ data_env <- new.env()
 #' @export
 redraw <- function(always = FALSE) {
   layer_id <- tail(ls(data_env), 1)
+  if(!length(layer_id)) stop("`flow::redraw()` should only be called from the debugger after calling `flow::flow_run()`")
   data_env[[layer_id]]$refresh <- always
   data_env[[layer_id]]$update_diagram()
   invisible(NULL)
