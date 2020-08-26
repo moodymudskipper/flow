@@ -27,20 +27,22 @@ insert_update <- function(expr, env = as.environment(list(i=0)), n){
 
   blocks <- split(calls, block_ids)
 
+  # we can't type `flow:::update` without triggering a note so we work around it
+  flow_update <- call(":::", as.symbol("flow"), as.symbol("update"))
+
   for (i in seq_along(blocks)) {
     # increment block number
     env$i <- env$i + 1
     # precede block with flow:::update call
     has_browser <- env$i %in% n
     if(has_browser)
-      blocks[[i]] <- c(bquote(flow:::update(.(env$i))), quote(browser()), blocks[[i]])
+      blocks[[i]] <- c(bquote(.(flow_update)(.(env$i))), quote(browser()), blocks[[i]])
     else
-      blocks[[i]] <- c(bquote(flow:::update(.(env$i))), blocks[[i]])
+      blocks[[i]] <- c(bquote(.(flow_update)(.(env$i))), blocks[[i]])
 
     j <- 2 + has_browser
 
     if(blocks[[i]][j] %call_in% "if"){
-      #blocks[[i]] <- c(blocks[[i]], bquote(flow:::update(.(-env$i))))
       # yes clause of the if call of the i-th item
       blocks[[c(i, j, 3)]] <- insert_update(blocks[[c(i, j, 3)]], env, n)
 
@@ -52,21 +54,18 @@ insert_update <- function(expr, env = as.environment(list(i=0)), n){
     }
 
     if(blocks[[i]][j] %call_in% "for"){
-      #blocks[[i]] <- c(blocks[[i]], bquote(flow:::update(.(-env$i))))
       # loop of the for call of the i-th item
       blocks[[c(i, j, 4)]] <- insert_update(blocks[[c(i, j, 4)]], env, n)
       next
     }
 
     if(blocks[[i]][j] %call_in% "while"){
-      #blocks[[i]] <- c(blocks[[i]], bquote(flow:::update(.(-env$i))))
       # loop of the while call of the i-th item
       blocks[[c(i, j, 3)]] <- insert_update(blocks[[c(i, j, 3)]], env, n)
       next
     }
 
     if(blocks[[i]][j] %call_in% "repeat"){
-      #blocks[[i]] <- c(blocks[[i]], bquote(flow:::update(.(-env$i))))
       # loop of the repeat call of the i-th item
       blocks[[c(i, j, 2)]] <- insert_update(blocks[[c(i, j, 2)]], env, n)
       next
@@ -116,7 +115,7 @@ update <- function(n, child = FALSE) {
     if (edge_to_neg_node_exists) {
 
       last_node_is_loop <-
-        subset(nodes, id == last_node)$block_type %in% c("for", "while", "repeat")
+        nodes[nodes$id == last_node, "block_type"] %in% c("for", "while", "repeat")
 
       if(!last_node_is_loop) {
         # undash edge
@@ -137,7 +136,7 @@ update <- function(n, child = FALSE) {
         nodes$passes[node_index_lgl] + 1
 
       # update to same n now that last_node was updated
-      return(flow:::update(n, TRUE))
+      return(update(n, TRUE))
     }
 
     # if we don't have direct link nor link to neg node, it means we looped back up
@@ -158,8 +157,8 @@ update <- function(n, child = FALSE) {
     data_env[[layer_id]]$nodes$passes[head_node_lgl] <-
       nodes$passes[head_node_lgl] + 1
 
-    # flow:::update to same n now that last_node was updated
-    return(flow:::update(n, TRUE))
+    # update to same n now that last_node was updated
+    return(update(n, TRUE))
 
   }
 
