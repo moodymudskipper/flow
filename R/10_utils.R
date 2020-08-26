@@ -1,6 +1,6 @@
 # imports and lower level unexported functions
 
-#' @importFrom utils head getS3method browseURL
+#' @importFrom utils head getS3method browseURL tail
 NULL
 
 add_comment_calls <- function(fun, prefix = "##"){
