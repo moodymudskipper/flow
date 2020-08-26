@@ -74,9 +74,6 @@ at the bottom.}
 
 \item{edgeMargin}{Edge margin, no effect was observed}
 }
-\value{
-
-}
 \description{
 This functions builds the nomnoml code to render from the data built by
 \code{flow_data()}. It's not very useful for the average user to call it directly
