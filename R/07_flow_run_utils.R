@@ -198,14 +198,23 @@ data_env <- new.env()
 #' contains a variable `d`, `flow::d` won't be found. In that case you will
 #' have to use `flow_draw()`.
 #'
+#' If `d` or `flow_draw()` are called outside of the debugger they will return
+#' `NULL` silently.
+#'
 #' @usage flow_draw()
 #' @usage d
 #' @aliases d
 #'
 #' @export
 flow_draw <- function() {
+  # the following is necessary to pass checks
+  if(!interactive()) # || identical(sys.call(-1)[[1]], quote(mget)))
+    return(invisible())
   layer_id <- tail(ls(data_env), 1)
-  if(!length(layer_id)) stop("`d` and flow::redraw()` should only be called from the debugger after calling `flow::flow_run()`")
+  if(!length(layer_id)) {
+    #warning("`d` and flow::draw()` should only be called from the debugger after calling `flow::flow_run()`, returning NULL")
+    return(invisible())
+  }
   #data_env[[layer_id]]$refresh <- always
   data_env[[layer_id]]$update_diagram()
   invisible(NULL)
