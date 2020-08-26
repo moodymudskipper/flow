@@ -21,4 +21,7 @@ such as \code{f}, \code{c} etc... It differs however in that it can be overridde
 For instance if the function uses a variable \code{d} or that a parent environment
 contains a variable \code{d}, \code{flow::d} won't be found. In that case you will
 have to use \code{flow_draw()}.
+
+If \code{d} or \code{flow_draw()} are called outside of the debugger they will return
+\code{NULL} silently.
 }
