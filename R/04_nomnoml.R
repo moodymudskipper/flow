@@ -106,7 +106,7 @@ build_nomnoml_code <- function(
   headers_lgl <- node_data$block_type == "header"
   node_data$box[headers_lgl]  <- sub("^\\[.*?: ;","[<header>", node_data$box[headers_lgl])
   # cleanup last chars of the box in cases where no code (no code or start/end blocks)
-  node_data$box  <- sub(":?\\s*;\\]$","]", node_data$box)
+  node_data$box  <- sub("(:?)\\s*;\\]$","\\1]", node_data$box, perl=TRUE)
   # create the nomnoml code for each edge
   edge_data$order <- seq_len(nrow(edge_data))
   edge_data <- merge(edge_data,node_data[c("id","box")], by.x = "from", by.y = "id", all.x = TRUE)
