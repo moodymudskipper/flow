@@ -64,7 +64,7 @@ flow_data <-
     }
 
     # add the final node
-    id = get_last_id(data) + 1
+    id <- get_last_id(data) + 1
     data <- add_node(data, id, "return")
     if (!is.null(prefix)) {
       prefix <- paste0("^\\s*", prefix,"\\s*")
