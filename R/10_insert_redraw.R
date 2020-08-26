@@ -75,157 +75,9 @@ insert_update <- function(expr, env = as.environment(list(i=0)), n){
  as.call(c(quote(`{`), unlist(blocks)))
 }
 
-
-#' Experimental replacement for flow_run
-#'
-#' @inheritParams flow_run
-#' @export
-flow_run2 <-
-  function(x, prefix = NULL, swap = TRUE, code = TRUE, ...,
-           out = NULL, svg = FALSE, browse = FALSE) {
-    # capture call and function
-    call <- substitute(x)
-    if (!is.call(call)) stop("x must be a call")
-    fun_sym <- call[[1]]
-    fun <- eval.parent(fun_sym)
-
-    if(is.null(body(fun))) stop("`", as.character(fun_sym),
-                                "` doesn't have a body (try `body(", as.character(fun_sym),
-                                ")`). {flow}'s functions don't work on such inputs.")
-
-    # if function is a S3 standard generic, debug appropriate method
-    if (isS3stdGeneric(fun)) {
-      fun_sym <- str2lang(getS3methodSym(deparse(fun_sym), eval.parent(call[[2]])))
-      fun <- eval(fun_sym)
-    }
-
-    # build the diagram data from the function
-    flow_data_call <- as.call(list(
-      quote(flow::flow_data),
-      fun_sym,
-      range = NULL,
-      prefix = substitute(prefix),
-      sub_fun_id = NULL,
-      swap = substitute(swap)))
-    data <- eval.parent(flow_data_call)
-
-    # dash the edges
-    data$edges$arrow <- gsub("->", "--:>", data$edges$arrow, fixed = TRUE)
-    data$edges$arrow <- gsub("<-", "<:--", data$edges$arrow, fixed = TRUE)
-    data$edges$arrow[data$edges$from == 0] <- "->"
-
-    # initiates number of passes
-    data$edges$passes <- 0
-    data$nodes$passes <- 0
-
-    # move data to the global variable data_env, so we can access and modify
-    # values inside of our flow:::update function
-    # the id of our debugging layer is the time, so we know it's unique and
-    # can be sorted
-    layer_id <- as.character(Sys.time())
-    data_env[[layer_id]] <- list()
-    data_env[[layer_id]]$nodes <- data$nodes
-    data_env[[layer_id]]$edges <- data$edges
-    #data_env[[layer_id]]$browse_at <- browse
-    data_env[[layer_id]]$refresh <- FALSE
-    data_env[[layer_id]]$last_node <- 0
-
-    update_diagram <- function() {
-      #browser()
-      # display updated diagram
-
-      data <- data_env[[layer_id]]
-
-      nomnoml_code  <- build_nomnoml_code(data, code = code, ...)
-      widget_params <- list(code = nomnoml_code, svg = svg)
-      widget <- htmlwidgets::createWidget(
-        name = "nomnoml", widget_params, package = "nomnoml")
-      if (is.null(out)) return(print(widget))
-
-      is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg")
-      if (is_tmp) {
-        out <- tempfile("flow_", fileext = paste0(".", out))
-      }
-      ext <- sub(".*?\\.([[:alnum:]]+)$", "\\1", out)
-      if (tolower(ext) %in% c("html", "htm"))
-        htmlwidgets::saveWidget(widget, out)
-      else {
-        html <- tempfile("flow_", fileext = ".html")
-        htmlwidgets::saveWidget(widget, html)
-        webshot::webshot(html, out, selector = "canvas")
-      }
-
-      if (is_tmp) {
-        message(sprintf("The diagram was saved to '%s'", gsub("\\\\","/", out)))
-        browseURL(out)
-      }
-      out
-    }
-
-    # we put update_diagram in our global environment this way so it posses
-    # all the parameter values in its enclosure
-    data_env[[layer_id]]$update_diagram <- update_diagram
-
-    # the diagram is drawn in the end, error or not
-
-    # message("defining on.exit: ", layer_id)
-    on.exit({
-      # message("exiting: ", layer_id)
-      update_diagram()
-      rm(list = layer_id, envir = data_env)
-      })
-
-    if (swap) body(fun) <- swap_calls(body(fun))
-    body(fun) <- insert_update(body(fun), n = browse)
-    #body(fun) <- as.call(c(quote(`{`), quote(browser()), as.list(body(fun)[-1])))
-    call[[1]] <- fun
-    res <- eval.parent(call)
-
-
-    # if(!isFALSE(browser)) {
-    #   update_diagram()
-    # }
-
-    # finish the flow to the end after last flow:::update call
-    repeat {
-      next_edge_lgl <- data_env[[layer_id]]$edges$from == data_env[[layer_id]]$last_node
-      if(!any(next_edge_lgl)) break else {
-        # there could be several candidate, standard blocks are dismissed as
-        # they would have been dealt with by previous update calls
-        if(sum(next_edge_lgl) > 1) {
-          candidate_nodes <- data_env[[layer_id]]$edges$to[next_edge_lgl]
-          chosen_candidate_lgl <-
-            with(data_env[[layer_id]]$nodes,
-            block_type[id %in% candidate_nodes] != "standard")
-          chosen_candidate <- candidate_nodes[chosen_candidate_lgl]
-          next_edge_lgl <-
-            with(data_env[[layer_id]],
-                 edges$from == last_node & edges$to == chosen_candidate)
-        }
-
-        # undash
-        data_env[[layer_id]]$edges$arrow[next_edge_lgl] <- "->"
-
-        # increment edge passes
-        data_env[[layer_id]]$edges$passes[next_edge_lgl] <-
-          data_env[[layer_id]]$edges$passes[next_edge_lgl] + 1
-
-        # update last node
-        data_env[[layer_id]]$last_node <- data_env[[layer_id]]$edges$to[next_edge_lgl]
-      }
-    }
-
-    # and we should when we stop debugging we should be able to draw only in the end (check if is debugged before flow:::updateing)
-    res
-  }
-
 update <- function(n, child = FALSE) {
   # the last layer_id is the current one
   layer_id <- tail(ls(data_env), 1)
-
-  if(data_env[[layer_id]]$refresh) {
-    on.exit(data_env[[layer_id]]$update_diagram())
-  }
 
   # we copy variables for convenience
   nodes     <- data_env[[layer_id]]$nodes
@@ -321,27 +173,40 @@ update <- function(n, child = FALSE) {
     nodes$passes[nodes$id == n]+ 1
 
   data_env[[layer_id]]$last_node <- n
+
+  # if(data_env[[layer_id]]$refresh) {
+  #   on.exit(data_env[[layer_id]]$update_diagram())
+  # }
   invisible(NULL)
 }
-
 
 # data_env is an environment that will contain data lists
 # each of this data lists serves for a layer of debugging, so it means we'll have
 # most of the time zero or one, but is flexible for nested debugging
 data_env <- new.env()
 
-
-#rm(list=ls(data_env), envir = data_env)
-
-#' redraw
-#' @param always not implemented yet, set to TRUE to always redraw automatically during current run
+#' Draw Diagram From Debugger
+#'
+#' `flow_draw()` should only be used in the debugger triggered by a call
+#' to `flow_run()`, or following a call to `flow_debug()` or `flow_debugonce()`.
+#' `d` is an active binding to `flow_draw()`, it means you can just type `d`
+#' (without parentheses) instead of `flow_draw()`.
+#'
+#' `d` was designed to look like the other shortcuts detailed in `?browser`,
+#' such as `f`, `c` etc... It differs however in that it can be overridden.
+#' For instance if the function uses a variable `d` or that a parent environment
+#' contains a variable `d`, `flow::d` won't be found. In that case you will
+#' have to use `flow_draw()`.
+#'
+#' @usage flow_draw()
+#' @usage d
+#' @aliases d
 #'
 #' @export
-redraw <- function(always = FALSE) {
+flow_draw <- function() {
   layer_id <- tail(ls(data_env), 1)
-  if(!length(layer_id)) stop("`flow::redraw()` should only be called from the debugger after calling `flow::flow_run()`")
-  data_env[[layer_id]]$refresh <- always
+  if(!length(layer_id)) stop("`d` and flow::redraw()` should only be called from the debugger after calling `flow::flow_run()`")
+  #data_env[[layer_id]]$refresh <- always
   data_env[[layer_id]]$update_diagram()
   invisible(NULL)
 }
-

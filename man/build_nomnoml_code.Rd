@@ -29,10 +29,10 @@ build_nomnoml_code(
 )
 }
 \arguments{
-\item{data}{A data frame built by `flow_data()`}
+\item{data}{A data frame built by \code{flow_data()}}
 
 \item{code}{Whether to display the code in code blocks or only the header, to be
-more compact, if `NA`, the code will be displayed only if no header is
+more compact, if \code{NA}, the code will be displayed only if no header is
 defined by special comments.}
 
 \item{direction}{Whether to orient the chart from top to bottom or left to right}
@@ -42,9 +42,9 @@ at the bottom.}
 
 \item{arrowSize}{Arrow size}
 
-\item{edges}{Whether to keep edges `"straight"`, or have them `"rounded"`}
+\item{edges}{Whether to keep edges \code{"straight"}, or have them \code{"rounded"}}
 
-\item{bendSize}{Bend size, if `edges` is `"rounded"`}
+\item{bendSize}{Bend size, if \code{edges} is \code{"rounded"}}
 
 \item{font}{Font}
 
@@ -79,11 +79,11 @@ at the bottom.}
 }
 \description{
 This functions builds the nomnoml code to render from the data built by
-`flow_data()`. It's not very useful for the average user to call it directly
-but its arguments can be set through `flow_view()` so their definitions are useful.
+\code{flow_data()}. It's not very useful for the average user to call it directly
+but its arguments can be set through \code{flow_view()} so their definitions are useful.
 }
 \details{
-All arguments, with the exception of `data` and `code`, are
+All arguments, with the exception of \code{data} and \code{code}, are
 nomnoml directives, enumerated at https://openbase.io/js/nomnoml/documentation .
 
 Some of those don't seem to do anything in the context of this package,

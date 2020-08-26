@@ -5,7 +5,7 @@
 #' the lower level function, which builds the edge and node data rendered by
 #' `flow_view()` and `flow_run()`.
 #'
-#' @param x A call or a function
+#' @param x A call, a function, or a path to a script
 #' @param range numeric vector used to compute the range of boxes to zoom in
 #' @param prefix prefix to use for special comments in our code used as block headers,
 #'   must start with `"#"`
@@ -19,9 +19,9 @@
 #' @inheritParams build_nomnoml_code
 #' @param width,height Width and height in pixels, passed to `htmlwidgets::createWidget()`
 #' @param browse whether to debug step by step (block by block),
-#'   can also be a vector of block ids, in this case only those will be considered for browsing
-#' @param trim wether to trim the head of the diagram, only relevant if browse
-#' is `TRUE`
+#'   can also be a vector of block ids, in this case `browser()` calls will be
+#'   inserted at the start of these blocks
+#' @param show_passes label the edges with the number of passes
 #' @param out a path to save the diagram to.
 #'   Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 #'   export the objec to a temp file of the relevant format and open it,

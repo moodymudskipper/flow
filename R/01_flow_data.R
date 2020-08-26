@@ -45,8 +45,12 @@ flow_data <-
         code = f_sym,
         code_str = title)
       data <- add_edge(data, from = 0L, to = 1L)
-      if (swap) body(x) <- swap_calls(body(x))
-      data <- add_data_from_expr(data, body(x), narrow = narrow)
+      if(is_flow_traced(x))
+        body_ <- body(attributes(x)$original)
+      else
+        body_ <- body(x)
+      if (swap) body_ <- swap_calls(body_)
+      data <- add_data_from_expr(data, body_, narrow = narrow)
     } else if (is.call(x)) {
       if (swap)  x <- swap_calls(x)
       data <- add_data_from_expr(data, x, narrow = narrow)
