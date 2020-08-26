@@ -47,7 +47,6 @@ flow_code <-
 #' @param gutter Gutter, no effect was observed
 #' @param edgeMargin Edge margin, no effect was observed
 #'
-#' @return
 #' @export
 build_nomnoml_code <- function(
   data,
