@@ -138,7 +138,7 @@ c(
   1)
 ```
 
-Nothing prevents you from choosing `prefix = #`, in that case all comments will
+Nothing prevents you from choosing `prefix = "#"`, in that case all comments will
 be considered as headers.
 
 ## Display or hide the code
@@ -168,19 +168,21 @@ flow_view(rle, prefix = "##", code = NA)
 In our simple example you can see that the main branch has shifted from the
 center after the first `if` block. This is not a problem here but for bigger
 diagrams you might have the issue of the diagram shifting right significantly.
-This can be undesirable for observation, web pages, pdfs etc where we'd like
-to have everything fit on the width of the page whenever possible. The `narrow`
-argument makes it possible, at the cost of drawing a longer diagram. 
+This can be undesirable for web pages, pdf documents etc where we'd like
+to have everything fit on the width of the page whenever possible. 
+
+The `narrow` argument makes it possible, at the cost of drawing a longer diagram. 
 
 ```{r, fig.width=8, fig.height=8, fig.align = "center"}
 flow_view(rle, narrow = TRUE)
 ```
+
 ## Display nested functions as diagrams
 
-You might define or encounter functions which themselves contain another function
-definition. It will often be anonymous functions, but not always.
+A function's body often contains other function definitions, sometimes anonymous,
+sometimes assigned to a variable.
 
-The `sub_fun_id` argument allows you to explore those.
+The `sub_fun_id` argument allows you to explore any of those.
 
 A good example is the base function `bquote()`, it defines a couple functions,
 and the diagram that *{flow}* draws is not fully satisfactory.
@@ -195,6 +197,7 @@ investigate them. Let's see what `unquote()` is about.
 ```{r, fig.width=8, fig.height=8, fig.align = "center"}
 flow_view(bquote, sub_fun_id = "unquote")
 ```
+
 ## Zoom on a subpart of the diagram with the `range` argument.
 
 Some function diagrams are gigantic, and it its convenient to be able to show
