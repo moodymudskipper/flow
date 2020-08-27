@@ -59,22 +59,9 @@ flow_debugonce <- function(
 
 is_flow_traced <- function(f){
   if(length(body(f)) < 2) return(FALSE)
-  #nocov start
-  traces <- expression(
-    .doTrace({
-      call <- sys.call(-4)
-      flow_run_call <- bquote(flow::flow_run(x = .(call)))
-      return(eval.parent(flow_run_call, 5))
-    }),
-    tracer <- bquote({
-      call <- sys.call(-4) # w have to go back a few more steps when in doTrace
-      flow_run_call <- bquote(.(call))
-      #browser()
-      on.exit(untrace(call[[1]]))
-      return(eval.parent(flow_run_call, 5))
-    }))
-  #nocov end
-  any(sapply(traces, function(x) identical(deparse(x), deparse(body(f)[[2]]))))
+  identical(
+    deparse(body(f)[[2]], width.cutoff = 500)[c(1,5)],
+    c(".doTrace({", "    return(eval.parent(flow_run_call, 5))"))
 }
 
 #' @export
