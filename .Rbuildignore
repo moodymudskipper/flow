@@ -3,3 +3,5 @@
 ^README\.Rmd$
 ^\.travis\.yml$
 ^codecov\.yml$
+^doc$
+^Meta$
