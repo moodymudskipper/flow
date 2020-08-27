@@ -23,7 +23,7 @@ flow_debug <- function(
   tracer <- bquote({
     call <- sys.call(-4) # w have to go back a few more steps when in doTrace
     flow_run_call <- bquote(.(call))
-    return(eval.parent(flow_run_call))
+    return(eval.parent(flow_run_call, 5))
   })
   trace_call <- bquote(
     trace(.(substitute(f)), quote(.(tracer)), print = FALSE)
@@ -44,11 +44,11 @@ flow_debugonce <- function(
   names(call)[names(call) == "f"] <- "x"
   call[["x"]] <- quote(.(call))
   tracer <- bquote({
-    call <- sys.call(-4) # w have to go back a few more steps when in doTrace
+    call <- sys.call(-4) # we have to go back a few more steps when in doTrace
     flow_run_call <- bquote(.(call))
-    #browser()
     on.exit(untrace(call[[1]]))
-    return(eval.parent(flow_run_call))
+    #browser()
+    return(eval.parent(flow_run_call, 5))
   })
   trace_call <- bquote(
     trace(.(substitute(f)), quote(.(tracer)), print = FALSE)
@@ -64,14 +64,14 @@ is_flow_traced <- function(f){
     .doTrace({
       call <- sys.call(-4)
       flow_run_call <- bquote(flow::flow_run(x = .(call)))
-      return(eval.parent(flow_run_call))
+      return(eval.parent(flow_run_call, 5))
     }),
     tracer <- bquote({
       call <- sys.call(-4) # w have to go back a few more steps when in doTrace
       flow_run_call <- bquote(.(call))
       #browser()
       on.exit(untrace(call[[1]]))
-      return(eval.parent(flow_run_call))
+      return(eval.parent(flow_run_call, 5))
     }))
   #nocov end
   any(sapply(traces, function(x) identical(deparse(x), deparse(body(f)[[2]]))))
