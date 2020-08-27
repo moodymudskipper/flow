@@ -55,12 +55,15 @@ get_last_call_type <- function(expr){
   if (is.call(expr) && identical(expr[[1]], quote(`{`))) {
     expr <- expr[[length(expr)]] # could be a call or a symbol
   }
-  if (is.call(expr))
+  last_call_type <- if (is.call(expr))
     deparse(expr[[1]])
   # else if (deparse(expr) %in% c("break","next")) {
   #   deparse(expr)}
   else
     "standard"
+  if(last_call_type %in% c("abort", "rlang::abort"))
+    last_call_type <- "stop"
+  last_call_type
 }
 
 find_funs <- function(call){
