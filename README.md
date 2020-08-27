@@ -48,8 +48,8 @@ flow_view(median.default)
 
 There are way too many features to show them all on a README, check the
 vignette [Draw a
-function](http://htmlpreview.github.io/?https://raw.githubusercontent.com/moodymudskipper/flow/master/doc/Draw-a-function.html)
-for a deeper dive. More vignette to come\!
+function](https://moodymudskipper.github.io/flow/articles/Draw-a-function.html)
+for a deeper dive. More vignettes to come\!
 
 The following code gives you a taste of the possibilities.
 
