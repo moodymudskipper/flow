@@ -82,23 +82,37 @@ find_funs <- function(call){
 }
 
 swap_calls <- function(expr){
+  # if not a call return as is
   if (!is.call(expr)) return(expr)
-  if (is.call(expr) && identical(expr[[1]], quote(`<-`)) &&
-     is.call(expr[[3]]) && identical(expr[[3]][[1]], quote(`if`))) {
+  # if call is of form foo <- if(...
+  is_if_assignment <- is.call(expr) && identical(expr[[1]], quote(`<-`)) &&
+    is.call(expr[[3]]) && identical(expr[[3]][[1]], quote(`if`))
+  if (is_if_assignment) {
+    # var is the lhs of <-
     var <- expr[[2]]
+    # expr is the rhs of <-
     expr <- expr[[3]]
 
-    if (is.call(expr[[3]]) && identical(expr[[3]][[1]], quote(`{`)))
+    yes_surrounded_by_curly <-
+      is.call(expr[[3]]) && identical(expr[[3]][[1]], quote(`{`))
+    if (yes_surrounded_by_curly)
+      # change the last expression into an assignment to var
       expr[[3]][[length(expr[[3]])]] <- call("<-", var, expr[[3]][[length(expr[[3]])]])
     else
+      # change unique expression into an asignment to var
       expr[[3]] <- call("<-", var, expr[[3]])
 
-    if (is.call(expr[[4]]) && identical(expr[[4]][[1]], quote(`{`)))
+    no_surrounded_by_curly <-
+      is.call(expr[[4]]) && identical(expr[[4]][[1]], quote(`{`))
+    if (no_surrounded_by_curly)
+      # change the last expression into an assignment to var
       expr[[4]][[length(expr[[4]])]] <- call("<-", var, expr[[4]][[length(expr[[4]])]])
     else
+      # change unique expression into an asignment to var
       expr[[4]] <- call("<-", var, expr[[4]])
     return(expr)
   }
+  # apply recursively
   expr[] <- lapply(expr, swap_calls)
   expr
 }
