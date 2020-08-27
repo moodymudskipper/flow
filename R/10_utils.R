@@ -40,7 +40,7 @@ get_last_id <- function(data) {
 
 deparse2 <- function(x){
   x <- as.call(c(quote(`{`),x))
-  x <- deparse(x)
+  x <- deparse(x, width.cutoff = 500)
   x <- x[-c(1, length(x))]
   x <- sub("^    ","",x)
   paste(x, collapse = "\n")
@@ -56,7 +56,7 @@ get_last_call_type <- function(expr){
     expr <- expr[[length(expr)]] # could be a call or a symbol
   }
   last_call_type <- if (is.call(expr))
-    deparse(expr[[1]])
+    deparse(expr[[1]], width.cutoff = 500)
   # else if (deparse(expr) %in% c("break","next")) {
   #   deparse(expr)}
   else

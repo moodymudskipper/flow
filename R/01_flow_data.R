@@ -35,7 +35,7 @@ flow_data <-
 
     if (is.function(x)) {
       # functions have a special primary node that we need to deal with
-      title <- head(deparse(args(x)), -1)
+      title <- head(deparse(args(x), width.cutoff = 500), -1)
       title <- paste(title, collapse = "\n  ")
       title <- trimws(sub("^function ", deparse(f_sym), title))
       data <- add_node(
