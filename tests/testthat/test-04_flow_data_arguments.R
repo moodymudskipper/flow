@@ -111,3 +111,4 @@ test_that("package works with range arg",{
       edge_label = c("", "", ""),
       arrow = c("--:>", "->", "--:>"),
       stringsAsFactors = FALSE))
+})

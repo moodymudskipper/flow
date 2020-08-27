@@ -55,7 +55,6 @@ dput2 <- function(x,
   #     arrow = "->",
   #     stringsAsFactors = FALSE))
 
-})
 
 # have tests with break and next
 # have tests with repeat an while
