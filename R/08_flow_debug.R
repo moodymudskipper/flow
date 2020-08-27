@@ -59,6 +59,7 @@ flow_debugonce <- function(
 
 is_flow_traced <- function(f){
   if(length(body(f)) < 2) return(FALSE)
+  #nocov start
   traces <- expression(
     .doTrace({
       call <- sys.call(-4)
@@ -72,6 +73,7 @@ is_flow_traced <- function(f){
       on.exit(untrace(call[[1]]))
       return(eval.parent(flow_run_call))
     }))
+  #nocov end
   any(sapply(traces, function(x) identical(deparse(x), deparse(body(f)[[2]]))))
 }
 
