@@ -113,7 +113,7 @@ add_data_from_if_block <- function(data, block, narrow = FALSE){
 
   last_call_type <- get_last_call_type(yes_expr)
 
-  if (last_call_type %in% c("stop", "return", "next", "break")) {
+  if (last_call_type %in% c("stop", "return")) {  ##, "next", "break")) {
     # if yes branch ends with a stop or return call
     data <- add_node(data, -id_last_yes, block_type = last_call_type)
     data$edges$to[nrow(data$edges)] <- -id_last_yes

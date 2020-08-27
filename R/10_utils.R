@@ -57,9 +57,9 @@ get_last_call_type <- function(expr){
   }
   if (is.call(expr))
     deparse(expr[[1]])
-  else if (deparse(expr) %in% c("break","next")) {
-    deparse(expr)
-  } else
+  # else if (deparse(expr) %in% c("break","next")) {
+  #   deparse(expr)}
+  else
     "standard"
 }
 
