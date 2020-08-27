@@ -85,7 +85,7 @@ swap_calls <- function(expr){
   # if not a call return as is
   if (!is.call(expr)) return(expr)
   # if call is of form foo <- if(...
-  is_if_assignment <- is.call(expr) && identical(expr[[1]], quote(`<-`)) &&
+  is_if_assignment <- identical(expr[[1]], quote(`<-`)) &&
     is.call(expr[[3]]) && identical(expr[[3]][[1]], quote(`if`))
   if (is_if_assignment) {
     # var is the lhs of <-
@@ -112,6 +112,15 @@ swap_calls <- function(expr){
       expr[[4]] <- call("<-", var, expr[[4]])
     return(expr)
   }
+
+  # is_stopifnot <-
+  #   identical(expr[[1]], quote(stopifnot))
+  # if (is_stopifnot){
+  #   expr <- call("if", call("!",expr[[2]]), bquote({
+  #     `#`("Adapted from stopifnot")
+  #     stop(.(
+  #     paste(deparse(expr[[2]]),"is not TRUE")))}))
+  # }
   # apply recursively
   expr[] <- lapply(expr, swap_calls)
   expr
