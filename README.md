@@ -25,6 +25,10 @@ scripts and ease debugging.
   - Use the Rstudio addins to run `flow_view()` or `flow_run()` on your
     selection.
 
+*{flow}* is built on top of Javier Luraschi’s *{nomnoml}* package, which
+provides an interface to nomnoml, a tool for drawing sassy UML diagrams
+based on syntax with customizable styling.
+
 ## Installation
 
 Install with:

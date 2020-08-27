@@ -19,7 +19,6 @@ knitr::opts_chunk$set(
 
 # flow <img src='man/figures/logo.png' align="right" height="139" />
 
-
 Visualize as flow diagrams the logic of functions, expressions or scripts and ease debugging.
 
 * Call `flow_view()` on a function, a quoted expression, or the path of an R script
@@ -32,6 +31,10 @@ code was taken. Set `browse = TRUE` to debug your function block by block
 * Export to *html*, *png*, *jpeg*, or *pdf*.
 
 * Use the Rstudio addins to run `flow_view()` or `flow_run()` on your selection.
+
+*{flow}* is built on top of Javier Luraschi's *{nomnoml}* package, which provides
+an interface to nomnoml, a tool for drawing sassy UML diagrams based on syntax 
+with customizable styling.
 
 ## Installation
 
