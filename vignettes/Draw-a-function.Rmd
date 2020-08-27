@@ -19,9 +19,15 @@ knitr::opts_chunk$set(
 We use the function `flow_view()` to draw a function as a diagram. It can be any
 function, packaged or user made, as long as it has a body.
 
-Take the `rle` function from base R, it's role is to (from `?rle`):
+Take the `rle` function from base R, its role is to (citing `?rle`):
 
 > Compute the lengths and values of runs of equal values in a vector
+
+For instance:
+
+```{r}
+rle(c(3, 3, 3, 1, 6 , 6))
+```
 
 And its code is :
 
@@ -29,18 +35,18 @@ And its code is :
 rle
 ```
 
-The function is decently simple but its logic and complexity are not obvious at
-a glance. `flow_view()` helps us sort it out.
+The function is not overly complex but its logic is not obvious at
+first glance. `flow_view()` helps us sort it out.
 
 ```{r, fig.width=8, fig.height=8, fig.align = "center"}
 library(flow)
 flow_view(rle)
 ```
 
-`if` statements always branch on 2 paths, whether an `else` clause is present
+`if` statements always branch into two paths, whether an `else` clause is present
 or not. `for`, `while`, and `repeat` loops are also supported.
 
-The colored circles are exit point, orange for errors (using `stop()`), 
+The colored circles are exit points, orange for errors (using `stop()`), 
 green for returned values (using `return()`) or just reaching the end of the function.
 
 There you go, you know all you need to get started! And for this example and many 
@@ -52,18 +58,18 @@ For other cases we propose the following features.
 
 *{flow}* supports saving your diagrams to various formats by using the argument `out`.
 
-If `out` is a path (absolute or relative), the diagram will be saved there, 
-using the file extension to determine the format. For instance :
+If `out` is a path, the diagram will be saved there, 
+using the file extension to determine the format. For instance:
 
 ```{r, eval = FALSE}
 flow_view(rle, out = "diagrams/rle.png")
 ```
 
-if you don't want to save at a specific location but just want to open your
+If you don't want to save at a specific location but just want to open your
 diagram in a different format, use the shorthands `"pdf"`, `"png"`, `"jpg"`,
-`"jpeg"`, `"htm"` , `"html"` and `flow_view()` will save them to a temporary 
-location, print its url, and opens this location using `browseURL` (which opens
-your files with your relevant default viewer). For instance.
+`"jpeg"`, `"htm"` , `"html"` and `flow_view()` will save it  to a temporary 
+location, print and return its url, and open this location using `browseURL` (which opens
+your files with your relevant default viewer). For instance:
 
 ```{r, eval = FALSE}
 flow_view(rle, out = "html")
@@ -71,15 +77,166 @@ flow_view(rle, out = "html")
 #> [1] "*******.html"
 ```
 
-When exporting to *html*, you might sometimes want to use SVG rendering by
-using the argument `svg = TRUE`. A difference is that it makes text selectable.
+When exporting to *html*, 
+you might sometimes want to use SVG rendering by using the argument `svg = TRUE`. 
+A difference is that it makes text selectable.
 
-## limitations
+## Display comments as code block headers
+
+Comments and diagrams are two nice ways of understanding code, so why not use 
+them together? This is done by using the `prefix` argument.
+Comments in your call will be treated as block headers if they start with the
+given prefix.
+
+Let's rework our `rle` function by adding helpful comments, prefixed by `"##"` :
+
+```{r, fig.width=8, fig.height=8, fig.align = "center"}
+rle <- function (x) 
+{
+  # A rle object is a list containing elements length and value. It is
+  # assigned a class "rle"
+  
+    ## is argument of wrong type ?
+    if (!is.vector(x) && !is.list(x)) 
+        stop("'x' must be a vector of an atomic type")
+    n <- length(x)
+    if (n == 0L) {
+        ## return a rle object with zero length elements
+        return(structure(list(lengths = integer(), values = x), 
+            class = "rle"))
+    }
+    ## compute index of elements that are distinct from the next
+    y <- x[-1L] != x[-n]
+    i <- c(which(y | is.na(y)), n)
+    ## compute the final object
+    structure(list(lengths = diff(c(0L, i)), values = x[i]), 
+        class = "rle")
+}
+
+flow_view(rle, prefix = "##")
+```
+
+We see that : 
+
+* The unprefixed comments are ignored.
+* Prefixed comments right before control flow calls (here `if`) will serve
+as headers for control flow header blocks.
+* Prefixed comments before other code will serve as headers for the subsequent
+code chunks.
+* Adding special comments in the middle of standard code,as we did in the last
+block, will split the block and use the comment as the header of the new block.
+
+Note the we used `{}` after `if (n == 0L)` compared to the original code.
+This is a current limitation, special comments are viewed as code we need the 
+`{}` to keep both following lines in the `if` condition.
+
+Misplaced comments, which cannot be used as headers, will be ignored, such as in :
+
+```{r, eval = FALSE}
+c(
+  ## comment
+  1)
+```
+
+Nothing prevents you from choosing `prefix = #`, in that case all comments will
+be considered as headers.
+
+## Display or hide the code
+
+If you're mainly interested in the logical structure of your code you can choose
+to remove the code from standard blocks, and have a lighter output :
+
+```{r, fig.width=8, fig.height=8, fig.align = "center"}
+flow_view(rle, code = FALSE)
+```
+If you defined headers as we did in the previous section you can see the logic
+almost as if it was pseudo code :
+
+```{r, fig.width=8, fig.height=8, fig.align = "center"}
+flow_view(rle, prefix = "##", code = FALSE)
+```
+
+An intermediate is to use `code = NA`, to show only header whenever they are
+available, note that in that case even the `if` block's text was simplified : 
+
+```{r, fig.width=8, fig.height=8, fig.align = "center"}
+flow_view(rle, prefix = "##", code = NA)
+```
+
+## Narrow down a wide diagram
+
+In our simple example you can see that the main branch has shifted from the
+center after the first `if` block. This is not a problem here but for bigger
+diagrams you might have the issue of the diagram shifting right significantly.
+This can be undesirable for observation, web pages, pdfs etc where we'd like
+to have everything fit on the width of the page whenever possible. The `narrow`
+argument makes it possible, at the cost of drawing a longer diagram. 
+
+```{r, fig.width=8, fig.height=8, fig.align = "center"}
+flow_view(rle, narrow = TRUE)
+```
+## Display nested functions as diagrams
+
+You might define or encounter functions which themselves contain another function
+definition. It will often be anonymous functions, but not always.
+
+The `sub_fun_id` argument allows you to explore those.
+
+A good example is the base function `bquote()`, it defines a couple functions,
+and the diagram that *{flow}* draws is not fully satisfactory.
+
+```{r, fig.width=8, fig.height=8, fig.align = "center"}
+flow_view(bquote)
+```
+
+*{flow}* detects the function definitions and proposes you to
+investigate them. Let's see what `unquote()` is about.
+
+```{r, fig.width=8, fig.height=8, fig.align = "center"}
+flow_view(bquote, sub_fun_id = "unquote")
+```
+## Zoom on a subpart of the diagram with the `range` argument.
+
+Some function diagrams are gigantic, and it its convenient to be able to show
+only a subpart. The `range` argument offers this option.
+
+it's value is determined to compute the range of boxes to display.
+
+```{r, fig.width=8, fig.height=8, fig.align = "center"}
+flow_view(rle, range = 1:3)
+```
+
+It is far from perfect and I hope to come up with better solutions to zoom on
+charts in the future but hopefully it'll be helpful meanwhile.
+
+
+## Other arguments
+
+`width` and `height` are passed directly to `htmlwidgets::createWidget()`,
+call `?htmlwidgets::createWidget` to know more.
+
+`...` is forwarded to `build_nomnoml_code`, these are arguments used by nomnoml
+for the diagram representation, such as font, padding etc. Among those, I noticed
+that `ranker = "longest-path"` sometimes looks nice to line up all exit points : 
+
+
+```{r, fig.width=8, fig.height=8, fig.align = "center"}
+flow_view(rle, ranker = "longest-path")
+```
+
+
+
+## Limitations
 
 `next` and `break` statements are not considered special for the moment, so
 they don't branch correctly. This should be solved in the future.
 
+`stop()` and `rlang::abort()` end their branch with an orange circle, but they
+are hardcoded, {flow} doesn't guess if a function is a stopping function (a
+function that always fails). I will add some mainstream ones, or implement a
+mecanism to define a custom list of those if you request it.
+
 `stopifnot()` is not considered special, so it won't branch to an orange circle.
-
-
+I might create a `stopifnot` block type in the future, and make it work with
+`assertthat::assert_that` too.
 
