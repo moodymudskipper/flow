@@ -71,7 +71,17 @@ find_funs <- function(call){
   env$funs <- list()
   find_funs0 <- function(x, env){
     if (!is.call(x)) return(invisible())
-    if (identical(x[[1]], quote(`function`))) {
+    is_assignment <-
+      identical(x[[1]], quote(`<-`)) || identical(x[[1]], quote(`=`))
+    if (is_assignment) {
+      is_function_assignment <-
+        is.call(x[[3]]) && identical(x[[c(3,1)]], quote(`function`))
+      if(is_function_assignment){
+        env$funs <- append(env$funs, x[[3]])
+        names(env$funs)[length(env$funs)] <- paste(deparse(x[[2]]), collapse="\n")
+        return(lapply(x[[3]], find_funs0, env))
+      }
+    } else if (identical(x[[1]], quote(`function`))) {
       env$funs <- append(env$funs, x)
     }
     lapply(x, find_funs0, env)

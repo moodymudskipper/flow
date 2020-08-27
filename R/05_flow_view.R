@@ -9,7 +9,7 @@
 #' @param range numeric vector used to compute the range of boxes to zoom in
 #' @param prefix prefix to use for special comments in our code used as block headers,
 #'   must start with `"#"`
-#' @param sub_fun_id if not NULL, the index of the function definition found in
+#' @param sub_fun_id if not NULL, the index or name of the function definition found in
 #'   x that we wish to inspect
 #' @param swap whether to change `var <- if(cond) expr` into
 #'   `if(cond) var <- expr` so the diagram displays better
