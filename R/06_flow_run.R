@@ -47,11 +47,10 @@ flow_run <-
     data_env[[layer_id]]$nodes <- data$nodes
     data_env[[layer_id]]$edges <- data$edges
     #data_env[[layer_id]]$browse_at <- browse
-    #data_env[[layer_id]]$refresh <- FALSE
+    data_env[[layer_id]]$refresh <- FALSE
     data_env[[layer_id]]$last_node <- 0
 
     update_diagram <- function() {
-      #browser()
       # display updated diagram
 
       data <- data_env[[layer_id]]

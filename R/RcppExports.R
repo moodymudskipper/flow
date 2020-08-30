@@ -2,6 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 is_browsing <- function() {
-    .Call('_flow_is_browsing', PACKAGE = 'flow')
+    .Call(`_flow_is_browsing`)
 }
 

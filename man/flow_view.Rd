@@ -51,7 +51,7 @@ flow_run(
 \item{prefix}{prefix to use for special comments in our code used as block headers,
 must start with \code{"#"}}
 
-\item{sub_fun_id}{if not NULL, the index of the function definition found in
+\item{sub_fun_id}{if not NULL, the index or name of the function definition found in
 x that we wish to inspect}
 
 \item{swap}{whether to change \code{var <- if(cond) expr} into

@@ -36,7 +36,8 @@ insert_update <- function(expr, env = as.environment(list(i=0)), n){
     # precede block with flow:::update call
     has_browser <- env$i %in% n
     if(has_browser)
-      blocks[[i]] <- c(bquote(.(flow_update)(.(env$i))), quote(browser()), blocks[[i]])
+      blocks[[i]] <-
+      c(quote(browser()), bquote(.(flow_update)(.(env$i))), blocks[[i]])
     else
       blocks[[i]] <- c(bquote(.(flow_update)(.(env$i))), blocks[[i]])
 
@@ -84,22 +85,10 @@ update <- function(n, child = FALSE) {
   #browse_at <- data_env[[layer_id]]$browse_at
   last_node <- data_env[[layer_id]]$last_node
 
-  # we start browsing after an update call directly called from the debugged
-  # function if we reach the the n == brows_at block, and if it hasn't been
-  # passed yet
 
-  # start_browsing <-
-  #   !child &&
-  #   browse_at == n &&
-  #   nodes$passes[nodes$id == n] == 0
-  #
-  # if(start_browsing) {
-  #   # data_env[[layer_id]]$refresh <- TRUE
-  #   on.exit({
-  #     message("exiting update")
-  #     eval.parent(quote(browser()))
-  #     })
-  # }
+  if(!child && getOption("flow.auto_draw") && is_browsing()) {
+    on.exit(data_env[[layer_id]]$update_diagram())
+  }
 
   # position where last_node connects to new node
   direct_edge_row_lgl <- edges$from == last_node & edges$to == n
@@ -191,6 +180,10 @@ data_env <- new.env()
 #' `d` is an active binding to `flow_draw()`, it means you can just type `d`
 #' (without parentheses) instead of `flow_draw()`.
 #'
+#' To have the diagram redraw itself when entering each new block, set
+#'`options(flow.auto_draw = TRUE)`, it's disabled by default because displaying
+#' or exporting the diagram sometimes takes a non-trivial amount of time.
+#'
 #' `d` was designed to look like the other shortcuts detailed in `?browser`,
 #' such as `f`, `c` etc... It differs however in that it can be overridden.
 #' For instance if the function uses a variable `d` or that a parent environment
@@ -207,14 +200,13 @@ data_env <- new.env()
 #' @export
 flow_draw <- function() {
   # the following is necessary to pass checks
-  if(!interactive()) # || identical(sys.call(-1)[[1]], quote(mget)))
+  if(!interactive() || !is_browsing()) # || identical(sys.call(-1)[[1]], quote(mget)))
     return(invisible())
   layer_id <- tail(ls(data_env), 1)
   if(!length(layer_id)) {
     #warning("`d` and flow::draw()` should only be called from the debugger after calling `flow::flow_run()`, returning NULL")
     return(invisible())
   }
-  #data_env[[layer_id]]$refresh <- always
   data_env[[layer_id]]$update_diagram()
   invisible(NULL)
 }
