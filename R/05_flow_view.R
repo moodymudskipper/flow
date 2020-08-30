@@ -29,6 +29,9 @@
 #' @param svg only for default or html outut, whether to use svg rendering, rendering
 #'   is more robust without it, but it makes text selectable on output which is
 #'    sometimes useful
+#' @param engine Either `"nomnoml"` (default) or `"plantuml"` (experimental), if
+#'   the latter, arguments `range`, `prefix`, `narrow`, `code`, `width`,
+#'   `height` and `...` will be ignored.
 #'
 #' @export
 flow_view <-
