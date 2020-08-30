@@ -3,6 +3,12 @@
 #' @importFrom utils head getS3method browseURL tail
 NULL
 
+## usethis namespace: start
+#' @importFrom Rcpp sourceCpp
+## usethis namespace: end
+NULL
+
+
 add_comment_calls <- function(fun, prefix = "##"){
   if (is.null(prefix)) return(fun)
   src <- deparse(fun, width.cutoff = 500, control = "useSource")

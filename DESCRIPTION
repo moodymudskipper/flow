@@ -20,7 +20,9 @@ Imports:
     utils,
     htmlwidgets,
     rstudioapi,
-    webshot
+    webshot,
+    Rcpp
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
+LinkingTo: Rcpp
