@@ -5,20 +5,75 @@ skinparam SequenceGroupBorderColor black
 skinparam ActivityDiamondBorderColor black
 skinparam ArrowColor black
 "
-flow_view_plantuml <- function(fun_chr, f) {
+flow_view_plantuml <- function(x_chr, x, prefix, sub_fun_id, swap, out, svg) {
+
+  if(is.function(x) && is.null(body(x)))
+    stop("`", x_chr,
+         "` doesn't have a body (try `body(", x_chr,
+         ")`). {flow}'s functions don't work on such inputs.")
+
+  # relevant only for functions
+  # put comments in `#`() calls so we can manipulate them as code,
+  # the function `build_blocks()`, called itself in `add_data_from_expr()`,
+  # will deal with them further down the line
+  x <- add_comment_calls(x, prefix)
+
+  # deal with sub functions (function definitions found in the code)
+  sub_funs <- find_funs(x)
+  if (!is.null(sub_fun_id)) {
+    # if we gave a sub_fun_id, make this subfunction our new x
+    x_chr <- "fun"
+    x <- eval(sub_funs[[sub_fun_id]])
+  } else {
+    if (length(sub_funs)) {
+      # else print them for so user can choose a sub_fun_id if relevant
+      message("We found function definitions in this code, ",
+              "use the argument sub_fun_id to inspect them")
+      print(sub_funs)
+    }
+  }
+
   # header and start node
-  header <- deparse(args(f))
-  header <- paste(header[-length(header)], collapse = "\\n")
-  header <- sub("^function", fun_chr, header)
-  header <- paste0("title ", header, "\nstart\n")
+  if(is.function(x)) {
+    header <- deparse(args(x))
+    header <- paste(header[-length(header)], collapse = "\\n")
+    header <- sub("^function", x_chr, header)
+    header <- paste0("title ", header, "\nstart\n")
+  } else {
+    header <- "start\n"
+  }
+
+
   # main code
-  code_str <- view_pant_ulm1(body(f), first = TRUE)
+  body_ <- body(x)
+  if (swap) body_ <- swap_calls(body_)
+  code_str <- view_pant_ulm1(body_, first = TRUE)
+  # escape bracket character
+  code_str <- gsub("\\[", "~[", code_str)
+  code_str <- gsub("\\]", "~]", code_str)
+
 
   # concat params, header and code
   code_str <- paste0(plantuml_skinparam,"\n", header, code_str)
 
   plant_uml_object <- plantuml::plantuml(code_str)
-  plot(plant_uml_object, vector = FALSE) #, file = "test.png")
+
+  if(is.null(out)) {
+    plot(plant_uml_object, vector = svg)
+    return(NULL)
+  }
+
+  is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg")
+  if (is_tmp) {
+    out <- tempfile("flow_", fileext = paste0(".", out))
+  }
+  plot(plant_uml_object, vector = svg, file = out)
+
+  if (is_tmp) {
+    message(sprintf("The diagram was saved to '%s'", gsub("\\\\","/", out)))
+    browseURL(out)
+  }
+  NULL
 }
 
 view_pant_ulm0 <- function(expr) {
@@ -39,6 +94,9 @@ view_pant_ulm0 <- function(expr) {
         paste(deparse(expr[[2]]), collapse= "\\n"))
       yes_txt <- view_pant_ulm0(expr[[3]])
       if (length(exprs) == 4) {
+        # here test if subclause is of length 1 and is an if call
+        # if so, do an else if
+        # this must be recursive so maybe we need another function
         else_txt <- "else (n)"
         no_txt <-  view_pant_ulm0(expr[[4]])
         txt <- paste(if_txt, yes_txt, else_txt, no_txt, "endif", sep = "\n")
