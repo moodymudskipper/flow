@@ -215,6 +215,22 @@ charts in the future but hopefully it'll be helpful meanwhile.
 
 ## Other arguments
 
+`swap`, `TRUE` by default, edits the statements like : 
+
+```{r, eval=FALSE}
+x <- if(cond) this else that
+```
+
+into
+
+```{r, eval=FALSE}
+if(cond) x <- this else x <- that
+```
+
+The reason is that the latter version can be represented by a diagram while
+the first can't. The logic stays the same however. If you want to make sure 
+you see the original code, use `swap = FALSE`.
+
 `width` and `height` are passed directly to `htmlwidgets::createWidget()`,
 call `?htmlwidgets::createWidget` to know more.
 

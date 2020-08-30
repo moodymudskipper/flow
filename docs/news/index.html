@@ -137,12 +137,13 @@
 <li>unsatisfactory support of next and break was removed</li>
 <li>A vignette “Draw a function” was added</li>
 </ul>
-<p>flow_run was reworked to be more robust, in particular:</p>
+<p><code><a href="../reference/flow_view.html">flow_run()</a></code> was reworked to be more robust, in particular:</p>
 <ul>
-<li>special calls like on.exit(), formals(), match.arg() etc now work seemlessly</li>
-<li>We use base::browser() so all its features are available, it also means we can go through loops and iterattions.</li>
-<li>The argument show_passes was added to flow_run to display the number of passes through each continuous edge of the diagram</li>
-<li>when setting <code>browse = TRUE</code>, the diagrams are not drawn automatically, instead we now use <code>d</code> or <code><a href="../reference/flow_draw.html">flow_draw()</a></code> to redraw the diagram at the chosen step. running <code><a href="../reference/flow_draw.html">flow_draw(always = TRUE)</a></code> in the debugger makes sure they’re drawn automatically at each step of the run.</li>
+<li>Special calls like <code><a href="https://rdrr.io/r/base/on.exit.html">on.exit()</a></code>, <code><a href="https://rdrr.io/r/base/formals.html">formals()</a></code>, <code><a href="https://rdrr.io/r/base/match.arg.html">match.arg()</a></code> etc now work seamlessly in <code><a href="../reference/flow_view.html">flow_run()</a></code>.</li>
+<li>We use <code><a href="https://rdrr.io/r/base/browser.html">base::browser()</a></code> so all its features are available, it also means we can go through loops and iterations.</li>
+<li>The argument show_passes was added to <code><a href="../reference/flow_view.html">flow_run()</a></code> to display the number of passes through each continuous edge of the diagram.</li>
+<li>When setting <code>browse = TRUE</code>, the diagrams are not drawn automatically, instead we now use <code>d</code> or <code><a href="../reference/flow_draw.html">flow_draw()</a></code> to redraw the diagram at the chosen step. running <code><a href="../reference/flow_draw.html">flow_draw(always = TRUE)</a></code> in the debugger makes sure they’re drawn automatically at each step of the run.</li>
+<li>New functions <code><a href="../reference/flow_debug.html">flow_debug()</a></code> and <code><a href="../reference/flow_debug.html">flow_debugonce()</a></code> make it convenient to call <code>debug_run()</code> indirectly through another call.</li>
 </ul>
 </div>
   </div>
