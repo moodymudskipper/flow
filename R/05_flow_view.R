@@ -34,7 +34,26 @@
 flow_view <-
   function(x, range = NULL, prefix = NULL, sub_fun_id = NULL,
            swap = TRUE, narrow = FALSE, code = TRUE, width = NULL,
-           height = NULL, ..., out = NULL, svg = FALSE) {
+           height = NULL, ..., out = NULL, svg = FALSE, engine = c("nomnoml", "plantuml")) {
+    engine = match.arg(engine)
+    if(engine == "plantuml") {
+      # we should aim at diminishing this list as much as possible
+      # range, narrow, width, height, and ... should not be relevant
+      # the rest is
+      # sub_fun_id and swap should be easy enough
+      # code = FALSE is easy
+      # prefix and code = NA are hard
+      # out is straightforward except these formats don't work consistently
+      # svg should be straightforward, but doesn't work for me when TRUE
+      if(!missing(range) || !missing(prefix) || !missing(sub_fun_id) ||
+         !missing(swap) || !missing(narrow) || !missing(code) ||
+         !missing(width) || !missing(height) || length(list(...)) ||
+         !missing(out) || ! missing(svg))
+        warning("The following arguments are ignored if `engine` is set to
+                \"plantuml\"")
+      flow_view_plantuml(deparse(substitute(x)), x)
+      return(invisible())
+    }
     data <- eval.parent(substitute(flow::flow_data(x, range, prefix, sub_fun_id, swap, narrow)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = svg)
