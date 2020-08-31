@@ -28,7 +28,8 @@ flow_view(
   height = NULL,
   ...,
   out = NULL,
-  svg = FALSE
+  svg = FALSE,
+  engine = c("nomnoml", "plantuml")
 )
 
 flow_run(
@@ -76,6 +77,10 @@ if a regular path is used the format will be guessed from the extension.}
 \item{svg}{only for default or html outut, whether to use svg rendering, rendering
 is more robust without it, but it makes text selectable on output which is
 sometimes useful}
+
+\item{engine}{Either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental), if
+the latter, arguments \code{range}, \code{prefix}, \code{narrow}, \code{code}, \code{width},
+\code{height} and \code{...} will be ignored.}
 
 \item{browse}{whether to debug step by step (block by block),
 can also be a vector of block ids, in this case \code{browser()} calls will be
