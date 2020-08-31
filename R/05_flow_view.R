@@ -29,12 +29,32 @@
 #' @param svg only for default or html outut, whether to use svg rendering, rendering
 #'   is more robust without it, but it makes text selectable on output which is
 #'    sometimes useful
+#' @param engine Either `"nomnoml"` (default) or `"plantuml"` (experimental), if
+#'   the latter, arguments `range`, `prefix`, `narrow`, `code`, `width`,
+#'   `height` and `...` will be ignored.
 #'
 #' @export
 flow_view <-
   function(x, range = NULL, prefix = NULL, sub_fun_id = NULL,
            swap = TRUE, narrow = FALSE, code = TRUE, width = NULL,
-           height = NULL, ..., out = NULL, svg = FALSE) {
+           height = NULL, ..., out = NULL, svg = FALSE, engine = c("nomnoml", "plantuml")) {
+    engine = match.arg(engine)
+    if(engine == "plantuml") {
+      # we should aim at diminishing this list as much as possible
+      # range, narrow, width, height, and ... should not be relevant
+      # code = FALSE is easy
+      # prefix and code = NA are hard
+      if(!missing(range) || !missing(prefix) ||
+         !missing(narrow) || !missing(code) ||
+         !missing(width) || !missing(height) || length(list(...)))
+        warning("The following arguments are ignored if `engine` is set to
+                \"plantuml\" : `range`, `prefix`, `narrow`, `code`, `width`,
+                `height` , `...`")
+      flow_view_plantuml(
+        deparse(substitute(x)), x,
+        prefix = prefix, sub_fun_id = sub_fun_id, swap = swap, out = out, svg = svg)
+      return(invisible(NULL))
+    }
     data <- eval.parent(substitute(flow::flow_data(x, range, prefix, sub_fun_id, swap, narrow)))
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = svg)
