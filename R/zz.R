@@ -9,9 +9,11 @@ NULL
 NULL
 
 ## usethis namespace: start
-#' @useDynLib flow, .registration = TRUE
+#' @useDynLib flow
 ## usethis namespace: end
 NULL
+
+# , .registration = TRUE
 
 .onLoad <- function(libname, pkgname) {
   #nocov start
