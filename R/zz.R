@@ -1,6 +1,6 @@
 # imports and lower level unexported functions
 
-#' @importFrom utils head getS3method browseURL tail
+#' @importFrom utils head getS3method browseURL tail getFromNamespace
 NULL
 
 ## usethis namespace: start
@@ -9,11 +9,11 @@ NULL
 NULL
 
 ## usethis namespace: start
-#' @useDynLib flow
+#' @useDynLib flow, .registration = TRUE
 ## usethis namespace: end
 NULL
 
-# , .registration = TRUE
+
 
 .onLoad <- function(libname, pkgname) {
   #nocov start
