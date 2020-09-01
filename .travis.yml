@@ -1,4 +1,66 @@
-# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+# # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: R
-cache: packages
+# language: R
+# cache: packages
+
+# r_github_packages:
+#   - jimhester/covr
+# latex: true
+# r_build_args: '--no-build-vignettes'
+# r_check_args: '--ignore-vignettes'
+
+# matrix:
+#   include:
+#     - os: linux
+#       addons:
+#         apt:
+#           sources:
+#             - ubuntu-toolchain-r-test
+#           packages:
+#             - g++-7
+#       env:
+#         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+
+# #for your reference:
+# #fPIC is Position Independent Code
+# #O is optimization level
+# #W are warning flags
+# before_install:
+#   - mkdir -p ~/.R/
+#   - echo "CXX14 = g++-7 -fPIC -flto=2" >> ~/.R/Makevars
+#   - echo "CXX14FLAGS = -mtune=native -march=native -Wno-unused-variable -Wno-unused-function -Wno-unused-local-typedefs -Wno-ignored-attributes -Wno-deprecated-declarations -Wno-attributes -O3" >> ~/.R/Makevars
+
+# after_success:
+#   - travis_wait 80 Rscript -e 'covr::codecov()'
+
+
+# Run Travis CI for R using https://eddelbuettel.github.io/r-travis/
+
+language: c
+sudo: required
+dist: bionic
+
+jobs:
+  include:
+    #- name: r-3.5
+    #  env: R_VERSION="3.5"
+    - name: r-4.0
+      env: R_VERSION="4.0"
+
+before_install:
+  - curl -OLs https://eddelbuettel.github.io/r-travis/run.sh && chmod 0755 run.sh
+  - ./run.sh bootstrap
+
+install:
+  - ./run.sh install_aptget r-cran-rcpp
+
+script:
+  - ./run.sh run_tests
+
+after_script:
+  - ./run.sh dump_logs
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
