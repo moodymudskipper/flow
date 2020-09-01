@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 #include <R.h>
-#include <RInternals.h>
+#include <Rinternals.h>
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector is_browsing() {
