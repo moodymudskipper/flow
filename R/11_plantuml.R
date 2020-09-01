@@ -54,7 +54,8 @@ flow_view_plantuml <- function(x_chr, x, prefix, sub_fun_id, swap, out, svg) {
   # concat params, header and code
   code_str <- paste0(plantuml_skinparam,"\n", header, code_str)
 
-  plant_uml_object <- plantuml::plantuml(code_str)
+  plantuml <- getFromNamespace("plantuml", "plantuml")
+  plant_uml_object <- plantuml(code_str)
 
   if(is.null(out)) {
     plot(plant_uml_object, vector = svg)

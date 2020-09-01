@@ -40,6 +40,13 @@ flow_view <-
            height = NULL, ..., out = NULL, svg = FALSE, engine = c("nomnoml", "plantuml")) {
     engine = match.arg(engine)
     if(engine == "plantuml") {
+      if(!requireNamespace("plantuml"))
+        stop("The package plantuml needs to be installed to use this feature. ",
+             'To install it run `remotes::install_github("rkrug/plantuml")`, ',
+             "You might also need to install java ('https://www.java.com'), ",
+             "ghostcript ('https://www.ghostcript.com'), ",
+             "and graphViz ('https://graphviz.org/')")
+
       # we should aim at diminishing this list as much as possible
       # range, narrow, width, height, and ... should not be relevant
       # code = FALSE is easy
