@@ -39,6 +39,16 @@ flow_view <-
            swap = TRUE, narrow = FALSE, code = TRUE, width = NULL,
            height = NULL, ..., out = NULL, svg = FALSE, engine = c("nomnoml", "plantuml")) {
     engine = match.arg(engine)
+
+    f_chr <- deparse(substitute(x))
+    is_valid_named_list <-
+      is.list(x) && length(x) == 1 && !is.null(names(x))
+
+    if(is_valid_named_list) {
+      f_chr <- names(x)
+      x <- x[[1]]
+    }
+
     if(engine == "plantuml") {
       # if(!requireNamespace("plantuml"))
       #   stop("The package plantuml needs to be installed to use this feature. ",
@@ -58,11 +68,11 @@ flow_view <-
                 \"plantuml\" : `range`, `prefix`, `narrow`, `code`, `width`,
                 `height` , `...`")
       flow_view_plantuml(
-        deparse(substitute(x)), x,
+        f_chr, x,
         prefix = prefix, sub_fun_id = sub_fun_id, swap = swap, out = out, svg = svg)
       return(invisible(NULL))
     }
-    data <- eval.parent(substitute(flow::flow_data(x, range, prefix, sub_fun_id, swap, narrow)))
+    data <- flow_data(setNames(list(x), f_chr), range, prefix, sub_fun_id, swap, narrow)
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = svg)
     widget <- htmlwidgets::createWidget(
