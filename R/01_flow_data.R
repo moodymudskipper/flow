@@ -5,6 +5,14 @@ flow_data <-
            narrow = FALSE) {
     f_sym <- substitute(x)
 
+    is_valid_named_list <-
+      is.list(x) && length(x) == 1 && allNames(x) != ""
+
+    if(is_valid_named_list) {
+      f_sym <- as.name(names(x))
+      x <- x[[1]]
+    }
+
     if(is.function(x) && is.null(body(x))) stop("`", as.character(f_sym),
       "` doesn't have a body (try `body(", as.character(f_sym),
       ")`). {flow}'s functions don't work on such inputs.")
