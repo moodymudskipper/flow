@@ -16,5 +16,12 @@
 instead we now use `d` or `flow_draw()` to redraw the diagram at the chosen step.
 running `flow_draw(always = TRUE)` in the debugger makes sure they're drawn 
 automatically at each step of the run. 
+
+Moreover:
+
 * New functions `flow_debug()` and `flow_debugonce()` make it convenient to
 call `debug_run()` indirectly through another call.
+* The engine "plantuml" was added, it is not as flexible as "nomnoml" (not all features
+are supported) but is more polished and more compact.
+* The new function `flow_doc()` draws the diagrams of all the functions of a
+package to an *html* file.

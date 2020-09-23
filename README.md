@@ -25,16 +25,20 @@ scripts and ease debugging.
   - Use the Rstudio addins to run `flow_view()` or `flow_run()` on your
     selection.
 
-*{flow}* is built on top of Javier Luraschi’s *{nomnoml}* package, which
-provides an interface to nomnoml, a tool for drawing sassy UML diagrams
-based on syntax with customizable styling.
+  - Document an entire package with `flow_doc()`
+
+*{flow}* is built on top of Javier Luraschi’s *{nomnoml}* package, and
+Rainer M Krug ’s *{plantuml}* package, the latter only available from
+github at the moment (“rkrug/plantuml”).
+
+More on the website : <https://moodymudskipper.github.io/flow>
 
 ## Installation
 
 Install with:
 
 ``` r
-devtools::install_github("moodymudskipper/flow")
+remotes::install_github("moodymudskipper/flow")
 ```
 
 ## Example
@@ -44,7 +48,7 @@ library(flow)
 flow_view(median.default)
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 There are way too many features to show them all on a README, check the
 vignette [Draw a
@@ -54,8 +58,12 @@ for a deeper dive. More vignettes to come\!
 The following code gives you a taste of the possibilities.
 
 ``` r
+# use plantuml
+flow_view(median.default, engine = "plantuml")
+
 # exports (supports png, jpeg, pdf, html)
-# shortcuts are available to export to temp file and open 
+# shortcuts are available to export to temp file and open
+# (often easier to explore there than in the IDE)
 flow_view(median.default, out = "png")
 
 # visualize which path was taken (relevant S3 method is presented)
@@ -65,8 +73,15 @@ flow_run(median(vec, na.rm = TRUE))
 # works when code fails too (handy to debug!)
 flow_run(median(iris))
 
+# show the number of passes on each edge
+flow_run(Reduce(`+`, 1:4), show_passes = TRUE)
+
 # step by step exploration
 vec <- c(1:3, NA)
 flow_run(median(vec, na.rm = TRUE), browse = TRUE)
-# then call `d` to draw the diagram at the relevant step
+# then enter `d` to draw the diagram at the relevant step
+
+# check what path is taken inside of `mean.default` when median is called
+flow_debugonce(mean.default)
+median(1:4)
 ```

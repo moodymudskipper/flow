@@ -162,7 +162,8 @@ the lower level function, which builds the edge and node data rendered by
   <span class='kw'>height</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>...</span>,
   <span class='kw'>out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>svg</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>svg</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>engine</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"nomnoml"</span>, <span class='st'>"plantuml"</span>)
 )
 
 <span class='fu'>flow_run</span>(
@@ -195,7 +196,7 @@ must start with <code>"#"</code></p></td>
     </tr>
     <tr>
       <th>sub_fun_id</th>
-      <td><p>if not NULL, the index of the function definition found in
+      <td><p>if not NULL, the index or name of the function definition found in
 x that we wish to inspect</p></td>
     </tr>
     <tr>
@@ -234,6 +235,12 @@ if a regular path is used the format will be guessed from the extension.</p></td
       <td><p>only for default or html outut, whether to use svg rendering, rendering
 is more robust without it, but it makes text selectable on output which is
 sometimes useful</p></td>
+    </tr>
+    <tr>
+      <th>engine</th>
+      <td><p>Either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental), if
+the latter, arguments <code>range</code>, <code>prefix</code>, <code>narrow</code>, <code>code</code>, <code>width</code>,
+<code>height</code> and <code>...</code> will be ignored.</p></td>
     </tr>
     <tr>
       <th>browse</th>

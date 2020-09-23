@@ -93,24 +93,30 @@
 <li><p>Call <code><a href="reference/flow_view.html">flow_run()</a></code> on a call to a function to visualize which logical path in the code was taken. Set <code>browse = TRUE</code> to debug your function block by block (similar to <code><a href="https://rdrr.io/r/base/browser.html">base::browser()</a></code>) as the diagram updates.</p></li>
 <li><p>Export to <em>html</em>, <em>png</em>, <em>jpeg</em>, or <em>pdf</em>.</p></li>
 <li><p>Use the Rstudio addins to run <code><a href="reference/flow_view.html">flow_view()</a></code> or <code><a href="reference/flow_view.html">flow_run()</a></code> on your selection.</p></li>
+<li><p>Document an entire package with <code><a href="reference/flow_doc.html">flow_doc()</a></code></p></li>
 </ul>
-<p><em>{flow}</em> is built on top of Javier Luraschi’s <em>{nomnoml}</em> package, which provides an interface to nomnoml, a tool for drawing sassy UML diagrams based on syntax with customizable styling.</p>
+<p><em>{flow}</em> is built on top of Javier Luraschi’s <em>{nomnoml}</em> package, and Rainer M Krug ’s <em>{plantuml}</em> package, the latter only available from github at the moment (“rkrug/plantuml”).</p>
+<p>More on the website : <a href="https://moodymudskipper.github.io/flow" class="uri">https://moodymudskipper.github.io/flow</a></p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Install with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"moodymudskipper/flow"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"moodymudskipper/flow"</span>)</pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">flow</span>)
 <span class="fu"><a href="reference/flow_view.html">flow_view</a></span>(<span class="no">median.default</span>)</pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-2-1.png" width="100%"></p>
 <p>There are way too many features to show them all on a README, check the vignette <a href="https://moodymudskipper.github.io/flow/articles/Draw-a-function.html">Draw a function</a> for a deeper dive. More vignettes to come!</p>
 <p>The following code gives you a taste of the possibilities.</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="co"># exports (supports png, jpeg, pdf, html)</span>
-<span class="co"># shortcuts are available to export to temp file and open </span>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="co"># use plantuml</span>
+<span class="fu"><a href="reference/flow_view.html">flow_view</a></span>(<span class="no">median.default</span>, <span class="kw">engine</span> <span class="kw">=</span> <span class="st">"plantuml"</span>)
+
+<span class="co"># exports (supports png, jpeg, pdf, html)</span>
+<span class="co"># shortcuts are available to export to temp file and open</span>
+<span class="co"># (often easier to explore there than in the IDE)</span>
 <span class="fu"><a href="reference/flow_view.html">flow_view</a></span>(<span class="no">median.default</span>, <span class="kw">out</span> <span class="kw">=</span> <span class="st">"png"</span>)
 
 <span class="co"># visualize which path was taken (relevant S3 method is presented)</span>
@@ -120,10 +126,17 @@
 <span class="co"># works when code fails too (handy to debug!)</span>
 <span class="fu"><a href="reference/flow_view.html">flow_run</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span>(<span class="no">iris</span>))
 
+<span class="co"># show the number of passes on each edge</span>
+<span class="fu"><a href="reference/flow_view.html">flow_run</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/funprog.html">Reduce</a></span>(<span class="no">`+`</span>, <span class="fl">1</span>:<span class="fl">4</span>), <span class="kw">show_passes</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+
 <span class="co"># step by step exploration</span>
 <span class="no">vec</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>:<span class="fl">3</span>, <span class="fl">NA</span>)
 <span class="fu"><a href="reference/flow_view.html">flow_run</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span>(<span class="no">vec</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>), <span class="kw">browse</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="co"># then call `d` to draw the diagram at the relevant step</span></pre></div>
+<span class="co"># then enter `d` to draw the diagram at the relevant step</span>
+
+<span class="co"># check what path is taken inside of `mean.default` when median is called</span>
+<span class="fu"><a href="reference/flow_debug.html">flow_debugonce</a></span>(<span class="no">mean.default</span>)
+<span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span>(<span class="fl">1</span>:<span class="fl">4</span>)</pre></div>
 </div>
 </div>
 

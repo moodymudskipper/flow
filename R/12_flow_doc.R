@@ -52,6 +52,7 @@ output:
 
   for(L in names(exported_funs_split)) {
 
+
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Letter title
     letter_title <- sprintf("## %s\n\n", L)

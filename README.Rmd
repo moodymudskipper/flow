@@ -32,103 +32,42 @@ code was taken. Set `browse = TRUE` to debug your function block by block
 
 * Use the Rstudio addins to run `flow_view()` or `flow_run()` on your selection.
 
-*{flow}* is built on top of Javier Luraschi's *{nomnoml}* package, which provides
-an interface to nomnoml, a tool for drawing sassy UML diagrams based on syntax 
-with customizable styling.
+* Document an entire package with `flow_doc()`
+
+*{flow}* is built on top of Javier Luraschi's *{nomnoml}* package, and 
+Rainer M Krug 's *{plantuml}* package, the latter only available from github
+at the moment ("rkrug/plantuml").
+
+More on the website : https://moodymudskipper.github.io/flow
 
 ## Installation
 
 Install with:
 
 ``` r
-devtools::install_github("moodymudskipper/flow")
+remotes::install_github("moodymudskipper/flow")
 ```
 ## Example
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 library(flow)
 flow_view(median.default)
 ```
 
 
-```{r, setup, include=FALSE}
-library(nomnoml)
-```
-
-```{nomnoml, echo=FALSE}
-#.if: visual=rhomb fill=#e2efda align=center
-#.for: visual=rhomb fill=#ddebf7 align=center
-#.repeat: visual=rhomb fill=#fce4d6 align=center
-#.while: visual=rhomb fill=#fff2cc align=center
-#.standard: visual=class fill=#ededed
-#.commented: visual=class fill=#ededed
-#.header: visual=ellipse fill=#d9e1f2 align=center
-#.return: visual=end fill=#70ad47  empty
-#.stop: visual=end fill=#ed7d31  empty
-#.break: visual=receiver fill=#ffc000 empty
-#.next: visual=transceiver fill=#5b9bd5  empty
-#arrowSize: 1
-#bendSize: 0.3
-#direction: down
-#gutter: 5
-#edgeMargin: 0
-#edges: hard
-#fill: #eee8d5
-#fillArrows: false
-#font: Calibri
-#fontSize: 12
-#leading: 1.25
-#lineWidth: 3
-#padding: 16
-#spacing: 40
-#stroke: #33322E
-#title: filename
-#zoom: 1
-#acyclicer: greedy
-#ranker: network-simplex
-[<header>median.default(x, na.rm = FALSE, ...)]  -> [<if> 1: ;if (is.factor(x) \|\|
- is.data.frame(x))]
-[<if> 1: ;if (is.factor(x) \|\|
- is.data.frame(x))] y -> [<standard> 2: ;stop("need numeric data")]
-[<standard> 2: ;stop("need numeric data")]  -> [<stop> -2]
-[<if> 1: ;if (is.factor(x) \|\|
- is.data.frame(x))] n -> [<end> -1]
-[<end> -1]  -> [<if> 3: ;if (length(names(x)))]
-[<if> 3: ;if (length(names(x)))] y -> [<standard> 4: ;names(x) <- NULL]
-[<standard> 4: ;names(x) <- NULL]  -> [<end> -3]
-[<if> 3: ;if (length(names(x)))] n -> [<end> -3]
-[<end> -3]  -> [<if> 5: ;if (na.rm)]
-[<if> 5: ;if (na.rm)] y -> [<standard> 6: ;x <- x\[!is.na(x)\]]
-[<standard> 6: ;x <- x\[!is.na(x)\]]  -> [<end> -5]
-[<if> 5: ;if (na.rm)] n -> [<if> 7: ;if (any(is.na(x)))]
-[<if> 7: ;if (any(is.na(x)))] y -> [<standard> 8: ;return(x\[FALSE\]\[NA\])]
-[<standard> 8: ;return(x\[FALSE\]\[NA\])]  -> [<return> -8]
-[<if> 7: ;if (any(is.na(x)))] n -> [<end> -7]
-[<end> -7]  -> [<end> -5]
-[<end> -5]  -> [<standard> 9: ;n <- length(x)]
-[<standard> 9: ;n <- length(x)]  -> [<if> 10: ;if (n == 0L)]
-[<if> 10: ;if (n == 0L)] y -> [<standard> 11: ;return(x\[FALSE\]\[NA\])]
-[<standard> 11: ;return(x\[FALSE\]\[NA\])]  -> [<return> -11]
-[<if> 10: ;if (n == 0L)] n -> [<end> -10]
-[<end> -10]  -> [<standard> 12: ;half <- (n + 1L)%/%2L]
-[<standard> 12: ;half <- (n + 1L)%/%2L]  -> [<if> 13: ;if (n%%2L == 1L)]
-[<if> 13: ;if (n%%2L == 1L)] y -> [<standard> 14: ;sort(x, partial = half)\[half\]]
-[<standard> 14: ;sort(x, partial = half)\[half\]]  -> [<end> -13]
-[<if> 13: ;if (n%%2L == 1L)] n -> [<standard> 15: ;mean(sort(x, partial = half + 0L:1L)\[half + 0L:1L\])]
-[<standard> 15: ;mean(sort(x, partial = half + 0L:1L)\[half + 0L:1L\])]  -> [<end> -13]
-[<end> -13]  -> [<return> 16]
-```
-
 There are way too many features to show them all on a README, check the vignette
 [Draw a function](https://moodymudskipper.github.io/flow/articles/Draw-a-function.html) 
 for a deeper dive. More vignettes to come!
 
-
 The following code gives you a taste of the possibilities.
 
 ```{r, eval = FALSE}
+# use plantuml
+flow_view(median.default, engine = "plantuml")
+
 # exports (supports png, jpeg, pdf, html)
-# shortcuts are available to export to temp file and open 
+# shortcuts are available to export to temp file and open
+# (often easier to explore there than in the IDE)
 flow_view(median.default, out = "png")
 
 # visualize which path was taken (relevant S3 method is presented)
@@ -138,9 +77,16 @@ flow_run(median(vec, na.rm = TRUE))
 # works when code fails too (handy to debug!)
 flow_run(median(iris))
 
+# show the number of passes on each edge
+flow_run(Reduce(`+`, 1:4), show_passes = TRUE)
+
 # step by step exploration
 vec <- c(1:3, NA)
 flow_run(median(vec, na.rm = TRUE), browse = TRUE)
-# then call `d` to draw the diagram at the relevant step
+# then enter `d` to draw the diagram at the relevant step
+
+# check what path is taken inside of `mean.default` when median is called
+flow_debugonce(mean.default)
+median(1:4)
 ```
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Draw Diagram From Debugger — flow_draw • flow</title>
+<title>Draw Flow Diagrams for an Entire Package — flow_doc • flow</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,11 +46,8 @@
 
 
 
-<meta property="og:title" content="Draw Diagram From Debugger — flow_draw" />
-<meta property="og:description" content="flow_draw() should only be used in the debugger triggered by a call
-to flow_run(), or following a call to flow_debug() or flow_debugonce().
-d is an active binding to flow_draw(), it means you can just type d
-(without parentheses) instead of flow_draw()." />
+<meta property="og:title" content="Draw Flow Diagrams for an Entire Package — flow_doc" />
+<meta property="og:description" content="Draw Flow Diagrams for an Entire Package" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -129,35 +126,34 @@ d is an active binding to flow_draw(), it means you can just type d
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Draw Diagram From Debugger</h1>
+    <h1>Draw Flow Diagrams for an Entire Package</h1>
     
-    <div class="hidden name"><code>flow_draw.Rd</code></div>
+    <div class="hidden name"><code>flow_doc.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>flow_draw()</code> should only be used in the debugger triggered by a call
-to <code><a href='flow_view.html'>flow_run()</a></code>, or following a call to <code><a href='flow_debug.html'>flow_debug()</a></code> or <code><a href='flow_debug.html'>flow_debugonce()</a></code>.
-<code>d</code> is an active binding to <code>flow_draw()</code>, it means you can just type <code>d</code>
-(without parentheses) instead of <code>flow_draw()</code>.</p>
+    <p>Draw Flow Diagrams for an Entire Package</p>
     </div>
 
-    <pre class="usage"><span class='fu'>flow_draw</span>()
+    <pre class="usage"><span class='fu'>flow_doc</span>(<span class='no'>pkg</span>, <span class='kw'>out</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>pkg</span>, <span class='st'>".html"</span>), <span class='no'>...</span>)</pre>
 
-<span class='no'>d</span></pre>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>pkg</th>
+      <td><p>package name as a string</p></td>
+    </tr>
+    <tr>
+      <th>out</th>
+      <td><p>path to an html file to write to</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>additional arguments passed to flow_view</p></td>
+    </tr>
+    </table>
 
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To have the diagram redraw itself when entering each new block, set
-<code><a href='https://rdrr.io/r/base/options.html'>options(flow.auto_draw = TRUE)</a></code>, it's disabled by default because displaying
-or exporting the diagram sometimes takes a non-trivial amount of time.</p>
-<p><code>d</code> was designed to look like the other shortcuts detailed in <code><a href='https://rdrr.io/r/base/browser.html'>?browser</a></code>,
-such as <code>f</code>, <code>c</code> etc... It differs however in that it can be overridden.
-For instance if the function uses a variable <code>d</code> or that a parent environment
-contains a variable <code>d</code>, <code>flow::d</code> won't be found. In that case you will
-have to use <code>flow_draw()</code>.</p>
-<p>If <code>d</code> or <code>flow_draw()</code> are called outside of the debugger they will return
-<code>NULL</code> silently.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

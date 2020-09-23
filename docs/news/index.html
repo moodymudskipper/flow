@@ -143,7 +143,12 @@
 <li>We use <code><a href="https://rdrr.io/r/base/browser.html">base::browser()</a></code> so all its features are available, it also means we can go through loops and iterations.</li>
 <li>The argument show_passes was added to <code><a href="../reference/flow_view.html">flow_run()</a></code> to display the number of passes through each continuous edge of the diagram.</li>
 <li>When setting <code>browse = TRUE</code>, the diagrams are not drawn automatically, instead we now use <code>d</code> or <code><a href="../reference/flow_draw.html">flow_draw()</a></code> to redraw the diagram at the chosen step. running <code><a href="../reference/flow_draw.html">flow_draw(always = TRUE)</a></code> in the debugger makes sure they’re drawn automatically at each step of the run.</li>
+</ul>
+<p>Moreover:</p>
+<ul>
 <li>New functions <code><a href="../reference/flow_debug.html">flow_debug()</a></code> and <code><a href="../reference/flow_debug.html">flow_debugonce()</a></code> make it convenient to call <code>debug_run()</code> indirectly through another call.</li>
+<li>The engine “plantuml” was added, it is not as flexible as “nomnoml” (not all features are supported) but is more polished and more compact.</li>
+<li>The new function <code><a href="../reference/flow_doc.html">flow_doc()</a></code> draws the diagrams of all the functions of a package to an <em>html</em> file.</li>
 </ul>
 </div>
   </div>
