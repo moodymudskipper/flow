@@ -137,18 +137,16 @@ swap_calls <- function(expr){
 # a fixed version of utils::isS3stdGeneric so it works on symbols, NULL bodied
 # functions and traced functions (if trace is first)
 isS3stdGeneric <- function(f) {
-  {
-    if("functionWithTrace" %in% class(f))
-      bdexpr <- body(attr(f, "original"))
-    else
-      bdexpr <- body(f)
-    while(is.call(bdexpr) && (as.character(bdexpr[[1L]]) == "{"))
-      bdexpr <- as.list(bdexpr[[2]])
-    ret <- is.call(bdexpr) && identical(bdexpr[[1L]], as.name("UseMethod"))
-    if (ret)
-      names(ret) <- bdexpr[[2L]]
-    ret
-  }
+  if("functionWithTrace" %in% class(f))
+    bdexpr <- body(attr(f, "original"))
+  else
+    bdexpr <- body(f)
+  while(is.call(bdexpr) && (as.character(bdexpr[[1L]]) == "{"))
+    bdexpr <- as.list(bdexpr[[2]])
+  ret <- is.call(bdexpr) && identical(bdexpr[[1L]], as.name("UseMethod"))
+  if (ret)
+    names(ret) <- bdexpr[[2L]]
+  ret
 }
 
 getS3methodSym <- function(fun, x){
