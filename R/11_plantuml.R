@@ -35,9 +35,12 @@ flow_view_plantuml <- function(x_chr, x, prefix, sub_fun_id, swap, out, svg) {
 
   # header and start node
   if(is.function(x)) {
-    header <- deparse(args(x))
+    header <- deparse_plantuml(args(x))
+    # remove the {}
     header <- paste(header[-length(header)], collapse = "\\n")
+    # replace the function(arg) by my_function(arg)
     header <- sub("^function", x_chr, header)
+    # make it a proper plantuml title
     header <- paste0("title ", header, "\nstart\n")
   } else {
     header <- "start\n"
@@ -47,10 +50,6 @@ flow_view_plantuml <- function(x_chr, x, prefix, sub_fun_id, swap, out, svg) {
   body_ <- body(x)
   if (swap) body_ <- swap_calls(body_)
   code_str <- view_pant_ulm1(body_, first = TRUE)
-  # escape bracket character
-  code_str <- gsub("\\[", "~[", code_str)
-  code_str <- gsub("\\]", "~]", code_str)
-
   # concat params, header and code
   code_str <- paste0(plantuml_skinparam,"\n", header, code_str)
 
@@ -91,7 +90,7 @@ view_pant_ulm0 <- function(expr) {
     if(identical(expr[[1]], quote(`if`))) {
       if_txt   <- sprintf(
         "#e2efda:if (if(%s)) then (y)",
-        paste(deparse(expr[[2]]), collapse= "\\n"))
+        paste(deparse_plantuml(expr[[2]]), collapse= "\\n"))
       yes_txt <- view_pant_ulm0(expr[[3]])
       if (length(exprs) == 4) {
         else_txt <- "else (n)"
@@ -107,7 +106,7 @@ view_pant_ulm0 <- function(expr) {
     if(identical(expr[[1]], quote(`while`))) {
       while_txt   <- sprintf(
         "#fff2cc:while (while(%s))",
-        paste(deparse(expr[[2]]), collapse= "\\n"))
+        paste(deparse_plantuml(expr[[2]]), collapse= "\\n"))
       expr_txt <- view_pant_ulm0(expr[[3]])
       txt <- paste(while_txt, expr_txt, "endwhile", sep = "\n")
       return(txt)
@@ -117,8 +116,8 @@ view_pant_ulm0 <- function(expr) {
     if(identical(expr[[1]], quote(`for`))) {
       for_txt   <- sprintf(
         "#ddebf7:while (for(%s in %s))",
-        paste(deparse(expr[[2]]), collapse= "\\n"),
-        paste(deparse(expr[[3]]), collapse= "\\n"))
+        paste(deparse_plantuml(expr[[2]]), collapse= "\\n"),
+        paste(deparse_plantuml(expr[[3]]), collapse= "\\n"))
       expr_txt <- view_pant_ulm0(expr[[4]])
       txt <- paste(for_txt, expr_txt, "endwhile", sep = "\n")
       return(txt)
@@ -134,18 +133,18 @@ view_pant_ulm0 <- function(expr) {
 
     #### STOP
     if(identical(expr[[1]], quote(`stop`))) {
-      stop_txt <- paste(deparse(expr), collapse= "\\n")
+      stop_txt <- paste(deparse_plantuml(expr), collapse= "\\n")
       return(paste0("#ed7d31:",stop_txt, ";\nstop"))
     }
 
     #### RETURN
     if(identical(expr[[1]], quote(`return`))) {
-      return_txt   <- paste(deparse(expr), collapse= "\\n")
+      return_txt   <- paste(deparse_plantuml(expr), collapse= "\\n")
       return(paste0("#70ad47:",return_txt, ";\nstop"))
     }
 
     #### REGULAR CALL
-    paste0(":", paste(deparse(expr), collapse = "\\n"), ";")
+    paste0(":", paste(deparse_plantuml(expr), collapse = "\\n"), ";")
   })
   paste(res, collapse="\n")
 }
@@ -193,7 +192,7 @@ view_pant_ulm00 <- function(expr, first = FALSE) {
 
     #### starts with SYMBOL / LITTERAL
     if(!is.call(expr[[1]]) || length(expr) > 1) {
-      deparsed <- sapply(expr, function(x) paste(deparse(x), collapse = "\\n"))
+      deparsed <- sapply(expr, function(x) paste(deparse_plantuml(x), collapse = "\\n"))
       return(paste0(":", paste(deparsed, collapse = "\\n"), ";"))
     }
 
@@ -204,7 +203,7 @@ view_pant_ulm00 <- function(expr, first = FALSE) {
       # browser()
       if_txt   <- sprintf(
         "#e2efda:if (if(%s)) then (y)",
-        paste(deparse(expr[[2]]), collapse= "\\n"))
+        paste(deparse_plantuml(expr[[2]]), collapse= "\\n"))
       yes_txt <- view_pant_ulm1(expr[[3]])
       if (length(expr) == 4) {
         # is_elseif <-
@@ -235,7 +234,7 @@ view_pant_ulm00 <- function(expr, first = FALSE) {
     if(identical(expr[[1]], quote(`while`))) {
       while_txt   <- sprintf(
         "#fff2cc:while (while(%s))",
-        paste(deparse(expr[[2]]), collapse= "\\n"))
+        paste(deparse_plantuml(expr[[2]]), collapse= "\\n"))
       expr_txt <- view_pant_ulm1(expr[[3]])
       txt <- paste(while_txt, expr_txt, "endwhile", sep = "\n")
       return(txt)
@@ -245,8 +244,8 @@ view_pant_ulm00 <- function(expr, first = FALSE) {
     if(identical(expr[[1]], quote(`for`))) {
       for_txt   <- sprintf(
         "#ddebf7:while (for(%s in %s))",
-        paste(deparse(expr[[2]]), collapse= "\\n"),
-        paste(deparse(expr[[3]]), collapse= "\\n"))
+        paste(deparse_plantuml(expr[[2]]), collapse= "\\n"),
+        paste(deparse_plantuml(expr[[3]]), collapse= "\\n"))
       expr_txt <- view_pant_ulm1(expr[[4]])
       txt <- paste(for_txt, expr_txt, "endwhile", sep = "\n")
       return(txt)
@@ -262,18 +261,18 @@ view_pant_ulm00 <- function(expr, first = FALSE) {
 
     #### STOP
     if(identical(expr[[1]], quote(`stop`))) {
-      stop_txt <- paste(deparse(expr), collapse= "\\n")
+      stop_txt <- paste(deparse_plantuml(expr), collapse= "\\n")
       return(paste0("#ed7d31:",stop_txt, ";\nstop"))
     }
 
     #### RETURN
     if(identical(expr[[1]], quote(`return`))) {
-      return_txt   <- paste(deparse(expr), collapse= "\\n")
+      return_txt   <- paste(deparse_plantuml(expr), collapse= "\\n")
       return(paste0("#70ad47:",return_txt, ";\nstop"))
     }
 
     #### REGULAR CALL
-    paste0(":", paste(deparse(expr), collapse = "\\n"), ";")
+    paste0(":", paste(deparse_plantuml(expr), collapse = "\\n"), ";")
   })
 
   if(first) {
@@ -326,10 +325,9 @@ view_pant_ulm1 <- function(expr, first = FALSE) {
   }
 
   res <- sapply(blocks, function(expr) {
-
     #### starts with SYMBOL / LITTERAL
     if(!is.call(expr[[1]]) || length(expr) > 1) {
-      deparsed <- sapply(expr, function(x) paste(deparse(x), collapse = "\\n"))
+      deparsed <- sapply(expr, function(x) paste(deparse_plantuml(x), collapse = "\\n"))
       return(paste0(":", paste(deparsed, collapse = "\\n"), ";"))
     }
 
@@ -339,7 +337,7 @@ view_pant_ulm1 <- function(expr, first = FALSE) {
     if(identical(expr[[1]], quote(`if`))) {
       if_txt   <- sprintf(
         "#e2efda:if (if(%s)) then (y)",
-        paste(deparse(expr[[2]]), collapse= "\\n"))
+        paste(deparse_plantuml(expr[[2]]), collapse= "\\n"))
       yes_txt <- view_pant_ulm1(expr[[3]])
       if (length(expr) == 4) {
         elseif_txt <- build_elseif_txt(expr[[4]])
@@ -354,7 +352,7 @@ view_pant_ulm1 <- function(expr, first = FALSE) {
     if(identical(expr[[1]], quote(`while`))) {
       while_txt   <- sprintf(
         "#fff2cc:while (while(%s))",
-        paste(deparse(expr[[2]]), collapse= "\\n"))
+        paste(deparse_plantuml(expr[[2]]), collapse= "\\n"))
       expr_txt <- view_pant_ulm1(expr[[3]])
       txt <- paste(while_txt, expr_txt, "endwhile", sep = "\n")
       return(txt)
@@ -364,8 +362,8 @@ view_pant_ulm1 <- function(expr, first = FALSE) {
     if(identical(expr[[1]], quote(`for`))) {
       for_txt   <- sprintf(
         "#ddebf7:while (for(%s in %s))",
-        paste(deparse(expr[[2]]), collapse= "\\n"),
-        paste(deparse(expr[[3]]), collapse= "\\n"))
+        paste(deparse_plantuml(expr[[2]]), collapse= "\\n"),
+        paste(deparse_plantuml(expr[[3]]), collapse= "\\n"))
       expr_txt <- view_pant_ulm1(expr[[4]])
       txt <- paste(for_txt, expr_txt, "endwhile", sep = "\n")
       return(txt)
@@ -381,18 +379,18 @@ view_pant_ulm1 <- function(expr, first = FALSE) {
 
     #### STOP
     if(identical(expr[[1]], quote(`stop`))) {
-      stop_txt <- paste(deparse(expr), collapse= "\\n")
+      stop_txt <- paste(deparse_plantuml(expr), collapse= "\\n")
       return(paste0("#ed7d31:",stop_txt, ";\nstop"))
     }
 
     #### RETURN
     if(identical(expr[[1]], quote(`return`))) {
-      return_txt   <- paste(deparse(expr), collapse= "\\n")
+      return_txt   <- paste(deparse_plantuml(expr), collapse= "\\n")
       return(paste0("#70ad47:",return_txt, ";\nstop"))
     }
 
     #### REGULAR CALL
-    paste0(":", paste(deparse(expr), collapse = "\\n"), ";")
+    paste0(":", paste(deparse_plantuml(expr), collapse = "\\n"), ";")
   })
 
   if(first) {
@@ -413,7 +411,7 @@ build_elseif_txt <- function(expr) {
   if(is_elseif) {
     elseif_txt <- sprintf(
       "#e2efda:elseif (if(%s)) then (y)",
-      paste(deparse(expr[[2]]), collapse= "\\n"))
+      paste(deparse_plantuml(expr[[2]]), collapse= "\\n"))
     yes_txt <- view_pant_ulm1(expr[[3]])
     if(length(expr) == 4)
       txt <- paste(elseif_txt, yes_txt, build_elseif_txt(expr[[4]]), sep = "\n")
@@ -428,6 +426,27 @@ build_elseif_txt <- function(expr) {
   txt
 }
 
+# deparse an expression to a correctly escaped character vector
+deparse_plantuml <- function(x) {
+  x <- deparse(x, backtick = TRUE)
+  chars <- c("\\[","\\]","~","\\.","\\*","_","\\-",'"', "<", ">", "&", "\\\\")
+  x <- to_unicode(x, chars) #
+  x
+}
 
+to_unicode <- function(x, chars = character()) {
+  if(length(chars)) {
+    # if chars is given, replace recursively the matches
+    m <- gregexpr(paste(chars, collapse="|"), x)
+    regmatches(x, m) <- lapply(regmatches(x, m), to_unicode)
+    return(x)
+  }
+  # encode all to UTF-8
+  x <- ifelse(Encoding(x) != 'UTF-8', enc2utf8(enc2native(x)), x)
+  bytes <- iconv(x, "UTF-8", "UTF-32BE", toRaw=TRUE)
+  vapply(bytes, FUN.VALUE = character(1), function(x) paste(sprintf(
+    "<U+%s%s>", x[c(FALSE, FALSE, TRUE, FALSE)], x[c(FALSE, FALSE, FALSE, TRUE)]),
+    collapse = ""))
+}
 
 # view_pant_ulm(median.default)
