@@ -59,8 +59,6 @@ output:
     cat(letter_title, file = rmd_output, append = TRUE)
 
     for(fun_chr in exported_funs_split[[L]]) {
-      # print(fun_chr)
-      # if(fun_chr == "aggregate.data.frame") browser()
       stepi <- stepi + 1
       setTxtProgressBar(pb,stepi)
 
@@ -102,6 +100,7 @@ output:
         sub_fun_val <- eval(sub_funs[[i]])
         sub_fun_chr <- names(sub_funs)[[i]]
 
+
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         # subfunction title
         sub_fun_title <- sprintf("#### %s\n\n", sub_fun_chr)
@@ -111,10 +110,16 @@ output:
         # subfunction image
         if(grepl("^\\d+$", sub_fun_chr)) sub_fun_chr <- "function"
         out_tmp <- file.path(path, paste0("exp_", stepi,"_", i, ".png"))
-        capture.output(suppressMessages(
-          flow_view(setNames(c(sub_fun_val), sub_fun_chr),  ..., out = out_tmp)))
-        sub_fun_img <- sprintf('![](exp_%s_%s.png)\n\n', stepi, i)
-        cat(sub_fun_img, file = rmd_output, append = TRUE)
+
+        if(!is.null(body(sub_fun_val))) {
+          capture.output(suppressMessages(
+            flow_view(setNames(c(sub_fun_val), sub_fun_chr),  ..., out = out_tmp)))
+          sub_fun_img <- sprintf('![](exp_%s_%s.png)\n\n', stepi, i)
+          cat(sub_fun_img, file = rmd_output, append = TRUE)
+        } else {
+          cat("`", sub_fun_chr, "` doesn't have a body\n\n", sep="",
+              file = rmd_output, append = TRUE)
+        }
 
       }
       nc <- nchar(fun_chr)
@@ -139,8 +144,6 @@ output:
     cat(letter_title, file = rmd_output, append = TRUE)
 
     for(fun_chr in unexported_funs_split[[L]]) {
-      # print(fun_chr)
-      # if(fun_chr == "[.terms") browser()
       stepi <- stepi + 1
       setTxtProgressBar(pb,stepi)
 
@@ -191,10 +194,16 @@ output:
         # subfunction image
         if(grepl("^\\d+$", sub_fun_chr)) sub_fun_chr <- "function"
         out_tmp <- file.path(path, paste0("unexp_", stepi,"_", i, ".png"))
-        capture.output(suppressMessages(
-          flow_view(setNames(c(sub_fun_val), sub_fun_chr),  ..., out = out_tmp)))
-        sub_fun_img <- sprintf('![](unexp_%s_%s.png)\n\n', stepi, i)
-        cat(sub_fun_img, file = rmd_output, append = TRUE)
+
+        if(!is.null(body(sub_fun_val))) {
+          capture.output(suppressMessages(
+            flow_view(setNames(c(sub_fun_val), sub_fun_chr),  ..., out = out_tmp)))
+          sub_fun_img <- sprintf('![](unexp_%s_%s.png)\n\n', stepi, i)
+          cat(sub_fun_img, file = rmd_output, append = TRUE)
+        } else {
+          cat("`", sub_fun_chr, "` doesn't have a body\n\n", sep="",
+              file = rmd_output, append = TRUE)
+        }
 
       }
       nc <- nchar(fun_chr)
