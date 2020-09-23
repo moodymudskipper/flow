@@ -128,7 +128,7 @@ build_plantuml_code <- function(expr, first = FALSE) {
       if_txt   <- sprintf(
         "#e2efda:if (if(%s)) then (y)",
         paste(deparse_plantuml(expr[[2]]), collapse= "\\n"))
-      yes_txt <- Recall(expr[[3]])
+      yes_txt <- build_plantuml_code(expr[[3]])
       if (length(expr) == 4) {
         elseif_txt <- build_elseif_txt(expr[[4]])
         txt <- paste(if_txt, yes_txt, elseif_txt, "endif", sep = "\n")
@@ -143,7 +143,7 @@ build_plantuml_code <- function(expr, first = FALSE) {
       while_txt   <- sprintf(
         "#fff2cc:while (while(%s))",
         paste(deparse_plantuml(expr[[2]]), collapse= "\\n"))
-      expr_txt <- Recall(expr[[3]])
+      expr_txt <- build_plantuml_code(expr[[3]])
       txt <- paste(while_txt, expr_txt, "endwhile", sep = "\n")
       return(txt)
     }
@@ -154,7 +154,7 @@ build_plantuml_code <- function(expr, first = FALSE) {
         "#ddebf7:while (for(%s in %s))",
         paste(deparse_plantuml(expr[[2]]), collapse= "\\n"),
         paste(deparse_plantuml(expr[[3]]), collapse= "\\n"))
-      expr_txt <- Recall(expr[[4]])
+      expr_txt <- build_plantuml_code(expr[[4]])
       txt <- paste(for_txt, expr_txt, "endwhile", sep = "\n")
       return(txt)
     }
@@ -162,7 +162,7 @@ build_plantuml_code <- function(expr, first = FALSE) {
     #### REPEAT
     if(identical(expr[[1]], quote(`for`))) {
       repeat_txt   <- "#fce4d6:while (repeat)"
-      expr_txt <- Recall(expr[[2]])
+      expr_txt <- build_plantuml_code(expr[[2]])
       txt <- paste(repeat_txt, expr_txt, "endwhile", sep = "\n")
       return(txt)
     }
@@ -202,7 +202,7 @@ build_elseif_txt <- function(expr) {
     elseif_txt <- sprintf(
       "#e2efda:elseif (if(%s)) then (y)",
       paste(deparse_plantuml(expr[[2]]), collapse= "\\n"))
-    yes_txt <- Recall(expr[[3]])
+    yes_txt <- build_plantuml_code(expr[[3]])
     if(length(expr) == 4)
       txt <- paste(elseif_txt, yes_txt, build_elseif_txt(expr[[4]]), sep = "\n")
     else {
@@ -210,7 +210,7 @@ build_elseif_txt <- function(expr) {
     }
   } else {
       else_txt <- "else (n)"
-      no_txt <-  Recall(expr)
+      no_txt <-  build_plantuml_code(expr)
       txt <- paste(else_txt, no_txt, sep = "\n")
   }
   txt
