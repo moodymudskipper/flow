@@ -73,8 +73,8 @@ build_nomnoml_code <- function(
 
   # check parameters
   direction <- match.arg(direction)
-  edges  <- match.arg(edges)
-  ranker <- match.arg(ranker)
+  edges     <- match.arg(edges)
+  ranker    <- match.arg(ranker)
 
   # FALSE or TRUE must become "false" or "true" for nomnoml
   fillArrows <- tolower(fillArrows)
@@ -121,48 +121,40 @@ build_nomnoml_code <- function(
     box.y))
   edge_data <- edge_data[order(edge_data$order),]
 
-  # create the header
-  header <- sprintf(
-    "
-    #.if: visual=rhomb fill=#e2efda align=center
-    #.for: visual=rhomb fill=#ddebf7 align=center
-    #.repeat: visual=rhomb fill=#fce4d6 align=center
-    #.while: visual=rhomb fill=#fff2cc align=center
-    #.standard: visual=class fill=#ededed
-    #.commented: visual=class fill=#ededed
-    #.header: visual=ellipse fill=#d9e1f2 align=center
-    #.return: visual=end fill=#70ad47  empty
-    #.stop: visual=end fill=#ed7d31  empty
-    #.break: visual=receiver fill=#ffc000 empty
-    #.next: visual=transceiver fill=#5b9bd5  empty
-    #arrowSize: %s
-    #bendSize: %s
-    #direction: %s
-    #gutter: %s
-    #edgeMargin: %s
-    #edges: %s
-    #fill: %s
-    #fillArrows: %s
-    #font: %s
-    #fontSize: %s
-    #leading: %s
-    #lineWidth: %s
-    #padding: %s
-    #spacing: %s
-    #stroke: %s
-    #title: %s
-    #zoom: %s
-    #acyclicer: %s
-    #ranker: %s",
-    arrowSize, bendSize, direction, gutter, edgeMargin, edges, fill, fillArrows,
-    font, fontSize, leading, lineWidth, padding, spacing, stroke, title, zoom,
-    acyclicer, ranker)
-  header <- gsub("\\n\\s+","\n", header)
+  header <- paste0(
+    "#.if: visual=rhomb fill=#e2efda align=center\n",
+    "#.for: visual=rhomb fill=#ddebf7 align=center\n",
+    "#.repeat: visual=rhomb fill=#fce4d6 align=center\n",
+    "#.while: visual=rhomb fill=#fff2cc align=center\n",
+    "#.standard: visual=class fill=#ededed\n",
+    "#.commented: visual=class fill=#ededed\n",
+    "#.header: visual=ellipse fill=#d9e1f2 align=center\n",
+    "#.return: visual=end fill=#70ad47  empty\n",
+    "#.stop: visual=end fill=#ed7d31  empty\n",
+    "#.break: visual=receiver fill=#ffc000 empty\n",
+    "#.next: visual=transceiver fill=#5b9bd5  empty\n",
+    "#arrowSize: ", arrowSize, "\n",
+    "#bendSize: ", bendSize, "\n",
+    "#direction: ", direction, "\n",
+    "#gutter: ", gutter, "\n",
+    "#edgeMargin: ", edgeMargin, "\n",
+    "#edges: ", edges, "\n",
+    "#fill: ", fill, "\n",
+    "#fillArrows: ", fillArrows, "\n",
+    "#font: ", font, "\n",
+    "#fontSize: ", fontSize, "\n",
+    "#leading: ", leading, "\n",
+    "#lineWidth: ", lineWidth, "\n",
+    "#padding: ", padding, "\n",
+    "#spacing: ", spacing, "\n",
+    "#stroke: ", stroke, "\n",
+    "#title: ", title, "\n",
+    "#zoom: ", zoom, "\n",
+    "#acyclicer: ", acyclicer, "\n",
+    "#ranker: ", ranker, "\n"
+  )
 
   nomnoml_code <- paste(edge_data$nomnoml_code, collapse = "\n")
-  # print(node_data[1:2])
-  # print(edge_data)
-  # cat(nomnoml_code)
   nomnoml_code <- paste0(header,"\n", nomnoml_code)
   nomnoml_code
 }
