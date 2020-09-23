@@ -78,6 +78,7 @@ find_funs <- function(call){
       }
     } else if (identical(x[[1]], quote(`function`))) {
       env$funs <- append(env$funs, x)
+      names(env$funs)[length(env$funs)] <- ""
     }
     lapply(x, find_funs0, env)
   }
@@ -107,6 +108,7 @@ swap_calls <- function(expr){
       # change unique expression into an asignment to var
       expr[[3]] <- call("<-", var, expr[[3]])
 
+    if(length(expr) == 4) {
     no_surrounded_by_curly <-
       is.call(expr[[4]]) && identical(expr[[4]][[1]], quote(`{`))
     if (no_surrounded_by_curly)
@@ -115,6 +117,7 @@ swap_calls <- function(expr){
     else
       # change unique expression into an asignment to var
       expr[[4]] <- call("<-", var, expr[[4]])
+    }
     return(expr)
   }
 
