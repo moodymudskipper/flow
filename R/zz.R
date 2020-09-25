@@ -1,6 +1,6 @@
 # imports and lower level unexported functions
 
-#' @importFrom utils head getS3method browseURL tail getFromNamespace ls.str
+#' @importFrom utils head getS3method browseURL tail getFromNamespace lsf.str
 #' @importFrom utils txtProgressBar setTxtProgressBar capture.output
 #' @importFrom stats setNames
 NULL
