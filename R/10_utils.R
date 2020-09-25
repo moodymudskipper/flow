@@ -1,3 +1,10 @@
+allNames <- function (x) {
+  value <- names(x)
+  if (is.null(value))
+    character(length(x))
+  else value
+}
+
 add_comment_calls <- function(fun, prefix = "##"){
   if (is.null(prefix)) return(fun)
   src <- deparse(fun, width.cutoff = 500, control = "useSource")

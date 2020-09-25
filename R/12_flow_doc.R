@@ -2,10 +2,9 @@
 #'
 #' @param pkg package name as a string
 #' @param out path to an html file to write to
-#' @param ... additional arguments passed to flow_view
+#' @param ... additional arguments passed to `flow_view()`
 #'
 #' @export
-#' @examples
 flow_doc <- function(pkg, out = paste0(pkg, ".html"), ...) {
   if(!endsWith(out, ".html"))
     stop("`out` must be a path to an html file to write to")
@@ -59,6 +58,7 @@ output:
     cat(letter_title, file = rmd_output, append = TRUE)
 
     for(fun_chr in exported_funs_split[[L]]) {
+      #print(fun_chr)
       stepi <- stepi + 1
       setTxtProgressBar(pb,stepi)
 

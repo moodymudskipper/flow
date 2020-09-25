@@ -104,7 +104,7 @@ test_that("flow_data works with 2 calls in body",{
     data.frame(
       id = c(0, 1, 2),
       block_type = c("header", "standard", "return"),
-      code_str = c("fun(x)", "x + y;u + v", ""),
+      code_str = c("fun(x)", "x + y\nu + v", ""),
       label = c("", "", ""),
       stringsAsFactors = FALSE))
   expect_equal(
@@ -133,7 +133,7 @@ test_that("package works on calls",{
     data.frame(
       id = c(1, 2),
       block_type = c("standard", "return"),
-      code_str = c("x <- x * 2;y <- x", ""),
+      code_str = c("x <- x * 2\ny <- x", ""),
       label = c("", ""),
       stringsAsFactors = FALSE))
   expect_equal(
@@ -158,7 +158,7 @@ test_that("package works on paths",{
     data.frame(
       id = c(1, 2),
       block_type = c("standard", "return"),
-      code_str = c("x <- x * 2;y <- x", ""),
+      code_str = c("x <- x * 2\ny <- x", ""),
       label = c("", ""),
       stringsAsFactors = FALSE))
   expect_equal(

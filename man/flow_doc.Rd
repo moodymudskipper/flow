@@ -11,7 +11,7 @@ flow_doc(pkg, out = paste0(pkg, ".html"), ...)
 
 \item{out}{path to an html file to write to}
 
-\item{...}{additional arguments passed to flow_view}
+\item{...}{additional arguments passed to \code{flow_view()}}
 }
 \description{
 Draw Flow Diagrams for an Entire Package

@@ -37,7 +37,8 @@ flow_view_plantuml <- function(x_chr, x, prefix, sub_fun_id, swap, out, svg) {
   if(is.function(x)) {
     header <- deparse_plantuml(args(x))
     # remove the {}
-    header <- paste(header[-length(header)], collapse = "\\n")
+    #header <- paste(header[-length(header)], collapse = "\\n")
+    header <- substr(header, 1, nchar(header) - 11)
     # replace the function(arg) by my_function(arg)
     header <- sub("^function", x_chr, header)
     # make it a proper plantuml title
@@ -117,7 +118,7 @@ build_plantuml_code <- function(expr, first = FALSE) {
   res <- sapply(blocks, function(expr) {
     #### starts with SYMBOL / LITTERAL
     if(!is.call(expr[[1]]) || length(expr) > 1) {
-      deparsed <- sapply(expr, function(x) paste(deparse_plantuml(x), collapse = "\\n"))
+      deparsed <- sapply(expr, deparse_plantuml)
       return(paste0(":", paste(deparsed, collapse = "\\n"), ";"))
     }
 
@@ -127,7 +128,7 @@ build_plantuml_code <- function(expr, first = FALSE) {
     if(identical(expr[[1]], quote(`if`))) {
       if_txt   <- sprintf(
         "#e2efda:if (if(%s)) then (y)",
-        paste(deparse_plantuml(expr[[2]]), collapse= "\\n"))
+        deparse_plantuml(expr[[2]]))
       yes_txt <- build_plantuml_code(expr[[3]])
       if (length(expr) == 4) {
         elseif_txt <- build_elseif_txt(expr[[4]])
@@ -142,7 +143,7 @@ build_plantuml_code <- function(expr, first = FALSE) {
     if(identical(expr[[1]], quote(`while`))) {
       while_txt   <- sprintf(
         "#fff2cc:while (while(%s))",
-        paste(deparse_plantuml(expr[[2]]), collapse= "\\n"))
+        deparse_plantuml(expr[[2]]))
       expr_txt <- build_plantuml_code(expr[[3]])
       txt <- paste(while_txt, expr_txt, "endwhile", sep = "\n")
       return(txt)
@@ -152,8 +153,8 @@ build_plantuml_code <- function(expr, first = FALSE) {
     if(identical(expr[[1]], quote(`for`))) {
       for_txt   <- sprintf(
         "#ddebf7:while (for(%s in %s))",
-        paste(deparse_plantuml(expr[[2]]), collapse= "\\n"),
-        paste(deparse_plantuml(expr[[3]]), collapse= "\\n"))
+        deparse_plantuml(expr[[2]]),
+        deparse_plantuml(expr[[3]]))
       expr_txt <- build_plantuml_code(expr[[4]])
       txt <- paste(for_txt, expr_txt, "endwhile", sep = "\n")
       return(txt)
@@ -169,18 +170,18 @@ build_plantuml_code <- function(expr, first = FALSE) {
 
     #### STOP
     if(identical(expr[[1]], quote(`stop`))) {
-      stop_txt <- paste(deparse_plantuml(expr), collapse= "\\n")
+      stop_txt <- deparse_plantuml(expr)
       return(paste0("#ed7d31:",stop_txt, ";\nstop"))
     }
 
     #### RETURN
     if(identical(expr[[1]], quote(`return`))) {
-      return_txt   <- paste(deparse_plantuml(expr), collapse= "\\n")
+      return_txt   <- deparse_plantuml(expr)
       return(paste0("#70ad47:",return_txt, ";\nstop"))
     }
 
     #### REGULAR CALL
-    paste0(":", paste(deparse_plantuml(expr), collapse = "\\n"), ";")
+    paste0(":", deparse_plantuml(expr), ";")
   })
 
   if(first) {
@@ -218,9 +219,11 @@ build_elseif_txt <- function(expr) {
 
 # deparse an expression to a correctly escaped character vector
 deparse_plantuml <- function(x) {
-  x <- deparse(x, backtick = TRUE)
+  x <- paste(deparse(x, backtick = TRUE),collapse = "\n")
+  x <- styler::style_text(x)
   chars <- c("\\[","\\]","~","\\.","\\*","_","\\-",'"', "<", ">", "&", "\\\\")
   x <- to_unicode(x, chars) #
+  x <- paste(x, collapse = "\\n")
   x
 }
 

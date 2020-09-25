@@ -12,7 +12,7 @@ build_nomnoml_code(
   arrowSize = 1,
   edges = c("hard", "rounded"),
   bendSize = 0.3,
-  font = "Calibri",
+  font = "Courier",
   fontSize = 12,
   lineWidth = 3,
   padding = 16,

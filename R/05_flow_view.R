@@ -73,6 +73,16 @@ flow_view <-
       return(invisible(NULL))
     }
     data <- flow_data(setNames(list(x), f_chr), range, prefix, sub_fun_id, swap, narrow)
+
+    # this should be done upstream
+    data$nodes$code_str[data$nodes$block_type == "standard"] <-
+      sapply(data$nodes$code_str[data$nodes$block_type == "standard"], function(x) {
+      if(x == "") return("")
+      paste(styler::style_text(x), collapse = "\n")
+    })
+    # nomnoml ignores regular spaces so we use braille spaces, these are quite wide
+    # when not using monospace so we might want to choose another
+    data$nodes$code_str <- gsub(" ", "\u2800", data$nodes$code_str)
     code <- build_nomnoml_code(data, code = code, ...)
     x <- list(code = code, svg = svg)
     widget <- htmlwidgets::createWidget(
