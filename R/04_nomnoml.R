@@ -87,6 +87,9 @@ build_nomnoml_code <- function(
   node_data$code_str <- gsub("]","\\]", node_data$code_str,fixed = TRUE)
   node_data$code_str <- gsub("[","\\[", node_data$code_str,fixed = TRUE)
   node_data$code_str <- gsub("|","\\|", node_data$code_str,fixed = TRUE)
+  node_data$label    <- gsub("]","\\]", node_data$label,fixed = TRUE)
+  node_data$label    <- gsub("[","\\[", node_data$label,fixed = TRUE)
+  node_data$label    <- gsub("|","\\|", node_data$label,fixed = TRUE)
 
   if (is.na(code)) {
     node_data$code_str[node_data$label != ""] <- ""
