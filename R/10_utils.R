@@ -6,10 +6,12 @@ allNames <- function (x) {
 }
 
 add_comment_calls <- function(fun, prefix = "##"){
-  if (is.null(prefix)) return(fun)
-  src <- deparse(fun, width.cutoff = 500, control = "useSource")
 
+  ## deparse function
+  src <- deparse(fun, width.cutoff = 500, control = "useSource")
   src <- paste(src, collapse = "\n")
+
+  ## remove misplaced comments
 
   # some header comments might be misplaced, i.e. placed before or after
   # arguments to a function. arguments start or finish with parentheses or commas,
@@ -27,9 +29,25 @@ add_comment_calls <- function(fun, prefix = "##"){
   # remove comments before ","
   src <- gsub("([\\s\\n]+#.*?\\n)+[\\s\\n]*,", ",", src, perl = TRUE)
 
+  ## split by line
   src <- strsplit(src, "\\n")[[1]]
+
+  ## replace comments by call to `#`()
   pattern <- paste0("^\\s*(", prefix, ".*?)$")
-  src <- gsub(pattern, "`#`(\"\\1\")", src)
+  coms_lgl <- grepl(pattern, src)
+
+  com <- gsub(pattern, "\\1", src[coms_lgl])
+
+  # remove comment prefix
+  com <- sub(paste0("^\\s*", prefix,"\\s*"), "", com)
+
+  # escape quotes
+  com <- gsub('"', '\\\\"', com)
+  com <- sprintf('`#`("%s")', com)
+
+  ## rebuild function
+
+  src[coms_lgl] <- com
   src <- paste(src, collapse = "\n")
   src <- str2lang(src)
   eval(src)
