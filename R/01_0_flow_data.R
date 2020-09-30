@@ -4,16 +4,15 @@ flow_data <-
   function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, swap = TRUE,
            narrow = FALSE) {
 
-    ## capture quoted input
+    ## fetch fun name from quoted input
     f_sym <- substitute(x)
-
 
     is_valid_named_list <-
       is.list(x) && length(x) == 1 && allNames(x) != ""
 
     ## is `x` a named list ?
     if(is_valid_named_list) {
-      ## build function symbol and make `x[[1]]` the new `x`
+      ## replace fun name and set the new `x`
       f_sym <- as.name(names(x))
       x <- x[[1]]
     }
@@ -43,7 +42,7 @@ flow_data <-
 
     ## was the sub_fun_id argument given ?
     if (!is.null(sub_fun_id)) {
-      ## make the relevant sub function our new input
+      ## replace fun name and set the new `x`
       f_sym <- quote(fun)
       x <- eval(sub_funs[[sub_fun_id]])
     } else {
@@ -73,21 +72,24 @@ flow_data <-
 
       ## is the function traced ?
       if(is_flow_traced(x)) {
-        ## make `x` the  body of original function
+        ## set `x` as  body of original function
         x <- body(attributes(x)$original)
       } else {
-        ## make `x` the  body of function
+        ## set `x` as  body of function
         x <- body(x)
       }
 
     } else {
       ## is x a string (presumably a path) ?
       if (is.character(x) && length(x) == 1) {
-        ## parse the relevant file into a call
+        ## set `x` as parsed code from file
         x <- as.call(c(quote(`{`), parse(file = x)))
       } else {
-        ## fail as x is of an unsupported type
-        stop("x must be a function, a call or a path to an R script")
+        ## is `x` a call ?
+        if(!is.call(x)) {
+          ## fail: unsupported type
+          stop("x must be a function, a call or a path to an R script")
+        }
       }
     }
 
@@ -99,63 +101,15 @@ flow_data <-
     ## build data from x
     data <- add_data_from_expr(data, x, narrow = narrow)
 
-    ## add the final node
+    # add the final node
     id <- get_last_id(data) + 1
     data <- add_node(data, id, "return")
 
     ## was a `range` arg given ?
     if (!is.null(range)) {
-      ## compute the range and starting/ending rows
-      range <- range(range)
-      range[2] <- min(max(data$nodes$id), range[2])
-      # matches give the row numbers, not the the node ids
-      matches <- which(data$nodes$id %in% range)
-      start <- min(matches)
-      end   <- max(matches)
-      data0 <- data
-      ## is our lower bound 1 or less ?
-      if (min(range) <= 1) {
-        ## start at 1 and keep relevant edges and nodes
-        data$nodes <- data$nodes[1:end,]
-        data$edges <- data$edges[
-          data$edges$from %in% data$nodes$id &
-            data$edges$to %in% data$nodes$id,]
-      } else {
-        ## add a header node containing displaying ". . ."
-        data$nodes <- rbind(
-          data.frame(id = 0, block_type = "header", code_str = ". . .",
-                     label = "", code = "", stringsAsFactors =  FALSE),
-          data$nodes[start:end,])
-        ##  keep relevant edges and nodes
-        data$edges <- data$edges[
-          data$edges$from %in% data$nodes$id &
-            data$edges$to %in% data$nodes$id,]
-        entry_points <- unique(
-          data$edges$from[!data$edges$from %in% data$edges$to])
-        data$edges <- rbind(
-          data.frame(from = 0, to = entry_points, edge_label = "", arrow = "--:>",
-                     stringsAsFactors = FALSE),
-          data$edges)
-      }
-
-      ## fetch last node in the data
-      max_id <- max(data0$nodes$id)
-
-      ## is the last node out of the range ?
-      if (max(range) < max_id) {
-        ## add a footer node containing displaying "..."
-        data$nodes <- rbind(
-          data$nodes,
-          data.frame(id = max_id, block_type = "header", code_str = "...",
-                     label = "", code = ""))
-        exit_points <- data$edges$to[!data$edges$to %in% data$edges$from]
-        exit_points <- data$nodes$id[data$nodes$id %in% exit_points &
-                                       !data$nodes$block_type %in% c("stop", "return")]
-        data$edges <- rbind(
-          data$edges,
-          data.frame(from = exit_points, to = max_id, edge_label = "", arrow = "--:>"))
-      }
-
+      ## subset data
+      # and add start and end node if relevant
+      data <- subset_data_by_range(data, range)
     }
 
     # we remove the remaining `#`() calls, not super clean but does the job

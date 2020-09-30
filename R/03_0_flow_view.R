@@ -84,6 +84,7 @@ flow_view <-
     # when not using monospace so we might want to choose another
     data$nodes$code_str <- gsub(" ", "\u2800", data$nodes$code_str)
     code <- build_nomnoml_code(data, code = code, ...)
+
     x <- list(code = code, svg = svg)
     widget <- htmlwidgets::createWidget(
       name = "nomnoml", x,

@@ -1,28 +1,3 @@
-# not directly recursive, but called by other add_data_from_* function
-
-add_data_from_expr <-  function(data, expr, narrow = FALSE){
-  blocks <- build_blocks(expr)
-  for (i in seq_along(blocks)) {
-    block <- blocks[[i]]
-    if (missing(block)) # deal with empty expr (`{}`)
-      block_type <- NULL
-    else
-      block_type <- attr(block, "block_type")
-    if (is.null(block_type)) {
-      data <- add_data_from_standard_block(data, block)
-    } else if (block_type == "if") {
-      data <- add_data_from_if_block(data, block, narrow = narrow)
-    } else if (block_type == "for") {
-      data <- add_data_from_for_block(data, block, narrow = narrow)
-    } else if (block_type == "while") {
-      data <- add_data_from_while_block(data, block, narrow = narrow)
-    } else if (block_type == "repeat") {
-      data <- add_data_from_repeat_block(data, block, narrow = narrow)
-    }
-  }
-  data
-}
-
 # split code in blocks, divided by calls to control flow or special comments
 # the output is a list of calls where each element has a "label" attribute and
 # if relevant a block_type attribute
