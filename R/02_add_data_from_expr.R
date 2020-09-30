@@ -13,11 +13,11 @@ add_data_from_expr <-  function(data, expr, narrow = FALSE){
     } else if (block_type == "if") {
       data <- add_data_from_if_block(data, block, narrow = narrow)
     } else if (block_type == "for") {
-      data <- add_data_from_for_block(data, block)
+      data <- add_data_from_for_block(data, block, narrow = narrow)
     } else if (block_type == "while") {
-      data <- add_data_from_while_block(data, block)
+      data <- add_data_from_while_block(data, block, narrow = narrow)
     } else if (block_type == "repeat") {
-      data <- add_data_from_repeat_block(data, block)
+      data <- add_data_from_repeat_block(data, block, narrow = narrow)
     }
   }
   data
