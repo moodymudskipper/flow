@@ -1,19 +1,13 @@
 flow_view_nomnoml <- function(
   f_chr, x, range, prefix, sub_fun_id, swap, narrow, code, width, height, ..., out, svg, engine) {
 
+  ## build data
   data <- flow_data(setNames(list(x), f_chr), range, prefix, sub_fun_id, swap, narrow)
 
-  # this should be done upstream
-  data$nodes$code_str[data$nodes$block_type == "standard"] <-
-    sapply(data$nodes$code_str[data$nodes$block_type == "standard"], function(x) {
-      if(x == "") return("")
-      paste(styler::style_text(x), collapse = "\n")
-    })
-  # nomnoml ignores regular spaces so we use braille spaces, these are quite wide
-  # when not using monospace so we might want to choose another
-  data$nodes$code_str <- gsub(" ", "\u2800", data$nodes$code_str)
+  ## build code from data
   code <- build_nomnoml_code(data, code = code, ...)
 
+  ## buildwidget
   x <- list(code = code, svg = svg)
   widget <- htmlwidgets::createWidget(
     name = "nomnoml", x,
@@ -21,24 +15,41 @@ flow_view_nomnoml <- function(
     height = height,
     package = "nomnoml")
 
-  if (is.null(out)) return(widget)
+  ## is the out argument NULL ?
+  if (is.null(out)) {
+    ## return the widget
+    return(widget)
+  }
 
+  # flag if out is a temp file shorthand
   is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg")
+
+  ## is it ?
   if (is_tmp) {
+    ## set out to a temp file with the right extension
     out <- tempfile("flow_", fileext = paste0(".", out))
   }
+
+  ## extract extension from path
   ext <- sub(".*?\\.([[:alnum:]]+)$", "\\1", out)
-  if (tolower(ext) %in% c("html", "htm"))
+
+  ## is `out` a path to a web page ?
+  if (tolower(ext) %in% c("html", "htm")) {
+    ## save to file
     htmlwidgets::saveWidget(widget, out)
-  else {
+  } else {
+    ## save to a temp html file then convert to required output
     html <- tempfile("flow_", fileext = ".html")
     htmlwidgets::saveWidget(widget, html)
     webshot::webshot(html, out, selector = "canvas")
   }
 
+  ## was the out argument a temp file shorthand ?
   if (is_tmp) {
+    ## print location of output and open it
     message(sprintf("The diagram was saved to '%s'", gsub("\\\\","/", out)))
     browseURL(out)
   }
-  out
+  ## return the path to the output invisibly
+  invisible(out)
 }
