@@ -23,8 +23,8 @@ add_comment_calls <- function(fun, prefix = "##"){
   # remove comments before ")"
   src <- gsub("([\\s\\n]+#.*?\\n)+[\\s\\n]*\\)", ")", src, perl = TRUE)
 
-  # remove comments after ","
-  src <- gsub(",\\n([\\s\\n]+#.*?\\n)+", ",", src, perl = TRUE)
+  # remove comments after "," where
+  src <- gsub("(\n[\\s]+[^#\\s].*?),\\n([\\s\\n]+#.*?\\n)+", "\\1,", src, perl = TRUE)
 
   # remove comments before ","
   src <- gsub("([\\s\\n]+#.*?\\n)+[\\s\\n]*,", ",", src, perl = TRUE)
