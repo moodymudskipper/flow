@@ -152,7 +152,7 @@ build_nomnoml_code <- function(
     "#.while: visual=rhomb fill=#fff2cc align=center\n",
     "#.standard: visual=class fill=#ededed align=left\n",
     "#.commented: visual=class fill=#ededed\n",
-    "#.header: visual=ellipse fill=#d9e1f2 align=center\n",
+    "#.header: visual=roundrect fill=#d9e1f2 align=left\n",
     "#.return: visual=end fill=#70ad47  empty\n",
     "#.stop: visual=end fill=#ed7d31  empty\n",
     "#.break: visual=receiver fill=#ffc000 empty\n",
