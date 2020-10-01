@@ -59,9 +59,11 @@ flow_data <-
     ## is `x` a function ?
     if (is.function(x)) {
       ## build function header node and edge
-      title <- head(deparse(args(x), width.cutoff = 500), -1)
+      title <- deparse(args(x), width.cutoff = 60L)
+      title <- styler::style_text(title)
       title <- paste(title, collapse = "\n  ")
-      title <- trimws(sub("^function ", deparse(f_sym), title))
+      title <- sub(" \\{\\n    NULL\\n  \\}$", "", title)
+      title <- trimws(sub("^function", deparse(f_sym), title))
       data <- add_node(
         data,
         id = 0L,
@@ -123,6 +125,8 @@ flow_data <-
     #   } else x
     # })
     data$nodes$code_str <- gsub("`#`\\(.*?\\);", "", data$nodes$code_str)
+
+    data$nodes$code_str <- gsub(" ", "\u2800", data$nodes$code_str)
 
     #data$nodes$code <- NULL
     ## return data
