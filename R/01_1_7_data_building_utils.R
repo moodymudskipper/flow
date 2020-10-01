@@ -13,14 +13,16 @@ new_data <- function(){
       edge_label = character(0),
       stringsAsFactors = FALSE)
   )
-  data$nodes$code <- list()
+  #data$nodes$code <- list()
   data
 }
 
-add_node <- function(data, id, block_type = "standard", code = substitute(), code_str = "", label = ""){
+add_node <- function(data, id, block_type = "standard",
+                     #code = substitute(),
+                     code_str = "", label = ""){
   ## build one row data.frame containing given node data
   node <- data.frame(id, block_type, code_str, stringsAsFactors = FALSE, label = label)
-  node$code <- list(code)
+  #node$code <- list(code)
 
   ## bind at end of node data
   data$nodes <- rbind(data$nodes, node)

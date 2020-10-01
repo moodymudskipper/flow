@@ -66,7 +66,7 @@ flow_data <-
         data,
         id = 0L,
         "header",
-        code = f_sym,
+        #code = f_sym,
         code_str = title)
       data <- add_edge(data, from = 0L, to = 1L)
 
@@ -115,15 +115,16 @@ flow_data <-
     # we remove the remaining `#`() calls, not super clean but does the job
 
     ## remove misplaced special comments
-    data$nodes$code <- lapply(data$nodes$code, function(x){
-      if(is.list(x) && length(x) && is.call(x[[1]])) {
-        txt <- deparse(x[[1]], width.cutoff = 500)
-        txt <- gsub("`#`\\(.*?\\)", "", txt)
-        str2lang(paste(txt, collapse = "\n"))
-      } else x
-    })
+    # data$nodes$code <- lapply(data$nodes$code, function(x){
+    #   if(is.list(x) && length(x) && is.call(x[[1]])) {
+    #     txt <- deparse(x[[1]], width.cutoff = 500)
+    #     txt <- gsub("`#`\\(.*?\\)", "", txt)
+    #     str2lang(paste(txt, collapse = "\n"))
+    #   } else x
+    # })
     data$nodes$code_str <- gsub("`#`\\(.*?\\);", "", data$nodes$code_str)
 
+    #data$nodes$code <- NULL
     ## return data
     data
   }

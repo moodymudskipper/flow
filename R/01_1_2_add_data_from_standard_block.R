@@ -9,7 +9,7 @@ add_data_from_standard_block <- function(data, block){
       data,
       id,
       block_type = "standard",
-      code = substitute(),
+      #code = substitute(),
       code_str = "")
   } else {
     ## build string to be displayed from block code
@@ -21,7 +21,7 @@ add_data_from_standard_block <- function(data, block){
       data,
       id,
       block_type = "standard",
-      code = block,
+      #code = block,
       code_str = code_str,
       label = attr(block, "label"))
   }

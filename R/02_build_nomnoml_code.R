@@ -1,12 +1,12 @@
-# kept for convenience
-flow_code <-
-  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, swap = FALSE,
-           narrow = FALSE, code = TRUE, ...) {
-    data <- eval.parent(substitute(flow_data(
-      x, range, prefix, sub_fun_id, swap, narrow)))
-    code <- build_nomnoml_code(data, code = code, ...)
-    code
-  }
+# # kept for convenience
+# flow_code <-
+#   function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, swap = FALSE,
+#            narrow = FALSE, code = TRUE, ...) {
+#     data <- eval.parent(substitute(flow_data(
+#       x, range, prefix, sub_fun_id, swap, narrow)))
+#     code <- build_nomnoml_code(data, code = code, ...)
+#     code
+#   }
 
 
 #' build nomnoml code from data
@@ -71,6 +71,8 @@ build_nomnoml_code <- function(
   gutter = 5,
   edgeMargin = 0){
 
+  ## check/preprocess parameters
+
   # check parameters
   direction <- match.arg(direction)
   edges     <- match.arg(edges)
@@ -78,6 +80,11 @@ build_nomnoml_code <- function(
 
   # FALSE or TRUE must become "false" or "true" for nomnoml
   fillArrows <- tolower(fillArrows)
+
+  # To appease cmd check
+  box.x <- edge_label <- arrow <- box.y <- NULL
+
+  ## escape special characters from relevant variables
 
   # extract nodes and edges
   node_data <- data$nodes
@@ -91,13 +98,20 @@ build_nomnoml_code <- function(
   node_data$label    <- gsub("[","\\[", node_data$label,fixed = TRUE)
   node_data$label    <- gsub("|","\\|", node_data$label,fixed = TRUE)
 
+  ## was `code` set to `NA` ?
   if (is.na(code)) {
+    ## remove the content of all blocks headed by special comments
     node_data$code_str[node_data$label != ""] <- ""
-  } else if (!code) {
-    node_data$code_str[node_data$block_type %in% c("standard", "commented")] <- ""
+  } else {
+    ## was `code` set to `FALSE` ?
+    if (!code) {
+      ## remove the content of all blocks except control flow headers
+      node_data$code_str[node_data$block_type %in% c("standard", "commented")] <- ""
+    }
   }
 
-  # create the box column containing the nomnoml box string
+  ## update node data with nomnoml code for all nodes
+
   node_data$box <- NA
   node_data$box <- sprintf(
     "[<%s> %s: %s;%s]",
@@ -105,24 +119,31 @@ build_nomnoml_code <- function(
     node_data$id,
     node_data$label,
     node_data$code_str)
+
   # cleanup header block
   headers_lgl <- node_data$block_type == "header"
   node_data$box[headers_lgl]  <- sub("^\\[.*?: ;","[<header>", node_data$box[headers_lgl])
   # cleanup last chars of the box in cases where no code (no code or start/end blocks)
   node_data$box  <- sub("(:?)\\s*;\\]$","\\1]", node_data$box, perl=TRUE)
-  # create the nomnoml code for each edge
+
+  ## merge to integrate node data into edge data
+
   edge_data$order <- seq_len(nrow(edge_data))
-  edge_data <- merge(edge_data,node_data[c("id","box")], by.x = "from", by.y = "id", all.x = TRUE)
-  edge_data <- merge(edge_data,node_data[c("id","box")], by.x = "to", by.y = "id", all.x = TRUE)
-  # To appease cmd check
-  box.x <- edge_label <- arrow <- box.y <- NULL
+  edge_data <- merge(edge_data, node_data[c("id","box")], by.x = "from", by.y = "id", all.x = TRUE)
+  edge_data <- merge(edge_data, node_data[c("id","box")], by.x = "to", by.y = "id", all.x = TRUE)
+
+  ## build nomnoml code lines
+
   edge_data <- transform(edge_data, nomnoml_code = sprintf(
     "%s %s %s %s",
     box.x,
     edge_label,
     arrow,
     box.y))
+
   edge_data <- edge_data[order(edge_data$order),]
+
+  ## build header and combine all into code string
 
   header <- paste0(
     "#.if: visual=rhomb fill=#e2efda align=center\n",
@@ -159,6 +180,7 @@ build_nomnoml_code <- function(
 
   nomnoml_code <- paste(edge_data$nomnoml_code, collapse = "\n")
   nomnoml_code <- paste0(header,"\n", nomnoml_code)
+
   nomnoml_code
 }
 
