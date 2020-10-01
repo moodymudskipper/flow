@@ -40,15 +40,20 @@ flow_view <-
            height = NULL, ..., out = NULL, svg = FALSE, engine = c("nomnoml", "plantuml")) {
     engine = match.arg(engine)
 
+    ## fetch fun name from quoted input
+
     f_chr <- deparse(substitute(x))
     is_valid_named_list <-
       is.list(x) && length(x) == 1 && !is.null(names(x))
 
+    ## is `x` a named list ?
     if(is_valid_named_list) {
+      ## replace fun name and set the new `x`
       f_chr <- names(x)
       x <- x[[1]]
     }
 
+    ## is the engine "plantuml" ?
     if(engine == "plantuml") {
       # if(!requireNamespace("plantuml"))
       #   stop("The package plantuml needs to be installed to use this feature. ",
@@ -61,57 +66,28 @@ flow_view <-
       # range, narrow, width, height, and ... should not be relevant
       # code = FALSE is easy
       # prefix and code = NA are hard
+
+      ## are any unsupported argument not missing ?
       if(!missing(range) || !missing(prefix) ||
          !missing(narrow) || !missing(code) ||
-         !missing(width) || !missing(height) || length(list(...)))
-        warning("The following arguments are ignored if `engine` is set to
-                \"plantuml\" : `range`, `prefix`, `narrow`, `code`, `width`,
-                `height` , `...`")
+         !missing(width) || !missing(height) || length(list(...))) {
+        ## warn that they will be ignored
+        warning("The following arguments are ignored if `engine` is set to ",
+                "\"plantuml\" : `range`, `prefix`, `narrow`, `code`, `width`, ",
+                "`height` , `...`")
+      }
+
+      ## run flow_view_plantuml
       flow_view_plantuml(
         f_chr, x,
         prefix = prefix, sub_fun_id = sub_fun_id, swap = swap, out = out, svg = svg)
       return(invisible(NULL))
     }
-    data <- flow_data(setNames(list(x), f_chr), range, prefix, sub_fun_id, swap, narrow)
 
-    # this should be done upstream
-    data$nodes$code_str[data$nodes$block_type == "standard"] <-
-      sapply(data$nodes$code_str[data$nodes$block_type == "standard"], function(x) {
-      if(x == "") return("")
-      paste(styler::style_text(x), collapse = "\n")
-    })
-    # nomnoml ignores regular spaces so we use braille spaces, these are quite wide
-    # when not using monospace so we might want to choose another
-    data$nodes$code_str <- gsub(" ", "\u2800", data$nodes$code_str)
-    code <- build_nomnoml_code(data, code = code, ...)
-
-    x <- list(code = code, svg = svg)
-    widget <- htmlwidgets::createWidget(
-      name = "nomnoml", x,
-      width = width,
-      height = height,
-      package = "nomnoml")
-
-    if (is.null(out)) return(widget)
-
-    is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg")
-    if (is_tmp) {
-      out <- tempfile("flow_", fileext = paste0(".", out))
-    }
-    ext <- sub(".*?\\.([[:alnum:]]+)$", "\\1", out)
-    if (tolower(ext) %in% c("html", "htm"))
-      htmlwidgets::saveWidget(widget, out)
-    else {
-      html <- tempfile("flow_", fileext = ".html")
-      htmlwidgets::saveWidget(widget, html)
-      webshot::webshot(html, out, selector = "canvas")
-    }
-
-    if (is_tmp) {
-      message(sprintf("The diagram was saved to '%s'", gsub("\\\\","/", out)))
-      browseURL(out)
-    }
-    out
+    ## run flow_view_nomnoml
+    flow_view_nomnoml(
+      f_chr, x, range, prefix, sub_fun_id, swap, narrow, code, width, height,
+      ..., out = out, svg = svg, engine = engine)
 }
 
 
