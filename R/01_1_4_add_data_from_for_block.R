@@ -6,10 +6,13 @@ add_data_from_for_block <- function(data, block, narrow = FALSE){
   id <- get_last_id(data) + 1
   id_end <- -id
   # add node for `for` statement
-  code_str = sprintf(
-    "for (%s in %s)",
-    deparse2(block[[2]]),
-    deparse2(block[[3]]))
+
+  code_str <- paste(deparse(call("for", block[[2]], block[[3]]), width.cutoff = 40L, backtick = TRUE), collapse = "\n")
+  code_str <- styler::style_text(code_str)
+  code_str[length(code_str)] <- sub(" NULL$","", code_str[length(code_str)])
+  if(length(code_str) == 1) code_str <- c(code_str, "\u2800")
+  code_str <- paste("\u2800", code_str, "\u2800", collapse = "\n")
+  code_str <- sub(" \\{ \u2800\\n\u2800   NULL \u2800\\n\u2800 \\} \u2800", "", code_str)
 
   data <- add_node(
     data,

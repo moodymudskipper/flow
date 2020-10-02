@@ -13,15 +13,13 @@ add_data_from_if_block <- function(data, block, narrow = FALSE){
 
 
   # build string to display in if node
-  #browser()
   code_str <- paste(deparse(call("if", block[[2]]), width.cutoff = 40L, backtick = TRUE), collapse = "\n")
   code_str <- styler::style_text(code_str)
+  code_str[length(code_str)] <- sub(" NULL$","", code_str[length(code_str)])
   if(length(code_str) == 1) code_str <- c(code_str, "\u2800")
   code_str <- paste("\u2800", code_str, "\u2800", collapse = "\n")
   code_str <- sub(" \\{ \u2800\\n\u2800   NULL \u2800\\n\u2800 \\} \u2800", "", code_str)
-  #code_str <- sprintf("if (%s)", deparse2(block[[2]]))
-  # code_str <- gsub("||","||\n", code_str,fixed = TRUE)
-  # code_str <- gsub("&&","&&\n", code_str,fixed = TRUE)
+
 
   # add IF node and edge from IF node to yes branch
   data <- add_node(
