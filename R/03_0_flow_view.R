@@ -1,9 +1,7 @@
 #' View function as flow chart
 #'
 #' `flow_view()` shows the code of a function as a flow diagram, `flow_run()`
-#' runs a call and draws the logical path taken by the code, `flow_data()` is
-#' the lower level function, which builds the edge and node data rendered by
-#' `flow_view()` and `flow_run()`.
+#' runs a call and draws the logical path taken by the code.
 #'
 #' @param x A call, a function, or a path to a script
 #' @param prefix prefix to use for special comments in our code used as block headers,

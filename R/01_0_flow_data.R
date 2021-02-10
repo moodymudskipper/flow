@@ -1,5 +1,3 @@
-#' @export
-#' @rdname flow_view
 flow_data <-
   function(x, prefix = NULL, sub_fun_id = NULL, swap = TRUE, narrow = FALSE) {
 
