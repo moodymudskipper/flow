@@ -6,12 +6,19 @@
 #'
 #' @export
 flow_doc <- function(pkg, out = paste0(pkg, ".html"), ...) {
-  if(!endsWith(out, ".html"))
+  ## is `out` a path to an html file
+  if(!endsWith(out, ".html")) {
+    ## fail eplicitly
     stop("`out` must be a path to an html file to write to")
+  }
+
+  ## fetch lists of exported and uneported functions from package
   all_funs <- lsf.str(asNamespace(pkg))
   exported <- getNamespaceExports(pkg)
   exported_funs <- intersect(all_funs, exported)
   unexported_funs <- setdiff(all_funs, exported_funs)
+
+  ## split those lists by first letter
   f <- toupper(substr(exported_funs,1,1))
   f[! f %in% LETTERS] <- "-"
   exported_funs_split <-split(exported_funs, f)
@@ -19,6 +26,7 @@ flow_doc <- function(pkg, out = paste0(pkg, ".html"), ...) {
   f[! f %in% LETTERS] <- "-"
   unexported_funs_split <- split(unexported_funs, f)
 
+  ## create a temp folder and location for rmd and intermediate files
   path <- file.path(tempdir(), pkg)
   dir.create(path, recursive = TRUE, showWarnings = FALSE)
   # this won't trigger a cmd check note
@@ -26,7 +34,7 @@ flow_doc <- function(pkg, out = paste0(pkg, ".html"), ...) {
   ns <- asNamespace(pkg)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Rmd header
+  ## Write Rmd header
 
   rmd_header <- sprintf('---
 title: "%s"
@@ -41,24 +49,29 @@ output:
   cat(rmd_header, file = rmd_output)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ## Write "Exported functions" title
   # Title Exported
   title_exported <- "# Exported functions\n\n"
   cat(title_exported, file = rmd_output, append = TRUE)
 
+  ## setup progress bar
   pb = txtProgressBar(min = 0, max = length(exported_funs), initial = 0)
   stepi = 0
   cat("Building diagrams of exported functions\n")
 
+  ## for every letter
   for(L in names(exported_funs_split)) {
 
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Letter title
+    ## Write letter title
     letter_title <- sprintf("## %s\n\n", L)
     cat(letter_title, file = rmd_output, append = TRUE)
 
+    ## for every function of the letter group
     for(fun_chr in exported_funs_split[[L]]) {
-      #print(fun_chr)
+
+      ## fetch function value and subfunctions
       stepi <- stepi + 1
       setTxtProgressBar(pb,stepi)
 
@@ -75,56 +88,80 @@ output:
       #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       # function title
 
-      if(has_subfuns)
+      ## is there nested function definitions ?
+      if(has_subfuns) {
+        ## build function title including tabset
         fun_title <- sprintf('### %s {.tabset}\n\n#### %s\n\n', fun_chr, fun_chr)
-      else
+      } else {
+        ## build function title
         fun_title <- sprintf("### %s\n\n", fun_chr)
+      }
 
+      ## write function title
       cat(fun_title, file = rmd_output, append = TRUE)
 
       #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       # function image
 
+      ## build path to image
       out_tmp <- file.path(path, paste0("exp_", stepi, ".png"))
+
+      ## does the function have a body ?
       if(!is.null(body(fun_val))) {
+        ## draw to the file and write link to image
         capture.output(suppressMessages(
           flow_view(setNames(c(fun_val), fun_chr),  ..., out = out_tmp)))
         fun_img <- sprintf('![](exp_%s.png)\n\n', stepi)
         cat(fun_img, file = rmd_output, append = TRUE)
       } else {
+        ## write that the function doesn't have a body
         cat("`", fun_chr, "` doesn't have a body\n\n", sep="",
             file = rmd_output, append = TRUE)
       }
 
+      ## for all nested functions
       for(i in seq_along(sub_funs)) {
+        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        # subfunction title
+
+        ## define and write the title
         sub_fun_val <- eval(sub_funs[[i]])
         sub_fun_chr <- names(sub_funs)[[i]]
 
-
-        #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        # subfunction title
         sub_fun_title <- sprintf("#### %s\n\n", sub_fun_chr)
         cat(sub_fun_title, file = rmd_output, append = TRUE)
 
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         # subfunction image
-        if(grepl("^\\d+$", sub_fun_chr)) sub_fun_chr <- "function"
+
+        ## is the nested function named ?
+        if(grepl("^\\d+$", sub_fun_chr)) {
+          ## name the function "function"
+          sub_fun_chr <- "function"
+        }
+
+        ## build path to image
         out_tmp <- file.path(path, paste0("exp_", stepi,"_", i, ".png"))
 
+        ## does the function have a body ?
         if(!is.null(body(sub_fun_val))) {
+          ## draw to the file and write link to image
           capture.output(suppressMessages(
             flow_view(setNames(c(sub_fun_val), sub_fun_chr),  ..., out = out_tmp)))
           sub_fun_img <- sprintf('![](exp_%s_%s.png)\n\n', stepi, i)
           cat(sub_fun_img, file = rmd_output, append = TRUE)
         } else {
+          ## write that the function doesn't have a body
           cat("`", sub_fun_chr, "` doesn't have a body\n\n", sep="",
               file = rmd_output, append = TRUE)
         }
 
       }
-      nc <- nchar(fun_chr)
+      #nc <- nchar(fun_chr)
     }
   }
+
+  ## close progress bar
   close(pb)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -206,7 +243,7 @@ output:
         }
 
       }
-      nc <- nchar(fun_chr)
+      #nc <- nchar(fun_chr)
     }
   }
   close(pb)

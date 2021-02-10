@@ -3,36 +3,47 @@
 flow_run <-
   function(x, prefix = NULL, swap = TRUE, code = TRUE, ...,
            out = NULL, svg = FALSE, browse = FALSE, show_passes = FALSE) {
-    # capture call and function
+    ## set `call` to quoted input
     call <- substitute(x)
-    if (!is.call(call)) stop("x must be a call")
+
+    ## is it a call ?
+    if (!is.call(call)) {
+      ## fail explicitly
+      stop("x must be a call")
+    }
+
+    ## fetch function symbol and evaluate it into `fun`
     fun_sym <- call[[1]]
     fun <- eval.parent(fun_sym)
 
-    if(is.null(body(fun))) stop("`", as.character(fun_sym),
+    ## does `fun` have a body ?
+    if(is.null(body(fun))) {
+      ## fail explicitly
+      stop("`", as.character(fun_sym),
                                 "` doesn't have a body (try `body(", as.character(fun_sym),
                                 ")`). {flow}'s functions don't work on such inputs.")
+    }
 
-    # if function is a S3 standard generic, debug appropriate method
+    ## is fun a S3 standard generic ?
     if (isS3stdGeneric(fun)) {
+      ## set fun to the relevant method
       fun_sym <- str2lang(getS3methodSym(deparse(fun_sym), eval.parent(call[[2]])))
       fun <- eval(fun_sym)
     }
 
-    # build the diagram data from the function
-    flow_data_call <- as.call(list(
-      quote(flow::flow_data),
-      fun_sym,
-      range = NULL,
-      prefix = substitute(prefix),
+    ## build the diagram data from the function
+    data <- flow::flow_data(
+      setNames(list(fun), deparse(fun_sym)),
+      prefix = prefix,
       sub_fun_id = NULL,
-      swap = substitute(swap)))
-    data <- eval.parent(flow_data_call)
+      swap = swap)
 
-    # dash the edges
+    ## dash the edges
     data$edges$arrow <- gsub("->", "--:>", data$edges$arrow, fixed = TRUE)
     data$edges$arrow <- gsub("<-", "<:--", data$edges$arrow, fixed = TRUE)
     data$edges$arrow[data$edges$from == 0] <- "->"
+
+    ## create new element in the global data_env envir with all relevant data
 
     # initiates number of passes
     data$edges$passes <- 0
@@ -50,6 +61,10 @@ flow_run <-
     data_env[[layer_id]]$refresh <- FALSE
     data_env[[layer_id]]$last_node <- 0
 
+
+    ## define closure `update_diagram`
+    # we define update_diagram here so it possesses
+    # all the parameter values in its enclosure
     update_diagram <- function() {
       # display updated diagram
 
@@ -88,52 +103,69 @@ flow_run <-
       out
     }
 
-    # we define update_diagram here so it possesses
-    # all the parameter values in its enclosure
+    ## add it to the layer
     data_env[[layer_id]]$update_diagram <- update_diagram
 
-    # the diagram is drawn in the end, error or not
+    ## make sure that on exit, diagram is updated and layer removed
     on.exit({
       update_diagram()
       rm(list = layer_id, envir = data_env)
     })
 
-    if(is_flow_traced(fun))
+    ## is the function traced by flow_debug ?
+    if(is_flow_traced(fun)) {
+      ## set body_ as the original body
       body_ <- body(attr(fun, "original"))
-    else
+    } else {
+      ## set body_ as the body
       body_ <- body(fun)
-    if (swap) body_ <- swap_calls(body_)
+    }
+
+    ## is `swap` TRUE ?
+    if (swap) {
+      ## swap `if` calls
+      body_ <- swap_calls(body_)
+    }
+
+    ## insert `update()` calls in the body
     body(fun) <- insert_update(body_, n = browse)
+
+    ## run the given call using modified function
     call[[1]] <- fun
     res <- eval.parent(call)
 
     # finish the flow to the end after last flow:::update call
+    ## undash all walked edges following last update() call
     repeat {
+      ## flag the edges starting from last node
       next_edge_lgl <- data_env[[layer_id]]$edges$from == data_env[[layer_id]]$last_node
-      if(!any(next_edge_lgl)) break else {
-        # there could be several candidate, standard blocks are dismissed as
-        # they would have been dealt with by previous update calls
-        if(sum(next_edge_lgl) > 1) {
-          candidate_nodes <- data_env[[layer_id]]$edges$to[next_edge_lgl]
-          chosen_candidate_lgl <-
-            with(data_env[[layer_id]]$nodes,
-                 block_type[id %in% candidate_nodes] != "standard")
-          chosen_candidate <- candidate_nodes[chosen_candidate_lgl]
-          next_edge_lgl <-
-            with(data_env[[layer_id]],
-                 edges$from == last_node & edges$to == chosen_candidate)
-        }
 
-        # undash
-        data_env[[layer_id]]$edges$arrow[next_edge_lgl] <- "->"
+       ## is there any ?
+      if(!any(next_edge_lgl)) break
 
-        # increment edge passes
-        data_env[[layer_id]]$edges$passes[next_edge_lgl] <-
-          data_env[[layer_id]]$edges$passes[next_edge_lgl] + 1
-
-        # update last node
-        data_env[[layer_id]]$last_node <- data_env[[layer_id]]$edges$to[next_edge_lgl]
+      # there could be several candidate, standard blocks are dismissed as
+      # they would have been dealt with by previous update calls
+      if(sum(next_edge_lgl) > 1) {
+        candidate_nodes <- data_env[[layer_id]]$edges$to[next_edge_lgl]
+        chosen_candidate_lgl <-
+          with(data_env[[layer_id]]$nodes,
+               block_type[id %in% candidate_nodes] != "standard")
+        chosen_candidate <- candidate_nodes[chosen_candidate_lgl]
+        next_edge_lgl <-
+          with(data_env[[layer_id]],
+               edges$from == last_node & edges$to == chosen_candidate)
       }
+
+      # undash
+      data_env[[layer_id]]$edges$arrow[next_edge_lgl] <- "->"
+
+      # increment edge passes
+      data_env[[layer_id]]$edges$passes[next_edge_lgl] <-
+        data_env[[layer_id]]$edges$passes[next_edge_lgl] + 1
+
+      # update last node
+      data_env[[layer_id]]$last_node <- data_env[[layer_id]]$edges$to[next_edge_lgl]
+
     }
     res
   }

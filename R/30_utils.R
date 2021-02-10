@@ -58,13 +58,13 @@ get_last_id <- function(data) {
   max(data$nodes$id)
 }
 
-deparse2 <- function(x){
-  x <- as.call(c(quote(`{`),x))
-  x <- deparse(x, width.cutoff = 500)
-  x <- x[-c(1, length(x))]
-  x <- sub("^    ","",x)
-  paste(x, collapse = "\n")
-}
+# deparse2 <- function(x){
+#   x <- as.call(c(quote(`{`),x))
+#   x <- deparse(x, width.cutoff = 500)
+#   x <- x[-c(1, length(x))]
+#   x <- sub("^    ","",x)
+#   paste(x, collapse = "\n")
+# }
 
 `%call_in%` <- function(calls, constructs){
   sapply(as.list(calls), function(x)
@@ -72,17 +72,30 @@ deparse2 <- function(x){
 }
 
 get_last_call_type <- function(expr){
+  ## is `expr` a {} expression ?
   if (is.call(expr) && identical(expr[[1]], quote(`{`))) {
+    ## set `expr` to the last expression
     expr <- expr[[length(expr)]] # could be a call or a symbol
   }
-  last_call_type <- if (is.call(expr))
-    deparse(expr[[1]], width.cutoff = 500)
+
+  ## is `expr` a call ?
+  if (is.call(expr)) {
+    ## get the last call type from the name of the called function
+    last_call_type <- deparse(expr[[1]], width.cutoff = 500)
   # else if (deparse(expr) %in% c("break","next")) {
   #   deparse(expr)}
-  else
-    "standard"
-  if(last_call_type %in% c("abort", "rlang::abort"))
+  } else  {
+    ## set the last call type to "standard"
+    last_call_type <- "standard"
+  }
+
+  ## is the last call type `abort` ?
+  if(last_call_type %in% c("abort", "rlang::abort")) {
+    ## set it to "stop"
     last_call_type <- "stop"
+  }
+
+  ## return the last call type
   last_call_type
 }
 
