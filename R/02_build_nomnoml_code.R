@@ -1,9 +1,9 @@
 # # kept for convenience
 # flow_code <-
-#   function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, swap = FALSE,
+#   function(x, prefix = NULL, sub_fun_id = NULL, swap = FALSE,
 #            narrow = FALSE, code = TRUE, ...) {
 #     data <- eval.parent(substitute(flow_data(
-#       x, range, prefix, sub_fun_id, swap, narrow)))
+#       x, prefix, sub_fun_id, swap, narrow)))
 #     code <- build_nomnoml_code(data, code = code, ...)
 #     code
 #   }
@@ -46,8 +46,6 @@
 #' @param acyclicer Acyclicer, no effect was observed
 #' @param gutter Gutter, no effect was observed
 #' @param edgeMargin Edge margin, no effect was observed
-#'
-#' @export
 build_nomnoml_code <- function(
   data,
   code,
