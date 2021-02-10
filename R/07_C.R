@@ -134,7 +134,7 @@ make_groups <- function(code) {
 #'   code of the functions.
 #'
 #' @export
-build_plantuml_code_from_c <- function(x, fun = NULL) {
+build_plantuml_code_from_c <- function(x, fun = NULL, out = NULL) {
         x_is_path <- grepl("\\.c(pp)?$", x )
         if(x_is_path) {
                 funs <- extract_c_funs(x)
@@ -152,10 +152,42 @@ build_plantuml_code_from_c <- function(x, fun = NULL) {
         #df <- make_groups(body)
         plantuml_code <- build_plantuml_code_from_c0(code)
         plantuml_code <- gsub("endif\\nelse", "else", plantuml_code)
+        plantuml_code <- gsub("\\\\nreturn", ";\n#70ad47:return", plantuml_code)
+        plantuml_code <- gsub("^:return", "#70ad47:return", plantuml_code)
+        plantuml_code <- gsub("#70ad47:return(.*?)\\n", "#70ad47:return\\1\nstop\n", plantuml_code)
+        plantuml_code <- gsub("#70ad47:return(.*?)[^\n]$", "#70ad47:return\\1;\nstop", plantuml_code)
+        #print(plantuml_code)
         plantuml_code <- paste(header, plantuml_skinparam, plantuml_code)
         plant_uml_object <- plantuml::plantuml(plantuml_code)
         plot(plant_uml_object, vector = FALSE)
-        invisible()
+
+        ## is `out` NULL ?
+        if(is.null(out)) {
+                ## plot the object and return NULL
+                plot(plant_uml_object, vector = svg)
+                return(invisible(NULL))
+        }
+
+        ## flag if out is a temp file shorthand
+        is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg")
+
+        ## is it ?
+        if (is_tmp) {
+                ## set out to a temp file with the right extension
+                out <- tempfile("flow_", fileext = paste0(".", out))
+        }
+
+        ## plot the object
+        plot(plant_uml_object, vector = svg, file = out)
+
+        ## was the out argument a temp file shorthand ?
+        if (is_tmp) {
+                ## print location of output and open it
+                message(sprintf("The diagram was saved to '%s'", gsub("\\\\","/", out)))
+                browseURL(out)
+        }
+        ## return the path to the output invisibly
+        invisible(out)
 }
 
 
@@ -233,8 +265,12 @@ c_clean_block <- function(x) {
         if(x == "") return("")
         # align
         x_split <- strsplit(x, "\n")[[1]]
-        while(all(grepl("^ ", x_split))) {
+        while(all(grepl("^ ", x_split)|x_split == "")) {
                 x_split <- substr(x_split, 2, nchar(x_split))
         }
         paste(x_split, collapse = "\n")
 }
+
+
+
+
