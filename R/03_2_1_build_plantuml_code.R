@@ -72,15 +72,22 @@ build_plantuml_code <- function(expr, first = FALSE) {
 
 block_to_plantuml <- function(expr) {
 
-  ## is it a list of calls, or contains a symbol or litteral ?
-  if(!is.call(expr[[1]]) || length(expr) > 1) {
+  ## is it a list containing several items ?
+  if(length(expr) > 1) {
     ## deparse all expressions and build plantuml code
-    deparsed <- sapply(expr, deparse_plantuml)
-    return(paste0(":", paste(deparsed, collapse = "\\n"), ";"))
+    deparsed <- sapply(expr, function(x) block_to_plantuml(list(x)))
+    return(deparsed)
   }
 
   ## set expr to the first and unique element of the block
   expr <- expr[[1]]
+
+  ## does it contain only a symbol or literal (not a call) ?
+  if(!is.call(expr)) {
+    ## deparse all expressions and build plantuml code
+    deparsed <- deparse_plantuml(expr)
+    return(paste0(":", deparsed, ";"))
+  }
 
   ## is it an `if` call ?
   if(identical(expr[[1]], quote(`if`))) {
