@@ -34,27 +34,6 @@ dput2 <- function(x,
 # function with both calls commented
 
 
-  # data <- flow_view(fun, prefix = "##", range = 2:4)
-  # # flow_data(fun)
-  # # dput2(data$nodes[1:4])
-  # # dput2(data$edges)
-  # expect_equal(
-  #   data$nodes[1:4],
-  #   data.frame(
-  #     id = c(1, 2),
-  #     block_type = c("standard", "return"),
-  #     code_str = c("x <- x * 2;y <- x", ""),
-  #     label = c("", ""),
-  #     stringsAsFactors = FALSE))
-  # expect_equal(
-  #   data$edges,
-  #   data.frame(
-  #     from = 1,
-  #     to = 2,
-  #     edge_label = "",
-  #     arrow = "->",
-  #     stringsAsFactors = FALSE))
-
 
 # have tests with break and next
 # have tests with repeat an while
