@@ -1,4 +1,4 @@
-flow_view_plantuml <- function(x_chr, x, prefix, sub_fun_id, swap, out, svg) {
+flow_view_plantuml <- function(x_chr, x, prefix, sub_fun_id, swap, out, svg, engine_opts) {
 
   ## is x a bodiless function ?
   if(is.function(x) && is.null(body(x))) {
@@ -87,11 +87,13 @@ flow_view_plantuml <- function(x_chr, x, prefix, sub_fun_id, swap, out, svg) {
   plant_uml_object <- plantuml(code_str)
 
 
+
   ## is `out` NULL ?
   if(is.null(out)) {
     ## plot the object and return NULL
-    plot(plant_uml_object, vector = svg)
+    do.call(plot, c(list(plant_uml_object, vector = svg), engine_opts))
     return(invisible(NULL))
+
   }
 
   ## flag if out is a temp file shorthand
@@ -104,7 +106,7 @@ flow_view_plantuml <- function(x_chr, x, prefix, sub_fun_id, swap, out, svg) {
   }
 
   ## plot the object
-  plot(plant_uml_object, vector = svg, file = out)
+  do.call(plot, c(list(plant_uml_object, file = out, vector = svg), engine_opts))
 
   ## was the out argument a temp file shorthand ?
   if (is_tmp) {
