@@ -1,15 +1,19 @@
 build_plantuml_code <- function(expr, first = FALSE) {
+  ## is `expr` a `{` expression
   if(is.call(expr) && identical(expr[[1]], quote(`{`))) {
+    ## are the {} empty ?
+    if(length(expr) == 1) {
+      return("")
+    }
+    ## build a list of calls
     calls <- as.list(expr)[-1]
   } else {
+    ## put the call in a list
     calls <- list(expr)
   }
 
-  # support empty calls (`{}`)
-  if (!length(calls)) {
-    blocks <- list(substitute()) # substitute() returns an empty call
-    return(blocks)
-  }
+  ## split calls into blocks
+
   # logical indices of control flow calls
   cfc_lgl <- calls %call_in% c("if", "for", "while", "repeat")
 
@@ -28,92 +32,123 @@ build_plantuml_code <- function(expr, first = FALSE) {
   blocks <- split(calls, block_ids)
 
   n_blocks <- length(blocks)
+
+  ## is it the first call (not a recursion) and the last block contains several calls
   if(first && length(blocks[[n_blocks]]) > 1) {
-    #browser()
-    # at first iteration we separate the last call so it can be used as a return call
+    ## separate the last call from the last block so it can be highlighted later
     l_last_block <- length(blocks[[n_blocks]])
     blocks[[n_blocks+1]] <- blocks[[n_blocks]][l_last_block]
     blocks[[n_blocks]] <- blocks[[n_blocks]][-l_last_block]
     n_blocks <- n_blocks + 1
   }
 
-  res <- sapply(blocks, function(expr) {
-    #### starts with SYMBOL / LITTERAL
-    if(!is.call(expr[[1]]) || length(expr) > 1) {
-      deparsed <- sapply(expr, deparse_plantuml)
-      return(paste0(":", paste(deparsed, collapse = "\\n"), ";"))
-    }
+  ## turn blocks to code
+  res <- sapply(blocks, block_to_plantuml)
 
-    expr <- expr[[1]]
-
-    #### IF
-    if(identical(expr[[1]], quote(`if`))) {
-      if_txt   <- sprintf(
-        "#e2efda:if (if(%s)) then (y)",
-        deparse_plantuml(expr[[2]]))
-      yes_txt <- build_plantuml_code(expr[[3]])
-      if (length(expr) == 4) {
-        elseif_txt <- build_elseif_txt(expr[[4]])
-        txt <- paste(if_txt, yes_txt, elseif_txt, "endif", sep = "\n")
-      } else {
-        txt <- paste(if_txt, yes_txt, "endif", sep = "\n")
-      }
-      return(txt)
-    }
-
-    #### WHILE
-    if(identical(expr[[1]], quote(`while`))) {
-      while_txt   <- sprintf(
-        "#fff2cc:while (while(%s))",
-        deparse_plantuml(expr[[2]]))
-      expr_txt <- build_plantuml_code(expr[[3]])
-      txt <- paste(while_txt, expr_txt, "endwhile", sep = "\n")
-      return(txt)
-    }
-
-    #### FOR
-    if(identical(expr[[1]], quote(`for`))) {
-      for_txt   <- sprintf(
-        "#ddebf7:while (for(%s in %s))",
-        deparse_plantuml(expr[[2]]),
-        deparse_plantuml(expr[[3]]))
-      expr_txt <- build_plantuml_code(expr[[4]])
-      txt <- paste(for_txt, expr_txt, "endwhile", sep = "\n")
-      return(txt)
-    }
-
-    #### REPEAT
-    if(identical(expr[[1]], quote(`for`))) {
-      repeat_txt   <- "#fce4d6:while (repeat)"
-      expr_txt <- build_plantuml_code(expr[[2]])
-      txt <- paste(repeat_txt, expr_txt, "endwhile", sep = "\n")
-      return(txt)
-    }
-
-    #### STOP
-    if(identical(expr[[1]], quote(`stop`))) {
-      stop_txt <- deparse_plantuml(expr)
-      return(paste0("#ed7d31:",stop_txt, ";\nstop"))
-    }
-
-    #### RETURN
-    if(identical(expr[[1]], quote(`return`))) {
-      return_txt   <- deparse_plantuml(expr)
-      return(paste0("#70ad47:",return_txt, ";\nstop"))
-    }
-
-    #### REGULAR CALL
-    paste0(":", deparse_plantuml(expr), ";")
-  })
-
+  ## is it the first call ?
   if(first) {
-    if(startsWith(res[n_blocks], ":"))
+    ## is the last block uncolored
+    if(startsWith(res[n_blocks], ":")) {
+      ## color it green
       res[n_blocks] <- paste0("#70ad47", res[n_blocks])
-    else if(startsWith(res[n_blocks], "#e2efda:if"))
-      res[n_blocks] <- sub("^#e2efda", "#70ad47", res[n_blocks])
-    if(res[n_blocks] != "stop")
+    } else {
+      ## is it an if call ?
+      if(startsWith(res[n_blocks], "#e2efda:if")) {
+        ## change its color
+        res[n_blocks] <- sub("^#e2efda", "#70ad47", res[n_blocks])
+      }
+    }
+    ## is the code of the last block not "stop"
+    if(res[n_blocks] != "stop") {
+      ## add "stop"
       res[n_blocks] <- paste0(res[n_blocks], "\nstop")
+    }
   }
 
+  ## return the plantuml code as a string
   paste(res, collapse="\n")
+}
+
+
+block_to_plantuml <- function(expr) {
+
+  ## is it a list of calls, or contains a symbol or litteral ?
+  if(!is.call(expr[[1]]) || length(expr) > 1) {
+    ## deparse all expressions and build plantuml code
+    deparsed <- sapply(expr, deparse_plantuml)
+    return(paste0(":", paste(deparsed, collapse = "\\n"), ";"))
+  }
+
+  ## set expr to the first and unique element of the block
+  expr <- expr[[1]]
+
+  ## is it an `if` call ?
+  if(identical(expr[[1]], quote(`if`))) {
+    ## build code for 'if () then ()'
+    if_txt   <- sprintf(
+      "#e2efda:if (if(%s)) then (y)",
+      deparse_plantuml(expr[[2]]))
+    yes_txt <- build_plantuml_code(expr[[3]])
+
+    ## is there an `else` clause ?
+    if (length(expr) == 4) {
+      ## build code for else and "endif"
+      elseif_txt <- build_elseif_txt(expr[[4]])
+      txt <- paste(if_txt, yes_txt, elseif_txt, "endif", sep = "\n")
+    } else {
+      ## build code for "endif"
+      txt <- paste(if_txt, yes_txt, "endif", sep = "\n")
+    }
+    ## return code
+    return(txt)
+  }
+
+  ## is it a `while` call ?
+  if(identical(expr[[1]], quote(`while`))) {
+    ## build code for "while"
+    while_txt   <- sprintf(
+      "#fff2cc:while (while(%s))",
+      deparse_plantuml(expr[[2]]))
+    expr_txt <- build_plantuml_code(expr[[3]])
+    txt <- paste(while_txt, expr_txt, "endwhile", sep = "\n")
+    return(txt)
+  }
+
+  ## is it a `for` call ?
+  if(identical(expr[[1]], quote(`for`))) {
+    ## build code for "for"
+    for_txt   <- sprintf(
+      "#ddebf7:while (for(%s in %s))",
+      deparse_plantuml(expr[[2]]),
+      deparse_plantuml(expr[[3]]))
+    expr_txt <- build_plantuml_code(expr[[4]])
+    txt <- paste(for_txt, expr_txt, "endwhile", sep = "\n")
+    return(txt)
+  }
+
+  ## is it a `repeat` call ?
+  if(identical(expr[[1]], quote(`for`))) {
+    ## build code for "repeat"
+    repeat_txt   <- "#fce4d6:while (repeat)"
+    expr_txt <- build_plantuml_code(expr[[2]])
+    txt <- paste(repeat_txt, expr_txt, "endwhile", sep = "\n")
+    return(txt)
+  }
+
+  ## is it a `stop` call ?
+  if(identical(expr[[1]], quote(`stop`))) {
+    ## build code for "stop"
+    stop_txt <- deparse_plantuml(expr)
+    return(paste0("#ed7d31:",stop_txt, ";\nstop"))
+  }
+
+  ## is it a `return` call ?
+  if(identical(expr[[1]], quote(`return`))) {
+    ## build code for "return"
+    return_txt   <- deparse_plantuml(expr)
+    return(paste0("#70ad47:",return_txt, ";\nstop"))
+  }
+
+  ## is it a single regular call ?
+  paste0(":", deparse_plantuml(expr), ";")
 }
