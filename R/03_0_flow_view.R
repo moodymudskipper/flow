@@ -6,7 +6,6 @@
 #' `flow_view()` and `flow_run()`.
 #'
 #' @param x A call, a function, or a path to a script
-#' @param range numeric vector used to compute the range of boxes to zoom in
 #' @param prefix prefix to use for special comments in our code used as block headers,
 #'   must start with `"#"`
 #' @param sub_fun_id if not NULL, the index or name of the function definition found in
@@ -30,12 +29,12 @@
 #'   is more robust without it, but it makes text selectable on output which is
 #'    sometimes useful
 #' @param engine Either `"nomnoml"` (default) or `"plantuml"` (experimental), if
-#'   the latter, arguments `range`, `prefix`, `narrow`, `code`, `width`,
+#'   the latter, arguments `prefix`, `narrow`, `code`, `width`,
 #'   `height` and `...` will be ignored.
 #'
 #' @export
 flow_view <-
-  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL,
+  function(x, prefix = NULL, sub_fun_id = NULL,
            swap = TRUE, narrow = FALSE, code = TRUE, width = NULL,
            height = NULL, ..., out = NULL, svg = FALSE, engine = c("nomnoml", "plantuml")) {
     engine = match.arg(engine)
@@ -63,17 +62,17 @@ flow_view <-
       #        "and graphViz ('https://graphviz.org/')")
 
       # we should aim at diminishing this list as much as possible
-      # range, narrow, width, height, and ... should not be relevant
+      # narrow, width, height, and ... should not be relevant
       # code = FALSE is easy
       # prefix and code = NA are hard
 
       ## are any unsupported argument not missing ?
-      if(!missing(range) || !missing(prefix) ||
+      if(!missing(prefix) ||
          !missing(narrow) || !missing(code) ||
          !missing(width) || !missing(height) || length(list(...))) {
         ## warn that they will be ignored
         warning("The following arguments are ignored if `engine` is set to ",
-                "\"plantuml\" : `range`, `prefix`, `narrow`, `code`, `width`, ",
+                "\"plantuml\" : `prefix`, `narrow`, `code`, `width`, ",
                 "`height` , `...`")
       }
 
@@ -86,7 +85,7 @@ flow_view <-
 
     ## run flow_view_nomnoml
     flow_view_nomnoml(
-      f_chr, x, range, prefix, sub_fun_id, swap, narrow, code, width, height,
+      f_chr, x, prefix, sub_fun_id, swap, narrow, code, width, height,
       ..., out = out, svg = svg, engine = engine)
 }
 

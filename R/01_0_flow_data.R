@@ -1,8 +1,7 @@
 #' @export
 #' @rdname flow_view
 flow_data <-
-  function(x, range = NULL, prefix = NULL, sub_fun_id = NULL, swap = TRUE,
-           narrow = FALSE) {
+  function(x, prefix = NULL, sub_fun_id = NULL, swap = TRUE, narrow = FALSE) {
 
     ## fetch fun name from quoted input
     f_sym <- substitute(x)
@@ -106,13 +105,6 @@ flow_data <-
     # add the final node
     id <- get_last_id(data) + 1
     data <- add_node(data, id, "return")
-
-    ## was a `range` arg given ?
-    if (!is.null(range)) {
-      ## subset data
-      # and add start and end node if relevant
-      data <- subset_data_by_range(data, range)
-    }
 
     # we remove the remaining `#`() calls, not super clean but does the job
 
