@@ -9,7 +9,7 @@
 # build_plantuml_code_from_c("R/test.cpp", "eval_filter_one")
 # build_plantuml_code_from_c("R/test.cpp", "dplyr_mask_eval_all_filter")
 
-
+# nocov start
 protect_c_code <- function(code) {
         # remove protected quotes
         code <- gsub('\\\\"', "..", code)
@@ -270,7 +270,7 @@ c_clean_block <- function(x) {
         }
         paste(x_split, collapse = "\n")
 }
-
+# nocov end
 
 
 

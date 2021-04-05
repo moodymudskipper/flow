@@ -42,9 +42,17 @@ test_that("flow_data works with 2 calls in body",{
   expect_snapshot(flow_data(fun))
 })
 
+# traced function
+test_that("flow_data works with a traced function",{
+  fun1 <- fun2 <- function(x) {x}
+  flow_debugonce(fun1)
+  expect_identical(flow_data(list(fun= fun1)), flow_data(list(fun = fun2)))
+  flow_undebug(fun1)
+})
+
 #### OTHER INPUT TYPES ####
 
-test_that("package works on calls",{
+test_that("flow_data works on calls",{
   call <- quote({
     x <- x*2
     y <- x
@@ -52,10 +60,15 @@ test_that("package works on calls",{
   expect_snapshot(flow_data(call))
 })
 
-test_that("package works on paths",{
+test_that("flow_data works on paths",{
   tmp <- tempfile(fileext=".R")
   write("x <- x*2\ny <- x", tmp)
 
   expect_snapshot(flow_data(tmp))
+})
+
+test_that("flow_data works on lists",{
+  fun <- function(x) {x}
+  expect_snapshot(flow_data(list(f = fun)))
 })
 

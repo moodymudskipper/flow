@@ -66,7 +66,7 @@
       2    1  2               ->
       
 
-# package works on calls
+# flow_data works on calls
 
     Code
       flow_data(call)
@@ -84,7 +84,7 @@
       1    1  2               ->
       
 
-# package works on paths
+# flow_data works on paths
 
     Code
       flow_data(tmp)
@@ -100,5 +100,22 @@
       $edges
         from to edge_label arrow
       1    1  2               ->
+      
+
+# flow_data works on lists
+
+    Code
+      flow_data(list(f = fun))
+    Output
+      $nodes
+        id block_type code_str label
+      1  0     header     f(x)      
+      2  1   standard        x      
+      3  2     return               
+      
+      $edges
+        from to edge_label arrow
+      1    0  1               ->
+      2    1  2               ->
       
 

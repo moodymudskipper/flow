@@ -182,7 +182,7 @@ flow_view(rle, narrow = TRUE)
 A function's body often contains other function definitions, sometimes anonymous,
 sometimes assigned to a variable.
 
-The `sub_fun_id` argument allows you to explore any of those.
+The `nested_fun` argument allows you to explore any of those.
 
 A good example is the base function `bquote()`, it defines a couple functions,
 and the diagram that *{flow}* draws is not fully satisfactory.
@@ -195,7 +195,7 @@ flow_view(bquote)
 investigate them. Let's see what `unquote()` is about.
 
 ```{r, fig.width=8, fig.height=8, fig.align = "center"}
-flow_view(bquote, sub_fun_id = "unquote")
+flow_view(bquote, nested_fun = "unquote")
 ```
 
 
@@ -217,31 +217,30 @@ The reason is that the latter version can be represented by a diagram while
 the first can't. The logic stays the same however. If you want to make sure 
 you see the original code, use `swap = FALSE`.
 
-`width` and `height` are passed directly to `htmlwidgets::createWidget()`,
-call `?htmlwidgets::createWidget` to know more.
+`engine_opts` is used to pass arguments to engine specific functions.
 
-`...` is forwarded to `build_nomnoml_code`, these are arguments used by nomnoml
-for the diagram representation, such as font, padding etc. Among those, I noticed
-that `ranker = "longest-path"` sometimes looks nice to line up all exit points : 
+In the most general case `engine_opts` is a list containing optional sub-lists named
+`"nomnoml"`, `"plantuml"`, and `"htmlwidgets"`.
 
+- The items of the `nomnoml`
+ sub-list will be forwarded to `nomnoml:::build_nomnoml_code()`, unexported but
+ documented in `?build_nomnoml_code`, in order to alter
+ *nomnoml* diagrams. For instance `fontSize`, `direction = "right"` to have a left to right
+ diagram, `ranker = "longest-path"` to see have exit points at the bottom...
+ - The items of the `plantuml` sub-list will be forwarded to `plantuml:::plot.plantuml()`,
+ , in order to alter  *plantuml* diagrams.
+ see `?plantuml:::plot.plantuml` and `?plantuml::plantuml_run`
+ - The items of the `htmlwidgets` sub-list will be forwarded to
+ `htmlwidgets::createWidget()` or `htmlwidgets::saveWidget()`, which are used by
+ the *nomnoml* engine.
+
+If this structure is not found, the items of `engine_opts` will be forwarded
+to `nomnoml:::build_nomnoml_code()` if the engine is `"nomnoml"`, and
+`plantuml:::plot.plantuml` if the engine is `"plantuml"`
+
+For instance here's a custom representation of `rle`
 
 ```{r, fig.width=8, fig.height=8, fig.align = "center"}
-flow_view(rle, ranker = "longest-path")
+flow_view(rle, engine_opts = c(ranker = "longest-path", direction = "right"))
 ```
-
-
-
-## Limitations
-
-`next` and `break` statements are not considered special for the moment, so
-they don't branch correctly. This should be solved in the future.
-
-`stop()` and `rlang::abort()` end their branch with an orange circle, but they
-are hardcoded, {flow} doesn't guess if a function is a stopping function (a
-function that always fails). I will add some mainstream ones, or implement a
-mecanism to define a custom list of those if you request it.
-
-`stopifnot()` is not considered special, so it won't branch to an orange circle.
-I might create a `stopifnot` block type in the future, and make it work with
-`assertthat::assert_that` too.
 

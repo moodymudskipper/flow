@@ -54,4 +54,10 @@ test_that("flow_data works with nested if calls",{
     if(x) if(y) foo else bar
   }
   expect_snapshot(flow_data(fun))
+
+  # note: this is currently wrong, setting test already to get coverage
+  fun <- function(x,y) {
+    if(x) if(y) stop() else stop()
+  }
+  expect_snapshot(flow_data(fun))
 })
