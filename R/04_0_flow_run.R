@@ -35,7 +35,7 @@ flow_run <-
     data <- flow::flow_data(
       setNames(list(fun), deparse(fun_sym)),
       prefix = prefix,
-      sub_fun_id = NULL,
+      nested_fun = NULL,
       swap = swap)
 
     ## dash the edges

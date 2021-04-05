@@ -1,5 +1,5 @@
 flow_data <-
-  function(x, prefix = NULL, sub_fun_id = NULL, swap = TRUE, narrow = FALSE) {
+  function(x, prefix = NULL, nested_fun = NULL, swap = TRUE, narrow = FALSE) {
 
     ## fetch fun name from quoted input
     f_sym <- substitute(x)
@@ -37,18 +37,18 @@ flow_data <-
     ## find sub functions (function defs found in the code)
     sub_funs <- find_funs(x)
 
-    ## was the sub_fun_id argument given ?
-    if (!is.null(sub_fun_id)) {
+    ## was the nested_fun argument given ?
+    if (!is.null(nested_fun)) {
       ## replace fun name and set the new `x`
       f_sym <- quote(fun)
-      x <- eval(sub_funs[[sub_fun_id]])
+      x <- eval(sub_funs[[nested_fun]])
     } else {
       ## do we have sub function definitions ?
       if (length(sub_funs)) {
         ## print them
-        # so user can choose a sub_fun_id if relevant
+        # so user can choose a nested_fun if relevant
         message("We found function definitions in this code, ",
-                "use the argument sub_fun_id to inspect them")
+                "use the argument nested_fun to inspect them")
         print(sub_funs)
       }
     }

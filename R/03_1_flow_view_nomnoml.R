@@ -1,9 +1,9 @@
 flow_view_nomnoml <- function(
-  f_chr, x, prefix, sub_fun_id, swap, narrow, code, out, svg,
+  f_chr, x, prefix, nested_fun, swap, narrow, code, out, svg,
   engine, engine_opts, htmlwidgets_opts) {
 
   ## build data
-  data <- flow_data(setNames(list(x), f_chr), prefix, sub_fun_id, swap, narrow)
+  data <- flow_data(setNames(list(x), f_chr), prefix, nested_fun, swap, narrow)
 
   ## build code from data
   code <- do.call(build_nomnoml_code, c(list(data,code = code), engine_opts))

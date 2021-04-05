@@ -1,9 +1,9 @@
 # # kept for convenience
 # flow_code <-
-#   function(x, prefix = NULL, sub_fun_id = NULL, swap = FALSE,
+#   function(x, prefix = NULL, nested_fun = NULL, swap = FALSE,
 #            narrow = FALSE, code = TRUE, ...) {
 #     data <- eval.parent(substitute(flow_data(
-#       x, prefix, sub_fun_id, swap, narrow)))
+#       x, prefix, nested_fun, swap, narrow)))
 #     code <- build_nomnoml_code(data, code = code, ...)
 #     code
 #   }

@@ -1,4 +1,4 @@
-flow_view_plantuml <- function(x_chr, x, prefix, sub_fun_id, swap, out, svg, engine_opts) {
+flow_view_plantuml <- function(x_chr, x, prefix, nested_fun, swap, out, svg, engine_opts) {
 
   ## is x a bodiless function ?
   if(is.function(x) && is.null(body(x))) {
@@ -18,17 +18,17 @@ flow_view_plantuml <- function(x_chr, x, prefix, sub_fun_id, swap, out, svg, eng
   ## find sub functions (function defs found in the code)
   sub_funs <- find_funs(x)
 
-  ## was the sub_fun_id argument given ?
-  if (!is.null(sub_fun_id)) {
+  ## was the nested_fun argument given ?
+  if (!is.null(nested_fun)) {
     ## replace fun name and set the new `x`
     x_chr <- "fun"
-    x <- eval(sub_funs[[sub_fun_id]])
+    x <- eval(sub_funs[[nested_fun]])
   } else {
     ## do we have sub function definitions ?
     if (length(sub_funs)) {
       ## print them
       message("We found function definitions in this code, ",
-              "use the argument sub_fun_id to inspect them")
+              "use the argument nested_fun to inspect them")
       print(sub_funs)
     }
   }
