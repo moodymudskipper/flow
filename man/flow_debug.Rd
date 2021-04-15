@@ -34,7 +34,7 @@ flow_undebug(f)
 \item{f}{function to debug}
 
 \item{prefix}{prefix to use for special comments in our code used as block headers,
-must start with \code{"#"}}
+must start with \code{"#"}, several prefixes can be provided}
 
 \item{swap}{whether to change \code{var <- if(cond) expr} into
 \code{if(cond) var <- expr} so the diagram displays better}
@@ -43,14 +43,12 @@ must start with \code{"#"}}
 more compact, if \code{NA}, the code will be displayed only if no header is
 defined by special comments.}
 
-\item{...}{Additional parameters passed to \code{build_nomnoml_code()}}
-
 \item{out}{a path to save the diagram to.
 Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 export the objec to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
 
-\item{svg}{only for default or html outut, whether to use svg rendering, rendering
+\item{svg}{only for default or html output, whether to use svg rendering, rendering
 is more robust without it, but it makes text selectable on output which is
 sometimes useful}
 

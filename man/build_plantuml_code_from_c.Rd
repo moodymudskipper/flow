@@ -4,7 +4,7 @@
 \alias{build_plantuml_code_from_c}
 \title{Draw Flow Diagram of a C Function}
 \usage{
-build_plantuml_code_from_c(x, fun = NULL)
+build_plantuml_code_from_c(x, fun = NULL, out = NULL)
 }
 \arguments{
 \item{x}{url of the file}

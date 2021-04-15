@@ -1,0 +1,9 @@
+navbar:
+  structure:
+    left:  [home, reference, articles, news, diagrams]
+    right: [github]
+  components:
+    home: ~
+    diagrams:
+     text: Diagrams
+     href: diagrams.html

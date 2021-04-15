@@ -4,15 +4,72 @@
 \alias{flow_doc}
 \title{Draw Flow Diagrams for an Entire Package}
 \usage{
-flow_doc(pkg, out = paste0(pkg, ".html"), ...)
+flow_doc(
+  pkg = NULL,
+  out = NULL,
+  prefix = NULL,
+  truncate = NULL,
+  swap = TRUE,
+  narrow = FALSE,
+  code = TRUE,
+  svg = FALSE,
+  engine = c("nomnoml", "plantuml"),
+  engine_opts = getOption("flow.engine_opts")
+)
 }
 \arguments{
 \item{pkg}{package name as a string}
 
 \item{out}{path to an html file to write to}
 
-\item{...}{additional arguments passed to \code{flow_view()}}
+\item{prefix}{prefix to use for special comments in our code used as block headers,
+must start with \code{"#"}, several prefixes can be provided}
+
+\item{truncate}{maximum number of characters to be printed per line}
+
+\item{swap}{whether to change \code{var <- if(cond) expr} into
+\code{if(cond) var <- expr} so the diagram displays better}
+
+\item{narrow}{\code{TRUE} makes sure the diagram stays centered on one column
+(they'll be longer but won't shift to the right)}
+
+\item{code}{Whether to display the code in code blocks or only the header, to be
+more compact, if \code{NA}, the code will be displayed only if no header is
+defined by special comments.}
+
+\item{svg}{only for default or html output, whether to use svg rendering, rendering
+is more robust without it, but it makes text selectable on output which is
+sometimes useful}
+
+\item{engine}{Either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental), if
+the latter, arguments \code{prefix}, \code{narrow}, and \code{code}}
+
+\item{engine_opts}{A named list.
+
+In the most general case \code{engine_opts} is a list containing optional sub-lists named
+\code{"nomnoml"}, \code{"plantuml"}, and \code{"htmlwidgets"}.
+\itemize{
+\item The items of the \code{nomnoml}
+sub-list will be forwarded to \code{nomnoml:::build_nomnoml_code()}, unexported but
+documented in \code{?build_nomnoml_code}, in order to alter
+\emph{nomnoml} diagrams. For instance \code{fontSize}, \code{direction = "right"} to have a left to right
+diagram, \code{ranker = "longest-path"} to see have exit points at the bottom...
+\item The items of the \code{plantuml} sub-list will be forwarded to \code{plantuml:::plot.plantuml()},
+, in order to alter  \emph{plantuml} diagrams.
+see \code{?plantuml:::plot.plantuml} and \code{?plantuml::plantuml_run}
+\item The items of the \code{htmlwidgets} sub-list will be forwarded to
+\code{htmlwidgets::createWidget()} or \code{htmlwidgets::saveWidget()}, which are used by
+the \emph{nomnoml} engine.
+}
+
+If this structure is not found, the items of \code{engine_opts} will be forwarded
+to \code{nomnoml:::build_nomnoml_code()} if the engine is \code{"nomnoml"}, and
+\code{plantuml:::plot.plantuml} if the engine is \code{"plantuml"}}
 }
 \description{
 Draw Flow Diagrams for an Entire Package
+}
+\details{
+if \code{pkg} and \code{out} are left \code{NULL}, a vignette \code{diagrams.md} will be built
+in the root, so that \code{pkgdown::build_site} will use it as an additional page.
 }

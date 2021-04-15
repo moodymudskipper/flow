@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>View function as flow chart — flow_data • flow</title>
+<title>View function as flow chart — flow_view • flow</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,11 +46,9 @@
 
 
 
-<meta property="og:title" content="View function as flow chart — flow_data" />
+<meta property="og:title" content="View function as flow chart — flow_view" />
 <meta property="og:description" content="flow_view() shows the code of a function as a flow diagram, flow_run()
-runs a call and draws the logical path taken by the code, flow_data() is
-the lower level function, which builds the edge and node data rendered by
-flow_view() and flow_run()." />
+runs a call and draws the logical path taken by the code." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -90,12 +88,6 @@ flow_view() and flow_run()." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -112,6 +104,9 @@ flow_view() and flow_run()." />
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
+</li>
+<li>
+  <a href="../diagrams.html">Diagrams</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -136,46 +131,34 @@ flow_view() and flow_run()." />
 
     <div class="ref-description">
     <p><code>flow_view()</code> shows the code of a function as a flow diagram, <code>flow_run()</code>
-runs a call and draws the logical path taken by the code, <code>flow_data()</code> is
-the lower level function, which builds the edge and node data rendered by
-<code>flow_view()</code> and <code>flow_run()</code>.</p>
+runs a call and draws the logical path taken by the code.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>flow_data</span>(
+    <pre class="usage"><span class='fu'>flow_view</span>(
   <span class='no'>x</span>,
-  <span class='kw'>range</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sub_fun_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>swap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>narrow</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
-
-<span class='fu'>flow_view</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>range</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sub_fun_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>truncate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>nested_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>swap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>narrow</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>width</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>height</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>,
   <span class='kw'>out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>svg</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>engine</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"nomnoml"</span>, <span class='st'>"plantuml"</span>)
+  <span class='kw'>engine</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"nomnoml"</span>, <span class='st'>"plantuml"</span>),
+  <span class='kw'>engine_opts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"flow.engine_opts"</span>)
 )
 
 <span class='fu'>flow_run</span>(
   <span class='no'>x</span>,
   <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>truncate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>swap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='no'>...</span>,
   <span class='kw'>out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>svg</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>browse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>show_passes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>show_passes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>engine_opts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"flow.engine_opts"</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -186,16 +169,16 @@ the lower level function, which builds the edge and node data rendered by
       <td><p>A call, a function, or a path to a script</p></td>
     </tr>
     <tr>
-      <th>range</th>
-      <td><p>numeric vector used to compute the range of boxes to zoom in</p></td>
-    </tr>
-    <tr>
       <th>prefix</th>
       <td><p>prefix to use for special comments in our code used as block headers,
-must start with <code>"#"</code></p></td>
+must start with <code>"#"</code>, several prefixes can be provided</p></td>
     </tr>
     <tr>
-      <th>sub_fun_id</th>
+      <th>truncate</th>
+      <td><p>maximum number of characters to be printed per line</p></td>
+    </tr>
+    <tr>
+      <th>nested_fun</th>
       <td><p>if not NULL, the index or name of the function definition found in
 x that we wish to inspect</p></td>
     </tr>
@@ -216,14 +199,6 @@ more compact, if <code>NA</code>, the code will be displayed only if no header i
 defined by special comments.</p></td>
     </tr>
     <tr>
-      <th>width, height</th>
-      <td><p>Width and height in pixels, passed to <code><a href='https://rdrr.io/pkg/htmlwidgets/man/createWidget.html'>htmlwidgets::createWidget()</a></code></p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Additional parameters passed to <code><a href='build_nomnoml_code.html'>build_nomnoml_code()</a></code></p></td>
-    </tr>
-    <tr>
       <th>out</th>
       <td><p>a path to save the diagram to.
 Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
@@ -232,15 +207,36 @@ if a regular path is used the format will be guessed from the extension.</p></td
     </tr>
     <tr>
       <th>svg</th>
-      <td><p>only for default or html outut, whether to use svg rendering, rendering
+      <td><p>only for default or html output, whether to use svg rendering, rendering
 is more robust without it, but it makes text selectable on output which is
 sometimes useful</p></td>
     </tr>
     <tr>
       <th>engine</th>
       <td><p>Either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental), if
-the latter, arguments <code>range</code>, <code>prefix</code>, <code>narrow</code>, <code>code</code>, <code>width</code>,
-<code>height</code> and <code>...</code> will be ignored.</p></td>
+the latter, arguments <code>prefix</code>, <code>narrow</code>, and <code>code</code></p></td>
+    </tr>
+    <tr>
+      <th>engine_opts</th>
+      <td><p>A named list.</p>
+<p>In the most general case <code>engine_opts</code> is a list containing optional sub-lists named
+<code>"nomnoml"</code>, <code>"plantuml"</code>, and <code>"htmlwidgets"</code>.</p><ul>
+<li><p>The items of the <code>nomnoml</code>
+sub-list will be forwarded to <code>nomnoml:::build_nomnoml_code()</code>, unexported but
+documented in <code><a href='build_nomnoml_code.html'>?build_nomnoml_code</a></code>, in order to alter
+<em>nomnoml</em> diagrams. For instance <code>fontSize</code>, <code>direction = "right"</code> to have a left to right
+diagram, <code>ranker = "longest-path"</code> to see have exit points at the bottom...</p></li>
+<li><p>The items of the <code>plantuml</code> sub-list will be forwarded to <code>plantuml:::plot.plantuml()</code>,
+, in order to alter  <em>plantuml</em> diagrams.
+see <code>?plantuml:::plot.plantuml</code> and <code><a href='https://rdrr.io/pkg/plantuml/man/plantuml_run.html'>?plantuml::plantuml_run</a></code></p></li>
+<li><p>The items of the <code>htmlwidgets</code> sub-list will be forwarded to
+<code><a href='https://rdrr.io/pkg/htmlwidgets/man/createWidget.html'>htmlwidgets::createWidget()</a></code> or <code><a href='https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html'>htmlwidgets::saveWidget()</a></code>, which are used by
+the <em>nomnoml</em> engine.</p></li>
+</ul>
+
+<p>If this structure is not found, the items of <code>engine_opts</code> will be forwarded
+to <code>nomnoml:::build_nomnoml_code()</code> if the engine is <code>"nomnoml"</code>, and
+<code>plantuml:::plot.plantuml</code> if the engine is <code>"plantuml"</code></p></td>
     </tr>
     <tr>
       <th>browse</th>

@@ -90,12 +90,6 @@ call flow_run() on the next call to f()." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -112,6 +106,9 @@ call flow_run() on the next call to f()." />
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
+</li>
+<li>
+  <a href="../diagrams.html">Diagrams</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -175,7 +172,7 @@ call <code><a href='flow_view.html'>flow_run()</a></code> on the next call to <c
     <tr>
       <th>prefix</th>
       <td><p>prefix to use for special comments in our code used as block headers,
-must start with <code>"#"</code></p></td>
+must start with <code>"#"</code>, several prefixes can be provided</p></td>
     </tr>
     <tr>
       <th>swap</th>
@@ -189,10 +186,6 @@ more compact, if <code>NA</code>, the code will be displayed only if no header i
 defined by special comments.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Additional parameters passed to <code><a href='build_nomnoml_code.html'>build_nomnoml_code()</a></code></p></td>
-    </tr>
-    <tr>
       <th>out</th>
       <td><p>a path to save the diagram to.
 Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
@@ -201,7 +194,7 @@ if a regular path is used the format will be guessed from the extension.</p></td
     </tr>
     <tr>
       <th>svg</th>
-      <td><p>only for default or html outut, whether to use svg rendering, rendering
+      <td><p>only for default or html output, whether to use svg rendering, rendering
 is more robust without it, but it makes text selectable on output which is
 sometimes useful</p></td>
     </tr>

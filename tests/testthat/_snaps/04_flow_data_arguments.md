@@ -1,7 +1,7 @@
-# sub_fun_id works
+# nested_fun works
 
     Code
-      flow_data(fun, sub_fun_id = 2)
+      flow_data(fun, nested_fun = 2)
     Output
       $nodes
         id block_type code_str label

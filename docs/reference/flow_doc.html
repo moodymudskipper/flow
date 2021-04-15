@@ -87,12 +87,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -109,6 +103,9 @@
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
+</li>
+<li>
+  <a href="../diagrams.html">Diagrams</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -135,7 +132,18 @@
     <p>Draw Flow Diagrams for an Entire Package</p>
     </div>
 
-    <pre class="usage"><span class='fu'>flow_doc</span>(<span class='no'>pkg</span>, <span class='kw'>out</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>pkg</span>, <span class='st'>".html"</span>), <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>flow_doc</span>(
+  <span class='kw'>pkg</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>truncate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>swap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>narrow</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>svg</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>engine</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"nomnoml"</span>, <span class='st'>"plantuml"</span>),
+  <span class='kw'>engine_opts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"flow.engine_opts"</span>)
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,11 +157,69 @@
       <td><p>path to an html file to write to</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>additional arguments passed to flow_view</p></td>
+      <th>prefix</th>
+      <td><p>prefix to use for special comments in our code used as block headers,
+must start with <code>"#"</code>, several prefixes can be provided</p></td>
+    </tr>
+    <tr>
+      <th>truncate</th>
+      <td><p>maximum number of characters to be printed per line</p></td>
+    </tr>
+    <tr>
+      <th>swap</th>
+      <td><p>whether to change <code>var &lt;- if(cond) expr</code> into
+<code>if(cond) var &lt;- expr</code> so the diagram displays better</p></td>
+    </tr>
+    <tr>
+      <th>narrow</th>
+      <td><p><code>TRUE</code> makes sure the diagram stays centered on one column
+(they'll be longer but won't shift to the right)</p></td>
+    </tr>
+    <tr>
+      <th>code</th>
+      <td><p>Whether to display the code in code blocks or only the header, to be
+more compact, if <code>NA</code>, the code will be displayed only if no header is
+defined by special comments.</p></td>
+    </tr>
+    <tr>
+      <th>svg</th>
+      <td><p>only for default or html output, whether to use svg rendering, rendering
+is more robust without it, but it makes text selectable on output which is
+sometimes useful</p></td>
+    </tr>
+    <tr>
+      <th>engine</th>
+      <td><p>Either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental), if
+the latter, arguments <code>prefix</code>, <code>narrow</code>, and <code>code</code></p></td>
+    </tr>
+    <tr>
+      <th>engine_opts</th>
+      <td><p>A named list.</p>
+<p>In the most general case <code>engine_opts</code> is a list containing optional sub-lists named
+<code>"nomnoml"</code>, <code>"plantuml"</code>, and <code>"htmlwidgets"</code>.</p><ul>
+<li><p>The items of the <code>nomnoml</code>
+sub-list will be forwarded to <code>nomnoml:::build_nomnoml_code()</code>, unexported but
+documented in <code><a href='build_nomnoml_code.html'>?build_nomnoml_code</a></code>, in order to alter
+<em>nomnoml</em> diagrams. For instance <code>fontSize</code>, <code>direction = "right"</code> to have a left to right
+diagram, <code>ranker = "longest-path"</code> to see have exit points at the bottom...</p></li>
+<li><p>The items of the <code>plantuml</code> sub-list will be forwarded to <code>plantuml:::plot.plantuml()</code>,
+, in order to alter  <em>plantuml</em> diagrams.
+see <code>?plantuml:::plot.plantuml</code> and <code><a href='https://rdrr.io/pkg/plantuml/man/plantuml_run.html'>?plantuml::plantuml_run</a></code></p></li>
+<li><p>The items of the <code>htmlwidgets</code> sub-list will be forwarded to
+<code><a href='https://rdrr.io/pkg/htmlwidgets/man/createWidget.html'>htmlwidgets::createWidget()</a></code> or <code><a href='https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html'>htmlwidgets::saveWidget()</a></code>, which are used by
+the <em>nomnoml</em> engine.</p></li>
+</ul>
+
+<p>If this structure is not found, the items of <code>engine_opts</code> will be forwarded
+to <code>nomnoml:::build_nomnoml_code()</code> if the engine is <code>"nomnoml"</code>, and
+<code>plantuml:::plot.plantuml</code> if the engine is <code>"plantuml"</code></p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>if <code>pkg</code> and <code>out</code> are left <code>NULL</code>, a vignette <code>diagrams.md</code> will be built
+in the root, so that <code><a href='https://pkgdown.r-lib.org/reference/build_site.html'>pkgdown::build_site</a></code> will use it as an additional page.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -47,6 +47,7 @@ test_that("flow_data works with a traced function",{
   fun1 <- fun2 <- function(x) {x}
   flow_debugonce(fun1)
   expect_identical(flow_data(list(fun= fun1)), flow_data(list(fun = fun2)))
+  browser()
   flow_undebug(fun1)
 })
 
