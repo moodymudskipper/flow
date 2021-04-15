@@ -51,7 +51,7 @@ flow_debugonce <- function(
     return(eval.parent(flow_run_call, 5))
   })
   trace_call <- bquote(
-    trace(.(substitute(f)), quote(.(tracer)), print = FALSE)
+    trace(.(substitute(f)), quote(.(tracer)), print = FALSE, where = environment())
   )
   eval.parent(trace_call)
   invisible()
