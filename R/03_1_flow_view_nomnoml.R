@@ -21,7 +21,7 @@ flow_view_nomnoml <- function(
     return(widget)
   }
 
-  # flag if out is a temp file shorthand
+  ## flag if out is a temp file shorthand
   is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg")
 
   ## is it ?
