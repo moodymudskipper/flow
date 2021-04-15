@@ -32,22 +32,26 @@ add_comment_calls <- function(fun, prefix = "##"){
   ## split by line
   src <- strsplit(src, "\\n")[[1]]
 
-  ## replace comments by call to `#`()
-  pattern <- paste0("^\\s*(", prefix, ".*?)$")
-  coms_lgl <- grepl(pattern, src)
+  for (prefix in prefix) {
+    ## replace comments by call to `#`()
+    pattern <- paste0("^\\s*(", prefix, ".*?)$")
 
-  com <- gsub(pattern, "\\1", src[coms_lgl])
+    coms_lgl <- grepl(pattern, src)
 
-  # remove comment prefix
-  com <- sub(paste0("^\\s*", prefix,"\\s*"), "", com)
+    com <- gsub(pattern, "\\1", src[coms_lgl])
 
-  # escape quotes
-  com <- gsub('"', '\\\\"', com)
-  com <- sprintf('`#`("%s")', com)
+    # remove comment prefix
+    com <- sub(paste0("^\\s*", prefix,"\\s*"), "", com)
 
-  ## rebuild function
+    # escape quotes
+    com <- gsub('"', '\\\\"', com)
+    com <- sprintf('`#`("%s")', com)
 
-  src[coms_lgl] <- com
+    ## rebuild function
+
+    src[coms_lgl] <- com
+  }
+
   src <- paste(src, collapse = "\n")
   src <- str2lang(src)
   eval(src)
@@ -82,8 +86,8 @@ get_last_call_type <- function(expr){
   if (is.call(expr)) {
     ## get the last call type from the name of the called function
     last_call_type <- deparse(expr[[1]], width.cutoff = 500)
-  # else if (deparse(expr) %in% c("break","next")) {
-  #   deparse(expr)}
+    # else if (deparse(expr) %in% c("break","next")) {
+    #   deparse(expr)}
   } else  {
     ## set the last call type to "standard"
     last_call_type <- "standard"
@@ -147,14 +151,14 @@ swap_calls <- function(expr){
       expr[[3]] <- call("<-", var, expr[[3]])
 
     if(length(expr) == 4) {
-    no_surrounded_by_curly <-
-      is.call(expr[[4]]) && identical(expr[[4]][[1]], quote(`{`))
-    if (no_surrounded_by_curly)
-      # change the last expression into an assignment to var
-      expr[[4]][[length(expr[[4]])]] <- call("<-", var, expr[[4]][[length(expr[[4]])]])
-    else
-      # change unique expression into an asignment to var
-      expr[[4]] <- call("<-", var, expr[[4]])
+      no_surrounded_by_curly <-
+        is.call(expr[[4]]) && identical(expr[[4]][[1]], quote(`{`))
+      if (no_surrounded_by_curly)
+        # change the last expression into an assignment to var
+        expr[[4]][[length(expr[[4]])]] <- call("<-", var, expr[[4]][[length(expr[[4]])]])
+      else
+        # change unique expression into an asignment to var
+        expr[[4]] <- call("<-", var, expr[[4]])
     }
     return(expr)
   }
@@ -216,5 +220,5 @@ getS3methodSym <- function(fun, x){
   nm
 }
 
- # getS3methodSym("mutate", starwars)
- # getS3methodSym("head", letters)
+# getS3methodSym("mutate", starwars)
+# getS3methodSym("head", letters)

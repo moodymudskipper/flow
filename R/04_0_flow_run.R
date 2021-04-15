@@ -1,8 +1,21 @@
 #' @export
 #' @rdname flow_view
 flow_run <-
-  function(x, prefix = NULL, swap = TRUE, code = TRUE, ...,
-           out = NULL, svg = FALSE, browse = FALSE, show_passes = FALSE) {
+  function(x, prefix = NULL, truncate = NULL, swap = TRUE, code = TRUE,
+           out = NULL, svg = FALSE, browse = FALSE, show_passes = FALSE,
+           engine_opts = getOption("flow.engine_opts")) {
+
+    engine_opts <- as.list(engine_opts)
+    htmlwidgets_opts <- engine_opts[["html_widgets"]]
+    if(any(names(engine_opts) %in% c("nomnoml", "plantuml", "htmlwidgets"))) {
+      if(!all(names(engine_opts) %in% c("nomnoml", "plantuml", "htmlwidgets")))
+        stop("engine_opts should be a list containing only lists named ",
+             "'nomnoml', 'plantuml' or 'htmlwidgets', or a list of parameters to",
+             "forward to the relevant engine function (either `nomnoml::nomnoml` ",
+             "or plantuml:::plot.plantuml.")
+      engine_opts <- engine_opts["nomnoml"]
+    }
+
     ## set `call` to quoted input
     call <- substitute(x)
 
@@ -35,6 +48,7 @@ flow_run <-
     data <- flow::flow_data(
       setNames(list(fun), deparse(fun_sym)),
       prefix = prefix,
+      truncate = truncate,
       nested_fun = NULL,
       swap = swap)
 
@@ -77,10 +91,13 @@ flow_run <-
           data$edges$edge_label)
       }
 
-      nomnoml_code  <- build_nomnoml_code(data, code = code, ...)
+      nomnoml_code  <-
+        do.call(build_nomnoml_code, c(list(data, code = code), engine_opts))
       widget_params <- list(code = nomnoml_code, svg = svg)
-      widget <- htmlwidgets::createWidget(
-        name = "nomnoml", widget_params, package = "nomnoml")
+      createWidget_opts <- htmlwidgets_opts[names(formals(htmlwidgets::createWidget))]
+      widget <- do.call(
+        htmlwidgets::createWidget,
+        c(list(name = "nomnoml", widget_params ,package = "nomnoml"), createWidget_opts))
       if (is.null(out)) return(print(widget))
 
       is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg")
@@ -88,11 +105,14 @@ flow_run <-
         out <- tempfile("flow_", fileext = paste0(".", out))
       }
       ext <- sub(".*?\\.([[:alnum:]]+)$", "\\1", out)
-      if (tolower(ext) %in% c("html", "htm"))
-        htmlwidgets::saveWidget(widget, out)
-      else {
+
+      saveWidget_opts <- htmlwidgets_opts[names(formals(htmlwidgets::saveWidget))]
+
+      if (tolower(ext) %in% c("html", "htm")) {
+        do.call(htmlwidgets::saveWidget, c(list(widget, out), saveWidget_opts))
+      } else {
         html <- tempfile("flow_", fileext = ".html")
-        htmlwidgets::saveWidget(widget, html)
+        do.call(htmlwidgets::saveWidget, c(list(widget, html), saveWidget_opts))
         webshot::webshot(html, out, selector = "canvas")
       }
 

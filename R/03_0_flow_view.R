@@ -5,7 +5,8 @@
 #'
 #' @param x A call, a function, or a path to a script
 #' @param prefix prefix to use for special comments in our code used as block headers,
-#'   must start with `"#"`
+#'   must start with `"#"`, several prefixes can be provided
+#' @param truncate maximum number of characters to be printed per line
 #' @param nested_fun if not NULL, the index or name of the function definition found in
 #'   x that we wish to inspect
 #' @param swap whether to change `var <- if(cond) expr` into
@@ -26,7 +27,7 @@
 #'    sometimes useful
 #' @param engine Either `"nomnoml"` (default) or `"plantuml"` (experimental), if
 #'   the latter, arguments `prefix`, `narrow`, and `code`
-#' @param engine_opts A named list, see details section.
+#' @param engine_opts A named list.
 #'
 #' In the most general case `engine_opts` is a list containing optional sub-lists named
 #' `"nomnoml"`, `"plantuml"`, and `"htmlwidgets"`.
@@ -50,7 +51,12 @@
 #'
 #' @export
 flow_view <- function(
-  x, prefix = NULL, nested_fun = NULL, swap = TRUE, narrow = FALSE, code = TRUE,
+  x, prefix = NULL,
+  truncate = NULL,
+  nested_fun = NULL,
+  swap = TRUE,
+  narrow = FALSE,
+  code = TRUE,
   out = NULL, svg = FALSE,
   engine = c("nomnoml", "plantuml"),
   engine_opts = getOption("flow.engine_opts")) {
@@ -108,6 +114,7 @@ flow_view <- function(
         x_chr = f_chr,
         x = x,
         prefix = prefix,
+        truncate = truncate,
         nested_fun = nested_fun,
         swap = swap,
         out = out,

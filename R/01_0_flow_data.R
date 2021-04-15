@@ -1,5 +1,5 @@
 flow_data <-
-  function(x, prefix = NULL, nested_fun = NULL, swap = TRUE, narrow = FALSE) {
+  function(x, prefix = NULL, nested_fun = NULL, swap = TRUE, narrow = FALSE, truncate = NULL) {
 
     ## fetch fun name from quoted input
     f_sym <- substitute(x)
@@ -107,18 +107,23 @@ flow_data <-
     # we remove the remaining `#`() calls, not super clean but does the job
 
     ## remove misplaced special comments
-    # data$nodes$code <- lapply(data$nodes$code, function(x){
-    #   if(is.list(x) && length(x) && is.call(x[[1]])) {
-    #     txt <- deparse(x[[1]], width.cutoff = 500)
-    #     txt <- gsub("`#`\\(.*?\\)", "", txt)
-    #     str2lang(paste(txt, collapse = "\n"))
-    #   } else x
-    # })
     data$nodes$code_str <- gsub("`#`\\(.*?\\);", "", data$nodes$code_str)
 
     data$nodes$code_str <- gsub(" ", "\u2800", data$nodes$code_str)
 
-    #data$nodes$code <- NULL
+    if(!is.null(truncate)) {
+      data$nodes$code_str <- sapply(
+        strsplit(data$nodes$code_str, "\n"),
+        function(x) paste(
+          ifelse(nchar(x) > truncate, paste0(substr(x, 1, truncate-3),"..."), x),
+          collapse = "\n"))
+      data$nodes$label <- sapply(
+        strsplit(data$nodes$label, "\n"),
+        function(x) paste(
+          ifelse(nchar(x) > truncate, paste0(substr(x, 1, truncate-3),"..."), x),
+          collapse = "\n"))
+    }
+
     ## return data
     data
   }

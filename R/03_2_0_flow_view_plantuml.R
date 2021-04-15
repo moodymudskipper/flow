@@ -1,4 +1,5 @@
-flow_view_plantuml <- function(x_chr, x, prefix, nested_fun, swap, out, svg, engine_opts) {
+flow_view_plantuml <- function(
+  x_chr, x, prefix, truncate, nested_fun, swap, out, svg, engine_opts) {
 
   ## is x a bodiless function ?
   if(is.function(x) && is.null(body(x))) {
@@ -36,7 +37,7 @@ flow_view_plantuml <- function(x_chr, x, prefix, nested_fun, swap, out, svg, eng
   ## is `x` a function ?
   if(is.function(x)) {
     ## build function header code
-    header <- deparse_plantuml(args(x))
+    header <- deparse_plantuml(args(x), truncate)
     # remove the {}
     #header <- paste(header[-length(header)], collapse = "\\n")
     header <- substr(header, 1, nchar(header) - 13)
@@ -78,7 +79,7 @@ flow_view_plantuml <- function(x_chr, x, prefix, nested_fun, swap, out, svg, eng
   }
 
   ## build rest of plantuml code and plantuml object
-  code_str <- build_plantuml_code(x, first = TRUE)
+  code_str <- build_plantuml_code(x, first = TRUE, truncate = truncate)
   # concat params, header and code
   code_str <- paste0(plantuml_skinparam,"\n", header, code_str)
 

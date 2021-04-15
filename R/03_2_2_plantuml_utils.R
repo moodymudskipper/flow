@@ -9,7 +9,7 @@ skinparam ArrowColor black
 
 
 
-build_elseif_txt <- function(expr) {
+build_elseif_txt <- function(expr, truncate) {
   ## flag if the expr is an `if` call
   is_elseif <-
     is.call(expr) && identical(expr[[1]], quote(`if`))
@@ -18,12 +18,12 @@ build_elseif_txt <- function(expr) {
     ## build elseif header code and yes code
     elseif_txt <- sprintf(
       "#e2efda:elseif (if(%s)) then (y)",
-      paste(deparse_plantuml(expr[[2]]), collapse= "\\n"))
-    yes_txt <- build_plantuml_code(expr[[3]])
+      paste(deparse_plantuml(expr[[2]], truncate), collapse= "\\n"))
+    yes_txt <- build_plantuml_code(expr[[3]], truncate = truncate)
     ## is there an else clause ?
     if(length(expr) == 4) {
       ## recurse to build else code, and paste codes
-      txt <- paste(elseif_txt, yes_txt, build_elseif_txt(expr[[4]]), sep = "\n")
+      txt <- paste(elseif_txt, yes_txt, build_elseif_txt(expr[[4]], truncate), sep = "\n")
     } else {
       ##  paste codes
       txt <- paste(elseif_txt, yes_txt, sep = "\n")
@@ -31,7 +31,7 @@ build_elseif_txt <- function(expr) {
   } else {
     ## build else code
     else_txt <- "else (n)"
-    no_txt <-  build_plantuml_code(expr)
+    no_txt <-  build_plantuml_code(expr, truncate = truncate)
     txt <- paste(else_txt, no_txt, sep = "\n")
   }
   ## return the code
@@ -39,7 +39,7 @@ build_elseif_txt <- function(expr) {
 }
 
 # deparse an expression to a correctly escaped character vector
-deparse_plantuml <- function(x) {
+deparse_plantuml <- function(x, truncate) {
   ## deparse to a string
   x <- paste(deparse(x, backtick = TRUE),collapse = "\n")
   ## format using styler
@@ -47,6 +47,12 @@ deparse_plantuml <- function(x) {
   ## replace plantuml special characters with <U+*> syntax
   chars <- c("\\[","\\]","~","\\.","\\*","_","\\-",'"', "<", ">", "&", "\\\\")
   x <- to_unicode(x, chars) #
+  if(!is.null(truncate))  {
+    x <- ifelse(
+      nchar(x) > truncate,
+      paste(substr(x, 1, truncate-3),"..."),
+      x)
+  }
   x <- paste(x, collapse = "\\n")
   x
 }
