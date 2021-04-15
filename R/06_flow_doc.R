@@ -1,20 +1,57 @@
+
+
+
 #' Draw Flow Diagrams for an Entire Package
 #'
 #' @param pkg package name as a string
 #' @param out path to an html file to write to
-#' @param ... additional arguments passed to `flow_view()`
-#'
+#' @inheritParams flow_view
+#' @details
+#' if `pkg` and `out` are left `NULL`, a vignette `diagrams.md` will be built
+#' in the root, so that `pkgdown::build_site` will use it as an additional page.
 #' @export
-flow_doc <- function(pkg, out = paste0(pkg, ".html"), ...) {
-  ## is `out` a path to an html file
-  if(!endsWith(out, ".html")) {
-    ## fail eplicitly
-    stop("`out` must be a path to an html file to write to")
+flow_doc <- function(pkg = NULL, out = NULL, prefix = NULL, truncate = NULL,
+                     swap = TRUE, narrow = FALSE, code = TRUE, svg = FALSE,
+                     engine = c("nomnoml", "plantuml"), engine_opts = getOption("flow.engine_opts")) {
+  ## preprocess arguments
+  engine <- match.arg(engine)
+  as_dots <- function(x) {
+    f <- function(...) environment()$...
+    do.call(f, as.list(x))
+  }
+  `...` <- as_dots(list(prefix = prefix, truncate = truncate,
+                        swap = swap, narrow = narrow, code = code, svg = svg,
+                        engine = engine, engine_opts = engine_opts))
+
+  ## define pkgdown flag
+  pkgdown <- is.null(pkg)
+
+  ## did we specify an output?
+  if(is.null(out)) {
+    ## did we specify a package?
+    if(pkgdown) {
+      ## output so pkgdown::build_site will add report on new page on website
+      out <- "diagrams.md"
+    } else {
+      ## default output
+      out <- paste0(pkg, ".html")
+    }
   }
 
   ## fetch lists of exported and uneported functions from package
+
+  ## did we specify a package?
+  if(pkgdown) {
+    ## guess pkg from working dir and exported funs from NAMESPACE
+    pkg <- basename(getwd())
+    exported <- gsub("export\\((.*?)\\)", "\\1", grep("^export", readLines("NAMESPACE"), value = TRUE))
+  } else {
+    ## fetch exported functions
+    exported <- getNamespaceExports(pkg)
+  }
+
+  ## discard reexported funs from other NS and split into exp and unexp
   all_funs <- lsf.str(asNamespace(pkg))
-  exported <- getNamespaceExports(pkg)
   exported_funs <- intersect(all_funs, exported)
   unexported_funs <- setdiff(all_funs, exported_funs)
 
@@ -36,7 +73,10 @@ flow_doc <- function(pkg, out = paste0(pkg, ".html"), ...) {
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ## Write Rmd header
 
-  rmd_header <- sprintf('---
+    if(pkgdown)  {
+      rmd_header <- '*This page was built using the [{flow}](https://moodymudskipper.github.io/flow/) package*\n\n'
+    } else {
+      rmd_header <- sprintf('---
 title: "%s"
 output:
   html_document:
@@ -45,6 +85,7 @@ output:
 ---
 
 ', pkg)
+    }
 
   cat(rmd_header, file = rmd_output)
 
@@ -191,7 +232,7 @@ output:
         names(sub_funs) == "",
         seq_along(sub_funs),
         names(sub_funs)
-        )
+      )
       has_subfuns <- length(sub_funs) > 0
 
       #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -243,7 +284,6 @@ output:
         }
 
       }
-      #nc <- nchar(fun_chr)
     }
   }
   close(pb)
@@ -251,6 +291,10 @@ output:
   cat("knitting")
   out <- suppressWarnings(normalizePath(out, winslash = "/"))
   rmarkdown::render(rmd_output, output_file = out)
+  if(pkgdown) {
+    # remove the "<!DOCTYPE html>" line
+    writeLines(readLines(out)[-1], out)
+  }
   invisible(NULL)
 }
 
