@@ -76,7 +76,7 @@ flow_view <- function(
 
     ## fetch fun name from quoted input
 
-    f_chr <- deparse(substitute(x))
+    f_chr <- deparse1(substitute(x))
     is_valid_named_list <-
       is.list(x) && length(x) == 1 && !is.null(names(x))
 
