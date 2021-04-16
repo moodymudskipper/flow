@@ -45,7 +45,7 @@ flow_run <-
     }
 
     ## build the diagram data from the function
-    data <- flow::flow_data(
+    data <- flow_data(
       setNames(list(fun), deparse(fun_sym)),
       prefix = prefix,
       truncate = truncate,
