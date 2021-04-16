@@ -44,15 +44,19 @@ deparse_plantuml <- function(x, truncate) {
   x <- paste(deparse(x, backtick = TRUE),collapse = "\n")
   ## format using styler
   x <- styler::style_text(x)
-  ## replace plantuml special characters with <U+*> syntax
-  chars <- c("\\[","\\]","~","\\.","\\*","_","\\-",'"', "<", ">", "&", "\\\\")
-  x <- to_unicode(x, chars) #
+
+  ## truncate if relevant
   if(!is.null(truncate))  {
     x <- ifelse(
       nchar(x) > truncate,
       paste(substr(x, 1, truncate-3),"..."),
       x)
   }
+  ## replace plantuml special characters with <U+*> syntax
+  chars <- c("\\[","\\]","~","\\.","\\*","_","\\-",'"', "<", ">", "&", "\\\\")
+  x <- to_unicode(x, chars) #
+
+  ## collapse
   x <- paste(x, collapse = "\\n")
   x
 }

@@ -123,6 +123,7 @@ flow_view <- function(
       f_chr = f_chr,
       x  = x,
       prefix  = prefix,
+      truncate = truncate,
       nested_fun = nested_fun,
       swap = swap,
       narrow = narrow,
