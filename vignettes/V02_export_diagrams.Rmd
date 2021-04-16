@@ -41,5 +41,3 @@ flow_view(ave, out = "html")
 flow_view(ave, out = "pdf")
 flow_view(ave, out = "jpeg")
 ```
-
-For *html* output you might want to set the `svg` parameter to `TRUE` so that you'll be able to select and copy the code.

@@ -79,10 +79,6 @@ flow_view(rle, out = "html")
 #> [1] "*******.html"
 ```
 
-When exporting to *html*, 
-you might sometimes want to use SVG rendering by using the argument `svg = TRUE`. 
-A difference is that it makes text selectable.
-
 ## Display comments as code block headers
 
 Comments and diagrams are two nice ways of understanding code, so why not use 

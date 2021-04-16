@@ -13,7 +13,6 @@ flow_debug(
   code = TRUE,
   ...,
   out = NULL,
-  svg = FALSE,
   browse = FALSE
 )
 
@@ -24,7 +23,6 @@ flow_debugonce(
   code = TRUE,
   ...,
   out = NULL,
-  svg = FALSE,
   browse = FALSE
 )
 
@@ -47,10 +45,6 @@ defined by special comments.}
 Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 export the objec to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
-
-\item{svg}{only for default or html output, whether to use svg rendering, rendering
-is more robust without it, but it makes text selectable on output which is
-sometimes useful}
 
 \item{browse}{whether to debug step by step (block by block),
 can also be a vector of block ids, in this case \code{browser()} calls will be

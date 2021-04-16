@@ -15,7 +15,7 @@
 #' @export
 flow_debug <- function(
   f, prefix = NULL, swap = TRUE, code = TRUE, ...,
-  out = NULL, svg = FALSE, browse = FALSE) {
+  out = NULL, browse = FALSE) {
   call <- match.call()
   call[[1]] <- quote(flow::flow_run)
   names(call)[names(call) == "f"] <- "x"
@@ -38,7 +38,7 @@ flow_debug <- function(
 #' @rdname flow_debug
 flow_debugonce <- function(
   f, prefix = NULL, swap = TRUE, code = TRUE, ...,
-  out = NULL, svg = FALSE, browse = FALSE) {
+  out = NULL, browse = FALSE) {
   call <- match.call()
   call[[1]] <- quote(flow::flow_run)
   names(call)[names(call) == "f"] <- "x"

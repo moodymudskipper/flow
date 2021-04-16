@@ -2,7 +2,7 @@
 #' @rdname flow_view
 flow_run <-
   function(x, prefix = NULL, truncate = NULL, swap = TRUE, code = TRUE,
-           out = NULL, svg = FALSE, browse = FALSE, show_passes = FALSE,
+           out = NULL, browse = FALSE, show_passes = FALSE,
            engine_opts = getOption("flow.engine_opts")) {
 
     engine_opts <- as.list(engine_opts)
@@ -15,6 +15,7 @@ flow_run <-
              "or plantuml:::plot.plantuml.")
       engine_opts <- engine_opts["nomnoml"]
     }
+    svg <- is.null(out) || endsWith(out, ".html") || endsWith(out, ".html")
 
     ## set `call` to quoted input
     call <- substitute(x)

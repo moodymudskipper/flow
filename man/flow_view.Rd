@@ -14,7 +14,6 @@ flow_view(
   narrow = FALSE,
   code = TRUE,
   out = NULL,
-  svg = FALSE,
   engine = c("nomnoml", "plantuml"),
   engine_opts = getOption("flow.engine_opts")
 )
@@ -26,7 +25,6 @@ flow_run(
   swap = TRUE,
   code = TRUE,
   out = NULL,
-  svg = FALSE,
   browse = FALSE,
   show_passes = FALSE,
   engine_opts = getOption("flow.engine_opts")
@@ -57,10 +55,6 @@ defined by special comments.}
 Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 export the objec to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
-
-\item{svg}{only for default or html output, whether to use svg rendering, rendering
-is more robust without it, but it makes text selectable on output which is
-sometimes useful}
 
 \item{engine}{Either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental), if
 the latter, arguments \code{prefix}, \code{narrow}, and \code{code}}

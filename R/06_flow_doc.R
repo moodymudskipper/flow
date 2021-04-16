@@ -11,7 +11,7 @@
 #' in the root, so that `pkgdown::build_site` will use it as an additional page.
 #' @export
 flow_doc <- function(pkg = NULL, out = NULL, prefix = NULL, truncate = NULL,
-                     swap = TRUE, narrow = FALSE, code = TRUE, svg = FALSE,
+                     swap = TRUE, narrow = FALSE, code = TRUE,
                      engine = c("nomnoml", "plantuml"), engine_opts = getOption("flow.engine_opts")) {
   ## preprocess arguments
   engine <- match.arg(engine)
@@ -20,7 +20,7 @@ flow_doc <- function(pkg = NULL, out = NULL, prefix = NULL, truncate = NULL,
     do.call(f, as.list(x))
   }
   `...` <- as_dots(list(prefix = prefix, truncate = truncate,
-                        swap = swap, narrow = narrow, code = code, svg = svg,
+                        swap = swap, narrow = narrow, code = code,
                         engine = engine, engine_opts = engine_opts))
 
   ## define pkgdown flag

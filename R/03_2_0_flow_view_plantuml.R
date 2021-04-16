@@ -1,5 +1,5 @@
 flow_view_plantuml <- function(
-  x_chr, x, prefix, truncate, nested_fun, swap, out, svg, engine_opts) {
+  x_chr, x, prefix, truncate, nested_fun, swap, out, svg = FALSE, engine_opts) {
 
   ## is x a bodiless function ?
   if(is.function(x) && is.null(body(x))) {

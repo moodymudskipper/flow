@@ -22,9 +22,6 @@
 #'   Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 #'   export the objec to a temp file of the relevant format and open it,
 #'   if a regular path is used the format will be guessed from the extension.
-#' @param svg only for default or html output, whether to use svg rendering, rendering
-#'   is more robust without it, but it makes text selectable on output which is
-#'    sometimes useful
 #' @param engine Either `"nomnoml"` (default) or `"plantuml"` (experimental), if
 #'   the latter, arguments `prefix`, `narrow`, and `code`
 #' @param engine_opts A named list.
@@ -57,7 +54,7 @@ flow_view <- function(
   swap = TRUE,
   narrow = FALSE,
   code = TRUE,
-  out = NULL, svg = FALSE,
+  out = NULL,
   engine = c("nomnoml", "plantuml"),
   engine_opts = getOption("flow.engine_opts")) {
 
@@ -73,6 +70,7 @@ flow_view <- function(
   }
 
   engine = match.arg(engine)
+  svg <- is.null(out) || endsWith(out, ".html") || endsWith(out, ".html")
 
     ## fetch fun name from quoted input
 
@@ -113,7 +111,6 @@ flow_view <- function(
         nested_fun = nested_fun,
         swap = swap,
         out = out,
-        svg = svg,
         engine_opts = engine_opts)
       return(invisible(NULL))
     }
