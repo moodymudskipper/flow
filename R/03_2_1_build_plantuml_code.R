@@ -75,7 +75,9 @@ block_to_plantuml <- function(expr, truncate) {
   ## is it a list containing several items ?
   if(length(expr) > 1) {
     ## deparse all expressions and build plantuml code
-    deparsed <- sapply(expr, function(x) block_to_plantuml(list(x), truncate))
+    deparsed <- sapply(expr, deparse_plantuml, truncate)
+    deparsed <- paste(deparsed, collapse = "\n")
+    deparsed <- paste0(":",deparsed, ";")
     return(deparsed)
   }
 
