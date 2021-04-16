@@ -1,0 +1,45 @@
+---
+title: "Export Diagrams"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Export Diagrams}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(flow)
+```
+
+By default diagrams are shown in the viewer window. This might be enough,
+especially if you are lucky enoug to have a touch screen to zoom in and out on the relevant subparts, but you might want to export your diagram
+to share it or to explore it more conveniently.
+
+This is done by using the `out` parameter of `flow_view()` and `flow_run()`.
+
+The format will be infered from the file extension so you might do :
+
+```{r, eval = FALSE}
+library(flow)
+flow_view(ave, out = "ave.png")
+flow_view(ave, out = "ave.html")
+flow_view(ave, out = "some_folder/ave.pdf")
+flow_view(ave, out = "C:/some_folder/ave.jpeg")
+```
+
+If your goal is to explore rather than archive you might want to use
+the following shorthands, which will save the output as a temp file and
+open it with your default application.
+
+```{r, eval = FALSE}
+flow_view(ave, out = "png")
+flow_view(ave, out = "html")
+flow_view(ave, out = "pdf")
+flow_view(ave, out = "jpeg")
+```
+
+For *html* output you might want to set the `svg` parameter to `TRUE` so that you'll be able to select and copy the code.

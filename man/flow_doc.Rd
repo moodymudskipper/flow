@@ -12,7 +12,6 @@ flow_doc(
   swap = TRUE,
   narrow = FALSE,
   code = TRUE,
-  svg = FALSE,
   engine = c("nomnoml", "plantuml"),
   engine_opts = getOption("flow.engine_opts")
 )
@@ -36,10 +35,6 @@ must start with \code{"#"}, several prefixes can be provided}
 \item{code}{Whether to display the code in code blocks or only the header, to be
 more compact, if \code{NA}, the code will be displayed only if no header is
 defined by special comments.}
-
-\item{svg}{only for default or html output, whether to use svg rendering, rendering
-is more robust without it, but it makes text selectable on output which is
-sometimes useful}
 
 \item{engine}{Either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental), if
 the latter, arguments \code{prefix}, \code{narrow}, and \code{code}}

@@ -1,5 +1,5 @@
 Name: flow_view
-Description: View selection (function, script, or path) as a flow diagram
+Description: View selection (function, code, or path) as a flow diagram
 Binding: flow_view_addin
 Interactive: false
 

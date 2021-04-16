@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+
 ## Your first diagram
 
 We use the function `flow_view()` to draw a function as a diagram. It can be any

@@ -3,5 +3,13 @@ pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   Draw-a-function: Draw-a-function.html
-last_built: 2021-04-15T22:37Z
+  V01_simple_usage: V01_simple_usage.html
+  V02_export_diagrams: V02_export_diagrams.html
+  V03_addins: V03_addins.html
+  V04_customize: V04_customize.html
+  V05_nested_functions: V05_nested_functions.html
+  V06_advanced_debugging: V06_advanced_debugging.html
+  V07_flow_doc: V07_flow_doc.html
+  V08_engine_opts: V08_engine_opts.html
+last_built: 2021-04-16T14:08Z
 

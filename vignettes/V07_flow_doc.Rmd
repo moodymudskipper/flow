@@ -1,0 +1,35 @@
+---
+title: "Document a Whole Package with `flow_doc`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Document a Whole Package with `flow_doc`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The `flow_doc()` function provides a way to draw all the functions of a package
+and store them in an *html* report.
+
+The `pkg` argument can be any package name, from base R, CRAN, or other including your local pakages.
+
+The `out` argument must be a path to an *html* or *md* file.
+
+If you don't provide nor `pkg` nor `out`, a `diagrams.md` file will be created
+at the root of your project folder, so that when you run `pkgdown::build_site`
+it will be knitted into a new section.
+
+The [Diagrams](https://moodymudskipper.github.io/flow/articles/Draw-a-function.html)
+section of the [website](https://moodymudskipper.github.io/flow/)
+was built this way, simply by using the following call :
+
+```{r, eval = FALSE}
+library(flow)
+flow_doc(prefix = "##")
+```

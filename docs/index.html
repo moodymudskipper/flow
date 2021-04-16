@@ -57,6 +57,30 @@
 <li>
       <a href="articles/Draw-a-function.html">Draw a function</a>
     </li>
+    <li>
+      <a href="articles/V01_simple_usage.html">Simple Usage</a>
+    </li>
+    <li>
+      <a href="articles/V02_export_diagrams.html">Export Diagrams</a>
+    </li>
+    <li>
+      <a href="articles/V03_addins.html">Setup and Use the Addins</a>
+    </li>
+    <li>
+      <a href="articles/V04_customize.html">Customize Your Diagrams</a>
+    </li>
+    <li>
+      <a href="articles/V05_nested_functions.html">Explore Nested Functions</a>
+    </li>
+    <li>
+      <a href="articles/V06_advanced_debugging.html">Advanced Debugging</a>
+    </li>
+    <li>
+      <a href="articles/V07_flow_doc.html">Document a Whole Package with `flow_doc`</a>
+    </li>
+    <li>
+      <a href="articles/V08_engine_opts.html">Advanced Engine Options</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -103,22 +127,27 @@
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">flow</span>)
-<span class="fu"><a href="reference/flow_view.html">flow_view</a></span>(<span class="no">median.default</span>)</pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-2-1.png" width="100%"></p>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">flow</span>)</pre></div>
+<p>Using default nomnoml engine</p>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="reference/flow_view.html">flow_view</a></span>(<span class="no">median.default</span>)</pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="100%"></p>
+<p>Using plantuml engine (make sure the <a href="https://github.com/rkrug/plantuml">{plantuml}</a> package is installed).</p>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="reference/flow_view.html">flow_view</a></span>(<span class="no">median.default</span>, <span class="kw">engine</span> <span class="kw">=</span> <span class="st">"plantuml"</span>)</pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
+<p>Visualize which logical path is taken by a call (if calling a S3 generic as below, the relevant S3 method is presented):</p>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="no">vec</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>:<span class="fl">3</span>, <span class="fl">NA</span>)
+<span class="fu"><a href="reference/flow_view.html">flow_run</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span>(<span class="no">vec</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
+<span class="co">#&gt; [1] 2</span></pre></div>
 <p>There are way too many features to show them all on a README, check the vignette <a href="https://moodymudskipper.github.io/flow/articles/Draw-a-function.html">Draw a function</a> for a deeper dive. More vignettes to come!</p>
 <p>The following code gives you a taste of the possibilities.</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="co"># use plantuml</span>
-<span class="fu"><a href="reference/flow_view.html">flow_view</a></span>(<span class="no">median.default</span>, <span class="kw">engine</span> <span class="kw">=</span> <span class="st">"plantuml"</span>)
+<div class="sourceCode" id="cb6"><pre class="r"><span class="co"># use plantuml</span>
 
 <span class="co"># exports (supports png, jpeg, pdf, html)</span>
 <span class="co"># shortcuts are available to export to temp file and open</span>
 <span class="co"># (often easier to explore there than in the IDE)</span>
 <span class="fu"><a href="reference/flow_view.html">flow_view</a></span>(<span class="no">median.default</span>, <span class="kw">out</span> <span class="kw">=</span> <span class="st">"png"</span>)
 
-<span class="co"># visualize which path was taken (relevant S3 method is presented)</span>
-<span class="no">vec</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>:<span class="fl">3</span>, <span class="fl">NA</span>)
-<span class="fu"><a href="reference/flow_view.html">flow_run</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span>(<span class="no">vec</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
+
 
 <span class="co"># works when code fails too (handy to debug!)</span>
 <span class="fu"><a href="reference/flow_view.html">flow_run</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span>(<span class="no">iris</span>))
@@ -134,6 +163,21 @@
 <span class="co"># check what path is taken inside of `mean.default` when median is called</span>
 <span class="fu"><a href="reference/flow_debug.html">flow_debugonce</a></span>(<span class="no">mean.default</span>)
 <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span>(<span class="fl">1</span>:<span class="fl">4</span>)</pre></div>
+</div>
+<div id="detailed-vignettes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#detailed-vignettes" class="anchor"></a>detailed vignettes</h2>
+<p>Be sure to check the following vignette for a detailed breakdown of all features :</p>
+<ul>
+<li>Simple usage</li>
+<li>Export diagrams</li>
+<li>Setup the addin for a more efficient workflow</li>
+<li>Customize your diagrams</li>
+<li>Advanced debugging</li>
+<li>Document a package with <code>flow_doc</code>
+</li>
+<li>Advanced engine options</li>
+</ul>
 </div>
 </div>
 
