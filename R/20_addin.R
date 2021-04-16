@@ -19,7 +19,7 @@ flow_view_addin <- function() {
 
   ## is the selection of length 1 (presumably a function) ?
   if (length(selection_lng) == 1) {
-    # if length 1 it should be a function, a path as a string litteral or
+    # if length 1 it should be a function, a path as a string literal or
     # a path in a variable
 
     ## flow_view this function
