@@ -48,20 +48,20 @@ build_plantuml_code <- function(expr, first = FALSE, truncate) {
   ## is it the first call ?
   if(first) {
     ## is the last block uncolored
-    if(startsWith(res[n_blocks], ":")) {
+    if(startsWith(res[[n_blocks]], ":")) {
       ## color it green
-      res[n_blocks] <- paste0("#70ad47", res[n_blocks])
+      res[[n_blocks]] <- paste0("#70ad47", res[[n_blocks]])
     } else {
       ## is it an if call ?
-      if(startsWith(res[n_blocks], "#e2efda:if")) {
+      if(startsWith(res[[n_blocks]], "#e2efda:if")) {
         ## change its color
-        res[n_blocks] <- sub("^#e2efda", "#70ad47", res[n_blocks])
+        res[[n_blocks]] <- sub("^#e2efda", "#70ad47", res[[n_blocks]])
       }
     }
     ## is the code of the last block not "stop"
-    if(res[n_blocks] != "stop") {
+    if(res[[n_blocks]] != "stop") {
       ## add "stop"
-      res[n_blocks] <- paste0(res[n_blocks], "\nstop")
+      res[[n_blocks]] <- paste0(res[[n_blocks]], "\nstop")
     }
   }
 
