@@ -66,7 +66,6 @@ features :
   - [Advanced debugging](articles/V06_advanced_debugging.html)
   - [Document a whole package with
     `flow_doc`](articles/V07_flow_doc.html)
-  - [Advanced engine options](articles/V08_engine_opts.html)
 
 ## Notes
 

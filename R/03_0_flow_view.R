@@ -24,27 +24,6 @@
 #'   if a regular path is used the format will be guessed from the extension.
 #' @param engine Either `"nomnoml"` (default) or `"plantuml"` (experimental), if
 #'   the latter, arguments `prefix`, `narrow`, and `code`
-#' @param engine_opts A named list.
-#'
-#' In the most general case `engine_opts` is a list containing optional sub-lists named
-#' `"nomnoml"`, `"plantuml"`, and `"htmlwidgets"`.
-#'
-#'  - The items of the `nomnoml`
-#'   sub-list will be forwarded to `nomnoml:::build_nomnoml_code()`, unexported but
-#'   documented in `?build_nomnoml_code`, in order to alter
-#'   *nomnoml* diagrams. For instance `fontSize`, `direction = "right"` to have a left to right
-#'   diagram, `ranker = "longest-path"` to see have exit points at the bottom...
-#'   - The items of the `plantuml` sub-list will be forwarded to `plantuml:::plot.plantuml()`,
-#'   , in order to alter  *plantuml* diagrams.
-#'   see `?plantuml:::plot.plantuml` and `?plantuml::plantuml_run`
-#'   - The items of the `htmlwidgets` sub-list will be forwarded to
-#'   `htmlwidgets::createWidget()` or `htmlwidgets::saveWidget()`, which are used by
-#'   the *nomnoml* engine.
-#'
-#' If this structure is not found, the items of `engine_opts` will be forwarded
-#' to `nomnoml:::build_nomnoml_code()` if the engine is `"nomnoml"`, and
-#' `plantuml:::plot.plantuml` if the engine is `"plantuml"`
-#'
 #'
 #' @export
 flow_view <- function(
@@ -55,19 +34,7 @@ flow_view <- function(
   narrow = FALSE,
   code = TRUE,
   out = NULL,
-  engine = c("nomnoml", "plantuml"),
-  engine_opts = getOption("flow.engine_opts")) {
-
-  engine_opts <- as.list(engine_opts)
-  htmlwidgets_opts <- engine_opts[["html_widgets"]]
-  if(any(names(engine_opts) %in% c("nomnoml", "plantuml", "htmlwidgets"))) {
-    if(!all(names(engine_opts) %in% c("nomnoml", "plantuml", "htmlwidgets")))
-      stop("engine_opts should be a list containing only lists named ",
-           "'nomnoml', 'plantuml' or 'htmlwidgets', or a list of parameters to",
-           "forward to the relevant engine function (either `nomnoml::nomnoml` ",
-           "or plantuml:::plot.plantuml.")
-    engine_opts <- engine_opts["engine"]
-  }
+  engine = c("nomnoml", "plantuml")) {
 
   engine = match.arg(engine)
   svg <- is.null(out) || endsWith(out, ".html") || endsWith(out, ".html")
@@ -110,8 +77,7 @@ flow_view <- function(
         truncate = truncate,
         nested_fun = nested_fun,
         swap = swap,
-        out = out,
-        engine_opts = engine_opts)
+        out = out)
       return(invisible(NULL))
     }
 
@@ -127,9 +93,7 @@ flow_view <- function(
       code = code,
       out = out,
       svg = svg,
-      engine = engine,
-      engine_opts = engine_opts,
-      htmlwidgets_opts = htmlwidgets_opts)
+      engine = engine)
 }
 
 

@@ -1,20 +1,19 @@
 flow_view_nomnoml <- function(
   f_chr, x, prefix, truncate, nested_fun, swap, narrow, code, out, svg,
-  engine, engine_opts, htmlwidgets_opts) {
+  engine) {
 
   ## build data
   data <- flow_data(setNames(list(x), f_chr), prefix, nested_fun, swap, narrow,
                     truncate = truncate)
 
   ## build code from data
-  code <- do.call(build_nomnoml_code, c(list(data,code = code), engine_opts))
+  code <- do.call(build_nomnoml_code, c(list(data,code = code)))
 
   ## buildwidget
   x <- list(code = code, svg = svg)
-  createWidget_opts <- htmlwidgets_opts[names(formals(htmlwidgets::createWidget))]
   widget <- do.call(
     htmlwidgets::createWidget,
-    c(list(name = "nomnoml", x,package = "nomnoml"), createWidget_opts))
+    c(list(name = "nomnoml", x,package = "nomnoml")))
 
   ## is the out argument NULL ?
   if (is.null(out)) {
@@ -34,16 +33,14 @@ flow_view_nomnoml <- function(
   ## extract extension from path
   ext <- sub(".*?\\.([[:alnum:]]+)$", "\\1", out)
 
-  saveWidget_opts <- htmlwidgets_opts[names(formals(htmlwidgets::saveWidget))]
-
   ## is `out` a path to a web page ?
   if (tolower(ext) %in% c("html", "htm")) {
     ## save to file
-    do.call(htmlwidgets::saveWidget, c(list(widget, out), saveWidget_opts))
+    do.call(htmlwidgets::saveWidget, c(list(widget, out)))
   } else {
     ## save to a temp html file then convert to required output
     html <- tempfile("flow_", fileext = ".html")
-    do.call(htmlwidgets::saveWidget, c(list(widget, html), saveWidget_opts))
+    do.call(htmlwidgets::saveWidget, c(list(widget, html)))
     webshot::webshot(html, out, selector = "canvas")
   }
 

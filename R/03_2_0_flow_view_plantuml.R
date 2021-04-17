@@ -1,5 +1,5 @@
 flow_view_plantuml <- function(
-  x_chr, x, prefix, truncate, nested_fun, swap, out, svg = FALSE, engine_opts) {
+  x_chr, x, prefix, truncate, nested_fun, swap, out, svg = FALSE) {
 
   ## is x a bodiless function ?
   if(is.function(x) && is.null(body(x))) {
@@ -92,7 +92,7 @@ flow_view_plantuml <- function(
   ## is `out` NULL ?
   if(is.null(out)) {
     ## plot the object and return NULL
-    do.call(plot, c(list(plant_uml_object, vector = svg), engine_opts))
+    do.call(plot, c(list(plant_uml_object, vector = svg)))
     return(invisible(NULL))
 
   }
@@ -107,7 +107,7 @@ flow_view_plantuml <- function(
   }
 
   ## plot the object
-  do.call(plot, c(list(plant_uml_object, file = out, vector = svg), engine_opts))
+  do.call(plot, c(list(plant_uml_object, file = out, vector = svg)))
 
   ## was the out argument a temp file shorthand ?
   if (is_tmp) {
