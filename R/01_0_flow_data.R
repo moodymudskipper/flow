@@ -1,5 +1,5 @@
 flow_data <-
-  function(x, prefix = NULL, nested_fun = NULL, swap = TRUE, narrow = FALSE, truncate = NULL) {
+  function(x, prefix = NULL, narrow = FALSE, nested_fun = NULL, swap = TRUE, truncate = NULL) {
 
     ## fetch fun name from quoted input
     f_sym <- substitute(x)

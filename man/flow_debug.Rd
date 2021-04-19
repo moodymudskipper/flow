@@ -9,21 +9,25 @@
 flow_debug(
   f,
   prefix = NULL,
-  swap = TRUE,
   code = TRUE,
-  ...,
+  narrow = FALSE,
+  truncate = NULL,
+  swap = TRUE,
   out = NULL,
-  browse = FALSE
+  browse = FALSE,
+  show_passes = FALSE
 )
 
 flow_debugonce(
   f,
   prefix = NULL,
-  swap = TRUE,
   code = TRUE,
-  ...,
+  narrow = FALSE,
+  truncate = NULL,
+  swap = TRUE,
   out = NULL,
-  browse = FALSE
+  browse = FALSE,
+  show_passes = FALSE
 )
 
 flow_undebug(f)
@@ -34,12 +38,17 @@ flow_undebug(f)
 \item{prefix}{prefix to use for special comments in our code used as block headers,
 must start with \code{"#"}, several prefixes can be provided}
 
-\item{swap}{whether to change \code{var <- if(cond) expr} into
-\code{if(cond) var <- expr} so the diagram displays better}
-
 \item{code}{Whether to display the code in code blocks or only the header, to be
 more compact, if \code{NA}, the code will be displayed only if no header is
 defined by special comments.}
+
+\item{narrow}{\code{TRUE} makes sure the diagram stays centered on one column
+(they'll be longer but won't shift to the right)}
+
+\item{truncate}{maximum number of characters to be printed per line}
+
+\item{swap}{whether to change \code{var <- if(cond) expr} into
+\code{if(cond) var <- expr} so the diagram displays better}
 
 \item{out}{a path to save the diagram to.
 Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
@@ -49,6 +58,8 @@ if a regular path is used the format will be guessed from the extension.}
 \item{browse}{whether to debug step by step (block by block),
 can also be a vector of block ids, in this case \code{browser()} calls will be
 inserted at the start of these blocks}
+
+\item{show_passes}{label the edges with the number of passes}
 }
 \description{
 These functions are named after the base functions \code{debug()}, \code{undebug()} and

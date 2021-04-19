@@ -1,8 +1,15 @@
 #' @export
 #' @rdname flow_view
 flow_run <-
-  function(x, prefix = NULL, truncate = NULL, swap = TRUE, code = TRUE,
-           out = NULL, browse = FALSE, show_passes = FALSE) {
+  function(x,
+           prefix = NULL,
+           code = TRUE,
+           narrow = FALSE,
+           truncate = NULL,
+           swap = TRUE,
+           out = NULL,
+           browse = FALSE,
+           show_passes = FALSE) {
 
     svg <- is.null(out) || endsWith(out, ".html") || endsWith(out, ".html")
 
@@ -38,6 +45,7 @@ flow_run <-
     data <- flow_data(
       setNames(list(fun), deparse(fun_sym)),
       prefix = prefix,
+      narrow = narrow,
       truncate = truncate,
       nested_fun = NULL,
       swap = swap)

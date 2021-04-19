@@ -14,8 +14,15 @@
 #' @inheritParams flow_run
 #' @export
 flow_debug <- function(
-  f, prefix = NULL, swap = TRUE, code = TRUE, ...,
-  out = NULL, browse = FALSE) {
+  f,
+  prefix = NULL,
+  code = TRUE,
+  narrow = FALSE,
+  truncate = NULL,
+  swap = TRUE,
+  out = NULL,
+  browse = FALSE,
+  show_passes = FALSE) {
   call <- match.call()
   call[[1]] <- quote(flow::flow_run)
   names(call)[names(call) == "f"] <- "x"
@@ -37,8 +44,15 @@ flow_debug <- function(
 #'
 #' @rdname flow_debug
 flow_debugonce <- function(
-  f, prefix = NULL, swap = TRUE, code = TRUE, ...,
-  out = NULL, browse = FALSE) {
+  f,
+  prefix = NULL,
+  code = TRUE,
+  narrow = FALSE,
+  truncate = NULL,
+  swap = TRUE,
+  out = NULL,
+  browse = FALSE,
+  show_passes = FALSE) {
   call <- match.call()
   call[[1]] <- quote(flow::flow_run)
   names(call)[names(call) == "f"] <- "x"

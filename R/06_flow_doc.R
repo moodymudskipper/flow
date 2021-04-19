@@ -10,9 +10,15 @@
 #' if `pkg` and `out` are left `NULL`, a vignette `diagrams.md` will be built
 #' in the root, so that `pkgdown::build_site` will use it as an additional page.
 #' @export
-flow_doc <- function(pkg = NULL, out = NULL, prefix = NULL, truncate = NULL,
-                     swap = TRUE, narrow = FALSE, code = TRUE,
-                     engine = c("nomnoml", "plantuml"), engine_opts = getOption("flow.engine_opts")) {
+flow_doc <- function(
+  pkg = NULL,
+  prefix = NULL,
+  code = TRUE,
+  narrow = FALSE,
+  truncate = NULL,
+  swap = TRUE,
+  out = NULL,
+  engine = c("nomnoml", "plantuml")) {
   ## preprocess arguments
   engine <- match.arg(engine)
   as_dots <- function(x) {
@@ -21,7 +27,7 @@ flow_doc <- function(pkg = NULL, out = NULL, prefix = NULL, truncate = NULL,
   }
   `...` <- as_dots(list(prefix = prefix, truncate = truncate,
                         swap = swap, narrow = narrow, code = code,
-                        engine = engine, engine_opts = engine_opts))
+                        engine = engine))
 
   ## define pkgdown flag
   pkgdown <- is.null(pkg)
@@ -37,6 +43,8 @@ flow_doc <- function(pkg = NULL, out = NULL, prefix = NULL, truncate = NULL,
       out <- paste0(pkg, ".html")
     }
   }
+
+  ext <- sub("^.*?\\.(.*?)", "\\1", out)
 
   ## did we specify a package?
   if(pkgdown) {
@@ -71,17 +79,17 @@ flow_doc <- function(pkg = NULL, out = NULL, prefix = NULL, truncate = NULL,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ## Write Rmd header
 
-  if(pkgdown)  {
+  if(ext == "md")  {
     rmd_header <- ''
   } else {
-    rmd_header <- sprintf(paste0(
+    rmd_header <- sprintf(paste(
       '---',
       'title: "%s"',
       'output:',
       '  html_document:',
       '    toc: true',
       '    toc_float: true',
-      '---\n\n'), pkg)
+      '---\n\n', sep="\n"), pkg)
   }
 
   cat(rmd_header, file = rmd_output)
@@ -95,6 +103,7 @@ flow_doc <- function(pkg = NULL, out = NULL, prefix = NULL, truncate = NULL,
     ns = ns,
     path = path,
     exp_unexp = "exp",
+    pkg = pkg,
     ...)
 
   append_function_diagrams(
@@ -105,12 +114,13 @@ flow_doc <- function(pkg = NULL, out = NULL, prefix = NULL, truncate = NULL,
     ns = ns,
     path = path,
     exp_unexp = "unexp",
+    pkg = pkg,
     ...)
 
   cat("knitting")
   out <- suppressWarnings(normalizePath(out, winslash = "/"))
   rmarkdown::render(rmd_output, output_file = out)
-  if(pkgdown) {
+  if(ext == "md") {
     # remove the "<!DOCTYPE html>" line
     writeLines(readLines(out)[-1], out)
   }
@@ -128,7 +138,9 @@ append_function_diagrams <- function(
   ns,
   path,
   exp_unexp,
+  pkg,
   ...) {
+  if(!length(funs_split)) return(invisible(NULL))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ## Write  title

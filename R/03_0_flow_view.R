@@ -27,12 +27,13 @@
 #'
 #' @export
 flow_view <- function(
-  x, prefix = NULL,
+  x,
+  prefix = NULL,
+  code = TRUE,
+  narrow = FALSE,
   truncate = NULL,
   nested_fun = NULL,
   swap = TRUE,
-  narrow = FALSE,
-  code = TRUE,
   out = NULL,
   engine = c("nomnoml", "plantuml")) {
 
@@ -62,8 +63,8 @@ flow_view <- function(
              "and graphViz ('https://graphviz.org/')")
 
       ## are any unsupported argument not missing ?
-      if(!missing(prefix) ||
-         !missing(narrow) || !missing(code)) {
+      if(!is.null(prefix) ||
+         narrow || !code) {
         ## warn that they will be ignored
         warning("The following arguments are ignored if `engine` is set to ",
                 "\"plantuml\" : `prefix`, `narrow`, `code`")
