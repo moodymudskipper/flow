@@ -76,8 +76,8 @@ block_to_plantuml <- function(expr, truncate) {
   if(length(expr) > 1) {
     ## deparse all expressions and build plantuml code
     deparsed <- sapply(expr, deparse_plantuml, truncate)
-    deparsed <- paste(deparsed, collapse = "\n")
     deparsed <- paste0(":",deparsed, ";")
+    deparsed <- paste(deparsed, collapse = "\n")
     return(deparsed)
   }
 
