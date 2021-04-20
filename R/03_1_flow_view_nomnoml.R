@@ -3,8 +3,13 @@ flow_view_nomnoml <- function(
   engine) {
 
   ## build data
-  data <- flow_data(setNames(list(x), f_chr), prefix, nested_fun, swap, narrow,
-                    truncate = truncate)
+  data <- flow_data(
+    setNames(list(x), f_chr),
+    prefix = prefix,
+    narrow = narrow,
+    nested_fun = nested_fun,
+    swap = swap,
+    truncate = truncate)
 
   ## build code from data
   code <- do.call(build_nomnoml_code, c(list(data,code = code)))
