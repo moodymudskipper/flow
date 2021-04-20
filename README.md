@@ -42,7 +42,7 @@ Using default nomnoml engine
 flow_view(rle)
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+![nomnoml](man/figures/README_nomnoml.png)
 
 Using plantuml engine (make sure the
 [{plantuml}](https://github.com/rkrug/plantuml) package is installed).
@@ -51,23 +51,12 @@ Using plantuml engine (make sure the
 flow_view(rle, engine = "plantuml")
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
-
-## detailed vignettes
-
-Be sure to check the following vignettes for a detailed breakdown of all
-features :
-
-  - [Simple usage and addins](articles/V01_simple_usage.html)
-  - [Export diagrams](articles/V02_export_diagrams.html)
-  - [Setup and use the addins](articles/V03_addins.html)
-  - [Customize your diagrams](articles/V04_customize.html)
-  - [Explore nested functions](articles/V05_nested_functions.html)
-  - [Advanced debugging](articles/V06_advanced_debugging.html)
-  - [Document a whole package with
-    `flow_doc`](articles/V07_flow_doc.html)
+![plantuml](man/figures/README_plantuml.png)
 
 ## Notes
+
+Make sure to check the vignettes for a detailed breakdown of all
+features.
 
 *{flow}* is built on top of Javier Luraschi’s *{nomnoml}* package, and
 Rainer M Krug ’s *{plantuml}* package, the latter only available from
