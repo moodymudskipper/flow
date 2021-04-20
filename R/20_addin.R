@@ -18,7 +18,7 @@ flow_view_addin <- function() {
   selection_lng <- parse(text = selection)
 
   ## is the selection of length 1 (presumably a function) ?
-  if (length(selection_lng) == 1) {
+  if (length(selection_lng) == 1 && length(selection_lng[[1]])  == 1) {
     # if length 1 it should be a function, a path as a string literal or
     # a path in a variable
 
@@ -43,7 +43,7 @@ flow_run_addin <- function() {
 
   ## parse the selection
   selection_lng <- str2lang(selection)
-  print(eval.parent(bquote(flow::flow_view(.(selection_lng[[1]])))))
+  print(eval.parent(bquote(flow::flow_run(.(selection_lng)))))
   invisible()
   # nocov end
 }
