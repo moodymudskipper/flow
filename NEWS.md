@@ -1,3 +1,23 @@
+# flow 0.0.2
+
+The API was simplified, we lose some flexibility, but I doubt we lose anything
+useful, if you miss something, speak up in the github issues.
+
+* Various bug fixes
+* 7 new vignettes and a reworked README
+* The `sub_fun_id` argument was renamed into nested_fun
+* `prefix` can now be a vector, in which case all prefixes are considered"
+* A new `truncate` argument provides a way to improve display of wide diagrams,
+by truncating output.
+* Arguments were reordered.
+* We can't forward arguments to {plantuml} or {nomnoml} package functions anymore,
+  this wasn't very useful and added unnecessary complexity.
+* `flow_doc` supports `md` output and in particular if no argument is given,
+a *diagrams.md* file is created at the root of the project folder so it can
+be leveraged by *{pkgdown}* to add a section to the website that will contain
+all diagrams (as is done on 
+{flow}'s website)
+
 # flow 0.0.1
 
 * Added a `NEWS.md` file to track changes to the package.
@@ -25,3 +45,5 @@ call `debug_run()` indirectly through another call.
 are supported) but is more polished and more compact.
 * The new function `flow_doc()` draws the diagrams of all the functions of a
 package to an *html* file.
+
+

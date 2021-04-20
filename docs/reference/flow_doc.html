@@ -80,19 +80,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -103,12 +97,33 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Draw-a-function.html">Draw a function</a>
+      <a href="../articles/V01_simple_usage.html">Simple Usage</a>
+    </li>
+    <li>
+      <a href="../articles/V02_export_diagrams.html">Export Diagrams</a>
+    </li>
+    <li>
+      <a href="../articles/V03_addins.html">Setup and Use the Addins</a>
+    </li>
+    <li>
+      <a href="../articles/V04_customize.html">Customize Your Diagrams</a>
+    </li>
+    <li>
+      <a href="../articles/V05_nested_functions.html">Explore Nested Functions</a>
+    </li>
+    <li>
+      <a href="../articles/V06_advanced_debugging.html">Advanced Debugging</a>
+    </li>
+    <li>
+      <a href="../articles/V07_flow_doc.html">Document a Whole Package with `flow_doc`</a>
     </li>
   </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
+</li>
+<li>
+  <a href="../diagrams.html">Diagrams</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -135,7 +150,16 @@
     <p>Draw Flow Diagrams for an Entire Package</p>
     </div>
 
-    <pre class="usage"><span class='fu'>flow_doc</span>(<span class='no'>pkg</span>, <span class='kw'>out</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='no'>pkg</span>, <span class='st'>".html"</span>), <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>flow_doc</span>(
+  <span class='kw'>pkg</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>narrow</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>truncate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>swap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>engine</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"nomnoml"</span>, <span class='st'>"plantuml"</span>)
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,15 +169,45 @@
       <td><p>package name as a string</p></td>
     </tr>
     <tr>
-      <th>out</th>
-      <td><p>path to an html file to write to</p></td>
+      <th>prefix</th>
+      <td><p>prefix to use for special comments in our code used as block headers,
+must start with <code>"#"</code>, several prefixes can be provided</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>additional arguments passed to flow_view</p></td>
+      <th>code</th>
+      <td><p>Whether to display the code in code blocks or only the header, to be
+more compact, if <code>NA</code>, the code will be displayed only if no header is
+defined by special comments.</p></td>
+    </tr>
+    <tr>
+      <th>narrow</th>
+      <td><p><code>TRUE</code> makes sure the diagram stays centered on one column
+(they'll be longer but won't shift to the right)</p></td>
+    </tr>
+    <tr>
+      <th>truncate</th>
+      <td><p>maximum number of characters to be printed per line</p></td>
+    </tr>
+    <tr>
+      <th>swap</th>
+      <td><p>whether to change <code>var &lt;- if(cond) expr</code> into
+<code>if(cond) var &lt;- expr</code> so the diagram displays better</p></td>
+    </tr>
+    <tr>
+      <th>out</th>
+      <td><p>path to an html or md file to write to</p></td>
+    </tr>
+    <tr>
+      <th>engine</th>
+      <td><p>Either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental), if
+the latter, arguments <code>prefix</code>, <code>narrow</code>, and <code>code</code></p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>if <code>pkg</code> and <code>out</code> are left <code>NULL</code>, a vignette <code>diagrams.md</code> will be built
+in the root, so that <code><a href='https://pkgdown.r-lib.org/reference/build_site.html'>pkgdown::build_site</a></code> will use it as an additional page.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

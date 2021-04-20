@@ -2,7 +2,8 @@
 
 #' @importFrom utils head getS3method browseURL tail getFromNamespace lsf.str
 #' @importFrom utils txtProgressBar setTxtProgressBar capture.output
-#' @importFrom stats setNames
+#' @importFrom utils installed.packages
+#' @importFrom stats setNames aggregate
 NULL
 
 ## usethis namespace: start

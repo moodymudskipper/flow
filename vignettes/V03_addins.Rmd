@@ -1,0 +1,23 @@
+---
+title: "Setup and Use the Addins"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Setup and Use the Addins}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+*{flow}* provides a pair of addins so you can run `flow_view()` or `flow_run()` on
+your selection.
+
+The `flow_view()` addin will figure out if the selection is a path, the 
+symbol of a function, or code. The `flow_run` should be used on calls only.
+
+![addins](addins.gif)
