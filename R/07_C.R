@@ -125,13 +125,6 @@ make_groups <- function(code) {
         df
 }
 
-#' Draw Flow Diagram of a C Function
-#'
-#'
-#' @param x url of the file
-#' @param fun function as a string, if missing, `build_plantuml_code_from_c()`
-#'   will name the possible choices, and return invisibly a named list of the
-#'   code of the functions.
 build_plantuml_code_from_c <- function(x, fun = NULL, out = NULL) {
         x_is_path <- grepl("\\.c(pp)?$", x )
         if(x_is_path) {
@@ -162,7 +155,7 @@ build_plantuml_code_from_c <- function(x, fun = NULL, out = NULL) {
         ## is `out` NULL ?
         if(is.null(out)) {
                 ## plot the object and return NULL
-                plot(plant_uml_object, vector = svg)
+                plot(plant_uml_object)
                 return(invisible(NULL))
         }
 
@@ -176,7 +169,7 @@ build_plantuml_code_from_c <- function(x, fun = NULL, out = NULL) {
         }
 
         ## plot the object
-        plot(plant_uml_object, vector = svg, file = out)
+        plot(plant_uml_object, file = out)
 
         ## was the out argument a temp file shorthand ?
         if (is_tmp) {
