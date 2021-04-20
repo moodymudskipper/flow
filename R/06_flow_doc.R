@@ -25,9 +25,6 @@ flow_doc <- function(
     f <- function(...) environment()$...
     do.call(f, as.list(x))
   }
-  `...` <- as_dots(list(prefix = prefix, truncate = truncate,
-                        swap = swap, narrow = narrow, code = code,
-                        engine = engine))
 
   ## define pkgdown flag
   pkgdown <- is.null(pkg)
@@ -104,7 +101,13 @@ flow_doc <- function(
     path = path,
     exp_unexp = "exp",
     pkg = pkg,
-    ...)
+
+    prefix = prefix,
+    truncate = truncate,
+    swap = swap,
+    narrow = narrow,
+    code = code,
+    engine = engine)
 
   append_function_diagrams(
     title = "# Unexported functions\n\n",
@@ -115,7 +118,13 @@ flow_doc <- function(
     path = path,
     exp_unexp = "unexp",
     pkg = pkg,
-    ...)
+
+    prefix = prefix,
+    truncate = truncate,
+    swap = swap,
+    narrow = narrow,
+    code = code,
+    engine = engine)
 
   cat("knitting")
   out <- suppressWarnings(normalizePath(out, winslash = "/"))
