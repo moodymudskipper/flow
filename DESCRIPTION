@@ -9,7 +9,6 @@ Authors@R:
 Description: Visualize as flow diagrams the logic of functions, expressions or scripts and ease debugging.
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
 Suggests: 
     testthat (>= 2.1.0),
     covr,
