@@ -49,10 +49,12 @@ green for returned values (using `return()`) or just reaching the end of the fun
 If you installed *{plantuml}* you can set `engine` to `"plantuml"`, *plantuml* 
 diagrams are a bit less flexible but they often look more polished and compact.
 
-```{r}
+```{r, eval = FALSE}
 # display a function's body
 flow_view(ave, engine = "plantuml") 
 ```
+
+![plantuml](plantuml.png)
 
 ## `flow_run`
 
