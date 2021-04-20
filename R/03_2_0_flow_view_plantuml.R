@@ -1,6 +1,9 @@
 flow_view_plantuml <- function(
   x_chr, x, prefix, truncate, nested_fun, swap, out, svg = FALSE) {
 
+  if(!is.null(out) && sub("^.*?\\.(.*?)", "\\1", out) %in% c("png", "jpg", "jpeg"))
+    stop("the 'plantuml' engine is only compatible with 'png', 'jpg', 'jpeg' output")
+
   ## is x a bodiless function ?
   if(is.function(x) && is.null(body(x))) {
     ## fail explicitly
