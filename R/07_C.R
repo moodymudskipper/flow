@@ -71,6 +71,11 @@ update_groups <- function(groups, code, label, pattern) {
         groups
 }
 
+rleid <- function(x) {
+        x <- rle(x)$lengths
+        rep(seq_along(x), times=x)
+}
+
 make_groups <- function(code) {
         code1 <- protect_c_code(code)
         groups <- rep_len(NA, nchar(code))
@@ -102,8 +107,8 @@ make_groups <- function(code) {
                 group = groups1,
                 subgroup = groups,
                 chr = strsplit(code, "")[[1]],
-                id_group = data.table::rleid(groups1),
-                id_subgroup = data.table::rleid(groups))
+                id_group = rleid(groups1),
+                id_subgroup = rleid(groups))
         # combine text by subgroup
         df <- aggregate(chr ~ id_group + id_subgroup + group + subgroup, data = df, FUN = function(x) paste(x, collapse =""))
         df <- df[order(df[[1]], df[[2]]),]
@@ -149,7 +154,7 @@ build_plantuml_code_from_c <- function(x, fun = NULL, out = NULL) {
         plantuml_code <- gsub("#70ad47:return(.*?)[^\n]$", "#70ad47:return\\1;\nstop", plantuml_code)
         #print(plantuml_code)
         plantuml_code <- paste(header, plantuml_skinparam, plantuml_code)
-        plant_uml_object <- plantuml::plantuml(plantuml_code)
+        plant_uml_object <- gfn("plantuml", "plantuml")(plantuml_code)
         plot(plant_uml_object, vector = FALSE)
 
         ## is `out` NULL ?

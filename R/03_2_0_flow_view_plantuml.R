@@ -86,7 +86,6 @@ flow_view_plantuml <- function(
   # concat params, header and code
   code_str <- paste0(plantuml_skinparam,"\n", header, code_str)
 
-  gfn <- getFromNamespace
   plantuml <- gfn("plantuml", "plantuml")
   plant_uml_object <- plantuml(code_str)
 

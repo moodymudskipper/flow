@@ -220,5 +220,4 @@ getS3methodSym <- function(fun, x){
   nm
 }
 
-# getS3methodSym("mutate", starwars)
-# getS3methodSym("head", letters)
+gfn <- getFromNamespace
