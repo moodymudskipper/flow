@@ -13,5 +13,5 @@ test_that("flow_view works", {
     if(x) foo else bar
   }
   expect_error(flow_view(fun), NA)
-  expect_error(flow_view(fun, engine = "plantuml"), NA)
+  #expect_error(flow_view(fun, engine = "plantuml"), NA)
 })
