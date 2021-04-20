@@ -40,6 +40,12 @@ flow_view("../tests/testthat.R")
 flow_view(quote(if(1 + 1 == 2) {"ok"} else {"oh no"}))
 ```
 
+`if` statements always branch into two paths, whether an `else` clause is present
+or not. `for`, `while`, and `repeat` loops are also supported.
+
+The colored circles are exit points, orange for errors (using `stop()`), 
+green for returned values (using `return()`) or just reaching the end of the function.
+
 If you installed *{plantuml}* you can set `engine` to `"plantuml"`, *plantuml* 
 diagrams are a bit less flexible but they often look more polished and compact.
 

@@ -83,7 +83,7 @@ call flow_run() on the next call to f()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
 
@@ -99,9 +99,6 @@ call flow_run() on the next call to f()." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/Draw-a-function.html">Draw a function</a>
-    </li>
     <li>
       <a href="../articles/V01_simple_usage.html">Simple Usage</a>
     </li>
@@ -122,9 +119,6 @@ call flow_run() on the next call to f()." />
     </li>
     <li>
       <a href="../articles/V07_flow_doc.html">Document a Whole Package with `flow_doc`</a>
-    </li>
-    <li>
-      <a href="../articles/V08_engine_opts.html">Advanced Engine Options</a>
     </li>
   </ul>
 </li>
@@ -165,23 +159,25 @@ call <code><a href='flow_view.html'>flow_run()</a></code> on the next call to <c
     <pre class="usage"><span class='fu'>flow_debug</span>(
   <span class='no'>f</span>,
   <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>swap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='no'>...</span>,
+  <span class='kw'>narrow</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>truncate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>swap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>svg</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>browse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>browse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>show_passes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
 
 <span class='fu'>flow_debugonce</span>(
   <span class='no'>f</span>,
   <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>swap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='no'>...</span>,
+  <span class='kw'>narrow</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>truncate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>swap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>svg</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>browse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>browse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>show_passes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
 
 <span class='fu'>flow_undebug</span>(<span class='no'>f</span>)</pre>
@@ -199,15 +195,24 @@ call <code><a href='flow_view.html'>flow_run()</a></code> on the next call to <c
 must start with <code>"#"</code>, several prefixes can be provided</p></td>
     </tr>
     <tr>
-      <th>swap</th>
-      <td><p>whether to change <code>var &lt;- if(cond) expr</code> into
-<code>if(cond) var &lt;- expr</code> so the diagram displays better</p></td>
-    </tr>
-    <tr>
       <th>code</th>
       <td><p>Whether to display the code in code blocks or only the header, to be
 more compact, if <code>NA</code>, the code will be displayed only if no header is
 defined by special comments.</p></td>
+    </tr>
+    <tr>
+      <th>narrow</th>
+      <td><p><code>TRUE</code> makes sure the diagram stays centered on one column
+(they'll be longer but won't shift to the right)</p></td>
+    </tr>
+    <tr>
+      <th>truncate</th>
+      <td><p>maximum number of characters to be printed per line</p></td>
+    </tr>
+    <tr>
+      <th>swap</th>
+      <td><p>whether to change <code>var &lt;- if(cond) expr</code> into
+<code>if(cond) var &lt;- expr</code> so the diagram displays better</p></td>
     </tr>
     <tr>
       <th>out</th>
@@ -217,16 +222,14 @@ export the objec to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.</p></td>
     </tr>
     <tr>
-      <th>svg</th>
-      <td><p>only for default or html output, whether to use svg rendering, rendering
-is more robust without it, but it makes text selectable on output which is
-sometimes useful</p></td>
-    </tr>
-    <tr>
       <th>browse</th>
       <td><p>whether to debug step by step (block by block),
 can also be a vector of block ids, in this case <code><a href='https://rdrr.io/r/base/browser.html'>browser()</a></code> calls will be
 inserted at the start of these blocks</p></td>
+    </tr>
+    <tr>
+      <th>show_passes</th>
+      <td><p>label the edges with the number of passes</p></td>
     </tr>
     </table>
 

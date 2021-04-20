@@ -17,8 +17,6 @@ knitr::opts_chunk$set(
 In this vignette we showcase the arguments of `flow_view()` and `flow_run()`
 that affect the way the diagrams are displayed.
 
-It and can be of length > 1 in which case all given prefixes are considered.
-
 ## `prefix`
 
 `prefix` is used to display special comments on top of code blocks, it must start 
@@ -50,12 +48,22 @@ factorial <- function(x) {
 flow_view(factorial, prefix = "##")
 ```
 
+* `prefix` can be of length > 1 in which case all given prefixes are considered
+* The unprefixed comments are ignored.
+* Prefixed comments right before control flow calls (here `if`) will serve
+as headers for control flow header blocks.
+* Prefixed comments before other code will serve as headers for the subsequent
+code chunks.
+* Adding special comments in the middle of a code block code will split the block in two
+* We need to use `{}` after `if (n == 0L)` if we want to use a prefixed comment
+
 This argument is ignored when using the *plantuml* engine.
 
 ## `code`
 
-`code` is used to choose whether to display the code in code blocks or only the header, if `NA` 
-the code will be displayed only if no header is defined by special comments.
+`code` is used to choose whether to display the code in code blocks or only the 
+header, if `NA` the code will be displayed only if no header is defined by 
+special comments.
 
 ```{r}
 flow_view(factorial, code = FALSE)
@@ -114,13 +122,9 @@ By default calls like `x <- if(cond) a else b` are automatically transformed int
 If this is not acceptable this can be turned off by setting `swap` to `FALSE`.
 
 ```{r}
-fun <- function(x) {
-  x <- if (x < 10) {
-    message("value is small!")
-    "small"
-  } else {
-    "big"
-  }
+fun <- function(cond) {
+  x <- if(cond) this else that
+  x
 }
 
 flow_view(fun)

@@ -17,9 +17,7 @@ knitr::opts_chunk$set(
 *{flow}* provides a pair of addins so you can run `flow_view()` or `flow_run()` on
 your selection.
 
-gif here
-
 The `flow_view()` addin will figure out if the selection is a path, the 
-symbol of a function, or code.
+symbol of a function, or code. The `flow_run` should be used on calls only.
 
-gif here
+![addins](addins.gif)

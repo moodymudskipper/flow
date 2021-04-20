@@ -81,7 +81,7 @@ runs a call and draws the logical path taken by the code." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
 
@@ -97,9 +97,6 @@ runs a call and draws the logical path taken by the code." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/Draw-a-function.html">Draw a function</a>
-    </li>
     <li>
       <a href="../articles/V01_simple_usage.html">Simple Usage</a>
     </li>
@@ -120,9 +117,6 @@ runs a call and draws the logical path taken by the code." />
     </li>
     <li>
       <a href="../articles/V07_flow_doc.html">Document a Whole Package with `flow_doc`</a>
-    </li>
-    <li>
-      <a href="../articles/V08_engine_opts.html">Advanced Engine Options</a>
     </li>
   </ul>
 </li>
@@ -161,28 +155,25 @@ runs a call and draws the logical path taken by the code.</p>
     <pre class="usage"><span class='fu'>flow_view</span>(
   <span class='no'>x</span>,
   <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>narrow</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>truncate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>nested_fun</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>swap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>narrow</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>svg</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>engine</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"nomnoml"</span>, <span class='st'>"plantuml"</span>),
-  <span class='kw'>engine_opts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"flow.engine_opts"</span>)
+  <span class='kw'>engine</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"nomnoml"</span>, <span class='st'>"plantuml"</span>)
 )
 
 <span class='fu'>flow_run</span>(
   <span class='no'>x</span>,
   <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>narrow</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>truncate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>swap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>svg</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>browse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>show_passes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>engine_opts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"flow.engine_opts"</span>)
+  <span class='kw'>show_passes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -196,6 +187,17 @@ runs a call and draws the logical path taken by the code.</p>
       <th>prefix</th>
       <td><p>prefix to use for special comments in our code used as block headers,
 must start with <code>"#"</code>, several prefixes can be provided</p></td>
+    </tr>
+    <tr>
+      <th>code</th>
+      <td><p>Whether to display the code in code blocks or only the header, to be
+more compact, if <code>NA</code>, the code will be displayed only if no header is
+defined by special comments.</p></td>
+    </tr>
+    <tr>
+      <th>narrow</th>
+      <td><p><code>TRUE</code> makes sure the diagram stays centered on one column
+(they'll be longer but won't shift to the right)</p></td>
     </tr>
     <tr>
       <th>truncate</th>
@@ -212,17 +214,6 @@ x that we wish to inspect</p></td>
 <code>if(cond) var &lt;- expr</code> so the diagram displays better</p></td>
     </tr>
     <tr>
-      <th>narrow</th>
-      <td><p><code>TRUE</code> makes sure the diagram stays centered on one column
-(they'll be longer but won't shift to the right)</p></td>
-    </tr>
-    <tr>
-      <th>code</th>
-      <td><p>Whether to display the code in code blocks or only the header, to be
-more compact, if <code>NA</code>, the code will be displayed only if no header is
-defined by special comments.</p></td>
-    </tr>
-    <tr>
       <th>out</th>
       <td><p>a path to save the diagram to.
 Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
@@ -230,37 +221,9 @@ export the objec to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.</p></td>
     </tr>
     <tr>
-      <th>svg</th>
-      <td><p>only for default or html output, whether to use svg rendering, rendering
-is more robust without it, but it makes text selectable on output which is
-sometimes useful</p></td>
-    </tr>
-    <tr>
       <th>engine</th>
       <td><p>Either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental), if
 the latter, arguments <code>prefix</code>, <code>narrow</code>, and <code>code</code></p></td>
-    </tr>
-    <tr>
-      <th>engine_opts</th>
-      <td><p>A named list.</p>
-<p>In the most general case <code>engine_opts</code> is a list containing optional sub-lists named
-<code>"nomnoml"</code>, <code>"plantuml"</code>, and <code>"htmlwidgets"</code>.</p><ul>
-<li><p>The items of the <code>nomnoml</code>
-sub-list will be forwarded to <code>nomnoml:::build_nomnoml_code()</code>, unexported but
-documented in <code><a href='build_nomnoml_code.html'>?build_nomnoml_code</a></code>, in order to alter
-<em>nomnoml</em> diagrams. For instance <code>fontSize</code>, <code>direction = "right"</code> to have a left to right
-diagram, <code>ranker = "longest-path"</code> to see have exit points at the bottom...</p></li>
-<li><p>The items of the <code>plantuml</code> sub-list will be forwarded to <code>plantuml:::plot.plantuml()</code>,
-, in order to alter  <em>plantuml</em> diagrams.
-see <code>?plantuml:::plot.plantuml</code> and <code><a href='https://rdrr.io/pkg/plantuml/man/plantuml_run.html'>?plantuml::plantuml_run</a></code></p></li>
-<li><p>The items of the <code>htmlwidgets</code> sub-list will be forwarded to
-<code><a href='https://rdrr.io/pkg/htmlwidgets/man/createWidget.html'>htmlwidgets::createWidget()</a></code> or <code><a href='https://rdrr.io/pkg/htmlwidgets/man/saveWidget.html'>htmlwidgets::saveWidget()</a></code>, which are used by
-the <em>nomnoml</em> engine.</p></li>
-</ul>
-
-<p>If this structure is not found, the items of <code>engine_opts</code> will be forwarded
-to <code>nomnoml:::build_nomnoml_code()</code> if the engine is <code>"nomnoml"</code>, and
-<code>plantuml:::plot.plantuml</code> if the engine is <code>"plantuml"</code></p></td>
     </tr>
     <tr>
       <th>browse</th>

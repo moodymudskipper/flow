@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
 
@@ -95,9 +95,6 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/Draw-a-function.html">Draw a function</a>
-    </li>
     <li>
       <a href="../articles/V01_simple_usage.html">Simple Usage</a>
     </li>
@@ -118,9 +115,6 @@
     </li>
     <li>
       <a href="../articles/V07_flow_doc.html">Document a Whole Package with `flow_doc`</a>
-    </li>
-    <li>
-      <a href="../articles/V08_engine_opts.html">Advanced Engine Options</a>
     </li>
   </ul>
 </li>
@@ -150,6 +144,23 @@
       
     </div>
 
+    <div id="flow-002" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.2">
+<a href="#flow-002" class="anchor"></a>flow 0.0.2</h1>
+<p>The API was simplified, we lose some flexibility, but I doubt we lose anything useful, if you miss something, speak up in the github issues.</p>
+<ul>
+<li>Various bug fixes</li>
+<li>7 new vignettes and a reworked README</li>
+<li>The <code>sub_fun_id</code> argument was renamed into nested_fun</li>
+<li>
+<code>prefix</code> can now be a vector, in which case all prefixes are considered"</li>
+<li>A new <code>truncate</code> argument provides a way to improve display of wide diagrams, by truncating output.</li>
+<li>Arguments were reordered.</li>
+<li>We can’t forward arguments to {plantuml} or {nomnoml} package functions anymore, this wasn’t very useful and added unnecessary complexity.</li>
+<li>
+<code>flow_doc</code> supports <code>md</code> output and in particular if no argument is given, a <em>diagrams.md</em> file is created at the root of the project folder so it can be leveraged by <em>{pkgdown}</em> to add a section to the website that will contain all diagrams (as is done on {flow}’s website)</li>
+</ul>
+</div>
     <div id="flow-001" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.1">
 <a href="#flow-001" class="anchor"></a>flow 0.0.1</h1>

@@ -17,13 +17,14 @@ knitr::opts_chunk$set(
 The `flow_doc()` function provides a way to draw all the functions of a package
 and store them in an *html* report.
 
-The `pkg` argument can be any package name, from base R, CRAN, or other including your local pakages.
+The `pkg` argument can be any package name, from base R, CRAN, or other 
+including your local packages.
 
 The `out` argument must be a path to an *html* or *md* file.
 
 If you don't provide nor `pkg` nor `out`, a `diagrams.md` file will be created
-at the root of your project folder, so that when you run `pkgdown::build_site`
-it will be knitted into a new section.
+at the root of your project folder, so that you can use `pkgdown::build_site`
+to knit it into a new section after editing the YAML file properlu.
 
 The [Diagrams](https://moodymudskipper.github.io/flow/articles/Draw-a-function.html)
 section of the [website](https://moodymudskipper.github.io/flow/)
@@ -32,4 +33,19 @@ was built this way, simply by using the following call :
 ```{r, eval = FALSE}
 library(flow)
 flow_doc(prefix = "##")
+```
+
+And the `_pkgdown.yml` file that is created by `usethis::use_pkgdown()` is edited
+to contain :
+
+```
+navbar:
+  structure:
+    left:  [home, reference, articles, news, diagrams]
+    right: [github]
+  components:
+    home: ~
+    diagrams:
+     text: Diagrams
+     href: diagrams.html
 ```
