@@ -4,7 +4,7 @@
 #' Draw Flow Diagrams for an Entire Package
 #'
 #' @param pkg package name as a string
-#' @param out path to an html file to write to
+#' @param out path to an html or md file to write to
 #' @inheritParams flow_view
 #' @details
 #' if `pkg` and `out` are left `NULL`, a vignette `diagrams.md` will be built
