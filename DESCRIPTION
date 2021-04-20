@@ -1,6 +1,6 @@
 Package: flow
 Title: View and Browse Code Using Flow Diagrams
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: 
     person(given = "Antoine",
            family = "Fabri",
