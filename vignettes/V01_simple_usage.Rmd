@@ -54,9 +54,9 @@ diagrams are a bit less flexible but they often look more polished and compact.
 flow_view(ave, engine = "plantuml") 
 ```
 
-![plantuml](plantuml.png)
+![](plantuml.png)
 
-## `flow_run`
+## `flow_run()`
 
 `flow_run` actually executes a call to a function, and displays the logical path.
 It takes as a first argument an unquoted call to the function we want to dive in.
@@ -78,7 +78,19 @@ factorial <- function(x) {
 flow_run(factorial(5L))
 ```
 
-It can also be used on calls that fail, which is convenient for debugging.
+<img src="flow_run_1.png" alt="" width="300"/>
+
+`flow_run()` counts how many time code blocks
+where entered and these numbers are displayed next to the edges between parenthesis.
+
+It can also be used on calls that fail, which is convenient for debugging, for
+instance the following call fails :
+
+```{r, error = TRUE}
+flow_run(factorial(10L))
+```
+
+<img src="flow_run_2.png" alt="" width="300"/>
 
 If you call `flow_run()` on a call to an S3 generic, the appropriate S3 method
 will be represented.
@@ -90,3 +102,7 @@ below, the relevant S3 method is presented):
 vec <- c(1:3, NA)
 flow_run(median(vec, na.rm = TRUE))
 ```
+
+<img src="flow_run_3.png" alt="" width="500"/>
+
+The `"plantuml"` engine is not supported by `flow_run()`.

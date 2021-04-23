@@ -132,18 +132,3 @@ flow_view(fun)
 flow_view(fun, swap = FALSE)
 ```
 
-## `show_passes`
-
-`show_passes` is used when calling `flow_run()` to count how many time code blocks
-where executed. Let's try it on the `factorial` function defined above
-
-```{r}
-flow_run(factorial(5L), show_passes = TRUE)
-```
-
-This will display a diagram even if the code fails, so we can see where it did
-and what logical path we went through before the failure.
-
-The `"plantuml"` engine is not supported by `flow_run()`.
-
-

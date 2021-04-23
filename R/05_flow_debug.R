@@ -21,8 +21,7 @@ flow_debug <- function(
   truncate = NULL,
   swap = TRUE,
   out = NULL,
-  browse = FALSE,
-  show_passes = FALSE) {
+  browse = FALSE) {
   call <- match.call()
   call[[1]] <- quote(flow::flow_run)
   names(call)[names(call) == "f"] <- "x"
@@ -51,8 +50,7 @@ flow_debugonce <- function(
   truncate = NULL,
   swap = TRUE,
   out = NULL,
-  browse = FALSE,
-  show_passes = FALSE) {
+  browse = FALSE) {
   call <- match.call()
   call[[1]] <- quote(flow::flow_run)
   names(call)[names(call) == "f"] <- "x"
@@ -60,11 +58,13 @@ flow_debugonce <- function(
   tracer <- bquote({
     call <- sys.call(-4) # we have to go back a few more steps when in doTrace
     flow_run_call <- bquote(.(call))
-    on.exit(untrace(call[[1]]))
+    on.exit(suppressMessages(untrace(call[[1]])))
     return(eval.parent(flow_run_call, 5))
   })
   trace_call <- bquote(
-    trace(.(substitute(f)), quote(.(tracer)), print = FALSE, where = environment())
+    suppressMessages(
+      trace(.(substitute(f)), quote(.(tracer)), print = FALSE, where = environment())
+    )
   )
   eval.parent(trace_call)
   invisible()

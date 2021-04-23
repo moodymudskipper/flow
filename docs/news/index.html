@@ -114,7 +114,7 @@
       <a href="../articles/V06_advanced_debugging.html">Advanced Debugging</a>
     </li>
     <li>
-      <a href="../articles/V07_flow_doc.html">Document a Whole Package with `flow_doc`</a>
+      <a href="../articles/V07_Reports.html">Build reports to document functions and unit tests</a>
     </li>
   </ul>
 </li>
@@ -151,10 +151,12 @@
 <ul>
 <li>Various bug fixes</li>
 <li>7 new vignettes and a reworked README</li>
-<li>The <code>sub_fun_id</code> argument was renamed into nested_fun</li>
+<li>The <code>sub_fun_id</code> argument was renamed into <code>nested_fun</code>.</li>
 <li>
-<code>prefix</code> can now be a vector, in which case all prefixes are considered"</li>
+<code>prefix</code> can now be a vector, in which case all prefixes are considered</li>
 <li>A new <code>truncate</code> argument provides a way to improve display of wide diagrams, by truncating output.</li>
+<li>The <code>show_passes</code> argument was removed and passes are always shown.</li>
+<li>A new <code><a href="../reference/flow_test.html">flow_test()</a></code> functions build a report detailing testthat unit tests.</li>
 <li>Arguments were reordered.</li>
 <li>We can’t forward arguments to {plantuml} or {nomnoml} package functions anymore, this wasn’t very useful and added unnecessary complexity.</li>
 <li>
@@ -173,7 +175,7 @@
 <ul>
 <li>Special calls like <code><a href="https://rdrr.io/r/base/on.exit.html">on.exit()</a></code>, <code><a href="https://rdrr.io/r/base/formals.html">formals()</a></code>, <code><a href="https://rdrr.io/r/base/match.arg.html">match.arg()</a></code> etc now work seamlessly in <code><a href="../reference/flow_view.html">flow_run()</a></code>.</li>
 <li>We use <code><a href="https://rdrr.io/r/base/browser.html">base::browser()</a></code> so all its features are available, it also means we can go through loops and iterations.</li>
-<li>The argument show_passes was added to <code><a href="../reference/flow_view.html">flow_run()</a></code> to display the number of passes through each continuous edge of the diagram.</li>
+<li>The argument <code>show_passes</code> was added to <code><a href="../reference/flow_view.html">flow_run()</a></code> to display the number of passes through each continuous edge of the diagram.</li>
 <li>When setting <code>browse = TRUE</code>, the diagrams are not drawn automatically, instead we now use <code>d</code> or <code><a href="../reference/flow_draw.html">flow_draw()</a></code> to redraw the diagram at the chosen step. running <code><a href="../reference/flow_draw.html">flow_draw(always = TRUE)</a></code> in the debugger makes sure they’re drawn automatically at each step of the run.</li>
 </ul>
 <p>Moreover:</p>

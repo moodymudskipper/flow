@@ -33,7 +33,8 @@ defined by special comments.}
 \item{swap}{whether to change \code{var <- if(cond) expr} into
 \code{if(cond) var <- expr} so the diagram displays better}
 
-\item{out}{path to an html or md file to write to}
+\item{out}{path to output (\code{.html} or \code{.md}), if left \code{NULL} a temp \emph{html}
+file will be created and opened.}
 
 \item{engine}{Either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental), if
 the latter, arguments \code{prefix}, \code{narrow}, and \code{code}}
@@ -42,6 +43,6 @@ the latter, arguments \code{prefix}, \code{narrow}, and \code{code}}
 Draw Flow Diagrams for an Entire Package
 }
 \details{
-if \code{pkg} and \code{out} are left \code{NULL}, a vignette \code{diagrams.md} will be built
+if \code{pkg} and \code{out} are both left \code{NULL}, a vignette \code{diagrams.md} will be built
 in the root, so that \code{pkgdown::build_site} will use it as an additional page.
 }

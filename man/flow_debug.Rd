@@ -14,8 +14,7 @@ flow_debug(
   truncate = NULL,
   swap = TRUE,
   out = NULL,
-  browse = FALSE,
-  show_passes = FALSE
+  browse = FALSE
 )
 
 flow_debugonce(
@@ -26,8 +25,7 @@ flow_debugonce(
   truncate = NULL,
   swap = TRUE,
   out = NULL,
-  browse = FALSE,
-  show_passes = FALSE
+  browse = FALSE
 )
 
 flow_undebug(f)
@@ -58,8 +56,6 @@ if a regular path is used the format will be guessed from the extension.}
 \item{browse}{whether to debug step by step (block by block),
 can also be a vector of block ids, in this case \code{browser()} calls will be
 inserted at the start of these blocks}
-
-\item{show_passes}{label the edges with the number of passes}
 }
 \description{
 These functions are named after the base functions \code{debug()}, \code{undebug()} and

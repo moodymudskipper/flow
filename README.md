@@ -19,7 +19,8 @@ Use cases are :
     understanding of its structure
   - Documentation
   - Debugging
-  - Providing a higher level view of an algorithm to collaborator
+  - Inspect unit test results
+  - Providing a higher level view of an algorithm to collaborators
   - Education
 
 ## Installation

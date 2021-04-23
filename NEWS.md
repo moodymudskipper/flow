@@ -5,10 +5,12 @@ useful, if you miss something, speak up in the github issues.
 
 * Various bug fixes
 * 7 new vignettes and a reworked README
-* The `sub_fun_id` argument was renamed into nested_fun
-* `prefix` can now be a vector, in which case all prefixes are considered"
+* The `sub_fun_id` argument was renamed into `nested_fun`.
+* `prefix` can now be a vector, in which case all prefixes are considered
 * A new `truncate` argument provides a way to improve display of wide diagrams,
 by truncating output.
+* The `show_passes` argument was removed and passes are always shown.
+* A new `flow_test()` functions build a report detailing testthat unit tests.
 * Arguments were reordered.
 * We can't forward arguments to {plantuml} or {nomnoml} package functions anymore,
   this wasn't very useful and added unnecessary complexity.
@@ -30,7 +32,7 @@ all diagrams (as is done on
   in `flow_run()`.
 * We use `base::browser()` so all its features are available, it also means we can
   go through loops and iterations.
-* The argument show_passes was added to `flow_run()` to display the number of passes 
+* The argument `show_passes` was added to `flow_run()` to display the number of passes 
   through each continuous edge of the diagram.
 * When setting `browse = TRUE`, the diagrams are not drawn automatically,
 instead we now use `d` or `flow_draw()` to redraw the diagram at the chosen step.
