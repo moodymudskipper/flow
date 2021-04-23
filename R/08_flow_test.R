@@ -1,14 +1,22 @@
 
 #' build report from tests
 #'
-#' @param out path to output (`.html` or `.md`)
+#' @param out path to output (`.html` or `.md`), if left `NULL` a temp *html*
+#'   file will be created and opened.
 #' @param failed_only whether to restrict the report to failing tests only
+#' @inheritParams flow_run
 #'
-#' @return
+#' @return Returns `NULL` invisibly, called for side effects.
 #' @export
-#'
-#' @examples
-flow_test <- function(out = "tests.html", failed_only = FALSE) {
+flow_test <- function(
+  prefix = NULL,
+  code = TRUE,
+  narrow = FALSE,
+  truncate = NULL,
+  swap = TRUE,
+  out = NULL,
+  show_passes = FALSE,
+  failed_only = FALSE) {
   scripts <- list.files(
     path = "tests/testthat",
     pattern = "\\.r$",
@@ -18,6 +26,13 @@ flow_test <- function(out = "tests.html", failed_only = FALSE) {
   ## create temp file
   tmp_dir <- tempdir()
   rmd_output <- tempfile(fileext = ".Rmd", tmpdir = tmp_dir)
+  if(is.null(out)) {
+    missing_output <- TRUE
+    out <- tempfile(fileext = ".html")
+  } else {
+    missing_output <- FALSE
+  }
+
 
   ## fetch pkgname from root folder
   pkg <- basename(getwd())
@@ -28,22 +43,43 @@ flow_test <- function(out = "tests.html", failed_only = FALSE) {
   ## print header and library call to file
   cat(file = rmd_output, sprintf(
     '---
-title: "Test diagrams"
-date: "`r Sys.Date()`"
+title: "{%s} Unit Test Report"
 output: html_document
 ---
+
+*Built with* [*{flow}*](https://moodymudskipper.github.io/flow/)
 
 ```{r, include = FALSE}
 library(%s)
 ```
-# Test report {.tabset}
+# {.tabset}
 
-', pkg
+', pkg, pkg
   ))
 
-  # script <- scripts[[5]]
+  out <- normalizePath(out, mustWork = FALSE)
 
-  e <- new.env(parent = .GlobalEnv)
+  ## create testthat envir so we can run the code without attaching testthat
+  testthat_funs <- as.list(asNamespace("testthat"))[getNamespaceExports("testthat")]
+  testthat_env  <- as.environment(testthat_funs)
+  parent.env(testthat_env) <- .GlobalEnv
+
+  ## create pkg envir so we can run the code without attaching it
+  pkg_funs <- as.list(asNamespace(pkg))
+  pkg_env  <- as.environment(pkg_funs)
+  parent.env(pkg_env) <- testthat_env
+
+  ## create a child envir of the latter where we'll execute our code
+  e <- new.env(parent = pkg_env)
+
+  n_test_that_calls <- sum(
+    sapply(scripts, function(x) sum(all.names(parse(file = x)) == "test_that"))
+    )
+
+  ## setup progress bar
+  pb = txtProgressBar(min = 0, max = n_test_that_calls, initial = 0)
+  stepi = 0
+  writeLines("generating unit test report")
 
   ## iterate through test scripts
   for(script in scripts) {
@@ -77,50 +113,71 @@ library(%s)
           i2 <<- c(i2, i)
           inspected_funs <<- c(inspected_funs, as.character(call[[1]]))
           img_path <- sprintf("%s/%s_%s.png", tmp_dir, script_short, i)
-          call("flow_run", call, out = img_path)
+          as.call(c(
+            quote(flow::flow_run),
+            call,
+            prefix = prefix,
+            code = code,
+            narrow = narrow,
+            truncate = truncate,
+            swap = swap,
+            out = img_path,
+            show_passes = show_passes))
         }
 
-        # ## run the call
-        # eval(call2, e)
-        #
         call_wrapped <- call_apply(
           call,
           find = find_pkg_fun_calls,
           replace = wrap_call
-          # ,
-          # output = "list"
         )
 
-        success <- eval(call_wrapped, e)
 
-        if(!failed_only || !sucess) {
-        success <- if(success) "passed" else "failed"
+        success <- eval_silent(call_wrapped, e)
 
-        code <- paste(styler::style_text(deparse(call)), collapse = "\n")
+        ## update progress bar
+        stepi <- stepi + 1
+        setTxtProgressBar(pb,stepi)
+
+
+        if(!failed_only || !success) {
+        #success <- if(success) "passed" else "failed"
+
+        chunk_code <- paste(styler::style_text(deparse(call)), collapse = "\n")
         desc <- eval(match.call(testthat::test_that, call)[["desc"]], e)
+
+        if(success) {
+          desc <- sprintf('<span style="color: green;">%s</span>', desc)
+        } else {
+          desc <- sprintf('<span style="color: red;">%s</span>', desc)
+        }
 
         ## print test description as title 3
         cat(
           file = rmd_output,
-          sprintf("### %s (%s) {.tabset}\n\n", desc, success),
+          sprintf("### %s {.tabset}\n\n", desc),
           append = TRUE)
 
         ## print code as first title 4
-        code_section <- sprintf("#### code\n\n```{r}\n%s\n```\n\n", code)
+        code_section <- sprintf("#### code\n\n```{r, eval = FALSE}\n%s\n```\n\n", chunk_code)
         cat(file = rmd_output, code_section, append = TRUE)
 
 
         diagram_sections <- sprintf(
           "#### %s\n\n![](%s/%s_%s.png)\n\n", inspected_funs, tmp_dir, script_short, i2)
-        }
-
 
         cat(file = rmd_output, diagram_sections, append = TRUE, sep= "")
+        }
       }
     }
   }
 
-  rmarkdown::render(rmd_output, output_file = out)
+  rmarkdown::render(rmd_output, output_file = out, quiet = TRUE)
+
+  if(missing_output) {
+    browseURL(out)
+  }
+
+  invisible(NULL)
 }
 
 
@@ -179,4 +236,17 @@ call_apply <- function(call, find, replace = NULL, output = c("call", "list", "i
       alist(call=, ind=), quote(call[[ind]])))
   lapply(indices, function(ind) replace(call, ind))
 
+}
+
+
+
+eval_silent <- function(call, env = parent.frame()) {
+  sink_file <- file(tempfile(), open = "w")
+  sink(file = sink_file, type = "output")
+  sink(file = sink_file, type = "message")
+  on.exit({
+    sink(type = "output")
+    sink(type = "message")
+  })
+  suppressWarnings(eval(call, env))
 }
