@@ -46,7 +46,8 @@ factorial5 <- function(){
   x <- 5L
   factorial(x)
 }
+factorial5()
 ```
 
 
-
+<img src="flow_debugonce.png" alt="" width="300"/>

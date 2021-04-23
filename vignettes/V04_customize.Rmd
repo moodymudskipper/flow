@@ -141,6 +141,8 @@ where executed. Let's try it on the `factorial` function defined above
 flow_run(factorial(5L), show_passes = TRUE)
 ```
 
+<img src="flow_run_4.png" alt="" width="300"/>
+
 This will display a diagram even if the code fails, so we can see where it did
 and what logical path we went through before the failure.
 

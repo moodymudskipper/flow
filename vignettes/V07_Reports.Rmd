@@ -1,8 +1,8 @@
 ---
-title: "Document a Whole Package with `flow_doc`"
+title: "Build reports to document functions and unit tests"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Document a Whole Package with `flow_doc`}
+  %\VignetteIndexEntry{Build reports to document functions and unit tests}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
+## `flow_doc()`
 
 The `flow_doc()` function provides a way to draw all the functions of a package
 and store them in an *html* report.
@@ -49,3 +51,20 @@ navbar:
      text: Diagrams
      href: diagrams.html
 ```
+
+## `flow_test()`
+
+If you're using the package *{testthat}* for your unit tests, `flow_test()`
+will help you explore them.
+
+![flow_test](flow_test.gif)
+
+Below I ran `flow::flow_test()` after opening the project of my package *{unglue}*.
+
+It built a report with a tab for each test file,
+then next to the code of each script we're able to visualize the diagram of
+our package's functions and the logical path taken by the code, so we can easily see
+what was tested and what potentially went wrong.
+
+Successful tests are showed in green, while failed ones (none in the example above)
+will be shown in red.
