@@ -47,7 +47,7 @@ flow_run <-
       prefix = prefix,
       narrow = narrow,
       truncate = truncate,
-      nested_fun = NULL,
+      nested_fun = NA,
       swap = swap)
 
     ## dash the edges

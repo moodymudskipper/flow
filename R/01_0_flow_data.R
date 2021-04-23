@@ -37,19 +37,23 @@ flow_data <-
     ## find sub functions (function defs found in the code)
     sub_funs <- find_funs(x)
 
-    ## was the nested_fun argument given ?
-    if (!is.null(nested_fun)) {
-      ## replace fun name and set the new `x`
-      f_sym <- quote(fun)
-      x <- eval(sub_funs[[nested_fun]])
-    } else {
-      ## do we have sub function definitions ?
-      if (length(sub_funs)) {
-        ## print them
-        # so user can choose a nested_fun if relevant
-        message("We found function definitions in this code, ",
-                "use the argument nested_fun to inspect them")
-        print(sub_funs)
+    ## was the nested_fun argument NA (print nothing)
+    if(length(nested_fun) != 1 || !is.na(nested_fun)) {
+
+      ## was the nested_fun argument given ?
+      if (!is.null(nested_fun)) {
+        ## replace fun name and set the new `x`
+        f_sym <- quote(fun)
+        x <- eval(sub_funs[[nested_fun]])
+      } else {
+        ## do we have sub function definitions ?
+        if (length(sub_funs)) {
+          ## print them
+          # so user can choose a nested_fun if relevant
+          message("We found function definitions in this code, ",
+                  "use the argument nested_fun to inspect them")
+          print(sub_funs)
+        }
       }
     }
 
