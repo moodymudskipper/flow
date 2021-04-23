@@ -118,7 +118,7 @@ call flow_run() on the next call to f()." />
       <a href="../articles/V06_advanced_debugging.html">Advanced Debugging</a>
     </li>
     <li>
-      <a href="../articles/V07_flow_doc.html">Document a Whole Package with `flow_doc`</a>
+      <a href="../articles/V07_Reports.html">Build reports to document functions and unit tests</a>
     </li>
   </ul>
 </li>
@@ -164,8 +164,7 @@ call <code><a href='flow_view.html'>flow_run()</a></code> on the next call to <c
   <span class='kw'>truncate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>swap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>browse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>show_passes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>browse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
 
 <span class='fu'>flow_debugonce</span>(
@@ -176,8 +175,7 @@ call <code><a href='flow_view.html'>flow_run()</a></code> on the next call to <c
   <span class='kw'>truncate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>swap</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>browse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>show_passes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>browse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
 
 <span class='fu'>flow_undebug</span>(<span class='no'>f</span>)</pre>
@@ -226,10 +224,6 @@ if a regular path is used the format will be guessed from the extension.</p></td
       <td><p>whether to debug step by step (block by block),
 can also be a vector of block ids, in this case <code><a href='https://rdrr.io/r/base/browser.html'>browser()</a></code> calls will be
 inserted at the start of these blocks</p></td>
-    </tr>
-    <tr>
-      <th>show_passes</th>
-      <td><p>label the edges with the number of passes</p></td>
     </tr>
     </table>
 

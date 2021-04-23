@@ -4,10 +4,11 @@
 #' Draw Flow Diagrams for an Entire Package
 #'
 #' @param pkg package name as a string
-#' @param out path to an html or md file to write to
+#' @param out path to output (`.html` or `.md`), if left `NULL` a temp *html*
+#'   file will be created and opened.
 #' @inheritParams flow_view
 #' @details
-#' if `pkg` and `out` are left `NULL`, a vignette `diagrams.md` will be built
+#' if `pkg` and `out` are both left `NULL`, a vignette `diagrams.md` will be built
 #' in the root, so that `pkgdown::build_site` will use it as an additional page.
 #' @export
 flow_doc <- function(
@@ -26,8 +27,10 @@ flow_doc <- function(
     do.call(f, as.list(x))
   }
 
-  ## define pkgdown flag
+  ## define pkgdown flags
   pkgdown <- is.null(pkg)
+  missing_out <- FALSE
+
 
   ## did we specify an output?
   if(is.null(out)) {
@@ -37,7 +40,8 @@ flow_doc <- function(
       out <- "diagrams.md"
     } else {
       ## default output
-      out <- paste0(pkg, ".html")
+      missing_out <- TRUE
+      out <- tempfile(fileext = ".html")
     }
   }
 
@@ -133,6 +137,11 @@ flow_doc <- function(
     # remove the "<!DOCTYPE html>" line
     writeLines(readLines(out)[-1], out)
   }
+
+  if(missing_out) {
+    browseURL(out)
+  }
+
   invisible(NULL)
 }
 
@@ -264,3 +273,13 @@ append_function_diagrams <- function(
   ## close progress bar
   close(pb)
 }
+
+
+
+
+
+
+
+
+
+

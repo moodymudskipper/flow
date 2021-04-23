@@ -24,9 +24,12 @@ including your local packages.
 
 The `out` argument must be a path to an *html* or *md* file.
 
+If `pkg` is provided but `out` is left `NULL`, the report will be printed to
+a temporary file and will be opened automatically.
+
 If you don't provide nor `pkg` nor `out`, a `diagrams.md` file will be created
 at the root of your project folder, so that you can use `pkgdown::build_site`
-to knit it into a new section after editing the YAML file properlu.
+to knit it into a new section after editing the YAML file properly.
 
 The [Diagrams](https://moodymudskipper.github.io/flow/articles/Draw-a-function.html)
 section of the [website](https://moodymudskipper.github.io/flow/)
@@ -67,4 +70,10 @@ our package's functions and the logical path taken by the code, so we can easily
 what was tested and what potentially went wrong.
 
 Successful tests are showed in green, while failed ones (none in the example above)
-will be shown in red.
+will be shown in red. To show only the failed tests, set the argument `failed_only`
+to `TRUE`.
+
+If its `out` parameter is left `NULL`, the report will be printed to
+a temporary file and will be opened automatically.
+
+Other parameters are forwarded to `flow_run()`.

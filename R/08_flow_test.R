@@ -15,7 +15,6 @@ flow_test <- function(
   truncate = NULL,
   swap = TRUE,
   out = NULL,
-  show_passes = FALSE,
   failed_only = FALSE) {
   scripts <- list.files(
     path = "tests/testthat",
@@ -121,8 +120,7 @@ library(%s)
             narrow = narrow,
             truncate = truncate,
             swap = swap,
-            out = img_path,
-            show_passes = show_passes))
+            out = img_path))
         }
 
         call_wrapped <- call_apply(

@@ -25,8 +25,7 @@ flow_run(
   truncate = NULL,
   swap = TRUE,
   out = NULL,
-  browse = FALSE,
-  show_passes = FALSE
+  browse = FALSE
 )
 }
 \arguments{
@@ -61,8 +60,6 @@ the latter, arguments \code{prefix}, \code{narrow}, and \code{code}}
 \item{browse}{whether to debug step by step (block by block),
 can also be a vector of block ids, in this case \code{browser()} calls will be
 inserted at the start of these blocks}
-
-\item{show_passes}{label the edges with the number of passes}
 }
 \description{
 \code{flow_view()} shows the code of a function as a flow diagram, \code{flow_run()}

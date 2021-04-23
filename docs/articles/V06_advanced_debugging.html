@@ -73,7 +73,7 @@
       <a href="../articles/V06_advanced_debugging.html">Advanced Debugging</a>
     </li>
     <li>
-      <a href="../articles/V07_flow_doc.html">Document a Whole Package with `flow_doc`</a>
+      <a href="../articles/V07_Reports.html">Build reports to document functions and unit tests</a>
     </li>
   </ul>
 </li>
@@ -125,11 +125,13 @@
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">flow</span>)
 
 <span class="fu"><a href="../reference/flow_debug.html">flow_debugonce</a></span>(<span class="no">factorial</span>)
-<span class="co">#&gt; Tracing function "factorial" in package "base"</span>
 <span class="no">factorial5</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(){
   <span class="no">x</span> <span class="kw">&lt;-</span> <span class="fl">5L</span>
   <span class="fu"><a href="https://rdrr.io/r/base/Special.html">factorial</a></span>(<span class="no">x</span>)
-}</pre></body></html></div>
+}
+<span class="fu">factorial5</span>()
+<span class="co">#&gt; [1] 120</span></pre></body></html></div>
+<p><img src="flow_debugonce.png" alt="" width="300"></p>
 </div>
   </div>
 

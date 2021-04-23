@@ -21,8 +21,7 @@ flow_debug <- function(
   truncate = NULL,
   swap = TRUE,
   out = NULL,
-  browse = FALSE,
-  show_passes = FALSE) {
+  browse = FALSE) {
   call <- match.call()
   call[[1]] <- quote(flow::flow_run)
   names(call)[names(call) == "f"] <- "x"
@@ -51,8 +50,7 @@ flow_debugonce <- function(
   truncate = NULL,
   swap = TRUE,
   out = NULL,
-  browse = FALSE,
-  show_passes = FALSE) {
+  browse = FALSE) {
   call <- match.call()
   call[[1]] <- quote(flow::flow_run)
   names(call)[names(call) == "f"] <- "x"

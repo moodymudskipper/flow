@@ -80,8 +80,11 @@ flow_run(factorial(5L))
 
 <img src="flow_run_1.png" alt="" width="300"/>
 
+`flow_run()` counts how many time code blocks
+where entered and these numbers are displayed next to the edges between parenthesis.
 
-It can also be used on calls that fail, which is convenient for debugging.
+It can also be used on calls that fail, which is convenient for debugging, for
+instance the following call fails :
 
 ```{r, error = TRUE}
 flow_run(factorial(10L))
@@ -102,3 +105,4 @@ flow_run(median(vec, na.rm = TRUE))
 
 <img src="flow_run_3.png" alt="" width="500"/>
 
+The `"plantuml"` engine is not supported by `flow_run()`.

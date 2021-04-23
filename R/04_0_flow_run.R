@@ -8,8 +8,7 @@ flow_run <-
            truncate = NULL,
            swap = TRUE,
            out = NULL,
-           browse = FALSE,
-           show_passes = FALSE) {
+           browse = FALSE) {
 
     svg <- is.null(out) || endsWith(out, ".html") || endsWith(out, ".html")
 
@@ -82,12 +81,11 @@ flow_run <-
 
       data <- data_env[[layer_id]]
 
-      if(show_passes) {
-        data$edges$edge_label <- ifelse(
-          data$edges$passes > 0,
-          trimws(sprintf("%s (%s)", data$edges$edge_label, data$edges$passes)),
-          data$edges$edge_label)
-      }
+      ## show passes
+      data$edges$edge_label <- ifelse(
+        data$edges$passes > 0,
+        trimws(sprintf("%s (%s)", data$edges$edge_label, data$edges$passes)),
+        data$edges$edge_label)
 
       nomnoml_code  <-
         do.call(build_nomnoml_code, c(list(data, code = code)))

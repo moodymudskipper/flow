@@ -115,7 +115,7 @@
       <a href="../articles/V06_advanced_debugging.html">Advanced Debugging</a>
     </li>
     <li>
-      <a href="../articles/V07_flow_doc.html">Document a Whole Package with `flow_doc`</a>
+      <a href="../articles/V07_Reports.html">Build reports to document functions and unit tests</a>
     </li>
   </ul>
 </li>
@@ -195,7 +195,8 @@ defined by special comments.</p></td>
     </tr>
     <tr>
       <th>out</th>
-      <td><p>path to an html or md file to write to</p></td>
+      <td><p>path to output (<code>.html</code> or <code>.md</code>), if left <code>NULL</code> a temp <em>html</em>
+file will be created and opened.</p></td>
     </tr>
     <tr>
       <th>engine</th>
@@ -206,7 +207,7 @@ the latter, arguments <code>prefix</code>, <code>narrow</code>, and <code>code</
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>if <code>pkg</code> and <code>out</code> are left <code>NULL</code>, a vignette <code>diagrams.md</code> will be built
+    <p>if <code>pkg</code> and <code>out</code> are both left <code>NULL</code>, a vignette <code>diagrams.md</code> will be built
 in the root, so that <code><a href='https://pkgdown.r-lib.org/reference/build_site.html'>pkgdown::build_site</a></code> will use it as an additional page.</p>
 
   </div>

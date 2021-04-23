@@ -17,7 +17,6 @@
 #' @param browse whether to debug step by step (block by block),
 #'   can also be a vector of block ids, in this case `browser()` calls will be
 #'   inserted at the start of these blocks
-#' @param show_passes label the edges with the number of passes
 #' @param out a path to save the diagram to.
 #'   Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 #'   export the objec to a temp file of the relevant format and open it,
