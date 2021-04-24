@@ -180,18 +180,12 @@ runs a call and draws the logical path taken by the code.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A call, a function, or a path to a script</p></td>
+      <td><p>a call, a function, or a path to a script</p></td>
     </tr>
     <tr>
       <th>prefix</th>
       <td><p>prefix to use for special comments in our code used as block headers,
 must start with <code>"#"</code>, several prefixes can be provided</p></td>
-    </tr>
-    <tr>
-      <th>code</th>
-      <td><p>Whether to display the code in code blocks or only the header, to be
-more compact, if <code>NA</code>, the code will be displayed only if no header is
-defined by special comments.</p></td>
     </tr>
     <tr>
       <th>narrow</th>
@@ -204,7 +198,7 @@ defined by special comments.</p></td>
     </tr>
     <tr>
       <th>nested_fun</th>
-      <td><p>if not NULL, the index or name of the function definition found in
+      <td><p>if not <code>NULL</code>, the index or name of the function definition found in
 x that we wish to inspect</p></td>
     </tr>
     <tr>
@@ -221,7 +215,7 @@ if a regular path is used the format will be guessed from the extension.</p></td
     </tr>
     <tr>
       <th>engine</th>
-      <td><p>Either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental), if
+      <td><p>either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental), if
 the latter, arguments <code>prefix</code>, <code>narrow</code>, and <code>code</code></p></td>
     </tr>
     <tr>

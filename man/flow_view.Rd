@@ -29,21 +29,17 @@ flow_run(
 )
 }
 \arguments{
-\item{x}{A call, a function, or a path to a script}
+\item{x}{a call, a function, or a path to a script}
 
 \item{prefix}{prefix to use for special comments in our code used as block headers,
 must start with \code{"#"}, several prefixes can be provided}
-
-\item{code}{Whether to display the code in code blocks or only the header, to be
-more compact, if \code{NA}, the code will be displayed only if no header is
-defined by special comments.}
 
 \item{narrow}{\code{TRUE} makes sure the diagram stays centered on one column
 (they'll be longer but won't shift to the right)}
 
 \item{truncate}{maximum number of characters to be printed per line}
 
-\item{nested_fun}{if not NULL, the index or name of the function definition found in
+\item{nested_fun}{if not \code{NULL}, the index or name of the function definition found in
 x that we wish to inspect}
 
 \item{swap}{whether to change \code{var <- if(cond) expr} into
@@ -54,7 +50,7 @@ Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 export the objec to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
 
-\item{engine}{Either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental), if
+\item{engine}{either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental), if
 the latter, arguments \code{prefix}, \code{narrow}, and \code{code}}
 
 \item{browse}{whether to debug step by step (block by block),
