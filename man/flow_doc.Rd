@@ -21,6 +21,10 @@ flow_doc(
 \item{prefix}{prefix to use for special comments in our code used as block headers,
 must start with \code{"#"}, several prefixes can be provided}
 
+\item{code}{Whether to display the code in code blocks or only the header,
+to be more compact, if \code{NA}, the code will be displayed only if no header
+is defined by special comments}
+
 \item{narrow}{\code{TRUE} makes sure the diagram stays centered on one column
 (they'll be longer but won't shift to the right)}
 

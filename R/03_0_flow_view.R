@@ -6,6 +6,9 @@
 #' @param x a call, a function, or a path to a script
 #' @param prefix prefix to use for special comments in our code used as block headers,
 #'   must start with `"#"`, several prefixes can be provided
+#' @param code Whether to display the code in code blocks or only the header,
+#' to be more compact, if `NA`, the code will be displayed only if no header
+#' is defined by special comments
 #' @param truncate maximum number of characters to be printed per line
 #' @param nested_fun if not `NULL`, the index or name of the function definition found in
 #'   x that we wish to inspect
@@ -13,7 +16,6 @@
 #'   `if(cond) var <- expr` so the diagram displays better
 #' @param narrow `TRUE` makes sure the diagram stays centered on one column
 #'   (they'll be longer but won't shift to the right)
-#' @inheritParams build_nomnoml_code
 #' @param browse whether to debug step by step (block by block),
 #'   can also be a vector of block ids, in this case `browser()` calls will be
 #'   inserted at the start of these blocks
