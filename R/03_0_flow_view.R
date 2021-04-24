@@ -3,11 +3,11 @@
 #' `flow_view()` shows the code of a function as a flow diagram, `flow_run()`
 #' runs a call and draws the logical path taken by the code.
 #'
-#' @param x A call, a function, or a path to a script
+#' @param x a call, a function, or a path to a script
 #' @param prefix prefix to use for special comments in our code used as block headers,
 #'   must start with `"#"`, several prefixes can be provided
 #' @param truncate maximum number of characters to be printed per line
-#' @param nested_fun if not NULL, the index or name of the function definition found in
+#' @param nested_fun if not `NULL`, the index or name of the function definition found in
 #'   x that we wish to inspect
 #' @param swap whether to change `var <- if(cond) expr` into
 #'   `if(cond) var <- expr` so the diagram displays better
@@ -21,7 +21,7 @@
 #'   Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 #'   export the objec to a temp file of the relevant format and open it,
 #'   if a regular path is used the format will be guessed from the extension.
-#' @param engine Either `"nomnoml"` (default) or `"plantuml"` (experimental), if
+#' @param engine either `"nomnoml"` (default) or `"plantuml"` (experimental), if
 #'   the latter, arguments `prefix`, `narrow`, and `code`
 #'
 #' @export
