@@ -67,5 +67,6 @@ Make sure to check the vignettes for a detailed breakdown of all features.
 
 
 *{flow}* is built on top of Javier Luraschi's *{nomnoml}* package, and 
-Rainer M Krug 's *{plantuml}* package, the latter only available from github
-at the moment ("rkrug/plantuml").
+Rainer M Krug 's *{plantuml}* package, the latter only available from 
+[github](https://github.com/rkrug/plantuml)
+at the moment.
