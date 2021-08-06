@@ -1,10 +1,10 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.org/moodymudskipper/flow.svg?branch=master)](https://travis-ci.org/moodymudskipper/flow)
-[![Codecov test
-coverage](https://codecov.io/gh/moodymudskipper/flow/branch/master/graph/badge.svg)](https://codecov.io/gh/moodymudskipper/flow?branch=master)
+<!-- [![Travis build status](https://travis-ci.org/moodymudskipper/flow.svg?branch=master)](https://travis-ci.org/moodymudskipper/flow) -->
+
+<!-- [![Codecov test coverage](https://codecov.io/gh/moodymudskipper/flow/branch/master/graph/badge.svg)](https://codecov.io/gh/moodymudskipper/flow?branch=master) -->
+
 <!-- badges: end -->
 
 # flow <img src='man/figures/logo.png' align="right" height="139" />
@@ -25,7 +25,13 @@ Use cases are :
 
 ## Installation
 
-Install with:
+Install from CRAN with:
+
+``` r
+install.packages("flow")
+```
+
+Or install development version from github:
 
 ``` r
 remotes::install_github("moodymudskipper/flow")
