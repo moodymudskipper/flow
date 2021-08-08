@@ -196,7 +196,7 @@ data_env <- new.env()
 #' @usage flow_draw()
 #' @usage d
 #' @aliases d
-#'
+#' @return Returns `NULL` invisibly (called for side effects)
 #' @export
 flow_draw <- function() {
   # the following is necessary to pass checks

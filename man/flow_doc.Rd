@@ -39,10 +39,14 @@ file will be created and opened.}
 \item{engine}{either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental), if
 the latter, arguments \code{prefix}, \code{narrow}, and \code{code}}
 }
+\value{
+Returns \code{NULL} invisibly (called for side effects).
+}
 \description{
 Draw Flow Diagrams for an Entire Package
 }
 \details{
 if \code{pkg} and \code{out} are both left \code{NULL}, a vignette \code{diagrams.md} will be built
 in the root, so that \code{pkgdown::build_site} will use it as an additional page.
+See also the vignette \emph{"Build reports to document functions and unit tests"}.
 }

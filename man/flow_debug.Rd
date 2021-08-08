@@ -57,6 +57,9 @@ if a regular path is used the format will be guessed from the extension.}
 can also be a vector of block ids, in this case \code{browser()} calls will be
 inserted at the start of these blocks}
 }
+\value{
+These functions return \code{NULL} invisibly (called for side effects)
+}
 \description{
 These functions are named after the base functions \code{debug()}, \code{undebug()} and
 \code{debugonce()}. \code{flow_debug()} will call \code{flow_run()}, with the same additional arguments, on all the following

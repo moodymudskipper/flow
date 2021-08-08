@@ -1,12 +1,16 @@
 
-#' build report from tests
+#' Build Report From Tests
+#'
+#' Build a markdown report from test scripts, showing the paths taken in tested
+#' functions, and where they fail if they do.
+#' See also the vignette *"Build reports to document functions and unit tests"*.
 #'
 #' @param out path to output (`.html` or `.md`), if left `NULL` a temp *html*
 #'   file will be created and opened.
 #' @param failed_only whether to restrict the report to failing tests only
 #' @inheritParams flow_run
 #'
-#' @return Returns `NULL` invisibly, called for side effects.
+#' @return Returns `NULL` invisibly (called for side effects)
 #' @export
 flow_test <- function(
   prefix = NULL,

@@ -25,8 +25,12 @@
 #'   if a regular path is used the format will be guessed from the extension.
 #' @param engine either `"nomnoml"` (default) or `"plantuml"` (experimental), if
 #'   the latter, arguments `prefix`, `narrow`, and `code`
-#'
+#' @return `flow_view()` returns `NULL` invisibly, or the output path invisibly if `out` is not
+#' `NULL` (called for side effects). `flow_run()` returns the output of the wrapped call.
 #' @export
+#' @examples
+#' flow_view(rle)
+#' flow_run(rle(c(1, 2, 2, 3)))
 flow_view <- function(
   x,
   prefix = NULL,
@@ -56,7 +60,7 @@ flow_view <- function(
 
     ## is the engine "plantuml" ?
     if(engine == "plantuml") {
-      if(!"plantuml" %in% installed.packages()[,"Package"])
+      if(!length(find.package("plantuml", quiet = TRUE)))
         stop("The package plantuml needs to be installed to use this feature. ",
              'To install it run `remotes::install_github("rkrug/plantuml")`, ',
              "You might also need to install java ('https://www.java.com'), ",

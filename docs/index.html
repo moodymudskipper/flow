@@ -18,7 +18,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="View and Browse Code Using Flow Diagrams">
-<meta property="og:description" content="Visualize as flow diagrams the logic of functions, expressions or scripts and ease debugging.">
+<meta property="og:description" content="Visualize as flow diagrams the logic of functions, expressions or 
+  scripts in a static way or when running a call, and ease debugging. Advanced
+  features include analogs to debug and debugonce to target specific functions to draw,
+  an utility to draw the calls used in the tests of the package in a markdown report, 
+  and an utility to draw all the functions of one package in a markdown report.">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -96,8 +100,6 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-
-
 <div id="flow-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#flow-" class="anchor"></a>flow <img src="reference/figures/logo.png" align="right" height="139">
@@ -116,18 +118,20 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>Install with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"moodymudskipper/flow"</span>)</pre></div>
+<p>Install from CRAN with:</p>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"flow"</span>)</pre></div>
+<p>Or install development version from github:</p>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"moodymudskipper/flow"</span>)</pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">flow</span>)</pre></div>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">flow</span>)</pre></div>
 <p>Using default nomnoml engine</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="reference/flow_view.html">flow_view</a></span>(<span class="no">rle</span>)</pre></div>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="reference/flow_view.html">flow_view</a></span>(<span class="no">rle</span>)</pre></div>
 <p><img src="reference/figures/README_nomnoml.png" alt="nomnoml"></p>
 <p>Using plantuml engine (make sure the <a href="https://github.com/rkrug/plantuml">{plantuml}</a> package is installed).</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="reference/flow_view.html">flow_view</a></span>(<span class="no">rle</span>, <span class="kw">engine</span> <span class="kw">=</span> <span class="st">"plantuml"</span>)</pre></div>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="reference/flow_view.html">flow_view</a></span>(<span class="no">rle</span>, <span class="kw">engine</span> <span class="kw">=</span> <span class="st">"plantuml"</span>)</pre></div>
 <p><img src="reference/figures/README_plantuml.png" alt="plantuml"></p>
 </div>
 <div id="notes" class="section level2">
@@ -137,7 +141,6 @@
 <p><em>{flow}</em> is built on top of Javier Luraschi’s <em>{nomnoml}</em> package, and Rainer M Krug ’s <em>{plantuml}</em> package, the latter only available from <a href="https://github.com/rkrug/plantuml">github</a> at the moment.</p>
 </div>
 </div>
-
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -154,14 +157,7 @@
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://travis-ci.org/moodymudskipper/flow"><img src="https://travis-ci.org/moodymudskipper/flow.svg?branch=master" alt="Travis build status"></a></li>
-<li><a href="https://codecov.io/gh/moodymudskipper/flow?branch=master"><img src="https://codecov.io/gh/moodymudskipper/flow/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-</ul>
-</div>
-</div>
+  </div>
 </div>
 
 

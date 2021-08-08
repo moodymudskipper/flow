@@ -2,7 +2,7 @@
 % Please edit documentation in R/08_flow_test.R
 \name{flow_test}
 \alias{flow_test}
-\title{build report from tests}
+\title{Build Report From Tests}
 \usage{
 flow_test(
   prefix = NULL,
@@ -36,8 +36,10 @@ file will be created and opened.}
 \item{failed_only}{whether to restrict the report to failing tests only}
 }
 \value{
-Returns \code{NULL} invisibly, called for side effects.
+Returns \code{NULL} invisibly (called for side effects)
 }
 \description{
-build report from tests
+Build a markdown report from test scripts, showing the paths taken in tested
+functions, and where they fail if they do.
+See also the vignette \emph{"Build reports to document functions and unit tests"}.
 }

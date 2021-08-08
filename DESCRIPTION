@@ -6,7 +6,11 @@ Authors@R:
            family = "Fabri",
            role = c("aut", "cre"),
            email = "antoine.fabri@gmail.com")
-Description: Visualize as flow diagrams the logic of functions, expressions or scripts and ease debugging.
+Description: Visualize as flow diagrams the logic of functions, expressions or 
+  scripts in a static way or when running a call, and ease debugging. Advanced
+  features include analogs to 'debug' and 'debugonce' to target specific functions to draw,
+  an utility to draw the calls used in the tests of the package in a markdown report, 
+  and an utility to draw all the functions of one package in a markdown report.
 License: GPL-3
 Encoding: UTF-8
 Suggests: 
@@ -22,7 +26,7 @@ Imports:
     webshot,
     Rcpp,
     styler
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.1.9001
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 LinkingTo: Rcpp
