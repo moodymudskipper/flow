@@ -14,3 +14,5 @@
 ^vignettes/V05_nested_functions\.Rmd$
 ^vignettes/V06_advanced_debugging\.Rmd$
 ^vignettes/V07_Reports\.Rmd$
+^CRAN-RELEASE$
+^cran-comments\.md$

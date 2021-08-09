@@ -9,6 +9,9 @@ flow_draw()
 
 d
 }
+\value{
+Returns \code{NULL} invisibly (called for side effects)
+}
 \description{
 \code{flow_draw()} should only be used in the debugger triggered by a call
 to \code{flow_run()}, or following a call to \code{flow_debug()} or \code{flow_debugonce()}.

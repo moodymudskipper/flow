@@ -2,7 +2,7 @@
 % Please edit documentation in R/08_flow_test.R
 \name{flow_test}
 \alias{flow_test}
-\title{build report from tests}
+\title{Build Report From Tests}
 \usage{
 flow_test(
   prefix = NULL,
@@ -18,9 +18,9 @@ flow_test(
 \item{prefix}{prefix to use for special comments in our code used as block headers,
 must start with \code{"#"}, several prefixes can be provided}
 
-\item{code}{Whether to display the code in code blocks or only the header, to be
-more compact, if \code{NA}, the code will be displayed only if no header is
-defined by special comments.}
+\item{code}{Whether to display the code in code blocks or only the header,
+to be more compact, if \code{NA}, the code will be displayed only if no header
+is defined by special comments}
 
 \item{narrow}{\code{TRUE} makes sure the diagram stays centered on one column
 (they'll be longer but won't shift to the right)}
@@ -36,8 +36,10 @@ file will be created and opened.}
 \item{failed_only}{whether to restrict the report to failing tests only}
 }
 \value{
-Returns \code{NULL} invisibly, called for side effects.
+Returns \code{NULL} invisibly (called for side effects)
 }
 \description{
-build report from tests
+Build a markdown report from test scripts, showing the paths taken in tested
+functions, and where they fail if they do.
+See also the vignette \emph{"Build reports to document functions and unit tests"}.
 }

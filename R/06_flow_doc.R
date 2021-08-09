@@ -10,6 +10,8 @@
 #' @details
 #' if `pkg` and `out` are both left `NULL`, a vignette `diagrams.md` will be built
 #' in the root, so that `pkgdown::build_site` will use it as an additional page.
+#' See also the vignette *"Build reports to document functions and unit tests"*.
+#' @return Returns `NULL` invisibly (called for side effects).
 #' @export
 flow_doc <- function(
   pkg = NULL,

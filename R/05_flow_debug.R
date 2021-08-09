@@ -12,6 +12,7 @@
 #'
 #' @param f function to debug
 #' @inheritParams flow_run
+#' @return These functions return `NULL` invisibly (called for side effects)
 #' @export
 flow_debug <- function(
   f,

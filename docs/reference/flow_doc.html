@@ -175,9 +175,9 @@ must start with <code>"#"</code>, several prefixes can be provided</p></td>
     </tr>
     <tr>
       <th>code</th>
-      <td><p>Whether to display the code in code blocks or only the header, to be
-more compact, if <code>NA</code>, the code will be displayed only if no header is
-defined by special comments.</p></td>
+      <td><p>Whether to display the code in code blocks or only the header,
+to be more compact, if <code>NA</code>, the code will be displayed only if no header
+is defined by special comments</p></td>
     </tr>
     <tr>
       <th>narrow</th>
@@ -200,15 +200,19 @@ file will be created and opened.</p></td>
     </tr>
     <tr>
       <th>engine</th>
-      <td><p>Either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental), if
+      <td><p>either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental), if
 the latter, arguments <code>prefix</code>, <code>narrow</code>, and <code>code</code></p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Returns <code>NULL</code> invisibly (called for side effects).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>if <code>pkg</code> and <code>out</code> are both left <code>NULL</code>, a vignette <code>diagrams.md</code> will be built
-in the root, so that <code><a href='https://pkgdown.r-lib.org/reference/build_site.html'>pkgdown::build_site</a></code> will use it as an additional page.</p>
+in the root, so that <code><a href='https://pkgdown.r-lib.org/reference/build_site.html'>pkgdown::build_site</a></code> will use it as an additional page.
+See also the vignette <em>"Build reports to document functions and unit tests"</em>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

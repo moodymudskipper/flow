@@ -180,7 +180,7 @@ runs a call and draws the logical path taken by the code.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A call, a function, or a path to a script</p></td>
+      <td><p>a call, a function, or a path to a script</p></td>
     </tr>
     <tr>
       <th>prefix</th>
@@ -189,9 +189,9 @@ must start with <code>"#"</code>, several prefixes can be provided</p></td>
     </tr>
     <tr>
       <th>code</th>
-      <td><p>Whether to display the code in code blocks or only the header, to be
-more compact, if <code>NA</code>, the code will be displayed only if no header is
-defined by special comments.</p></td>
+      <td><p>Whether to display the code in code blocks or only the header,
+to be more compact, if <code>NA</code>, the code will be displayed only if no header
+is defined by special comments</p></td>
     </tr>
     <tr>
       <th>narrow</th>
@@ -204,7 +204,7 @@ defined by special comments.</p></td>
     </tr>
     <tr>
       <th>nested_fun</th>
-      <td><p>if not NULL, the index or name of the function definition found in
+      <td><p>if not <code>NULL</code>, the index or name of the function definition found in
 x that we wish to inspect</p></td>
     </tr>
     <tr>
@@ -221,7 +221,7 @@ if a regular path is used the format will be guessed from the extension.</p></td
     </tr>
     <tr>
       <th>engine</th>
-      <td><p>Either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental), if
+      <td><p>either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental), if
 the latter, arguments <code>prefix</code>, <code>narrow</code>, and <code>code</code></p></td>
     </tr>
     <tr>
@@ -232,7 +232,16 @@ inserted at the start of these blocks</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p><code>flow_view()</code> returns <code>NULL</code> invisibly, or the output path invisibly if <code>out</code> is not
+<code>NULL</code> (called for side effects). <code>flow_run()</code> returns the output of the wrapped call.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>flow_view</span>(<span class='no'>rle</span>)
+<span class='fu'>flow_run</span>(<span class='fu'><a href='https://rdrr.io/r/base/rle.html'>rle</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>3</span>)))</div><div class='output co'>#&gt; Run Length Encoding
+#&gt;   lengths: int [1:3] 1 2 1
+#&gt;   values : num [1:3] 1 2 3</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

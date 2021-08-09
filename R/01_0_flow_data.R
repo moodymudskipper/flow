@@ -113,6 +113,9 @@ flow_data <-
     ## remove misplaced special comments
     data$nodes$code_str <- gsub("`#`\\(.*?\\);", "", data$nodes$code_str)
 
+    # 0387
+    # 2423
+    # 00b7
     data$nodes$code_str <- gsub(" ", "\u2800", data$nodes$code_str)
 
     if(!is.null(truncate)) {

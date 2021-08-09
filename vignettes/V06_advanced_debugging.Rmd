@@ -14,8 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-We've reviewed the basic use of `flow_run()` in [Simple usage and addins](articles/V01_simple_usage.html),
-
+We've reviewed the basic use of `flow_run()` in [Simple usage and addins](V01_simple_usage.html),
 here we'll talk about the `browse` argument of `flow_run()` and functions
 `flow_debug()` and `flow_debugonce()`
 

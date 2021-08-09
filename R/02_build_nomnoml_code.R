@@ -9,43 +9,6 @@
 #   }
 
 
-#' build nomnoml code from data
-#'
-#' This functions builds the nomnoml code to render from the data built by
-#' `flow_data()`. It's not very useful for the average user to call it directly
-#' but its arguments can be set through `flow_view()` so their definitions are useful.
-#'
-#' All arguments, with the exception of `data` and `code`, are
-#' nomnoml directives, enumerated at https://openbase.io/js/nomnoml/documentation .
-#'
-#' Some of those don't seem to do anything in the context of this package,
-#' but given the sparsity of nomnoml documentation, we
-#' decided to keep all of them for more flexibility.
-#'
-#' @param data A data frame built by `flow_data()`
-#' @param code Whether to display the code in code blocks or only the header, to be
-#'   more compact, if `NA`, the code will be displayed only if no header is
-#'   defined by special comments.
-#' @param direction Whether to orient the chart from top to bottom or left to right
-#' @param ranker ranker, set to "longest-path" to have all exit points alligned
-#'   at the bottom.
-#' @param arrowSize Arrow size
-#' @param edges Whether to keep edges `"straight"`, or have them `"rounded"`
-#' @param bendSize Bend size, if `edges` is `"rounded"`
-#' @param font Font
-#' @param fontSize Font size
-#' @param lineWidth Line Width
-#' @param padding Padding
-#' @param spacing Spacing between blocks
-#' @param leading distance between two baselines of lines of type
-#' @param stroke Stroke
-#' @param fill Default filling color
-#' @param title Title, no effect was observed
-#' @param zoom Zoom, no effect was observed
-#' @param fillArrows Whether to fill arrows, no effect was observed
-#' @param acyclicer Acyclicer, no effect was observed
-#' @param gutter Gutter, no effect was observed
-#' @param edgeMargin Edge margin, no effect was observed
 build_nomnoml_code <- function(
   data,
   code,

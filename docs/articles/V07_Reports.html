@@ -115,7 +115,7 @@
 <p>The <code>pkg</code> argument can be any package name, from base R, CRAN, or other including your local packages.</p>
 <p>The <code>out</code> argument must be a path to an <em>html</em> or <em>md</em> file.</p>
 <p>If <code>pkg</code> is provided but <code>out</code> is left <code>NULL</code>, the report will be printed to a temporary file and will be opened automatically.</p>
-<p>If you don’t provide nor <code>pkg</code> nor <code>out</code>, a <code>diagrams.md</code> file will be created at the root of your project folder, so that you can use <code><a href="https://pkgdown.r-lib.org/reference/build_site.html">pkgdown::build_site</a></code> to knit it into a new section after editing the YAML file properly.</p>
+<p>If you don’t provide neither <code>pkg</code> nor <code>out</code>, a <code>diagrams.md</code> file will be created at the root of your project folder, so that you can use <code><a href="https://pkgdown.r-lib.org/reference/build_site.html">pkgdown::build_site</a></code> to knit it into a new section after editing the YAML file properly.</p>
 <p>The <a href="https://moodymudskipper.github.io/flow/articles/Draw-a-function.html">Diagrams</a> section of the <a href="https://moodymudskipper.github.io/flow/">website</a> was built this way, simply by using the following call :</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">flow</span>)
 <span class="fu"><a href="../reference/flow_doc.html">flow_doc</a></span>(<span class="kw">prefix</span> <span class="kw">=</span> <span class="st">"##"</span>)</pre></body></html></div>
