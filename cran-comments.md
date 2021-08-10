@@ -11,7 +11,7 @@
 
 ## Answering Julia Haider's comments 2021-04-26
 
-* Details about package functionality implemented methods wered added to description text.
+* Details about package functionality and implemented methods wered added to description text.
 * All exported functions' documentation feature a \value field
 * Examples have been added for all exported functions, excepted for `flow_doc` and 
   `flow_test` which respectively take considerable time to run (usually more than a 

@@ -7,8 +7,8 @@
 #' the nomnoml engine, this is due to the system not recognizing the Braille
 #' character `\u2800`. This character is used to circumvent a nomnoml shortcoming:
 #' lines can't start with a standard space and multiple subsequent spaces might be collapsed.
-#' To choose another character, set the option `flow.identer`, for instance :
-#' `options(flow.identer = "\u00b7")`.
+#' To choose another character, set the option `flow.indenter`, for instance :
+#' `options(flow.indenter = "\u00b7")`.
 #'
 #' @param x a call, a function, or a path to a script
 #' @param prefix prefix to use for special comments in our code used as block headers,

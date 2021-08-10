@@ -16,12 +16,12 @@ library(flow)
 ```
 
 By default diagrams are shown in the viewer window. This might be enough,
-especially if you are lucky enoug to have a touch screen to zoom in and out on the relevant subparts, but you might want to export your diagram
+especially if you are lucky enough to have a touch screen to zoom in and out on the relevant subparts, but you might want to export your diagram
 to share it or to explore it more conveniently.
 
 This is done by using the `out` parameter of `flow_view()` and `flow_run()`.
 
-The format will be infered from the file extension so you might do :
+The format will be inferred from the file extension so you might do :
 
 ```{r, eval = FALSE}
 library(flow)

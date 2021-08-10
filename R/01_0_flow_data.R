@@ -113,7 +113,7 @@ flow_data <-
     ## remove misplaced special comments
     data$nodes$code_str <- gsub("`#`\\(.*?\\);", "", data$nodes$code_str)
 
-    dbl_space <- paste0(getOption("flow.identer"), " ")
+    dbl_space <- paste0(getOption("flow.indenter"), " ")
     data$nodes$code_str <- gsub("  ", dbl_space, data$nodes$code_str)
 
     if(!is.null(truncate)) {
