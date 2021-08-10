@@ -38,10 +38,10 @@
       flow_data(fun)
     Output
       $nodes
-        id block_type            code_str label
-      1  0     header              fun(x)      
-      2  1   standard x<U+2800>+<U+2800>y      
-      3  2     return                          
+        id block_type code_str label
+      1  0     header   fun(x)      
+      2  1   standard    x + y      
+      3  2     return               
       
       $edges
         from to edge_label arrow
@@ -55,10 +55,10 @@
       flow_data(fun)
     Output
       $nodes
-        id block_type                                 code_str label
-      1  0     header                                   fun(x)      
-      2  1   standard x<U+2800>+<U+2800>y\nu<U+2800>+<U+2800>v      
-      3  2     return                                               
+        id block_type     code_str label
+      1  0     header       fun(x)      
+      2  1   standard x + y\nu + v      
+      3  2     return                   
       
       $edges
         from to edge_label arrow
@@ -72,12 +72,9 @@
       flow_data(call)
     Output
       $nodes
-        id block_type                                                     code_str
-      1  1   standard x<U+2800><-<U+2800>x<U+2800>*<U+2800>2\ny<U+2800><-<U+2800>x
-      2  2     return                                                             
-        label
-      1      
-      2      
+        id block_type           code_str label
+      1  1   standard x <- x * 2\ny <- x      
+      2  2     return                         
       
       $edges
         from to edge_label arrow
@@ -90,12 +87,9 @@
       flow_data(tmp)
     Output
       $nodes
-        id block_type                                                     code_str
-      1  1   standard x<U+2800><-<U+2800>x<U+2800>*<U+2800>2\ny<U+2800><-<U+2800>x
-      2  2     return                                                             
-        label
-      1      
-      2      
+        id block_type           code_str label
+      1  1   standard x <- x * 2\ny <- x      
+      2  2     return                         
       
       $edges
         from to edge_label arrow

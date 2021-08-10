@@ -69,6 +69,14 @@ inserted at the start of these blocks}
 \code{flow_view()} shows the code of a function as a flow diagram, \code{flow_run()}
 runs a call and draws the logical path taken by the code.
 }
+\details{
+On some system the output might sometimes display the box character when using
+the nomnoml engine, this is due to the system not recognizing the Braille
+character \verb{\\u2800}. This character is used to circumvent a nomnoml shortcoming:
+lines can't start with a standard space and multiple subsequent spaces might be collapsed.
+To choose another character, set the option \code{flow.identer}, for instance :
+\code{options(flow.identer = "\\u00b7")}.
+}
 \examples{
 flow_view(rle)
 flow_run(rle(c(1, 2, 2, 3)))

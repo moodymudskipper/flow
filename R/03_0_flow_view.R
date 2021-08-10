@@ -3,6 +3,13 @@
 #' `flow_view()` shows the code of a function as a flow diagram, `flow_run()`
 #' runs a call and draws the logical path taken by the code.
 #'
+#' On some system the output might sometimes display the box character when using
+#' the nomnoml engine, this is due to the system not recognizing the Braille
+#' character `\u2800`. This character is used to circumvent a nomnoml shortcoming:
+#' lines can't start with a standard space and multiple subsequent spaces might be collapsed.
+#' To choose another character, set the option `flow.identer`, for instance :
+#' `options(flow.identer = "\u00b7")`.
+#'
 #' @param x a call, a function, or a path to a script
 #' @param prefix prefix to use for special comments in our code used as block headers,
 #'   must start with `"#"`, several prefixes can be provided

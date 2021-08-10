@@ -4,18 +4,12 @@
       flow_data(fun)
     Output
       $nodes
-        id block_type
-      1  0     header
-      2  1        for
-      3  2   standard
-      4 -1      start
-      5  3     return
-                                                                                                             code_str
-      1                                                                                                        fun(x)
-      2 <U+2800><U+2800>for<U+2800>(x<U+2800>in<U+2800>foo)<U+2800><U+2800>\n<U+2800><U+2800><U+2800><U+2800><U+2800>
-      3                                                                                                              
-      4                                                                                                              
-      5                                                                                                              
+        id block_type                                                     code_str
+      1  0     header                                                       fun(x)
+      2  1        for <U+2800> for (x in foo) <U+2800>\n<U+2800> <U+2800> <U+2800>
+      3  2   standard                                                             
+      4 -1      start                                                             
+      5  3     return                                                             
         label
       1      
       2      
@@ -38,18 +32,12 @@
       flow_data(fun)
     Output
       $nodes
-        id block_type
-      1  0     header
-      2  1        for
-      3  2   standard
-      4 -1      start
-      5  3     return
-                                                                                                             code_str
-      1                                                                                                        fun(x)
-      2 <U+2800><U+2800>for<U+2800>(x<U+2800>in<U+2800>foo)<U+2800><U+2800>\n<U+2800><U+2800><U+2800><U+2800><U+2800>
-      3                                                                                                             x
-      4                                                                                                              
-      5                                                                                                              
+        id block_type                                                     code_str
+      1  0     header                                                       fun(x)
+      2  1        for <U+2800> for (x in foo) <U+2800>\n<U+2800> <U+2800> <U+2800>
+      3  2   standard                                                            x
+      4 -1      start                                                             
+      5  3     return                                                             
         label
       1      
       2      
@@ -72,24 +60,12 @@
       flow_data(fun)
     Output
       $nodes
-        id block_type
-      1  0     header
-      2  1      while
-      3  2   standard
-      4 -1      start
-      5  3     return
-                                                                                            code_str
-      1                                                                                       fun(x)
-      2 <U+2800><U+2800>while<U+2800>(foo)<U+2800><U+2800>\n<U+2800><U+2800><U+2800><U+2800><U+2800>
-      3                                                                                            x
-      4                                                                                             
-      5                                                                                             
-        label
-      1      
-      2      
-      3      
-      4      
-      5      
+        id block_type                                                  code_str label
+      1  0     header                                                    fun(x)      
+      2  1      while <U+2800> while (foo) <U+2800>\n<U+2800> <U+2800> <U+2800>      
+      3  2   standard                                                         x      
+      4 -1      start                                                                
+      5  3     return                                                                
       
       $edges
         from to edge_label arrow
@@ -128,28 +104,17 @@
       flow_data(fun)
     Output
       $nodes
-         id block_type
-      1   0     header
-      2   1         if
-      3   2        for
-      4   3   standard
-      5  -2      start
-      6   4        for
-      7   5   standard
-      8  -4      start
-      9  -1        end
-      10  6     return
-                                                                                                              code_str
-      1                                                                                                         fun(x)
-      2                      <U+2800><U+2800>if<U+2800>(foo)<U+2800><U+2800>\n<U+2800><U+2800><U+2800><U+2800><U+2800>
-      3  <U+2800><U+2800>for<U+2800>(x<U+2800>in<U+2800>bar)<U+2800><U+2800>\n<U+2800><U+2800><U+2800><U+2800><U+2800>
-      4                                                                                                            baz
-      5                                                                                                               
-      6  <U+2800><U+2800>for<U+2800>(x<U+2800>in<U+2800>qux)<U+2800><U+2800>\n<U+2800><U+2800><U+2800><U+2800><U+2800>
-      7                                                                                                           quux
-      8                                                                                                               
-      9                                                                                                               
-      10                                                                                                              
+         id block_type                                                     code_str
+      1   0     header                                                       fun(x)
+      2   1         if       <U+2800> if (foo) <U+2800>\n<U+2800> <U+2800> <U+2800>
+      3   2        for <U+2800> for (x in bar) <U+2800>\n<U+2800> <U+2800> <U+2800>
+      4   3   standard                                                          baz
+      5  -2      start                                                             
+      6   4        for <U+2800> for (x in qux) <U+2800>\n<U+2800> <U+2800> <U+2800>
+      7   5   standard                                                         quux
+      8  -4      start                                                             
+      9  -1        end                                                             
+      10  6     return                                                             
          label
       1       
       2       
