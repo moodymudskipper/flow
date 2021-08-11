@@ -19,10 +19,6 @@ to \code{flow_run()}, or following a call to \code{flow_debug()} or \code{flow_d
 (without parentheses) instead of \code{flow_draw()}.
 }
 \details{
-To have the diagram redraw itself when entering each new block, set
-\code{options(flow.auto_draw = TRUE)}, it's disabled by default because displaying
-or exporting the diagram sometimes takes a non-trivial amount of time.
-
 \code{d} was designed to look like the other shortcuts detailed in \code{?browser},
 such as \code{f}, \code{c} etc... It differs however in that it can be overridden.
 For instance if the function uses a variable \code{d} or that a parent environment

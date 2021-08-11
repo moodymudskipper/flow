@@ -85,11 +85,6 @@ update <- function(n, child = FALSE) {
   #browse_at <- data_env[[layer_id]]$browse_at
   last_node <- data_env[[layer_id]]$last_node
 
-
-  if(!child && getOption("flow.auto_draw") && is_browsing()) {
-    on.exit(data_env[[layer_id]]$update_diagram())
-  }
-
   # position where last_node connects to new node
   direct_edge_row_lgl <- edges$from == last_node & edges$to == n
   direct_edge_exists <- any(direct_edge_row_lgl)
@@ -180,10 +175,6 @@ data_env <- new.env()
 #' `d` is an active binding to `flow_draw()`, it means you can just type `d`
 #' (without parentheses) instead of `flow_draw()`.
 #'
-#' To have the diagram redraw itself when entering each new block, set
-#'`options(flow.auto_draw = TRUE)`, it's disabled by default because displaying
-#' or exporting the diagram sometimes takes a non-trivial amount of time.
-#'
 #' `d` was designed to look like the other shortcuts detailed in `?browser`,
 #' such as `f`, `c` etc... It differs however in that it can be overridden.
 #' For instance if the function uses a variable `d` or that a parent environment
@@ -200,7 +191,7 @@ data_env <- new.env()
 #' @export
 flow_draw <- function() {
   # the following is necessary to pass checks
-  if(!interactive() || !is_browsing()) # || identical(sys.call(-1)[[1]], quote(mget)))
+  if(!interactive())
     return(invisible())
   layer_id <- tail(ls(data_env), 1)
   if(!length(layer_id)) {

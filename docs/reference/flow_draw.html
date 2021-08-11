@@ -166,10 +166,7 @@ to <code><a href='flow_view.html'>flow_run()</a></code>, or following a call to 
     <p>Returns <code>NULL</code> invisibly (called for side effects)</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>To have the diagram redraw itself when entering each new block, set
-<code><a href='https://rdrr.io/r/base/options.html'>options(flow.auto_draw = TRUE)</a></code>, it's disabled by default because displaying
-or exporting the diagram sometimes takes a non-trivial amount of time.</p>
-<p><code>d</code> was designed to look like the other shortcuts detailed in <code><a href='https://rdrr.io/r/base/browser.html'>?browser</a></code>,
+    <p><code>d</code> was designed to look like the other shortcuts detailed in <code><a href='https://rdrr.io/r/base/browser.html'>?browser</a></code>,
 such as <code>f</code>, <code>c</code> etc... It differs however in that it can be overridden.
 For instance if the function uses a variable <code>d</code> or that a parent environment
 contains a variable <code>d</code>, <code>flow::d</code> won't be found. In that case you will
