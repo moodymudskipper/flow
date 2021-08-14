@@ -80,8 +80,8 @@ flow_run(factorial(5L))
 
 <img src="flow_run_1.png" alt="" width="300"/>
 
-`flow_run()` counts how many time code blocks
-where entered and these numbers are displayed next to the edges between parenthesis.
+`flow_run()` counts how many times code blocks
+were entered and these numbers are displayed next to the edges between parenthesis.
 
 It can also be used on calls that fail, which is convenient for debugging, for
 instance the following call fails :
