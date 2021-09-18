@@ -14,6 +14,11 @@ flow_view_nomnoml <- function(
   ## build code from data
   code <- do.call(build_nomnoml_code, c(list(data,code = code)))
 
+  out <- save_nomnoml(code, svg, out)
+  if(inherits(out, "htmlwidget")) out else invisible(out)
+}
+
+save_nomnoml <- function(code, svg, out) {
   ## buildwidget
   x <- list(code = code, svg = svg)
   widget <- do.call(

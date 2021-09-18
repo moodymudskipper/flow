@@ -4,6 +4,7 @@
 #' @importFrom utils txtProgressBar setTxtProgressBar capture.output
 #' @importFrom utils installed.packages
 #' @importFrom stats setNames aggregate
+#' @importFrom methods formalArgs
 NULL
 
 
