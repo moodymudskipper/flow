@@ -1,27 +1,3 @@
-get_namespace_exports <- function(ns) {
-  current_pkg <- sub("^Package: (.*)$", "\\1", readLines("DESCRIPTION")[[1]])
-  if(is.environment(ns)) ns <- sub("^namespace:", "", environmentName(ns))
-  if(ns != current_pkg) return(getNamespaceExports(ns))
-  ns_lines <- readLines("NAMESPACE")
-  pattern <- "^export\\((.*)\\)$"
-  sub(pattern, "\\1", ns_lines)[grepl(pattern, ns_lines)]
-}
-
-is_namespaced <- function(call) {
-  is.call(call) &&
-    length(call) == 3 &&
-    deparse1(call[[1]]) %in% c("::", ":::")
-}
-
-raw_fun_name <- function(call) {
-  if(is_namespaced(call)) call <- call[[3]]
-  if(length(call) > 1) stop("invalid name")
-  as.character(call)
-}
-
-#  TODO: if argument is named foo, variable foo should be discarded as potential ns::foo object
-#  same if we find `foo <-` of `foo =`
-
 #  TODO: max depth should be applied on min depth where fun is found, else inconsistent ouput
 # as object can have several depths and here first found is taken
 
@@ -74,9 +50,10 @@ flow_view_deps <- function(
     # if(nm == "funs") browser()
     fun <- ns[[nm]]
     if(is.function(fun)) {
-      deps_nms <- unique(all.names(body(fun)))
+      body_ <- remove_namespaced_calls(body(fun))
+      deps_nms <- unique(all.names(body_))
       # remove argument names as these would override function def
-      deps_nms <- setdiff(deps_nms, formalArgs(fun))
+      deps_nms <- setdiff(deps_nms, c(formalArgs(fun), extract_assignment_targets(body_)))
 
       deps <- subset(funs, nm %in% deps_nms)
     } else {
@@ -111,9 +88,6 @@ flow_view_deps <- function(
     funs$covered[funs$nm == nm] <<- TRUE
     if(covered) return(NULL)
 
-
-
-
     if(nrow(deps)) {
       for(dep in deps$nm) {
         rec(dep, depth + 1, parent = nm)
@@ -128,29 +102,78 @@ flow_view_deps <- function(
   if(inherits(out, "htmlwidget")) out else invisible(out)
 }
 
+get_namespace_exports <- function(ns) {
+  current_pkg <- sub("^Package: (.*)$", "\\1", readLines("DESCRIPTION")[[1]])
+  if(is.environment(ns)) ns <- sub("^namespace:", "", environmentName(ns))
+  if(ns != current_pkg) return(getNamespaceExports(ns))
+  ns_lines <- readLines("NAMESPACE")
+  pattern <- "^export\\((.*)\\)$"
+  sub(pattern, "\\1", ns_lines)[grepl(pattern, ns_lines)]
+}
+
+is_namespaced <- function(call) {
+  is.call(call) &&
+    length(call) == 3 &&
+    deparse1(call[[1]]) %in% c("::", ":::")
+}
+
+raw_fun_name <- function(call) {
+  if(is_namespaced(call)) call <- call[[3]]
+  if(length(call) > 1) stop("invalid name")
+  as.character(call)
+}
+
+remove_namespaced_calls <- function(call) {
+  if(!is.call(call)) return(call)
+  if(length(call) == 3 && (
+    identical(call[[1]], quote(`::`)) ||
+    identical(call[[1]], quote(`:::`))
+  )) {
+    return(NULL)
+  }
+  as.call(lapply(call, remove_namespaced_calls))
+}
+
+extract_namespaced_calls <- function(call) {
+  extract_namespaced_calls_impl <- function(call) {
+  if(!is.call(call)) return(NULL)
+  if(length(call) == 3 && (
+    identical(call[[1]], quote(`::`)) ||
+    identical(call[[1]], quote(`:::`))
+  )) {
+    return(call)
+  }
+  lapply(call, extract_namespaced_calls_impl)
+  }
+  calls <- extract_namespaced_calls_impl(call)
+  calls <- unlist(calls)
+  vapply(calls, deparse, character(1))
+}
+
+extract_assignment_targets <- function(call) {
+  extract_assignment_targets_impl <- function(call) {
+    if(!is.call(call)) return(NULL)
+    if(length(call) == 3 && (
+      identical(call[[1]], quote(`<-`)) ||
+      identical(call[[1]], quote(`=`))
+    )) {
+      if(!is.symbol(call[[2]])) call[2] <- list(NULL)
+      return(c(call[[2]], extract_assignment_targets(call[[3]])))
+    }
+    lapply(call, extract_assignment_targets_impl)
+  }
+  calls <- extract_assignment_targets_impl(call)
+  calls <- unlist(calls)
+  vapply(calls, deparse, character(1))
+}
+
+
+
 get_imported_funs <- function(nm, ns, ns_nm) {
   fun <- ns[[nm]]
   if(!is.function(fun)) return(NULL)
-  body_chr <- deparse(body(fun))
-  pattern <- "[._a-zA-Z1-9]+\\:\\:\\:?[._a-zA-Z1-9]+"
-  namespaced_call_lines <- grep(pattern, body_chr, value = TRUE)
-  namespaced_calls1 <- mapply(
-    function(x, matches) {
-      unlist(sapply(seq_along(matches),
-                    function(i) substr(x, matches[[i]], matches[[i]] + attr(matches, "match.length")[[i]] - 1)))
-    },
-    namespaced_call_lines,
-    gregexpr(pattern, namespaced_call_lines),
-    USE.NAMES = FALSE)
-  namespaced_calls1 <- unique(unlist(namespaced_calls1))
-  if(length(namespaced_calls1))
-    namespaced_calls1 <- namespaced_calls1[
-      !startsWith(namespaced_calls1, paste0(ns_nm, "::")) &&
-      !startsWith(namespaced_calls1, "base::")]
-
-  # remove namespaced call for next step
-  body_chr <- gsub("[._a-zA-Z1-9]+\\:\\:[._a-zA-Z1-9]+", "`**`", body_chr)
-  body_ <- parse(text = body_chr)[[1]]
+  namespaced_calls1 <- extract_namespaced_calls(body(fun))
+  body_ <- remove_namespaced_calls(body(fun))
   funs <- setdiff(all.names(body_), formalArgs(fun))
   namespaces <- sapply(
     funs,
