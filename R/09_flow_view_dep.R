@@ -6,32 +6,25 @@
 #' @param fun A function
 #' @param max_depth An integer, the maximum depth to display
 #' @param trim A vector of list of function names where the recursion will stop
-#' @param show_imports Whether to show imported functions, only packages, or neither.
+#' @param show_imports Whether to show imported functions, only packages, or neither
+#' @param lines Whether to show the number of lines of code next to the function name
 #' @inheritParams flow_view
+#' @examples
+#' flow_view_deps(flow_view_deps)
 #' @export
 flow_view_deps <- function(
-  fun, max_depth = Inf, trim = NULL, show_imports = c("functions", "packages", "none"), out = NULL) {
+  fun, max_depth = Inf, trim = NULL, show_imports = c("functions", "packages", "none"), out = NULL, lines = TRUE) {
   nm <- raw_fun_name(substitute(fun))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # initiate global objects
 
   show_imports <- match.arg(show_imports)
-  # in all rigor we'll have to look above until we find a namespace
-  # because some manufactured functions will have their env be a child of the namespace
   ns <- environment(fun)
   ns_nm <- sub("package:","", environmentName(ns))
-  funs <- data.frame(nm = ls(ns))
-  funs$covered <- funs$nm %in% trim
-  funs$exported <- funs$nm %in% get_namespace_exports(ns)
-  funs$is_function <- sapply(funs$nm, function(nm) is.function(ns[[nm]]))
-  funs$is_call_routine <- sapply(funs$nm, function(nm) inherits(ns[[nm]], "CallRoutine"))
-  funs$style <- with(funs, ifelse(
-    exported,
-    ifelse(is_function, "expfun", "expdata"),
-    ifelse(is_function, "unexpfun", "unexpdata")))
-  funs$style[funs$covered] <- "trimmed"
-  funs$style[funs$is_call_routine] <- "callroutine"
+
+  funs <- flow_view_deps_df(ns, trim, lines)
+
   nomnoml_code <- "
 # direction: right
 #.expfun: visual=roundrect fill=#ddebf7 title=bold
@@ -46,8 +39,6 @@ flow_view_deps <- function(
   # recurse
 
   rec <- function(nm, depth = 1, parent = NULL) {
-    # browser()
-    # if(nm == "funs") browser()
     fun <- ns[[nm]]
     if(is.function(fun)) {
       body_ <- remove_namespaced_calls(body(fun))
@@ -69,19 +60,21 @@ flow_view_deps <- function(
     }
 
     covered <- funs$covered[funs$nm == nm]
+
     if(depth == max_depth && nrow(deps) && !covered) {
       style   <- "trimmed"
       covered <- TRUE
     } else {
       style   <- funs$style[funs$nm == nm]
     }
-    new_nomnoml_code <- paste0(
-      "[<", style, "> ",
-      paste(c(nm, imported), collapse = "|"), #paste_imported_ns(nm, ns, ns_nm, hide_core = hide_core),
-      "]")
+
+    header <- funs$header[funs$nm == nm]
+    id <- paste(c(header, imported), collapse = "|")
+    new_nomnoml_code <- paste0("[<", style, "> ", id, "]")
     if(!is.null(parent)) {
-      parent_style <- funs$style[funs$nm == parent]
-      new_nomnoml_code <- paste0("[<", parent_style, "> ", parent, "] -> ", new_nomnoml_code)
+      parent_style  <- funs$style[funs$nm == parent]
+      parent_header <- funs$header[funs$nm == parent]
+      new_nomnoml_code <- paste0("[<", parent_style, "> ", parent_header, "] -> ", new_nomnoml_code)
     }
     nomnoml_code <<- paste0(nomnoml_code, "\n", new_nomnoml_code)
 
@@ -100,6 +93,33 @@ flow_view_deps <- function(
   svg <- is.null(out) || endsWith(out, ".html") || endsWith(out,".html")
   out <- save_nomnoml(nomnoml_code, svg, out)
   if(inherits(out, "htmlwidget")) out else invisible(out)
+}
+
+flow_view_deps_df <- function(ns, trim, lines) {
+  # FIXME: this ignores functions stored in ns's children
+  funs <- data.frame(nm = ls(ns))
+
+  funs$covered <- funs$nm %in% trim
+
+  # FIXME: this ignores functions built in .onLoad and .onAttach
+  funs$exported <- funs$nm %in% get_namespace_exports(ns)
+  funs$is_function <- sapply(funs$nm, function(nm) is.function(ns[[nm]]))
+  funs$is_call_routine <- sapply(funs$nm, function(nm) inherits(ns[[nm]], "CallRoutine"))
+  funs$style <- with(funs, ifelse(
+    exported,
+    ifelse(is_function, "expfun", "expdata"),
+    ifelse(is_function, "unexpfun", "unexpdata")))
+  funs$style[funs$covered] <- "trimmed"
+  funs$style[funs$is_call_routine] <- "callroutine"
+
+  n_lines <- sapply(funs$nm, function(x) {length(deparse(ns[[x]]))})
+  n_lines <- pmax(1, n_lines-3)
+  funs$n_lines <- ifelse(funs$is_function, n_lines, 0)
+  funs$header <- funs$nm
+  if(lines) {
+    funs$header <- ifelse(funs$n_lines == 0, funs$nm, paste0(funs$nm, " (", funs$n_lines,")"))
+  }
+  funs
 }
 
 get_namespace_exports <- function(ns) {
@@ -158,7 +178,7 @@ extract_assignment_targets <- function(call) {
       identical(call[[1]], quote(`=`))
     )) {
       if(!is.symbol(call[[2]])) call[2] <- list(NULL)
-      return(c(call[[2]], extract_assignment_targets(call[[3]])))
+      return(c(call[[2]], extract_assignment_targets_impl(call[[3]])))
     }
     lapply(call, extract_assignment_targets_impl)
   }
