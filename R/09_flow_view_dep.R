@@ -123,6 +123,7 @@ flow_view_deps_df <- function(ns, trim, lines) {
 }
 
 get_namespace_exports <- function(ns) {
+  if(!exists("DESCRIPTION")) return(getNamespaceExports(ns))
   current_pkg <- sub("^Package: (.*)$", "\\1", readLines("DESCRIPTION")[[1]])
   if(is.environment(ns)) ns <- sub("^namespace:", "", environmentName(ns))
   if(ns != current_pkg) return(getNamespaceExports(ns))
