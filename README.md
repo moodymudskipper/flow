@@ -1,10 +1,7 @@
 
 <!-- badges: start -->
 
-<!-- [![Travis build status](https://travis-ci.org/moodymudskipper/flow.svg?branch=master)](https://travis-ci.org/moodymudskipper/flow) -->
-
-<!-- [![Codecov test coverage](https://codecov.io/gh/moodymudskipper/flow/branch/master/graph/badge.svg)](https://codecov.io/gh/moodymudskipper/flow?branch=master) -->
-
+[![R-CMD-check](https://github.com/moodymudskipper/flow/workflows/R-CMD-check/badge.svg)](https://github.com/moodymudskipper/flow/actions)
 <!-- badges: end -->
 
 # flow <img src='man/figures/logo.png' align="right" height="139" />
