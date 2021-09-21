@@ -225,7 +225,7 @@ gfn <- getFromNamespace
 
 robust_deparse <- function(call) {
   txt <- paste(deparse(call, width.cutoff = 40L, backtick = TRUE), collapse = "\n")
-  if (!grepl("$!!", txt)) return(txt)
+  if (!grepl("\\$!!", txt)) return(txt)
   # replace
   substitute_bad_dollars <- function(call) {
     if(!is.call(call)) return(call)
