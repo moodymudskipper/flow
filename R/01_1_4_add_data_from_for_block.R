@@ -7,7 +7,7 @@ add_data_from_for_block <- function(data, block, narrow = FALSE){
   id_end <- -id
   # add node for `for` statement
 
-  code_str <- paste(deparse(call("for", block[[2]], block[[3]]), width.cutoff = 40L, backtick = TRUE), collapse = "\n")
+  code_str <- robust_deparse(call("for", block[[2]], block[[3]]))
   code_str <- styler::style_text(code_str)
   code_str[length(code_str)] <- sub(" NULL$","", code_str[length(code_str)])
   if(length(code_str) == 1) code_str <- c(code_str, "\u2800")

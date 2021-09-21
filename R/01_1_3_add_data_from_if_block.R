@@ -13,7 +13,7 @@ add_data_from_if_block <- function(data, block, narrow = FALSE){
 
 
   # build string to display in if node
-  code_str <- paste(deparse(call("if", block[[2]]), width.cutoff = 40L, backtick = TRUE), collapse = "\n")
+  code_str <- robust_deparse(call("if", block[[2]]))
   code_str <- styler::style_text(code_str)
   code_str[length(code_str)] <- sub(" NULL$","", code_str[length(code_str)])
   if(length(code_str) == 1) code_str <- c(code_str, "\u2800")

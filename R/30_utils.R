@@ -221,3 +221,23 @@ getS3methodSym <- function(fun, x){
 }
 
 gfn <- getFromNamespace
+
+
+robust_deparse <- function(call) {
+  txt <- paste(deparse(call, width.cutoff = 40L, backtick = TRUE), collapse = "\n")
+  if (!grepl("$!!", txt)) return(txt)
+  # replace
+  substitute_bad_dollars <- function(call) {
+    if(!is.call(call)) return(call)
+    if(length(call) == 3 && identical(call[[1]], quote(`$`))) {
+      if(!is.character(call[[3]])) {
+        call[[1]] <- as.symbol("$\U200D")
+      }
+    }
+    call <- as.call(lapply(as.list(call), dirty_deparse))
+    call
+  }
+  call <- substitute_bad_dollars(call)
+  txt <- paste(deparse(call, width.cutoff = 40L, backtick = TRUE), collapse = "\n")
+  gsub("\U200D", "", txt)
+}

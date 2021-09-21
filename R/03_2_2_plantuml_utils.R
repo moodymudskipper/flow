@@ -41,7 +41,7 @@ build_elseif_txt <- function(expr, truncate) {
 # deparse an expression to a correctly escaped character vector
 deparse_plantuml <- function(x, truncate) {
   ## deparse to a string
-  x <- paste(deparse(x, backtick = TRUE),collapse = "\n")
+  x <- robust_deparse(x)
   ## format using styler
   x <- styler::style_text(x)
 
