@@ -231,13 +231,13 @@ robust_deparse <- function(call) {
     if(!is.call(call)) return(call)
     if(length(call) == 3 && identical(call[[1]], quote(`$`))) {
       if(!is.character(call[[3]])) {
-        call[[1]] <- as.symbol("$\U200D")
+        call[[1]] <- as.symbol("$\b")
       }
     }
-    call <- as.call(lapply(as.list(call), robust_deparse))
+    call <- as.call(lapply(as.list(call), substitute_bad_dollars))
     call
   }
   call <- substitute_bad_dollars(call)
   txt <- paste(deparse(call, width.cutoff = 40L, backtick = TRUE), collapse = "\n")
-  gsub("\U200D", "", txt)
+  gsub("`\\$\\\\b`", "`$`", txt)
 }
