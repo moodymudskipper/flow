@@ -234,7 +234,7 @@ robust_deparse <- function(call) {
         call[[1]] <- as.symbol("$\U200D")
       }
     }
-    call <- as.call(lapply(as.list(call), dirty_deparse))
+    call <- as.call(lapply(as.list(call), robust_deparse))
     call
   }
   call <- substitute_bad_dollars(call)
