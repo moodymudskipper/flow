@@ -72,7 +72,7 @@ get_last_id <- function(data) {
 
 `%call_in%` <- function(calls, constructs){
   sapply(as.list(calls), function(x)
-    is.call(x) && as.character(x[[1]]) %in% constructs)
+    is.call(x) && any(as.character(x[[1]]) %in% constructs))
 }
 
 get_last_call_type <- function(expr){
