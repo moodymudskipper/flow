@@ -62,6 +62,15 @@ get_last_id <- function(data) {
   max(data$nodes$id)
 }
 
+
+deparse1 <- function (expr, collapse = " ", width.cutoff = 500L, ...) {
+  if (R.version$major < 4) {
+    paste(deparse(expr = expr, width.cutoff = width.cutoff, ... = ...), collapse = collapse)
+  } else {
+    base::deparse1(expr = expr, collapse = collapse, width.cutoff = width.cutoff, ... = ...)
+  }
+}
+
 # deparse2 <- function(x){
 #   x <- as.call(c(quote(`{`),x))
 #   x <- deparse(x, width.cutoff = 500)
@@ -72,7 +81,7 @@ get_last_id <- function(data) {
 
 `%call_in%` <- function(calls, constructs){
   sapply(as.list(calls), function(x)
-    is.call(x) && any(as.character(x[[1]]) %in% constructs))
+    is.call(x) && deparse1(x[[1]]) %in% constructs)
 }
 
 get_last_call_type <- function(expr){
