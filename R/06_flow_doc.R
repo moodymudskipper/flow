@@ -133,8 +133,8 @@ flow_doc <- function(
     engine = engine)
 
   cat("knitting")
-  out <- suppressWarnings(normalizePath(out, winslash = "/"))
-  rmarkdown::render(rmd_output, output_file = out)
+
+  rmarkdown::render(rmd_output, output_file = here::here(out))
   if(ext == "md") {
     # remove the "<!DOCTYPE html>" line
     writeLines(readLines(out)[-1], out)
