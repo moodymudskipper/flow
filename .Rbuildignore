@@ -16,3 +16,4 @@
 ^vignettes/V07_Reports\.Rmd$
 ^CRAN-RELEASE$
 ^cran-comments\.md$
+^\.github$
