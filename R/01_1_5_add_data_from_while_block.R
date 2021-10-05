@@ -9,9 +9,13 @@ add_data_from_while_block <- function(data, block, narrow = FALSE){
   code_str <- robust_deparse(call("while", block[[2]]))
   code_str <- styler::style_text(code_str)
   code_str[length(code_str)] <- sub(" NULL$","", code_str[length(code_str)])
-  if(length(code_str) == 1) code_str <- c(code_str, "\u2800")
-  code_str <- paste("\u2800", code_str, "\u2800", collapse = "\n")
-  code_str <- sub(" \\{ \u2800\\n\u2800   NULL \u2800\\n\u2800 \\} \u2800", "", code_str)
+  indenter <- getOption("flow.indenter")
+  if(length(code_str) == 1) code_str <- c(code_str, indenter)
+  code_str <- paste(indenter, code_str, indenter, collapse = "\n")
+  code_str <- sub(sprintf(
+    " \\{ %s\\n%s   NULL %s\\n%s \\} %s",
+    indenter, indenter, indenter, indenter, indenter),
+    "", code_str)
 
   # add node for `while`
   data <- add_node(
