@@ -24,7 +24,8 @@ Imports:
     htmlwidgets,
     rstudioapi,
     webshot,
-    styler
+    styler,
+    methods
 RoxygenNote: 7.1.1.9001
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
