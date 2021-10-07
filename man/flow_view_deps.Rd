@@ -32,3 +32,6 @@ if a regular path is used the format will be guessed from the extension.}
 \description{
 Show dependency tree of a function
 }
+\examples{
+flow_view_deps(flow_view_deps)
+}
