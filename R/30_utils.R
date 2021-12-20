@@ -257,3 +257,7 @@ escape_pipes_and_brackets <- function(x) {
   x <- gsub("|","\\|", x ,fixed = TRUE)
   x
 }
+
+quote_non_syntactic <- function(x) {
+  ifelse(x == make.names(x), x, paste0("`", x, "`"))
+}
