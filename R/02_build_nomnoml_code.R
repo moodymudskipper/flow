@@ -52,12 +52,8 @@ build_nomnoml_code <- function(
   edge_data <- data$edges
 
   # escape pipes characters and square brackets
-  node_data$code_str <- gsub("]","\\]", node_data$code_str,fixed = TRUE)
-  node_data$code_str <- gsub("[","\\[", node_data$code_str,fixed = TRUE)
-  node_data$code_str <- gsub("|","\\|", node_data$code_str,fixed = TRUE)
-  node_data$label    <- gsub("]","\\]", node_data$label,fixed = TRUE)
-  node_data$label    <- gsub("[","\\[", node_data$label,fixed = TRUE)
-  node_data$label    <- gsub("|","\\|", node_data$label,fixed = TRUE)
+  node_data$code_str <- escape_pipes_and_brackets(node_data$code_str)
+  node_data$label    <- escape_pipes_and_brackets(node_data$label)
 
   ## was `code` set to `NA` ?
   if (is.na(code)) {

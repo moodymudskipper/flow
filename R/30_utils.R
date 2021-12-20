@@ -250,3 +250,10 @@ robust_deparse <- function(call) {
   txt <- paste(deparse(call, width.cutoff = 40L, backtick = TRUE), collapse = "\n")
   gsub("`\\$\\\\b`", "`$`", txt)
 }
+
+escape_pipes_and_brackets <- function(x) {
+  x <- gsub("]","\\]", x ,fixed = TRUE)
+  x <- gsub("[","\\[", x ,fixed = TRUE)
+  x <- gsub("|","\\|", x ,fixed = TRUE)
+  x
+}
