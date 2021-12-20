@@ -69,7 +69,7 @@ flow_view_deps <- function(
     }
 
     header <- funs$header[funs$nm == nm]
-    id <- paste(c(header, imported), collapse = "|")
+    id <- paste(escape_pipes_and_brackets(c(header, imported)) , collapse = "|")
     new_nomnoml_code <- paste0("[<", style, "> ", id, "]")
     if(!is.null(parent)) {
       parent_style  <- funs$style[funs$nm == parent]
