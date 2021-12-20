@@ -4,10 +4,15 @@
 \alias{flow_view_vars}
 \title{Draw the dependencies of variables in a functiomn}
 \usage{
-flow_view_vars(fun)
+flow_view_vars(fun, out = NULL)
 }
 \arguments{
 \item{fun}{The function to draw}
+
+\item{out}{a path to save the diagram to.
+Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
+export the objec to a temp file of the relevant format and open it,
+if a regular path is used the format will be guessed from the extension.}
 }
 \value{
 Called for side effects
