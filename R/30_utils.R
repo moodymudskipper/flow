@@ -261,3 +261,64 @@ escape_pipes_and_brackets <- function(x) {
 quote_non_syntactic <- function(x) {
   ifelse(x == make.names(x), x, paste0("`", x, "`"))
 }
+
+get_binding_environment <- function(fun_name, env = parent.frame()) {
+  if (identical(env, emptyenv())) {
+    stop("Can't find `", fun_name, "`.", call. = FALSE)
+  } else if (exists(fun_name, env, inherits = FALSE)) {
+    env
+  } else {
+    get_binding_environment(fun_name, parent.env(env))
+  }
+}
+
+namespace_name <- function(x, ...) UseMethod("namespace_name")
+
+#' @export
+namespace_name.environment <- function(x, env, ...) {
+  if(!isNamespace(x)) stop("The provided environment isn't a namespace")
+  sub("^namespace:", "", environmentName(x))
+}
+
+#' @export
+namespace_name.character <- function(x, env, fallback_ns = NULL) {
+  if(grepl("::", x)) {
+    return(sub("^([^:]+)[:]{1,2}.*", "\\1", x))
+  }
+  # since function's environment is not necessarily its namespace we need to
+  # go up to
+  if (!exists(x, envir = env, inherits = TRUE)) {
+    if(exists(x, envir = fallback_ns, inherits = FALSE))
+      return(namespace_name(fall_back_ns))
+    stop(sprintf("`%s` cannot be found", x))
+  }
+  obj <- get(x, env)
+  obj_env <- environment(obj)
+  # handle primitives
+  if(is.null(obj_env)) return("base")
+  # usually obj_env and namespace are the same but not always
+  namespace <- get_binding_environment(x, obj_env)
+  namespace_name(namespace)
+}
+
+get_namespace_exports <- function(ns) {
+  if(!file.exists("DESCRIPTION")) return(getNamespaceExports(ns))
+  current_pkg <- sub("^Package: (.*)$", "\\1", readLines("DESCRIPTION")[[1]])
+  if(is.environment(ns)) ns <- sub("^namespace:", "", environmentName(ns))
+  if(ns != current_pkg) return(getNamespaceExports(ns))
+  ns_lines <- readLines("NAMESPACE")
+  pattern <- "^export\\((.*)\\)$"
+  sub(pattern, "\\1", ns_lines)[grepl(pattern, ns_lines)]
+}
+
+is_namespaced <- function(call) {
+  is.call(call) &&
+    length(call) == 3 &&
+    deparse1(call[[1]]) %in% c("::", ":::")
+}
+
+raw_fun_name <- function(call) {
+  if(is_namespaced(call)) call <- call[[3]]
+  if(length(call) > 1) stop("invalid name")
+  as.character(call)
+}

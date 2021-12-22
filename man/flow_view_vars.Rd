@@ -2,21 +2,60 @@
 % Please edit documentation in R/10_flow_view_vars.R
 \name{flow_view_vars}
 \alias{flow_view_vars}
-\title{Draw the dependencies of variables in a functiomn}
+\title{Draw the dependencies of variables in a function}
 \usage{
-flow_view_vars(fun, out = NULL)
+flow_view_vars(
+  fun,
+  expand = TRUE,
+  refactor = c("refactored", "original"),
+  out = NULL
+)
 }
 \arguments{
 \item{fun}{The function to draw}
+
+\item{refactor}{If using 'refactor' package, whether to consider original or refactored code}
 
 \item{out}{a path to save the diagram to.
 Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 export the objec to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
+
+\item{exand}{A boolean}
 }
 \value{
 Called for side effects
 }
 \description{
-Experimental, and probably can never been made 100\% robust
+Experimental! This draws the dependencies between variables. This function
+is useful to detect dead code and variable clusters. By default the variable
+is shown a new time when it's overwritten or modified, this can be changed by
+setting \code{expand} to \code{FALSE}.
+}
+\details{
+\itemize{
+\item The function is blue
+\item The arguments are green
+\item The variables starting as constants are yellow
+\item The dead code branches are orange and dashed
+\item dashed lines represent how variables are undirectly impacted by control flow conditions,
+for instance the expression \code{if(z == 1) x <- y} would give you a full arrow
+from \code{y} to \code{x} and a dashed arrow from \code{z} to \code{x}
+}
+
+\code{expand = TRUE} gives a sense of the chronology, and keep separate the
+unrelated uses of temp variables. \code{expand = FALSE} is more compact and shows
+you directly what variables might impact a given variable, and what variables
+it impacts.
+
+This function will work best if  the function doesn't draw from or assign to other
+environments, that it doesn't use \code{assign()} or \code{attach()}. The output might
+be polluted by variable names found in some lazily evaluated function arguments.
+We ignore variable names found in calls to \code{quote()} and \code{n} as well as
+nested function definitions, but complete robustness is probably impossible.
+
+The diagram assumes that for / while / repeat loops were at least run once,
+if a value is modified in a branch of an if call (or both branches) and
+\code{expand} is \code{TRUE}, the modified variable(s) will point to a new one at the
+end of the \code{ìf} call.
 }
