@@ -311,7 +311,9 @@ namespace_name.character <- function(x, env, fallback_ns = NULL, fail_if_not_fou
     namespace_name <- pkgs[length(pkgs)] # or pkgs[1] ? not sure
   } else if(startsWith(bind_env_nm, "package:")) {
     namespace_name <- sub("^.*?:", "", bind_env_nm)
-  } else{
+  } else if (bind_env_nm == "base") {
+    namespace_name <- "base"
+  } else {
     namespace_name <- namespace_name(bind_env)
   }
 
