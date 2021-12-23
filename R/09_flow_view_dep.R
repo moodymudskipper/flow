@@ -28,7 +28,7 @@ flow_view_deps <- function(
   out = NULL,
   lines = TRUE) {
 
-  target_fun_name <- as.character(substitute(fun)) #
+  target_fun_name <- deparse(substitute(fun)) #
   call_env <- parent.frame()
   nm <- raw_fun_name(substitute(fun))
 
@@ -38,9 +38,6 @@ flow_view_deps <- function(
   # initiate global objects
 
   show_imports <- match.arg(show_imports)
-
-  ns_nm <- sub("package:","", environmentName(ns))
-
 
   nomnoml_code <- "
 # direction: right
@@ -56,6 +53,8 @@ flow_view_deps <- function(
   # recurse
   # we don't pass around nomnoml_code and objs, we just edit it with `<<-`
   rec <- function(row, depth = 1, parent = NULL) {
+    # message("----------------------------------------------------------------")
+    # print(row)
     dependency_df <- get_dependency_df(row, objs)
     # gather info from obs
 
@@ -107,7 +106,10 @@ flow_view_deps <- function(
 
   }
   #debug(rec)
-  rec (objs[objs$nm == target_fun_name,, drop = FALSE])
+
+  target_nm <- sub("^[^:]+[:]{2,3}`?([^`]+)`?", "\\1", target_fun_name)
+  target_ns_nm <- namespace_name(target_fun_name, parent.frame())
+  rec (objs[objs$nm == target_nm & objs$ns_nm == target_ns_nm,, drop = FALSE])
 
   svg <- is.null(out) || endsWith(out, ".html") || endsWith(out,".html")
   out <- save_nomnoml(nomnoml_code, svg, out)
@@ -204,13 +206,15 @@ get_ns_obj_df <- function(ns_nm, lines) {
 get_dependency_df <- function(row, objs) {
   obj <- getFromNamespace(row$nm, row$ns_nm)
   if(!is.function(obj)) return(NULL)
+  #if(row$nm == "") browser()
   namespaced_objs_df <- get_namespaced_objs_df(obj)
   short_objs_df <- get_short_objs_df(obj)
   dependency_df <- rbind(namespaced_objs_df, short_objs_df)
+  dependency_df <- subset(dependency_df, ns_nm != "base")
   dependency_df <- merge(dependency_df, objs, all.x = TRUE)
-  dependency_df$style[is.na(dependency_df$style)] <- "external_reference"
   dependency_df$hide[is.na(dependency_df$hide)] <- FALSE
-  dependency_df <- subset(dependency_df, ns_nm != "base" & !hide)
+  dependency_df <- subset(dependency_df, !hide)
+  dependency_df$style[is.na(dependency_df$style)] <- "external_reference"
   dependency_df$exported[is.na(dependency_df$exported)] <- TRUE
   dependency_df
 }
@@ -237,10 +241,13 @@ get_namespaced_objs_df <- function(obj) {
 get_short_objs_df <- function(obj) {
   body_ <- remove_namespaced_calls(body(obj))
   objs <- setdiff(all.names(body_), c(formalArgs(obj), extract_assignment_targets(body_)))
-  namespaces <- sapply(objs, namespace_name, environment(obj))
+  namespaces <- sapply(objs, namespace_name, environment(obj), fail_if_not_found = FALSE)
+  # NA namespaces are false positives, symbols found in NSE expressions
+  # FIXME: We could at least ignore rhs of $ for those because if we have lhs$rhs
+  #        at the moment if rhs exists in package but is not used it will still be referenced
   data.frame(
-    ns_nm = namespaces,
-    nm = objs
+    ns_nm = namespaces[!is.na(namespaces)],
+    nm = objs[!is.na(namespaces)]
   )
 }
 

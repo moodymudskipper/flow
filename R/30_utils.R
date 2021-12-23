@@ -281,24 +281,41 @@ namespace_name.environment <- function(x, env, ...) {
 }
 
 #' @export
-namespace_name.character <- function(x, env, fallback_ns = NULL) {
+namespace_name.character <- function(x, env, fallback_ns = NULL, fail_if_not_found = TRUE) {
+
+  # print(x)
+  # if(x == "all_patient_search_dt") browser()
   if(grepl("::", x)) {
     return(sub("^([^:]+)[:]{1,2}.*", "\\1", x))
   }
-  # since function's environment is not necessarily its namespace we need to
-  # go up to
+
+
+  # since function's environment is not necessarily its namespace we need to go up
   if (!exists(x, envir = env, inherits = TRUE)) {
-    if(exists(x, envir = fallback_ns, inherits = FALSE))
-      return(namespace_name(fall_back_ns))
-    stop(sprintf("`%s` cannot be found", x))
+    if(!is.null(fallback_ns) && exists(x, envir = fallback_ns, inherits = FALSE))
+      return(namespace_name(fallback_ns))
+    if(fail_if_not_found)
+      stop(sprintf("`%s` cannot be found", x))
+    else
+      return(NA)
   }
-  obj <- get(x, env)
-  obj_env <- environment(obj)
   # handle primitives
-  if(is.null(obj_env)) return("base")
-  # usually obj_env and namespace are the same but not always
-  namespace <- get_binding_environment(x, obj_env)
-  namespace_name(namespace)
+  if(is.null(environment(get(x, env)))) return("base")
+
+  bind_env <- get_binding_environment(x, env)
+  bind_env_nm <- environmentName(bind_env)
+  if(startsWith(bind_env_nm, "imports:")) {
+    parent_ns <- sub("^.*?:", "", bind_env_nm)
+    imports <- getNamespaceImports(parent_ns)
+    pkgs <- names(Filter(\(funs) x %in% funs, imports))
+    namespace_name <- pkgs[length(pkgs)] # or pkgs[1] ? not sure
+  } else if(startsWith(bind_env_nm, "package:")) {
+    namespace_name <- sub("^.*?:", "", bind_env_nm)
+  } else{
+    namespace_name <- namespace_name(bind_env)
+  }
+
+  namespace_name
 }
 
 get_namespace_exports <- function(ns) {
