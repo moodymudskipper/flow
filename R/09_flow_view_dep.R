@@ -66,13 +66,13 @@ flow_view_deps <- function(
     if(show_imports == "functions") {
       external_ref <- with(
         subset(dependency_df, style == "external_reference"),
-        paste0(ns_nm, ifelse(exported, "::", ":::"), quote_non_syntactic(nm))
+        if(length(ns_nm)) paste0(ns_nm, ifelse(exported, "::", ":::"), quote_non_syntactic(nm))
         #header
       )
     } else if(show_imports == "packages") {
       external_ref <- with(
         subset(dependency_df, style == "external_reference"),
-        paste0("{", unique(ns_nm), "}"))
+        if(length(ns_nm)) paste0("{", unique(ns_nm), "}"))
     } else {
       external_ref <- NULL
     }
