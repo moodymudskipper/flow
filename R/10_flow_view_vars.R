@@ -1,3 +1,5 @@
+globalVariables(c("lhs", "rhs"))
+
 #' Draw the dependencies of variables in a function
 #'
 #' Experimental! This draws the dependencies between variables. This function
@@ -29,7 +31,7 @@
 #' `expand` is `TRUE`, the modified variable(s) will point to a new one at the
 #' end of the `ìf` call.
 #' @param fun The function to draw
-#' @param exand A boolean
+#' @param expand A boolean
 #' @param refactor If using 'refactor' package, whether to consider original or refactored code
 #' @inheritParams flow_view
 #'
