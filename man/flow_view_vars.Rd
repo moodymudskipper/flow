@@ -14,14 +14,14 @@ flow_view_vars(
 \arguments{
 \item{fun}{The function to draw}
 
+\item{expand}{A boolean}
+
 \item{refactor}{If using 'refactor' package, whether to consider original or refactored code}
 
 \item{out}{a path to save the diagram to.
 Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 export the objec to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
-
-\item{exand}{A boolean}
 }
 \value{
 Called for side effects
