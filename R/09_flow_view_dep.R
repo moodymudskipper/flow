@@ -55,30 +55,34 @@ flow_view_deps <- function(
   rec <- function(row, depth = 1, parent = NULL) {
     # message("----------------------------------------------------------------")
     # print(row)
+    # if(row$nm == "build_element_exploration_table") browser()
     dependency_df <- get_dependency_df(row, objs)
     # gather info from obs
 
 
+    if(NROW(dependency_df)) {
+      internal_ref_df <- subset(dependency_df, style != "external_reference")
 
-    internal_ref_df <- subset(dependency_df, style != "external_reference")
 
-
-    if(show_imports == "functions") {
-      external_ref <- with(
-        subset(dependency_df, style == "external_reference"),
-        if(length(ns_nm)) paste0(ns_nm, ifelse(exported, "::", ":::"), quote_non_syntactic(nm))
-        #header
-      )
-    } else if(show_imports == "packages") {
-      external_ref <- with(
-        subset(dependency_df, style == "external_reference"),
-        if(length(ns_nm)) paste0("{", unique(ns_nm), "}"))
+      if(show_imports == "functions") {
+        external_ref <- with(
+          subset(dependency_df, style == "external_reference"),
+          if(length(ns_nm)) paste0(ns_nm, ifelse(exported, "::", ":::"), quote_non_syntactic(nm))
+          #header
+        )
+      } else if(show_imports == "packages") {
+        external_ref <- with(
+          subset(dependency_df, style == "external_reference"),
+          if(length(ns_nm)) paste0("{", unique(ns_nm), "}"))
+      } else {
+        external_ref <- NULL
+      }
     } else {
-      external_ref <- NULL
+      internal_ref_df <- external_ref <- NULL
     }
 
     covered <- row$covered
-    if(depth == max_depth && nrow(deps) && !row$covered) {
+    if(depth == max_depth && NROW(internal_ref_df) && !row$covered) {
       style   <- "trimmed"
       covered <- TRUE
     } else {
@@ -98,8 +102,8 @@ flow_view_deps <- function(
 
     if(covered) return(NULL)
 
-    if(nrow(internal_ref_df)) {
-      for(i in seq(nrow(internal_ref_df))) {
+    if(NROW(internal_ref_df)) {
+      for(i in seq(NROW(internal_ref_df))) {
         rec(internal_ref_df[i,, drop = FALSE], depth + 1, parent = row)
       }
     }
@@ -204,6 +208,7 @@ get_ns_obj_df <- function(ns_nm, lines) {
 }
 
 get_dependency_df <- function(row, objs) {
+  ns_nm <- hide <- NULL # for notes
   obj <- getFromNamespace(row$nm, row$ns_nm)
   if(!is.function(obj)) return(NULL)
   #if(row$nm == "") browser()
