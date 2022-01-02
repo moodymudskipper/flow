@@ -313,6 +313,10 @@ namespace_name.character <- function(x, env, fallback_ns = NULL, fail_if_not_fou
     namespace_name <- sub("^.*?:", "", bind_env_nm)
   } else if (bind_env_nm == "base") {
     namespace_name <- "base"
+  } else if (bind_env_nm == "") {
+    # an anonymous closure environment
+    # FIXME: deal with those cleanly, should be hidden from diagram
+    namespace_name <- "" # capture.output(bind_env)
   } else {
     namespace_name <- namespace_name(bind_env)
   }
