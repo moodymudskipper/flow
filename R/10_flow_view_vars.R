@@ -60,7 +60,7 @@ flow_view_vars <- function(fun, expand = TRUE, refactor = c("refactored", "origi
   body_ <- clean(body(fun))
 
   if(!is.call(body_) || !identical(body_[[1]], quote(`{`)))
-    body_ <- call("{", body_) #as.call(c(quote(`{`), body_))
+    body_ <- call("{", body_)
   body_[[length(body_)]] <- call("<-", "*OUT*", body_[[length(body_)]])
 
 
@@ -151,7 +151,6 @@ flow_view_vars <- function(fun, expand = TRUE, refactor = c("refactored", "origi
 
       # message("call")
       # print(call)
-      #
       # message("defs/local_defs before")
       # print(defs)
       # print(local_defs)
@@ -257,27 +256,6 @@ flow_view_vars <- function(fun, expand = TRUE, refactor = c("refactored", "origi
     df <- subset(df, lhs != rhs)
   }
 
-  # df <- ave(df, df$lhs, FUN = function(df_i) {
-  #   if(nrow(df_i) == 1) return(df_i)
-  #   df_i$lhs <- paste0(df_i$lhs, strrep("*", 0:(nrow(df_i)-1)))
-  #   df_i
-  # })
-  # for(i in seq(nrow(df)-1)) {
-  #   var <- df$lhs[[i]]
-  #   if(endsWith(var, "*")) {
-  #     old_var <- substr(var, 1, nchar(var) -1)
-  #     pos <- (i+1):nrow(df)
-  #     df$rhs[pos] <- lapply(df$rhs[pos], function(x) replace(x, x == old_var, var))
-  #   }
-  # }
-  # dfs <- split(df, seq(nrow(df)))
-  # dfs <- lapply(dfs, function(df) data.frame(lhs = df$lhs, rhs = unlist(df$rhs), link = df$link))
-  # df <- do.call(rbind, dfs)
-  # # # reorder so we have "cf" coming after "direct" and full lines have priority over dashed
-  # # df <- df[order(-xtfrm(df$link)),]
-  # df <- subset(df, lhs != rhs & rhs %in% c(lhs, args, fun_chr))
-
-  # df <- unique(df)
   nomnoml_code <- "
 # direction: down
 #.fun: visual=roundrect fill=#ddebf7 title=bold
