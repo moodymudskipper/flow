@@ -250,5 +250,5 @@ eval_silent <- function(call, env = parent.frame()) {
     sink(type = "output")
     sink(type = "message")
   })
-  suppressWarnings(eval(call, env))
+  suppressWarnings(!inherits(try(eval(call, env), silent = TRUE), "try-error"))
 }
