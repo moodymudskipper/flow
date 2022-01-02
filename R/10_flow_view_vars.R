@@ -30,17 +30,29 @@ globalVariables(c("lhs", "rhs"))
 #' if a value is modified in a branch of an if call (or both branches) and
 #' `expand` is `TRUE`, the modified variable(s) will point to a new one at the
 #' end of the `ìf` call.
-#' @param fun The function to draw
-#' @param expand A boolean
+#' @param x The function, script or expression to draw
+#' @param expand A boolean, if `FALSE` a variable name is only shown once, else
+#'   (the default) it's repeated and suffixed with a number of `*`
 #' @param refactor If using 'refactor' package, whether to consider original or refactored code
 #' @inheritParams flow_view
 #'
 #' @return Called for side effects
 #' @export
-flow_view_vars <- function(fun, expand = TRUE, refactor = c("refactored", "original"), out = NULL) {
+flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "original"), out = NULL) {
 
   refactor <- match.arg(refactor)
-  fun_chr <- deparse1(substitute(fun))
+  fun_chr <- deparse1(substitute(x))
+
+  if(is.language(x)) {
+    fun <- as.function(list(x))
+    fun_chr <- "expression"
+  } else if(is.character(x)) {
+    fun_body <- as.call(c(quote(`{`), parse(file = x)))
+    fun <- as.function(list(fun_body))
+    fun_chr <- "script"
+  } else {
+    fun <- x
+  }
 
   clean <- function(call) {
     if(!is.call(call)) return(call)
@@ -244,8 +256,10 @@ flow_view_vars <- function(fun, expand = TRUE, refactor = c("refactored", "origi
   df <- do.call(rbind, dfs)
 
 
+  df0 <-if(length(args))
+    data.frame(lhs = args, rhs = fun_chr, link = "args", action = "args")
   df <- rbind(
-    data.frame(lhs = args, rhs = fun_chr, link = "args", action = "args"),
+    df0,
     df
   )
 
@@ -254,6 +268,10 @@ flow_view_vars <- function(fun, expand = TRUE, refactor = c("refactored", "origi
     df$rhs <- gsub("^([^*]+)\\*+", "\\1", df$rhs)
     df <- unique(df)
     df <- subset(df, lhs != rhs)
+  }
+
+  if(identical(out, "data")) {
+    return(df)
   }
 
   nomnoml_code <- "

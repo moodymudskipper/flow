@@ -5,16 +5,17 @@
 \title{Draw the dependencies of variables in a function}
 \usage{
 flow_view_vars(
-  fun,
+  x,
   expand = TRUE,
   refactor = c("refactored", "original"),
   out = NULL
 )
 }
 \arguments{
-\item{fun}{The function to draw}
+\item{x}{The function, script or expression to draw}
 
-\item{expand}{A boolean}
+\item{expand}{A boolean, if \code{FALSE} a variable name is only shown once, else
+(the default) it's repeated and suffixed with a number of \code{*}}
 
 \item{refactor}{If using 'refactor' package, whether to consider original or refactored code}
 
