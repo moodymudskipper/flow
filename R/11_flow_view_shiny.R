@@ -31,7 +31,7 @@ flow_view_shiny <- function(
   # this should be recursive
   calls_ui_or_server <- sapply(
     pkg_funs,
-    \(x) any(grepl("(_ui)|(_server)$", all.names(body(getFromNamespace(x, pkg))))))
+    \(x) any(grepl(regex, all.names(body(getFromNamespace(x, pkg))))))
   new <- pkg_funs[calls_ui_or_server]
   new <- setdiff(new, module_funs)
   module_funs <- c(module_funs, new)
