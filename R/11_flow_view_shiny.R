@@ -18,7 +18,7 @@ flow_view_shiny <- function(
   show_imports = c("functions", "packages", "none"),
   out = NULL,
   lines = TRUE,
-  regex = "(ui)|(server)|(Ui)|(Server)(UI)|(SERVER)") {
+  regex = "(ui)|(server)|(Ui)|(Server)|(UI)|(SERVER)") {
   show_imports <- match.arg(show_imports)
   fun_sym <- substitute(fun)
   ns <- environment(fun) # not robust
