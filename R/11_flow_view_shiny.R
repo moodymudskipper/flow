@@ -47,15 +47,5 @@ flow_view_shiny <- function(
   auto_demote <- setdiff(auto_demote, promote)
   demote <- c(auto_demote, demote)
 
-  eval.parent(bquote(
-    flow_view_deps(
-      .(fun_sym),
-      .(max_depth),
-      .(trim),
-      .(promote),
-      .(demote),
-      .(hide),
-      .(show_imports),
-      .(out),
-      .(lines))))
+  do.call(flow_view_deps, list(fun_sym, max_depth, trim, promote, demote, hide, show_imports, out, lines))
 }
