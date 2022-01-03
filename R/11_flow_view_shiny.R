@@ -1,7 +1,7 @@
 #' Visualize a shiny app's dependency graph
 #'
-#' A wrapper around `flow_view_deps` which demotes every function that is not
-#' a server or ui function or calling one. What is or isn't considered as a
+#' A wrapper around `flow_view_deps` which demotes every object that is not
+#' a server function, a ui function or a function calling either. What is or isn't considered as a
 #' server or ui function depends on a regular expression provided through the `regex`
 #' argument.
 #'
