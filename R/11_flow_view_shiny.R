@@ -14,6 +14,7 @@ flow_view_shiny <- function(
   max_depth = Inf,
   trim = NULL,
   promote = NULL,
+  demote = NULL,
   hide = NULL,
   show_imports = c("functions", "packages", "none"),
   out = NULL,
