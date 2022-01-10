@@ -307,7 +307,7 @@ namespace_name.character <- function(x, env, fallback_ns = NULL, fail_if_not_fou
   if(startsWith(bind_env_nm, "imports:")) {
     parent_ns <- sub("^.*?:", "", bind_env_nm)
     imports <- getNamespaceImports(parent_ns)
-    pkgs <- names(Filter(\(funs) x %in% funs, imports))
+    pkgs <- names(Filter(function (funs) x %in% funs, imports))
     namespace_name <- pkgs[length(pkgs)] # or pkgs[1] ? not sure
   } else if(startsWith(bind_env_nm, "package:")) {
     namespace_name <- sub("^.*?:", "", bind_env_nm)

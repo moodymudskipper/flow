@@ -238,7 +238,7 @@ get_namespaced_objs_df <- function(obj) {
   }
   calls <- extract_namespaced_objs_impl(call)
   calls <- unlist(calls)
-  do.call(rbind, lapply(calls, \(x) data.frame(
+  do.call(rbind, lapply(calls, function (x) data.frame(
     ns_nm = as.character(x[[2]]),
     nm = as.character(x[[3]]))))
 }

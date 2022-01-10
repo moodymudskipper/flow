@@ -31,13 +31,13 @@ flow_view_shiny <- function(
   # this should be recursive
   calls_ui_or_server <- sapply(
     pkg_funs,
-    \(x) any(grepl(regex, all.names(body(getFromNamespace(x, pkg))))))
+    function (x) any(grepl(regex, all.names(body(getFromNamespace(x, pkg))))))
   new <- pkg_funs[calls_ui_or_server]
   new <- setdiff(new, module_funs)
   module_funs <- c(module_funs, new)
   while(length(new)) {
     new <- Filter(
-      \(x) any(all.names(body(getFromNamespace(x, pkg))) %in% module_funs),
+      function (x) any(all.names(body(getFromNamespace(x, pkg))) %in% module_funs),
       pkg_funs)
     new <- setdiff(new, module_funs)
     module_funs <- c(module_funs, new)
