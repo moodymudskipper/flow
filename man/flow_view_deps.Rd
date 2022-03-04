@@ -40,8 +40,7 @@ if a regular path is used the format will be guessed from the extension.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-}
-\details{
+
 Exported functions are shown in blue, unexported functions are shown in yellow.
 }
 \examples{
