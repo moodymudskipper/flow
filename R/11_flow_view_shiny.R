@@ -2,11 +2,11 @@
 #'
 #' A wrapper around `flow_view_deps` which demotes every object that is not
 #' a server function, a ui function or a function calling either. What is or isn't considered as a
-#' server or ui function depends on a regular expression provided through the `regex`
+#' server or ui function depends on a regular expression provided through the `pattern`
 #' argument.
 #'
 #' @param fun The function that runs the app
-#' @param regex A regular expression used to detect ui and server functions
+#' @param pattern A regular expression used to detect ui and server functions
 #' @inheritParams flow_view_deps
 #' @export
 flow_view_shiny <- function(
@@ -19,7 +19,7 @@ flow_view_shiny <- function(
   show_imports = c("functions", "packages", "none"),
   out = NULL,
   lines = TRUE,
-  regex = "(_ui)|(_server)|(Ui)|(Server)|(UI)|(SERVER)") {
+  pattern = "(_ui)|(_server)|(Ui)|(Server)|(UI)|(SERVER)") {
   show_imports <- match.arg(show_imports)
   fun_sym <- substitute(fun)
   ns <- environment(fun) # not robust
@@ -27,11 +27,11 @@ flow_view_shiny <- function(
   pkg_objs <- ls(ns)
   pkg_funs <- names(Filter(is.function, mget(pkg_objs, ns)))
   pkg_non_funs <- setdiff(pkg_objs, pkg_funs)
-  module_funs <- grep(regex, pkg_funs, value = TRUE)
+  module_funs <- grep(pattern, pkg_funs, value = TRUE)
   # this should be recursive
   calls_ui_or_server <- sapply(
     pkg_funs,
-    function (x) any(grepl(regex, all.names(body(getFromNamespace(x, pkg))))))
+    function (x) any(grepl(pattern, all.names(body(getFromNamespace(x, pkg))))))
   new <- pkg_funs[calls_ui_or_server]
   new <- setdiff(new, module_funs)
   module_funs <- c(module_funs, new)
