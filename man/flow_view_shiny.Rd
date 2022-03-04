@@ -14,7 +14,7 @@ flow_view_shiny(
   show_imports = c("functions", "packages", "none"),
   out = NULL,
   lines = TRUE,
-  regex = "(ui)|(server)|(Ui)|(Server)|(UI)|(SERVER)"
+  regex = "(_ui)|(_server)|(Ui)|(Server)|(UI)|(SERVER)"
 )
 }
 \arguments{
