@@ -1,10 +1,13 @@
 #  TODO: max depth should be applied on min depth where fun is found, else inconsistent ouput
 # as object can have several depths and here first found is taken
 
+
 #' Show dependency graph of a function
 #'
 #' Exported functions are shown in blue, unexported functions are shown in yellow.
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
 #' @param fun A function
 #' @param max_depth An integer, the maximum depth to display
 #' @param trim A vector of list of function names where the recursion will stop

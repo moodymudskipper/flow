@@ -39,6 +39,9 @@ if a regular path is used the format will be guessed from the extension.}
 \item{lines}{Whether to show the number of lines of code next to the function name}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+\details{
 Exported functions are shown in blue, unexported functions are shown in yellow.
 }
 \examples{

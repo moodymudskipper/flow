@@ -28,12 +28,13 @@ if a regular path is used the format will be guessed from the extension.}
 Called for side effects
 }
 \description{
-Experimental! This draws the dependencies between variables. This function
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+\details{
+This draws the dependencies between variables. This function
 is useful to detect dead code and variable clusters. By default the variable
 is shown a new time when it's overwritten or modified, this can be changed by
 setting \code{expand} to \code{FALSE}.
-}
-\details{
 \itemize{
 \item The function is blue
 \item The arguments are green

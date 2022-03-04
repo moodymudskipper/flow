@@ -5,6 +5,8 @@
 #' server or ui function depends on a regular expression provided through the `pattern`
 #' argument.
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
 #' @param fun The function that runs the app
 #' @param pattern A regular expression used to detect ui and server functions
 #' @inheritParams flow_view_deps
