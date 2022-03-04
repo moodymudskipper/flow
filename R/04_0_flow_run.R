@@ -94,6 +94,10 @@ flow_run <-
         htmlwidgets::createWidget,
         c(list(name = "nomnoml", widget_params ,package = "nomnoml")))
       if (is.null(out)) return(print(widget))
+      # nomnoml is called only through htmlwidgets::createWidget
+      # to pass tests on old ubuntu releases we need to call at least a function once,
+      # hence the following call
+      nomnoml::nomnoml_validate()
 
       is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg")
       if (is_tmp) {
