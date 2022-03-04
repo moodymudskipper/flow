@@ -17,14 +17,18 @@ test_that("nested_fun works",{
     fun2 <- function(z) z
     x
   }
-  expect_snapshot(flow_data(fun, nested_fun = 2))
+  out <- flow_data(fun, nested_fun = 2)
+  out$nodes$code_str <- gsub("\u2800", " ", out$nodes$code_str)
+  expect_snapshot(out)
 })
 
 test_that("flow_data works with prefixed comments",{
   fun <- function(x) {
     ## comment
     x}
-  expect_snapshot(flow_data(fun, prefix = "##"))
+  out <- flow_data(fun, prefix = "##")
+  out$nodes$code_str <- gsub("\u2800", " ", out$nodes$code_str)
+  expect_snapshot(out)
 })
 
 test_that("the `code` argument of flow_view works",{
@@ -40,16 +44,22 @@ test_that("flow_data works with narrow argument",{
   fun <- function(x) {
     if(x) foo else bar
   }
-  expect_snapshot(flow_data(fun))
+  out <- flow_data(fun, prefix = "##")
+  out$nodes$code_str <- gsub("\u2800", " ", out$nodes$code_str)
+  expect_snapshot(out)
 
   # note: this is currently wrong, setting test already to get coverage
   fun <- function(x,y) {
     if(x) stop() else bar
   }
-  expect_snapshot(flow_data(fun))
+  out <- flow_data(fun)
+  out$nodes$code_str <- gsub("\u2800", " ", out$nodes$code_str)
+  expect_snapshot(out)
 
   fun <- function(x,y) {
     if(x) foo else stop()
   }
-  expect_snapshot(flow_data(fun))
+  out <- flow_data(fun)
+  out$nodes$code_str <- gsub("\u2800", " ", out$nodes$code_str)
+  expect_snapshot(out)
 })
