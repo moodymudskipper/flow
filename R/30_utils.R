@@ -62,9 +62,12 @@ get_last_id <- function(data) {
   max(data$nodes$id)
 }
 
-
 deparse1 <- function (expr, collapse = " ", width.cutoff = 500L, ...)
   paste(deparse(expr, width.cutoff, ...), collapse = collapse)
+
+str2lang <- function(s) {
+  parse(text=s)[[1]]
+}
 
 # deparse2 <- function(x){
 #   x <- as.call(c(quote(`{`),x))
