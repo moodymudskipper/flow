@@ -127,10 +127,10 @@ from <code>y</code> to <code>x</code> and a dashed arrow from <code>z</code> to 
 unrelated uses of temp variables. <code>expand = FALSE</code> is more compact and shows
 you directly what variables might impact a given variable, and what variables
 it impacts.</p>
-<p>This function will work best if  the function doesn't draw from or assign to other
-environments, that it doesn't use <code><a href="https://rdrr.io/r/base/assign.html" class="external-link">assign()</a></code> or <code><a href="https://rdrr.io/r/base/attach.html" class="external-link">attach()</a></code>. The output might
+<p>This function will work best if the function doesn't draw from or assign to other
+environments and doesn't use <code><a href="https://rdrr.io/r/base/assign.html" class="external-link">assign()</a></code> or <code><a href="https://rdrr.io/r/base/attach.html" class="external-link">attach()</a></code>. The output might
 be polluted by variable names found in some lazily evaluated function arguments.
-We ignore variable names found in calls to <code><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote()</a></code> and <code>n</code> as well as
+We ignore variable names found in calls to <code><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote()</a></code> and <code>~</code> as well as
 nested function definitions, but complete robustness is probably impossible.</p>
 <p>The diagram assumes that for / while / repeat loops were at least run once,
 if a value is modified in a branch of an if call (or both branches) and
