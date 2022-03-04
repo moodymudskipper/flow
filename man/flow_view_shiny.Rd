@@ -42,6 +42,9 @@ if a regular path is used the format will be guessed from the extension.}
 \item{pattern}{A regular expression used to detect ui and server functions}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+\details{
 A wrapper around \code{flow_view_deps} which demotes every object that is not
 a server function, a ui function or a function calling either. What is or isn't considered as a
 server or ui function depends on a regular expression provided through the \code{pattern}
