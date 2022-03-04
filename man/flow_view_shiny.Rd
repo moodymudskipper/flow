@@ -14,11 +14,11 @@ flow_view_shiny(
   show_imports = c("functions", "packages", "none"),
   out = NULL,
   lines = TRUE,
-  regex = "(_ui)|(_server)|(Ui)|(Server)|(UI)|(SERVER)"
+  pattern = "(_ui)|(_server)|(Ui)|(Server)|(UI)|(SERVER)"
 )
 }
 \arguments{
-\item{fun}{A regular expression used to detect ui and server functions}
+\item{fun}{The function that runs the app}
 
 \item{max_depth}{An integer, the maximum depth to display}
 
@@ -38,10 +38,12 @@ export the objec to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
 
 \item{lines}{Whether to show the number of lines of code next to the function name}
+
+\item{pattern}{A regular expression used to detect ui and server functions}
 }
 \description{
 A wrapper around \code{flow_view_deps} which demotes every object that is not
 a server function, a ui function or a function calling either. What is or isn't considered as a
-server or ui function depends on a regular expression provided through the \code{regex}
+server or ui function depends on a regular expression provided through the \code{pattern}
 argument.
 }
