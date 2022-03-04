@@ -240,7 +240,8 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
       lhs = lhs,
       rhs = rhs,
       action = action,
-      link = "direct")
+      link = "direct",
+      stringsAsFactors = FALSE)
     if(length(add_vars)) {
       df_cf <- data.frame(
         lhs = lhs,
@@ -257,7 +258,7 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
 
 
   df0 <-if(length(args))
-    data.frame(lhs = args, rhs = fun_chr, link = "args", action = "args")
+    data.frame(lhs = args, rhs = fun_chr, link = "args", action = "args", stringsAsFactors = FALSE)
   df <- rbind(
     df0,
     df

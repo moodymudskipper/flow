@@ -108,7 +108,8 @@ make_groups <- function(code) {
                 subgroup = groups,
                 chr = strsplit(code, "")[[1]],
                 id_group = rleid(groups1),
-                id_subgroup = rleid(groups))
+                id_subgroup = rleid(groups),
+                stringsAsFactors = FALSE)
         # combine text by subgroup
         df <- aggregate(chr ~ id_group + id_subgroup + group + subgroup, data = df, FUN = function(x) paste(x, collapse =""))
         df <- df[order(df[[1]], df[[2]]),]

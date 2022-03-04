@@ -144,7 +144,8 @@ flow_view_deps_df <- function(target_fun_name,trim, promote, demote, hide, lines
   edit_df <- data.frame(
     ns_nm = namespaces[-1],
     nm = obj_names[-1],
-    edit = rep(names(edit), lengths(edit))
+    edit = rep(names(edit), lengths(edit)),
+    stringsAsFactors = FALSE
   )
   edit_df <- unique(edit_df)
 
@@ -190,7 +191,8 @@ get_ns_obj_df <- function(ns_nm, lines) {
   ns <- asNamespace(ns_nm)
   objs <- data.frame(
     ns_nm = ns_nm,
-    nm = ls(ns))
+    nm = ls(ns),
+    stringsAsFactors = FALSE)
 
   # FIXME: this ignores functions built in .onLoad and .onAttach
   objs$exported <- objs$nm %in% get_namespace_exports(ns)
@@ -238,9 +240,10 @@ get_namespaced_objs_df <- function(obj) {
   }
   calls <- extract_namespaced_objs_impl(call)
   calls <- unlist(calls)
-  do.call(rbind, lapply(calls, \(x) data.frame(
+  do.call(rbind, lapply(calls, function (x) data.frame(
     ns_nm = as.character(x[[2]]),
-    nm = as.character(x[[3]]))))
+    nm = as.character(x[[3]]),
+    stringsAsFactors = FALSE)))
 }
 
 get_short_objs_df <- function(obj) {
@@ -252,7 +255,8 @@ get_short_objs_df <- function(obj) {
   #        at the moment if rhs exists in package but is not used it will still be referenced
   data.frame(
     ns_nm = namespaces[!is.na(namespaces)],
-    nm = objs[!is.na(namespaces)]
+    nm = objs[!is.na(namespaces)],
+    stringsAsFactors = FALSE
   )
 }
 
