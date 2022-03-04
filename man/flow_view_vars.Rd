@@ -50,10 +50,10 @@ unrelated uses of temp variables. \code{expand = FALSE} is more compact and show
 you directly what variables might impact a given variable, and what variables
 it impacts.
 
-This function will work best if  the function doesn't draw from or assign to other
-environments, that it doesn't use \code{assign()} or \code{attach()}. The output might
+This function will work best if the function doesn't draw from or assign to other
+environments and doesn't use \code{assign()} or \code{attach()}. The output might
 be polluted by variable names found in some lazily evaluated function arguments.
-We ignore variable names found in calls to \code{quote()} and \code{n} as well as
+We ignore variable names found in calls to \code{quote()} and \code{~} as well as
 nested function definitions, but complete robustness is probably impossible.
 
 The diagram assumes that for / while / repeat loops were at least run once,
