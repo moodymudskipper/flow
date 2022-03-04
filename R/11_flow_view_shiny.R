@@ -6,7 +6,7 @@
 #' argument.
 #'
 #' @param fun The function that runs the app
-#' @param fun A regular expression used to detect ui and server functions
+#' @param regex A regular expression used to detect ui and server functions
 #' @inheritParams flow_view_deps
 #' @export
 flow_view_shiny <- function(
