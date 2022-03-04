@@ -3,6 +3,7 @@
 #' @importFrom utils head getS3method browseURL tail getFromNamespace lsf.str
 #' @importFrom utils txtProgressBar setTxtProgressBar capture.output
 #' @importFrom utils installed.packages
+#' @importFrom graphics plot
 #' @importFrom stats setNames aggregate
 #' @importFrom methods formalArgs
 NULL
