@@ -20,10 +20,10 @@ globalVariables(c("lhs", "rhs"))
 #'  you directly what variables might impact a given variable, and what variables
 #'  it impacts.
 #'
-#' This function will work best if  the function doesn't draw from or assign to other
-#' environments, that it doesn't use `assign()` or `attach()`. The output might
+#' This function will work best if the function doesn't draw from or assign to other
+#' environments and doesn't use `assign()` or `attach()`. The output might
 #' be polluted by variable names found in some lazily evaluated function arguments.
-#' We ignore variable names found in calls to `quote()` and `n` as well as
+#' We ignore variable names found in calls to `quote()` and `~` as well as
 #' nested function definitions, but complete robustness is probably impossible.
 #'
 #' The diagram assumes that for / while / repeat loops were at least run once,
@@ -41,46 +41,87 @@ globalVariables(c("lhs", "rhs"))
 #' @return Called for side effects
 #' @export
 flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "original"), out = NULL) {
-
   refactor <- match.arg(refactor)
-  fun_chr <- deparse1(substitute(x))
 
+  # build fun ------------------------------------------------------------------
+  fun <- flow_view_vars..build_fun(x, substitute(x))
+
+  # clean body to mitigate lazy eval pollution ---------------------------------
+  clean_body <- flow_view_vars..clean_body(fun$body)
+
+  # have body of function wrapped in {} ----------------------------------------
+  clean_body <- flow_view_vars..wrap_body(clean_body)
+
+  # build and call recursive fun to fetch dependencies -------------------------
+  var_deps <- flow_view_vars..fetch_var_deps(clean_body, fun$name, fun$args)
+
+  # format dependencies into a data frame containing graph and metadata --------
+  df <- flow_view_vars..format_deps(var_deps, fun$name, fun$args, expand)
+
+  # return the data frame, not documented at the moment ------------------------
+  if(identical(out, "data")) {
+    return(df)
+  }
+
+  # build nomnoml code ---------------------------------------------------------
+  nomnoml_code <- flow_view_vars..build_nomnoml_code(df,  fun$name, fun$args)
+
+  # output ---------------------------------------------------------------------
+  svg <- is.null(out) || endsWith(out, ".html") || endsWith(out,".html")
+  out <- save_nomnoml(nomnoml_code, svg, out)
+  if(inherits(out, "htmlwidget")) out else invisible(out)
+}
+
+flow_view_vars..build_fun <- function(x, x_lng) {
+  name <- deparse1(x_lng)
   if(is.language(x)) {
-    fun <- as.function(list(x))
-    fun_chr <- "expression"
+    value <- as.function(list(x))
+    name <- "expression"
+    fun_body <- x
+    args <- NULL
   } else if(is.character(x)) {
     fun_body <- as.call(c(quote(`{`), parse(file = x)))
     fun <- as.function(list(fun_body))
-    fun_chr <- "script"
+    name <- "script"
+    args <- NULL
   } else {
     fun <- x
+    fun_body <- body(fun)
+    args <- formalArgs(fun)
   }
+  list(fun = fun, name = name, body = fun_body, args = args)
+}
 
-  clean <- function(call) {
-    if(!is.call(call)) return(call)
-    if(deparse1(call[[1]]) %in% c("quote", "~", "function")) {
-      return(NULL)
-    }
-    if(deparse1(call[[1]]) %in% c(
-      "%refactor%", "%refactor_chunk%", "%refactor_value%",
-      "%refactor_chunk_and_value%", "%refactor_chunk_efficiently%",
-      "%refactor_value_efficiently%", "%refactor_chunk_and_value_efficiently%",
-      "%ignore_original%", "%ignore_refactored%"
-      )) {
-      if(refactor == "refactored") call[2] <- list(NULL) else call[3] <- list(NULL)
-    }
-    as.call(lapply(call, clean))
+flow_view_vars..clean_body <- function(call) {
+  # clean up code from calls to `quote`, `~`, `function`, and the unobserved side of
+  # `{refactor}` functions.
+  if(!is.call(call)) return(call)
+  if(deparse1(call[[1]]) %in% c("quote", "~", "function")) {
+    return(NULL)
   }
-  body_ <- clean(body(fun))
+  if(deparse1(call[[1]]) %in% c(
+    "%refactor%", "%refactor_chunk%", "%refactor_value%",
+    "%refactor_chunk_and_value%", "%refactor_chunk_efficiently%",
+    "%refactor_value_efficiently%", "%refactor_chunk_and_value_efficiently%",
+    "%ignore_original%", "%ignore_refactored%"
+  )) {
+    if(refactor == "refactored") call[2] <- list(NULL) else call[3] <- list(NULL)
+  }
+  as.call(lapply(call, flow_view_vars..clean_body))
+}
 
-  if(!is.call(body_) || !identical(body_[[1]], quote(`{`)))
-    body_ <- call("{", body_)
-  body_[[length(body_)]] <- call("<-", "*OUT*", body_[[length(body_)]])
+flow_view_vars..wrap_body <- function(clean_body) {
+  if(!is.call(clean_body) || !identical(clean_body[[1]], quote(`{`)))
+    clean_body <- call("{", clean_body)
+  clean_body[[length(clean_body)]] <- call("<-", "*OUT*", clean_body[[length(clean_body)]])
+  clean_body
+}
 
+flow_view_vars..fetch_var_deps <- function(clean_body, fun_name, args) {
 
   return_i <- 0
-  args <- formalArgs(fun)
   defs <- local_defs <- setNames(rep(1, length(args)), args)
+  make_chatty(defs)
   fetch_var_deps <- function(call, add_vars = NULL) {
     # message("call")
     # print(call)
@@ -88,20 +129,20 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
 
 
     if(!is.call(call)) return(NULL)
-    fun <- deparse1(call[[1]])
-    if(fun == "for") {
+    fun_name <- deparse1(call[[1]])
+    if(fun_name == "for") {
       add_vars <- unique(c(add_vars, all.names(call[[2]]), all.names(call[[3]])))
       add_vars <- intersect(add_vars, names(defs))
       return(fetch_var_deps(call[[4]], add_vars))
     }
 
-    if(fun == "while") {
+    if(fun_name == "while") {
       add_vars <- unique(c(add_vars, all.names(call[[2]])))
       add_vars <- intersect(add_vars, names(defs))
       return(fetch_var_deps(call[[3]], add_vars))
     }
 
-    if(fun == "if") {
+    if(fun_name == "if") {
 
       # need to handle cases without else,
 
@@ -154,14 +195,14 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
       }
     }
 
-    if(fun == "return") {
+    if(fun_name == "return") {
       if(length(call) == 1) call <- quote(return(NULL))
       return_i <<- return_i + 1
       call <- call("<-", sprintf("*OUT%s*", return_i), call[[2]])
       return(fetch_var_deps(call, add_vars))
     }
 
-    if (fun %in% c("<-", "=")) {
+    if (fun_name %in% c("<-", "=")) {
 
       # message("call")
       # print(call)
@@ -230,8 +271,11 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
     }
   }
 
+  fetch_var_deps(clean_body)
+}
 
-  var_deps <- fetch_var_deps(body_)
+flow_view_vars..format_deps <- function(var_deps, fun_name, fun_args, expand) {
+
   dfs <- lapply(var_deps, function(call) {
     lhs <- as.character(call[[1]])
     rhs <- call[[2]]
@@ -244,6 +288,7 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
       action = action,
       link = "direct",
       stringsAsFactors = FALSE)
+
     if(length(add_vars)) {
       df_cf <- data.frame(
         lhs = lhs,
@@ -258,13 +303,16 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
 
   df <- do.call(rbind, dfs)
 
+  # add link between function name and args to df ------------------------------
 
-  df0 <-if(length(args))
-    data.frame(lhs = args, rhs = fun_chr, link = "args", action = "args", stringsAsFactors = FALSE)
+  df0 <-if(length(fun_args))
+    data.frame(lhs = fun_args, rhs = fun_name, link = "args", action = "args", stringsAsFactors = FALSE)
   df <- rbind(
     df0,
     df
   )
+
+  # collapse starred variable if not `expand` ----------------------------------
 
   if(!expand) {
     df$lhs <- gsub("^([^*]+)\\*+", "\\1", df$lhs)
@@ -273,10 +321,11 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
     df <- subset(df, lhs != rhs)
   }
 
-  if(identical(out, "data")) {
-    return(df)
-  }
+  df
+}
 
+
+flow_view_vars..build_nomnoml_code <- function(df, fun_name, fun_args) {
   nomnoml_code <- "
 # direction: down
 #.fun: visual=roundrect fill=#ddebf7 title=bold
@@ -294,7 +343,7 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
     "[<",
     ifelse(
       grepl("^\\*OUT\\d*\\*$", df$lhs), "return",
-      ifelse(df$lhs %in% args, "arg",
+      ifelse(df$lhs %in% fun_args, "arg",
              ifelse(df$rhs == "*CONSTANT*", "newvar",
                     ifelse(!df$lhs %in% df$rhs, "deadcode","var")))),
     "> ",
@@ -305,8 +354,8 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
   df$rhs <- paste0(
     "[<",
     ifelse(
-      df$rhs == fun_chr, "fun",
-      ifelse(df$rhs %in% args, "arg", "var")),
+      df$rhs == fun_name, "fun",
+      ifelse(df$rhs %in% fun_args, "arg", "var")),
     "> ",
     df$rhs,
     "]"
@@ -319,9 +368,5 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
     paste(df$rhs, arrow, df$lhs, collapse = "\n")
   )
   #cat(nomnoml_code)
-
-  svg <- is.null(out) || endsWith(out, ".html") || endsWith(out,".html")
-  out <- save_nomnoml(nomnoml_code, svg, out)
-  if(inherits(out, "htmlwidget")) out else invisible(out)
+  nomnoml_code
 }
-
