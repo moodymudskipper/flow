@@ -121,7 +121,6 @@ flow_view_vars..fetch_var_deps <- function(clean_body, fun_name, args) {
 
   return_i <- 0
   defs <- local_defs <- setNames(rep(1, length(args)), args)
-  make_chatty(defs)
   fetch_var_deps <- function(call, add_vars = NULL) {
     # message("call")
     # print(call)
