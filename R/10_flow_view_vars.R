@@ -47,7 +47,7 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
   fun <- flow_view_vars..build_fun(x, substitute(x))
 
   # clean body to mitigate lazy eval pollution ---------------------------------
-  clean_body <- flow_view_vars..clean_body(fun$body)
+  clean_body <- flow_view_vars..clean_body(fun$body, refactor)
 
   # have body of function wrapped in {} ----------------------------------------
   clean_body <- flow_view_vars..wrap_body(clean_body)
@@ -92,7 +92,7 @@ flow_view_vars..build_fun <- function(x, x_lng) {
   list(fun = fun, name = name, body = fun_body, args = args)
 }
 
-flow_view_vars..clean_body <- function(call) {
+flow_view_vars..clean_body <- function(call, refactor) {
   # clean up code from calls to `quote`, `~`, `function`, and the unobserved side of
   # `{refactor}` functions.
   if(!is.call(call)) return(call)
