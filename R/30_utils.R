@@ -63,13 +63,8 @@ get_last_id <- function(data) {
 }
 
 
-deparse1 <- function (expr, collapse = " ", width.cutoff = 500L, ...) {
-  if (R.version$major < 4) {
-    paste(deparse(expr = expr, width.cutoff = width.cutoff, ... = ...), collapse = collapse)
-  } else {
-    base::deparse1(expr = expr, collapse = collapse, width.cutoff = width.cutoff, ... = ...)
-  }
-}
+deparse1 <- function (expr, collapse = " ", width.cutoff = 500L, ...)
+  paste(deparse(expr, width.cutoff, ...), collapse = collapse)
 
 # deparse2 <- function(x){
 #   x <- as.call(c(quote(`{`),x))
