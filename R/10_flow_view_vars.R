@@ -40,11 +40,13 @@ globalVariables(c("lhs", "rhs"))
 #'
 #' @return Called for side effects
 #' @export
+#' @examples
+#' flow_view_vars(ave)
 flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "original"), out = NULL) {
   refactor <- match.arg(refactor)
 
   # build fun ------------------------------------------------------------------
-  fun <- flow_view_vars..build_fun(x, substitute(x))
+  fun <- flow_view_vars..build_fun(x, substitute(x), parent.frame())
 
   # clean body to mitigate lazy eval pollution ---------------------------------
   clean_body <- flow_view_vars..clean_body(fun$body, refactor)
@@ -72,16 +74,16 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
   if(inherits(out, "htmlwidget")) out else invisible(out)
 }
 
-flow_view_vars..build_fun <- function(x, x_lng) {
+flow_view_vars..build_fun <- function(x, x_lng, env) {
   name <- deparse1(x_lng)
   if(is.language(x)) {
-    value <- as.function(list(x))
+    value <- as.function(list(x), envir = env)
     name <- "expression"
     fun_body <- x
     args <- NULL
   } else if(is.character(x)) {
     fun_body <- as.call(c(quote(`{`), parse(file = x)))
-    fun <- as.function(list(fun_body))
+    fun <- as.function(list(fun_body), envir = env)
     name <- "script"
     args <- NULL
   } else {
