@@ -1,0 +1,124 @@
+---
+title: "Experimental functions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Experimental functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(flow)
+```
+
+Version 0.3 features experimental functions to display different kinds of flow diagrams.
+
+These are not stable but already useful and since developing flow takes time I though
+it'd be useful to release them as they are for the time being. Please report issues
+or upvote existing ones on github if you'd like to see more work happening there.
+
+## `flow_view_vars()`
+
+`flow_view_vars()` shows dependencies between variables in a function, this kind
+of functions cannot be made completely robust but seems to work quite well
+if you don't use `assign` and don't reuse variable names all over the place.
+
+Full lines are direct dependencies, dashed lines are dependencies through control flow.
+Variables are repeated when they are modified.
+
+Let's test it on `tidyselect::ends_with`
+
+```{r}
+tidyselect::ends_with
+```
+
+```{r}
+flow_view_vars(tidyselect::ends_with)
+```
+
+If we don't want to repeat the variable we can set `expand = FALSE`, the resulting
+diagram doesn't reflect the sequence of modifications but sums up dependencies
+more clearly as it is more compact.
+
+```{r}
+flow_view_vars(tidyselect::ends_with, expand = FALSE)
+```
+
+Use the `out` argument to export these diagrams.
+
+## `flow_view_deps()`
+
+`flow_view_deps()` shows dependencies between functions in a package.
+
+Exported functions are blue, unexported are yellow, the number of lines of code
+is indicated between brackets (useful to detect small helpers).
+
+By default functions called from other non base packages are shown but don't
+create new nodes.
+
+```{r}
+flow_view_deps(tidyselect::ends_with)
+```
+
+We can collapse those to show only packages : 
+
+```{r}
+flow_view_deps(tidyselect::ends_with, show_imports = "packages")
+```
+
+Or not show those at all :
+
+```{r}
+flow_view_deps(tidyselect::ends_with, show_imports = "none")
+```
+
+There are many ways to tweak the output, in particular we can :
+
+* promote functions from other packages so they'll have their own node
+
+```{r}
+flow_view_deps(tidyselect::ends_with, promote = "purrr::map")
+```
+
+* Demote functions from the target package to treat them as functions from other packages.
+
+```{r}
+flow_view_deps(tidyselect::ends_with, demote = "peek_vars")
+```
+
+
+* Hide a function altogether :
+
+```{r}
+flow_view_deps(tidyselect::ends_with, hide = c("peek_vars", "purrr::map"))
+```
+
+* Trim to stop recursing after a given function:
+
+```{r}
+flow_view_deps(tidyselect::ends_with, trim = "peek_vars")
+```
+
+
+Use the `out` argument to export these diagrams.
+
+
+## `flow_view_shiny()`
+
+`flow_view_shiny()` is a wrapper around `flow_view_deps()` to show the structure
+of a shiny app. It works nicely on apps built with {golem} or follow the same
+kind of structure (good practice basically). Apps that use `source()`
+are not well supported but it might come as we found it's quite common (though
+probably not good practice).
+
+Here's an example using the great {esquisser} app.
+
+```{r}
+flow_view_shiny(esquisse::esquisser, show_imports = "none")
+```
+
+Use the `out` argument to export these diagrams.
