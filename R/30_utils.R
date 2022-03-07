@@ -285,6 +285,7 @@ namespace_name <- function(x, ...) UseMethod("namespace_name")
 
 #' @export
 namespace_name.environment <- function(x, env, ...) {
+  if(identical(x, globalenv())) return("R_GlobalEnv")
   if(!isNamespace(x)) stop("The provided environment isn't a namespace")
   sub("^namespace:", "", environmentName(x))
 }
@@ -334,6 +335,7 @@ namespace_name.character <- function(x, env, fallback_ns = NULL, fail_if_not_fou
 }
 
 get_namespace_exports <- function(ns) {
+  if (identical(ns, globalenv())) return(ls(globalenv()))
   if(!file.exists("DESCRIPTION")) return(getNamespaceExports(ns))
   current_pkg <- sub("^Package: (.*)$", "\\1", readLines("DESCRIPTION")[[1]])
   if(is.environment(ns)) ns <- sub("^namespace:", "", environmentName(ns))

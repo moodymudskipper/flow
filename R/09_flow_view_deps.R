@@ -133,7 +133,11 @@ flow_view_deps_df <- function(target_fun_name,trim, promote, demote, hide, lines
   #target_ns  <- environment(target_fun)
 
   fallback_ns_nm <- namespace_name(target_fun_name, default_env)
-  fallback_ns <- asNamespace(fallback_ns_nm)
+  if(fallback_ns_nm == "R_GlobalEnv") {
+    fallback_ns <- globalenv()
+  } else {
+    fallback_ns <- asNamespace(fallback_ns_nm)
+  }
   funs_raw <- unique(c(target_fun_name, trim, promote, demote, hide))
   namespaced_funs_lgl <- grepl("::", funs_raw)
   obj_names <- sub("^[^:]+[:]{2,3}`?([^`]+)`?", "\\1", funs_raw)
@@ -191,7 +195,12 @@ flow_view_deps_df <- function(target_fun_name,trim, promote, demote, hide, lines
 
 get_ns_obj_df <- function(ns_nm, lines) {
 
-  ns <- asNamespace(ns_nm)
+  if (ns_nm == "R_GlobalEnv") {
+    ns <- globalenv()
+  } else {
+    ns <- asNamespace(ns_nm)
+  }
+
   objs <- data.frame(
     ns_nm = ns_nm,
     nm = ls(ns),
@@ -214,9 +223,12 @@ get_ns_obj_df <- function(ns_nm, lines) {
 
 get_dependency_df <- function(row, objs) {
   ns_nm <- hide <- NULL # for notes
-  obj <- getFromNamespace(row$nm, row$ns_nm)
+  if(row$ns_nm == "R_GlobalEnv") {
+    obj <- get(row$nm, globalenv())
+  } else {
+    obj <- getFromNamespace(row$nm, row$ns_nm)
+  }
   if(!is.function(obj)) return(NULL)
-  #if(row$nm == "") browser()
   namespaced_objs_df <- get_namespaced_objs_df(obj)
   short_objs_df <- get_short_objs_df(obj)
   dependency_df <- rbind(namespaced_objs_df, short_objs_df)
