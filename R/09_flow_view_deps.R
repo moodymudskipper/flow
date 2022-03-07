@@ -8,13 +8,15 @@
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
-#' @param fun A function
+#' @param fun A function, can be of the form `fun`, `pkg::fun`, `pkg:::fun`,
+#'   if in the form `fun`, the binding should be located in a package namespace
+#'   or the global environment
 #' @param max_depth An integer, the maximum depth to display
-#' @param trim A vector of list of function names where the recursion will stop
-#' @param promote A vector of list of external functions to show as internal functions
-#' @param demote A vector of list of internal functions to show as external functions
-#' @param hide A vector of list of internal functions to completely remove from the chart
-#' @param show_imports Whether to show imported functions, only packages, or neither
+#' @param trim A vector or list of function names where the recursion will stop
+#' @param promote A vector or list of external functions to show as internal functions
+#' @param demote A vector or list of internal functions to show as external functions
+#' @param hide A vector or list of internal functions to completely remove from the chart
+#' @param show_imports Whether to show imported "functions", only "packages", or "none"
 #' @param lines Whether to show the number of lines of code next to the function name
 #' @inheritParams flow_view
 #' @examples

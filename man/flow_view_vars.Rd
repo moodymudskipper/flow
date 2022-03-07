@@ -61,3 +61,6 @@ if a value is modified in a branch of an if call (or both branches) and
 \code{expand} is \code{TRUE}, the modified variable(s) will point to a new one at the
 end of the \code{ìf} call.
 }
+\examples{
+flow_view_vars(ave)
+}

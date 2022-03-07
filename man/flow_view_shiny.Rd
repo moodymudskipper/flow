@@ -22,15 +22,15 @@ flow_view_shiny(
 
 \item{max_depth}{An integer, the maximum depth to display}
 
-\item{trim}{A vector of list of function names where the recursion will stop}
+\item{trim}{A vector or list of function names where the recursion will stop}
 
-\item{promote}{A vector of list of external functions to show as internal functions}
+\item{promote}{A vector or list of external functions to show as internal functions}
 
-\item{demote}{A vector of list of internal functions to show as external functions}
+\item{demote}{A vector or list of internal functions to show as external functions}
 
-\item{hide}{A vector of list of internal functions to completely remove from the chart}
+\item{hide}{A vector or list of internal functions to completely remove from the chart}
 
-\item{show_imports}{Whether to show imported functions, only packages, or neither}
+\item{show_imports}{Whether to show imported "functions", only "packages", or "none"}
 
 \item{out}{a path to save the diagram to.
 Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
