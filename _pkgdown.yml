@@ -1,9 +1,27 @@
 navbar:
   structure:
-    left:  [home, reference, articles, news, diagrams]
+    left:
+    - home
+    - reference
+    - articles
+    - news
+    - diagrams
     right: [github]
   components:
     home: ~
     diagrams:
      text: Diagrams
-     href: diagrams.html
+     href: diagrams.htmlß
+
+articles:
+- title: All articles
+  navbar: ~
+  contents:
+  - simple-usage
+  - export-diagrams
+  - addins
+  - customize
+  - nested-functions
+  - advanced-debugging
+  - reports
+  - experimental-functions

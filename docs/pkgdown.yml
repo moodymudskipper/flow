@@ -1,13 +1,14 @@
-pandoc: 2.7.3
-pkgdown: 1.5.1
+pandoc: 2.14.0.3
+pkgdown: 2.0.1
 pkgdown_sha: ~
 articles:
-  V01_simple_usage: V01_simple_usage.html
-  V02_export_diagrams: V02_export_diagrams.html
-  V03_addins: V03_addins.html
-  V04_customize: V04_customize.html
-  V05_nested_functions: V05_nested_functions.html
-  V06_advanced_debugging: V06_advanced_debugging.html
-  V07_Reports: V07_Reports.html
-last_built: 2021-08-11T21:14Z
+  addins: addins.html
+  advanced-debugging: advanced-debugging.html
+  customize: customize.html
+  experimental-functions: experimental-functions.html
+  export-diagrams: export-diagrams.html
+  nested-functions: nested-functions.html
+  reports: reports.html
+  simple-usage: simple-usage.html
+last_built: 2022-03-07T15:01Z
 

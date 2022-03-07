@@ -30,6 +30,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -42,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">flow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2.9000</span>
       </span>
     </div>
 
@@ -59,25 +61,28 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/V01_simple_usage.html">Simple Usage</a>
+      <a href="articles/simple-usage.html">Simple Usage</a>
     </li>
     <li>
-      <a href="articles/V02_export_diagrams.html">Export Diagrams</a>
+      <a href="articles/export-diagrams.html">Export Diagrams</a>
     </li>
     <li>
-      <a href="articles/V03_addins.html">Setup and Use the Addins</a>
+      <a href="articles/addins.html">Setup and Use the Addins</a>
     </li>
     <li>
-      <a href="articles/V04_customize.html">Customize Your Diagrams</a>
+      <a href="articles/customize.html">Customize Your Diagrams</a>
     </li>
     <li>
-      <a href="articles/V05_nested_functions.html">Explore Nested Functions</a>
+      <a href="articles/nested-functions.html">Explore Nested Functions</a>
     </li>
     <li>
-      <a href="articles/V06_advanced_debugging.html">Advanced Debugging</a>
+      <a href="articles/advanced-debugging.html">Advanced Debugging</a>
     </li>
     <li>
-      <a href="articles/V07_Reports.html">Build reports to document functions and unit tests</a>
+      <a href="articles/reports.html">Build reports to document functions and unit tests</a>
+    </li>
+    <li>
+      <a href="articles/experimental-functions.html">Experimental functions</a>
     </li>
   </ul>
 </li>
@@ -85,10 +90,17 @@
   <a href="news/index.html">Changelog</a>
 </li>
 <li>
-  <a href="diagrams.html">Diagrams</a>
+  <a href="diagrams.html%C3%9F">Diagrams</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/moodymudskipper/flow/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -100,9 +112,10 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="flow-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#flow-" class="anchor"></a>flow <img src="reference/figures/logo.png" align="right" height="139">
+
+
+<div class="section level1">
+<div class="page-header"><h1 id="flow-">flow <img src="reference/figures/logo.png" align="right" height="139"><a class="anchor" aria-label="anchor" href="#flow-"></a>
 </h1></div>
 <p><em>{flow}</em> provides tools to visualize as flow diagrams the logic of functions, expressions or scripts and ease debugging.</p>
 <p>Use cases are :</p>
@@ -115,45 +128,80 @@
 <li>Providing a higher level view of an algorithm to collaborators</li>
 <li>Education</li>
 </ul>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>Install from CRAN with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"flow"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"flow"</span><span class="op">)</span></code></pre></div>
 <p>Or install development version from github:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"moodymudskipper/flow"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"moodymudskipper/flow"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">flow</span>)</pre></div>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/moodymudskipper/flow" class="external-link">flow</a></span><span class="op">)</span></code></pre></div>
 <p>Using default nomnoml engine</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="reference/flow_view.html">flow_view</a></span>(<span class="no">rle</span>)</pre></div>
-<p><img src="reference/figures/README_nomnoml.png" alt="nomnoml"></p>
-<p>Using plantuml engine (make sure the <a href="https://github.com/rkrug/plantuml">{plantuml}</a> package is installed).</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="reference/flow_view.html">flow_view</a></span>(<span class="no">rle</span>, <span class="kw">engine</span> <span class="kw">=</span> <span class="st">"plantuml"</span>)</pre></div>
-<p><img src="reference/figures/README_plantuml.png" alt="plantuml"></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">rle</span><span class="op">)</span></code></pre></div>
+<div class="figure">
+<img src="reference/figures/README_nomnoml.png" alt=""><p class="caption">nomnoml</p>
 </div>
-<div id="notes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#notes" class="anchor"></a>Notes</h2>
+<p>Using plantuml engine (make sure the <a href="https://github.com/rkrug/plantuml" class="external-link">{plantuml}</a> package is installed).</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">rle</span>, engine <span class="op">=</span> <span class="st">"plantuml"</span><span class="op">)</span></code></pre></div>
+<div class="figure">
+<img src="reference/figures/README_plantuml.png" alt=""><p class="caption">plantuml</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>
+</h2>
 <p>Make sure to check the vignettes for a detailed breakdown of all features.</p>
-<p><em>{flow}</em> is built on top of Javier Luraschi’s <em>{nomnoml}</em> package, and Rainer M Krug ’s <em>{plantuml}</em> package, the latter only available from <a href="https://github.com/rkrug/plantuml">github</a> at the moment.</p>
+<p><em>{flow}</em> is built on top of Javier Luraschi’s <em>{nomnoml}</em> package, and Rainer M Krug ’s <em>{plantuml}</em> package, the latter only available from <a href="https://github.com/rkrug/plantuml" class="external-link">github</a> at the moment.</p>
 </div>
 </div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
-<h2>License</h2>
+    <div class="links">
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://cloud.r-project.org/package=flow" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/moodymudskipper/flow/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/moodymudskipper/flow/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
+<div class="license">
+<h2 data-toc-skip>License</h2>
+<ul class="list-unstyled">
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
+</ul>
+</div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing flow</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Antoine Fabri <br><small class="roles"> Author, maintainer </small>  </li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/moodymudskipper/flow/actions" class="external-link"><img src="https://github.com/moodymudskipper/flow/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
 
@@ -162,11 +210,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Antoine Fabri.</p>
+  <p></p>
+<p>Developed by Antoine Fabri.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -174,6 +224,8 @@
 
   
 
+
+  
 
   </body>
 </html>
