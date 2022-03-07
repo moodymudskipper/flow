@@ -51,7 +51,7 @@ x that we wish to inspect}
 
 \item{out}{a path to save the diagram to.
 Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
-export the objec to a temp file of the relevant format and open it,
+export the object to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
 
 \item{engine}{either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental), if
