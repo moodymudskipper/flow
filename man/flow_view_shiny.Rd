@@ -50,3 +50,8 @@ a server function, a ui function or a function calling either. What is or isn't 
 server or ui function depends on a regular expression provided through the \code{pattern}
 argument.
 }
+\examples{
+if (requireNamespace("esquisse", quietly = TRUE)) {
+  flow_view_shiny(esquisse::esquisser, show_imports = "none")
+}
+}
