@@ -29,17 +29,19 @@ Called for side effects
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-}
-\details{
+
 This draws the dependencies between variables. This function
 is useful to detect dead code and variable clusters. By default the variable
 is shown a new time when it's overwritten or modified, this can be changed by
 setting \code{expand} to \code{FALSE}.
+}
+\details{
+Colors and lines are to be understood as follows:
 \itemize{
 \item The function is blue
 \item The arguments are green
 \item The variables starting as constants are yellow
-\item The dead code branches are orange and dashed
+\item The dead code or pure side effect branches are orange and dashed
 \item dashed lines represent how variables are undirectly impacted by control flow conditions,
 for instance the expression \code{if(z == 1) x <- y} would give you a full arrow
 from \code{y} to \code{x} and a dashed arrow from \code{z} to \code{x}

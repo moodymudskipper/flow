@@ -1,16 +1,21 @@
 globalVariables(c("lhs", "rhs"))
 
+
 #' Draw the dependencies of variables in a function
+#' @description
+#' `r lifecycle::badge("experimental")`
 #'
 #' This draws the dependencies between variables. This function
 #' is useful to detect dead code and variable clusters. By default the variable
 #' is shown a new time when it's overwritten or modified, this can be changed by
 #' setting `expand` to `FALSE`.
 #'
+#' @details
+#' Colors and lines are to be understood as follows:
 #' * The function is blue
 #' * The arguments are green
 #' * The variables starting as constants are yellow
-#' * The dead code branches are orange and dashed
+#' * The dead code or pure side effect branches are orange and dashed
 #' * dashed lines represent how variables are undirectly impacted by control flow conditions,
 #'  for instance the expression `if(z == 1) x <- y` would give you a full arrow
 #'  from `y` to `x` and a dashed arrow from `z` to `x`
@@ -30,8 +35,6 @@ globalVariables(c("lhs", "rhs"))
 #' if a value is modified in a branch of an if call (or both branches) and
 #' `expand` is `TRUE`, the modified variable(s) will point to a new one at the
 #' end of the `ìf` call.
-#' @description
-#' `r lifecycle::badge("experimental")`
 #' @param x The function, script or expression to draw
 #' @param expand A boolean, if `FALSE` a variable name is only shown once, else
 #'   (the default) it's repeated and suffixed with a number of `*`
