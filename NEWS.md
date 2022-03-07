@@ -1,3 +1,20 @@
+# flow 0.0.3
+
+We provide new experimental functions, these might be subjected to non trivial
+breaking changes in the features and they have some known issues but we decided
+to release them in the wild already:
+
+* `flow_view_vars()` shows dependencies between variables within a function
+* `flow_view_deps()` shows dependencies between functions in a given package
+* `flow_view_shiny()` is a wrapper around `flow_view_deps()` to show only server
+ and ui functions and functions that call them
+ 
+These are introduced in `vignette("experimental-functions")` 
+ 
+Additionally :
+
+* Various bug fixes, in particular vignettes and compatibility with older R versions
+
 # flow 0.0.2
 
 The API was simplified, we lose some flexibility, but I doubt we lose anything
