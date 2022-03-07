@@ -127,10 +127,6 @@ flow_view_vars..fetch_var_deps <- function(clean_body, fun_name, args) {
   return_i <- 0
   defs <- local_defs <- setNames(rep(1, length(args)), args)
   fetch_var_deps <- function(call, add_vars = NULL) {
-    # message("call")
-    # print(call)
-    #browser()
-
 
     if(!is.call(call)) return(NULL)
     fun_name <- deparse1(call[[1]])
@@ -207,13 +203,6 @@ flow_view_vars..fetch_var_deps <- function(clean_body, fun_name, args) {
     }
 
     if (fun_name %in% c("<-", "=")) {
-
-      # message("call")
-      # print(call)
-      # message("defs/local_defs before")
-      # print(defs)
-      # print(local_defs)
-
       # RHS
       rhs <- call[[3]]
       rhs_nms <- intersect(all.names(rhs), names(local_defs))
@@ -256,18 +245,10 @@ flow_view_vars..fetch_var_deps <- function(clean_body, fun_name, args) {
       local_defs[[lhs]] <<- defs[[lhs]]
       lhs <- paste0(lhs, strrep("*", defs[[lhs]]-1))
 
-
-      # message("defs/local_defs after")
-      # print(defs)
-      # print(local_defs)
-
       # hide result in call so it's not vulnerable to unlist
       # here we might consider the add_vars separately so we can define a different
       # link when a variable is used in parent control flow rather than as a direct input
       res <- call(lhs, rhs_nms, add_vars = add_vars, action = action)
-
-      # message("res")
-      # print(res)
 
       c(res, fetch_var_deps(rhs, add_vars))
     } else {

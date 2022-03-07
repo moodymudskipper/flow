@@ -58,12 +58,8 @@ flow_view_deps <- function(
   # recurse
   # we don't pass around nomnoml_code and objs, we just edit it with `<<-`
   rec <- function(row, depth = 1, parent = NULL) {
-    # message("----------------------------------------------------------------")
-    # print(row)
-    # if(row$nm == "build_element_exploration_table") browser()
     dependency_df <- get_dependency_df(row, objs)
     # gather info from obs
-
 
     if(NROW(dependency_df)) {
       internal_ref_df <- subset(dependency_df, style != "external_reference")

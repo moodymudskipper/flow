@@ -293,8 +293,6 @@ namespace_name.environment <- function(x, env, ...) {
 #' @export
 namespace_name.character <- function(x, env, fallback_ns = NULL, fail_if_not_found = TRUE) {
 
-  # print(x)
-  # if(x == "all_patient_search_dt") browser()
   if(grepl("::", x)) {
     return(sub("^([^:]+)[:]{1,2}.*", "\\1", x))
   }
