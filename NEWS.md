@@ -1,4 +1,4 @@
-# flow 0.0.3
+# flow 0.1.0
 
 We provide new experimental functions, these might be subjected to non trivial
 breaking changes in the features and they have some known issues but we decided

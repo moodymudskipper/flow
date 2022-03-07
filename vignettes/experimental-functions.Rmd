@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 library(flow)
 ```
 
-Version 0.3 features experimental functions to display different kinds of flow diagrams.
+Version 0.1.0 features experimental functions to display different kinds of flow diagrams.
 
 These are not stable but already useful and since developing flow takes time I though
 it'd be useful to release them as they are for the time being. Please report issues
