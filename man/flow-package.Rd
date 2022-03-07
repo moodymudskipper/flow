@@ -14,7 +14,7 @@ Visualize as flow diagrams the logic of functions, expressions or scripts in a s
 Useful links:
 \itemize{
   \item \url{https://github.com/moodymudskipper/flow}
-  \item \url{https://moodymudskipper.github.io/flow}
+  \item \url{https://moodymudskipper.github.io/flow/}
   \item Report bugs at \url{https://github.com/moodymudskipper/flow/issues}
 }
 
