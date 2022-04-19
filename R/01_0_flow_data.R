@@ -42,8 +42,28 @@ flow_data <-
 
       ## was the nested_fun argument given ?
       if (!is.null(nested_fun)) {
-        ## replace fun name and set the new `x`
-        f_sym <- quote(fun)
+
+        if(length(nested_fun) != 1 || !typeof(nested_fun) %in% c("character", "integer", "double")) {
+          stop("`nested_fun` must be a string or a number.", call. = FALSE)
+        }
+
+        if (is.character(nested_fun)) {
+          if (!nested_fun %in% names(sub_funs)) {
+            stop("No nested function definition for `", nested_fun, "` was found.", call. = FALSE)
+          }
+          ## replace fun name
+          f_sym <- as.symbol(nested_fun)
+        } else {
+          if (nested_fun > length(sub_funs) ) {
+            stop(
+              "Found ", length(sub_funs), " nested functions. Index `",
+              nested_fun, "` is out of bounds.", call. = FALSE)
+          }
+          ## replace fun name
+          f_sym <- quote(fun)
+        }
+
+        ## set the new `x`
         x <- eval(sub_funs[[nested_fun]])
       } else {
         ## do we have sub function definitions ?
