@@ -125,6 +125,8 @@ get_last_call_type <- function(expr){
   last_call_type
 }
 
+# extract nested function definitions into named list
+# find_funs(body(bquote))
 find_funs <- function(call){
   env <- new.env()
   env$funs <- list()
@@ -151,6 +153,9 @@ find_funs <- function(call){
   env$funs
 }
 
+
+# when assignin result of if call,
+# swap_calls(quote(x <- if(cond) this else that))
 swap_calls <- function(expr){
   # if not a call return as is
   if (!is.call(expr)) return(expr)
@@ -299,6 +304,9 @@ namespace_name.environment <- function(x, env, ...) {
 #' @export
 namespace_name.character <- function(x, env, fallback_ns = NULL, fail_if_not_found = TRUE) {
 
+  if (identical(x, "::")) return("base")
+  if (identical(x, ":::")) return("base")
+
   if(grepl("::", x)) {
     return(sub("^([^:]+)[:]{1,2}.*", "\\1", x))
   }
@@ -318,6 +326,7 @@ namespace_name.character <- function(x, env, fallback_ns = NULL, fail_if_not_fou
 
   bind_env <- get_binding_environment(x, env)
   bind_env_nm <- environmentName(bind_env)
+
   if(startsWith(bind_env_nm, "imports:")) {
     parent_ns <- sub("^.*?:", "", bind_env_nm)
     imports <- getNamespaceImports(parent_ns)
