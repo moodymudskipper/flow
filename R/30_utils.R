@@ -240,15 +240,17 @@ getS3methodSym <- function(fun, x){
 
 gfn <- getFromNamespace
 
-
+# We might find code that is deparsed into something like foo$!!bar, which is not syntactic
+# if we do, we replace the dollar in `a$b` whenever `b` is not a symbol
+# robust_deparse(quote(`$`(a, !!b) + `$`(a, b)))
+# deparse(quote(`$`(a, !!b) + `$`(a, b)))
 robust_deparse <- function(call) {
   txt <- paste(deparse(call, width.cutoff = 40L, backtick = TRUE), collapse = "\n")
   if (!grepl("\\$!!", txt)) return(txt)
-  # replace
   substitute_bad_dollars <- function(call) {
     if(!is.call(call)) return(call)
     if(length(call) == 3 && identical(call[[1]], quote(`$`))) {
-      if(!is.character(call[[3]])) {
+      if(!is.symbol(call[[3]])) {
         call[[1]] <- as.symbol("$\b")
       }
     }
