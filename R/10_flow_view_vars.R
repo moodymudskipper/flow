@@ -63,13 +63,18 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
   # format dependencies into a data frame containing graph and metadata --------
   df <- flow_view_vars..format_deps(var_deps, fun$name, fun$args, expand)
 
-  # return the data frame, not documented at the moment ------------------------
+  # return the data frame ------------------------------------------------------
   if(identical(out, "data")) {
     return(df)
   }
 
   # build nomnoml code ---------------------------------------------------------
   nomnoml_code <- flow_view_vars..build_nomnoml_code(df,  fun$name, fun$args)
+
+  # return the code ------------------------------------------------------------
+  if(identical(out, "code")) {
+    return(nomnoml_code)
+  }
 
   # output ---------------------------------------------------------------------
   svg <- is.null(out) || endsWith(out, ".html") || endsWith(out,".html")

@@ -83,15 +83,14 @@ flow_view <- function(
       }
 
       ## run flow_view_plantuml
-      flow_view_plantuml(
+      return(flow_view_plantuml(
         x_chr = f_chr,
         x = x,
         prefix = prefix,
         truncate = truncate,
         nested_fun = nested_fun,
         swap = swap,
-        out = out)
-      return(invisible(NULL))
+        out = out))
     }
 
     ## run flow_view_nomnoml

@@ -1,7 +1,7 @@
 flow_view_plantuml <- function(
   x_chr, x, prefix, truncate, nested_fun, swap, out, svg = FALSE) {
 
-  if(!is.null(out) && !sub("^.*?\\.(.*?)", "\\1", out) %in% c("png", "jpg", "jpeg"))
+  if(!is.null(out) && !sub("^.*?\\.(.*?)", "\\1", out) %in% c("png", "jpg", "jpeg", "code"))
     stop("the 'plantuml' engine is only compatible with 'png', 'jpg', 'jpeg' output")
 
   ## is x a bodiless function ?
@@ -85,6 +85,8 @@ flow_view_plantuml <- function(
   code_str <- build_plantuml_code(x, first = TRUE, truncate = truncate)
   # concat params, header and code
   code_str <- paste0(plantuml_skinparam,"\n", header, code_str)
+
+  if(identical(out, "code")) return(code_str)
 
   plantuml <- gfn("plantuml", "plantuml")
   plant_uml_object <- plantuml(code_str)
