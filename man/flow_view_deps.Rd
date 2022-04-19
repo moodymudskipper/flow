@@ -13,7 +13,8 @@ flow_view_deps(
   hide = NULL,
   show_imports = c("functions", "packages", "none"),
   out = NULL,
-  lines = TRUE
+  lines = TRUE,
+  include_formals = TRUE
 )
 }
 \arguments{
@@ -39,6 +40,9 @@ export the object to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
 
 \item{lines}{Whether to show the number of lines of code next to the function name}
+
+\item{include_formals}{Whether to fetch dependencies in the default values of the
+function's arguments}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
