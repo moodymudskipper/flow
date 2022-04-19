@@ -121,7 +121,17 @@ flow_view_deps <- function(
   if(inherits(out, "htmlwidget")) out else invisible(out)
 }
 
-
+# A data frame containing all functions from all namespaces found in functions mentionned
+# in target_fun_name,trim, promote, demote, hide
+# ns_nm: namespace name
+# nm: function name
+# exported, is_function, is_call_routine
+# style: a label for the style to apply with nomnoml (expfun, unexpfun etc)
+# n_lines
+# trim, promote, demote, hide,
+# covered: whether we already defined the node
+# in_target_ns: Whether the object is bound in the same
+# header: the label of the node
 flow_view_deps_df <- function(target_fun_name,trim, promote, demote, hide, lines, default_env) {
   # make a data.frame with every fun from every namespace
   target_fun <- eval(str2lang(target_fun_name), default_env)
