@@ -18,6 +18,8 @@
 #' @param hide A vector or list of internal functions to completely remove from the chart
 #' @param show_imports Whether to show imported "functions", only "packages", or "none"
 #' @param lines Whether to show the number of lines of code next to the function name
+#' @param include_formals Whether to fetch dependencies in the default values of the
+#'   function's arguments
 #' @inheritParams flow_view
 #' @examples
 #' flow_view_deps(flow_view_deps)
@@ -31,7 +33,8 @@ flow_view_deps <- function(
   hide = NULL,
   show_imports = c("functions", "packages", "none"),
   out = NULL,
-  lines = TRUE) {
+  lines = TRUE,
+  include_formals = TRUE) {
 
   target_fun_name <- deparse(substitute(fun))
   call_env <- parent.frame()
@@ -60,7 +63,7 @@ flow_view_deps <- function(
   # recurse
   # we don't pass around nomnoml_code and objs, we just edit it with `<<-`
   rec <- function(row, depth = 1, parent = NULL) {
-    dependency_df <- get_dependency_df(row, objs)
+    dependency_df <- get_dependency_df(row, objs, include_formals)
     # gather info from obs
 
     if(NROW(dependency_df)) {
@@ -243,7 +246,7 @@ get_ns_obj_df <- function(ns_nm, lines) {
   objs
 }
 
-get_dependency_df <- function(row, objs) {
+get_dependency_df <- function(row, objs, include_formals) {
   ns_nm <- hide <- NULL # for notes
   if(row$ns_nm == "R_GlobalEnv") {
     obj <- get(row$nm, globalenv())
@@ -251,8 +254,8 @@ get_dependency_df <- function(row, objs) {
     obj <- getFromNamespace(row$nm, row$ns_nm)
   }
   if(!is.function(obj)) return(NULL)
-  namespaced_objs_df <- get_namespaced_objs_df(obj)
-  short_objs_df <- get_short_objs_df(obj)
+  namespaced_objs_df <- get_namespaced_objs_df(obj, include_formals)
+  short_objs_df <- get_short_objs_df(obj, include_formals)
   dependency_df <- rbind(namespaced_objs_df, short_objs_df)
   dependency_df <- subset(dependency_df, ns_nm != "base")
   dependency_df <- merge(dependency_df, objs, all.x = TRUE)
@@ -263,7 +266,7 @@ get_dependency_df <- function(row, objs) {
   dependency_df
 }
 
-get_namespaced_objs_df <- function(obj) {
+get_namespaced_objs_df <- function(obj, include_formals) {
   call <- body(obj)
   extract_namespaced_objs_impl <- function(call) {
     if(!is.call(call)) return(NULL)
@@ -276,6 +279,10 @@ get_namespaced_objs_df <- function(obj) {
     lapply(call, extract_namespaced_objs_impl)
   }
   calls <- extract_namespaced_objs_impl(call)
+  if (include_formals) {
+    calls_from_fmls <- lapply(formals(obj), extract_namespaced_objs_impl)
+    calls <- c(calls, calls_from_fmls)
+  }
   calls <- unlist(calls)
   do.call(rbind, lapply(calls, function (x) data.frame(
     ns_nm = as.character(x[[2]]),
@@ -283,9 +290,14 @@ get_namespaced_objs_df <- function(obj) {
     stringsAsFactors = FALSE)))
 }
 
-get_short_objs_df <- function(obj) {
+get_short_objs_df <- function(obj, include_formals) {
   body_ <- remove_namespaced_calls(body(obj))
-  objs <- setdiff(all.names(body_), c(formalArgs(obj), extract_assignment_targets(body_)))
+  all_nms <- all.names(body_)
+  if (include_formals) {
+    fmls <- lapply(formals(obj), remove_namespaced_calls)
+    all_nms <- unique(unlist(c(all_nms, lapply(fmls, all.names))))
+  }
+  objs <- setdiff(all_nms, c(formalArgs(obj), extract_assignment_targets(body_)))
   namespaces <- sapply(objs, namespace_name, environment(obj), fail_if_not_found = FALSE)
   # NA namespaces are false positives, symbols found in NSE expressions
   # FIXME: We could at least ignore rhs of $ for those because if we have lhs$rhs
