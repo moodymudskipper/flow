@@ -33,26 +33,28 @@ flow_view_deps <- function(
   out = NULL,
   lines = TRUE) {
 
-  target_fun_name <- deparse(substitute(fun)) #
+  target_fun_name <- deparse(substitute(fun))
   call_env <- parent.frame()
   nm <- raw_fun_name(substitute(fun))
 
-  objs <- flow_view_deps_df(target_fun_name, trim, promote, demote, hide, lines, call_env)
+  # A data frame with all potentially relevant functions + info
+  objs <- flow_view_deps_df(target_fun_name, trim, promote, demote, hide, lines, default_env = call_env)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # initiate global objects
 
   show_imports <- match.arg(show_imports)
 
-  nomnoml_code <- "
-# direction: right
-#.expfun: visual=roundrect fill=#ddebf7 title=bold
-#.unexpfun: visual=roundrect fill=#fff2cc title=bold
-#.trimmed: visual=roundrect fill=#fce4d6 dashed title=bold
-#.expdata: visual=database fill=#e2efda title=bold
-#.unexpdata: visual=database fill=#fff2cc title=bold
-#.callroutine: visual=transceiver fill=#ededed
-"
+  nomnoml_setup <- c(
+    "# direction: right",
+    "#.expfun: visual=roundrect fill=#ddebf7 title=bold",
+    "#.unexpfun: visual=roundrect fill=#fff2cc title=bold",
+    "#.trimmed: visual=roundrect fill=#fce4d6 dashed title=bold",
+    "#.expdata: visual=database fill=#e2efda title=bold",
+    "#.unexpdata: visual=database fill=#fff2cc title=bold",
+    "#.callroutine: visual=transceiver fill=#ededed"
+  )
+  nomnoml_data_rows <- list()
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # recurse
@@ -95,7 +97,15 @@ flow_view_deps <- function(
     if(!is.null(parent)) {
       new_nomnoml_code <- paste0("[<", parent$style, "> ", parent$header, "] -> ", new_nomnoml_code)
     }
-    nomnoml_code <<- paste0(nomnoml_code, "\n", new_nomnoml_code)
+
+    nomnoml_data_rows[[length(nomnoml_data_rows) + 1]] <<- list(
+      child_header = row$header,
+      external_ref = external_ref,
+      child_style = style,
+      parent_header = parent$header %||% NA_character_,
+      parent_style = parent$style %||% NA_character_,
+      code = new_nomnoml_code
+    )
 
     # update "covered status"
     row_ind <- objs$ns_nm == row$ns_nm & objs$nm == row$nm
@@ -108,13 +118,17 @@ flow_view_deps <- function(
         rec(internal_ref_df[i,, drop = FALSE], depth + 1, parent = row)
       }
     }
-
   }
-  #debug(rec)
 
   target_nm <- sub("^[^:]+[:]{2,3}`?([^`]+)`?", "\\1", target_fun_name)
   target_ns_nm <- namespace_name(target_fun_name, parent.frame())
   rec (objs[objs$nm == target_nm & objs$ns_nm == target_ns_nm,, drop = FALSE])
+  nomnoml_data <- as.data.frame(do.call(rbind, nomnoml_data_rows))
+  nomnoml_data$external_ref <- as.list(nomnoml_data$external_ref)
+  if (identical(out, "data")) return(nomnoml_data)
+
+  nomnoml_code <- paste(c(nomnoml_setup, nomnoml_data$code), collapse = "\n")
+  if (identical(out, "code")) return(nomnoml_code)
 
   svg <- is.null(out) || endsWith(out, ".html") || endsWith(out, ".htm")
   out <- save_nomnoml(nomnoml_code, svg, out)

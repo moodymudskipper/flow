@@ -69,6 +69,10 @@ str2lang <- function(s) {
   parse(text=s)[[1]]
 }
 
+`%||%` <-function (x, y) {
+  if (is.null(x)) y else x
+}
+
 trimws <- function (x, which = c("both", "left", "right"), whitespace = "[ \t\r\n]") {
   which <- match.arg(which)
   mysub <- function(re, x) sub(re, "", x, perl = TRUE)
