@@ -257,7 +257,7 @@ get_dependency_df <- function(row, objs, include_formals) {
   namespaced_objs_df <- get_namespaced_objs_df(obj, include_formals)
   short_objs_df <- get_short_objs_df(obj, include_formals)
   dependency_df <- unique(rbind(namespaced_objs_df, short_objs_df))
-  dependency_df <- subset(dependency_df, ns_nm != "base")
+  dependency_df <- subset(dependency_df, ns_nm != "base" & ns_nm != "")
   dependency_df <- merge(dependency_df, objs, all.x = TRUE)
   dependency_df$hide[is.na(dependency_df$hide)] <- FALSE
   dependency_df <- subset(dependency_df, !hide)
