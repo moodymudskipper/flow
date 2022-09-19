@@ -10,7 +10,8 @@
 #' `r lifecycle::badge("experimental")`
 #' @param fun A function, can be of the form `fun`, `pkg::fun`, `pkg:::fun`,
 #'   if in the form `fun`, the binding should be located in a package namespace
-#'   or the global environment
+#'   or the global environment. It can also be a named list of functions, such as
+#'   one you'd create with `dplyr::lst()`, for instance `lst(fun1, pkg::fun2)`.
 #' @param max_depth An integer, the maximum depth to display
 #' @param trim A vector or list of function names where the recursion will stop
 #' @param promote A vector or list of external functions to show as internal functions
@@ -35,13 +36,19 @@ flow_view_deps <- function(
   out = NULL,
   lines = TRUE,
   include_formals = TRUE) {
-
-  target_fun_name <- deparse(substitute(fun))
+  fun_lng <- substitute(fun)
   call_env <- parent.frame()
-  nm <- raw_fun_name(substitute(fun))
 
-  # A data frame with all potentially relevant functions + info
-  objs <- flow_view_deps_df(target_fun_name, trim, promote, demote, hide, lines, default_env = call_env)
+  if (is.list(fun)) {
+    objs <- lapply(names(fun), flow_view_deps_df, trim, promote, demote, hide, lines, default_env = call_env)
+    objs <- do.call(rbind, objs)
+    objs <- unique(objs)
+  } else {
+    target_fun_name <- deparse(fun_lng)
+    nm <- raw_fun_name(fun_lng)
+    # A data frame with all potentially relevant functions + info
+    objs <- flow_view_deps_df(target_fun_name, trim, promote, demote, hide, lines, default_env = call_env)
+  }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # initiate global objects
@@ -123,9 +130,18 @@ flow_view_deps <- function(
     }
   }
 
-  target_nm <- sub("^[^:]+[:]{2,3}`?([^`]+)`?", "\\1", target_fun_name)
-  target_ns_nm <- namespace_name(target_fun_name, parent.frame())
-  rec (objs[objs$nm == target_nm & objs$ns_nm == target_ns_nm,, drop = FALSE])
+  if (!is.list(fun)) {
+    target_nm <- sub("^[^:]+[:]{2,3}`?([^`]+)`?", "\\1", target_fun_name)
+    target_ns_nm <- namespace_name(target_fun_name, parent.frame())
+    rec (objs[objs$nm == target_nm & objs$ns_nm == target_ns_nm,, drop = FALSE])
+  } else {
+    for (target_fun_name in names(fun)) {
+      target_nm <- sub("^[^:]+[:]{2,3}`?([^`]+)`?", "\\1", target_fun_name)
+      target_ns_nm <- namespace_name(target_fun_name, parent.frame())
+      rec (objs[objs$nm == target_nm & objs$ns_nm == target_ns_nm,, drop = FALSE])
+    }
+  }
+
   nomnoml_data <- as.data.frame(do.call(rbind, nomnoml_data_rows))
   nomnoml_data$external_ref <- as.list(nomnoml_data$external_ref)
   if (identical(out, "data")) return(nomnoml_data)
