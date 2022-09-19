@@ -109,6 +109,11 @@ flow_view_vars..clean_body <- function(call, refactor) {
   if(deparse1(call[[1]]) %in% c("quote", "~", "function")) {
     return(NULL)
   }
+
+  if(deparse1(call[[1]]) == "$") {
+    return(call("DOLLAR",call[[2]]))
+  }
+
   if(deparse1(call[[1]]) %in% c(
     "%refactor%", "%refactor_chunk%", "%refactor_value%",
     "%refactor_chunk_and_value%", "%refactor_chunk_efficiently%",
@@ -221,6 +226,7 @@ flow_view_vars..fetch_var_deps <- function(clean_body, fun_name, args) {
         )
         rhs <- do.call(substitute, list(rhs, subst_list))
       }
+
 
       # LHS
       lhs <- call[[2]]
