@@ -1,6 +1,7 @@
 test_that("flow_view_deps works", {
   expect_snapshot({
     flow_view_deps(here::i_am, out = "data")
+    flow_view_deps(list("here::i_am" = here::i_am), out = "data")
     flow_view_deps(here::i_am, max_depth = 3, out = "data")
     flow_view_deps(here::i_am, trim = "format_reason", out = "data")
     flow_view_deps(here::i_am, promote = "rprojroot::has_file", out = "data")
@@ -11,5 +12,9 @@ test_that("flow_view_deps works", {
     flow_view_deps(here::i_am, lines = FALSE, out = "data")
     flow_view_deps(lifecycle::signal_experimental, max_depth = 1, include_formals = FALSE, out = "data")
     flow_view_deps(lifecycle::signal_experimental, max_depth = 1, include_formals = TRUE, out = "data")
+    flow_view_deps(`%in%`, out = "data")
     })
 })
+
+
+#

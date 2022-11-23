@@ -34,6 +34,39 @@
       8                                       [<expfun> i_am (14)] -> [<unexpfun> set_fix_fun (5)]
       9                                     [<expfun> i_am (14)] -> [<unexpfun> set_root_crit (1)]
     Code
+      flow_view_deps(list(`here::i_am` = here::i_am), out = "data")
+    Output
+                          child_header             external_ref child_style
+      1                      i_am (14)      rprojroot::has_file      expfun
+      2                    dr_here (1)                     NULL      expfun
+      3             format_dr_here (5)                     NULL    unexpfun
+      4              format_reason (9) rprojroot::get_root_desc    unexpfun
+      5 format_root_criteria_items (3)                     NULL    unexpfun
+      6                       here (1)                     NULL      expfun
+      7             mockable_getwd (6)                     NULL    unexpfun
+      8                set_fix_fun (5)                     NULL    unexpfun
+      9              set_root_crit (1)                     NULL    unexpfun
+             parent_header parent_style
+      1                 NA           NA
+      2          i_am (14)       expfun
+      3        dr_here (1)       expfun
+      4 format_dr_here (5)     unexpfun
+      5  format_reason (9)     unexpfun
+      6 format_dr_here (5)     unexpfun
+      7          i_am (14)       expfun
+      8          i_am (14)       expfun
+      9          i_am (14)       expfun
+                                                                                              code
+      1                                                   [<expfun> i_am (14)|rprojroot::has_file]
+      2                                             [<expfun> i_am (14)] -> [<expfun> dr_here (1)]
+      3                                  [<expfun> dr_here (1)] -> [<unexpfun> format_dr_here (5)]
+      4 [<unexpfun> format_dr_here (5)] -> [<unexpfun> format_reason (9)|rprojroot::get_root_desc]
+      5              [<unexpfun> format_reason (9)] -> [<unexpfun> format_root_criteria_items (3)]
+      6                                     [<unexpfun> format_dr_here (5)] -> [<expfun> here (1)]
+      7                                    [<expfun> i_am (14)] -> [<unexpfun> mockable_getwd (6)]
+      8                                       [<expfun> i_am (14)] -> [<unexpfun> set_fix_fun (5)]
+      9                                     [<expfun> i_am (14)] -> [<unexpfun> set_root_crit (1)]
+    Code
       flow_view_deps(here::i_am, max_depth = 3, out = "data")
     Output
               child_header        external_ref child_style parent_header parent_style
@@ -284,4 +317,11 @@
       1 signal_experimental (1) rlang::caller_env     trimmed            NA
         parent_style                                                  code
       1           NA [<trimmed> signal_experimental (1)|rlang::caller_env]
+    Code
+      flow_view_deps(`%in%`, out = "data")
+    Output
+        child_header external_ref child_style parent_header parent_style
+      1     %in% (1)         NULL      expfun            NA           NA
+                       code
+      1 [<expfun> %in% (1)]
 
