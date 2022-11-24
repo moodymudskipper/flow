@@ -41,7 +41,8 @@ globalVariables(c("lhs", "rhs"))
 #' @param refactor If using 'refactor' package, whether to consider original or refactored code
 #' @inheritParams flow_view
 #'
-#' @return Called for side effects
+#' @return `flow_vars()` returns a `"flow_diagram"` object by default, and the output path invisibly if `out` is not
+#' `NULL` (called for side effects).
 #' @export
 #' @examples
 #' flow_view_vars(ave)

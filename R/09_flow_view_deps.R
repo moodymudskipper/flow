@@ -21,6 +21,8 @@
 #' @param include_formals Whether to fetch dependencies in the default values of the
 #'   function's arguments
 #' @inheritParams flow_view
+#' @return `flow_view_deps()` returns a `"flow_diagram"` object by default, and the output path invisibly if `out` is not
+#' `NULL` (called for side effects).
 #' @examples
 #' flow_view_deps(flow_view_deps)
 #' @export
