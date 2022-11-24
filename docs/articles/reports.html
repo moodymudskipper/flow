@@ -109,7 +109,8 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Build reports to document functions and unit tests</h1>
+      <h1 data-toc-skip>Build reports to document functions and unit
+tests</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/moodymudskipper/flow/blob/HEAD/vignettes/reports.Rmd" class="external-link"><code>vignettes/reports.Rmd</code></a></small>
@@ -123,16 +124,27 @@
 <h2 id="flow_doc">
 <code>flow_doc()</code><a class="anchor" aria-label="anchor" href="#flow_doc"></a>
 </h2>
-<p>The <code><a href="../reference/flow_doc.html">flow_doc()</a></code> function provides a way to draw all the functions of a package and store them in an <em>html</em> report.</p>
-<p>The <code>pkg</code> argument can be any package name, from base R, CRAN, or other including your local packages.</p>
-<p>The <code>out</code> argument must be a path to an <em>html</em> or <em>md</em> file.</p>
-<p>If <code>pkg</code> is provided but <code>out</code> is left <code>NULL</code>, the report will be printed to a temporary file and will be opened automatically.</p>
-<p>If you don’t provide neither <code>pkg</code> nor <code>out</code>, a <code>diagrams.md</code> file will be created at the root of your project folder, so that you can use <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site</a></code> to knit it into a new section after editing the YAML file properly.</p>
-<p>The <a href="https://moodymudskipper.github.io/flow/articles/Draw-a-function.html" class="external-link">Diagrams</a> section of the <a href="https://moodymudskipper.github.io/flow/" class="external-link">website</a> was built this way, simply by using the following call :</p>
+<p>The <code><a href="../reference/flow_doc.html">flow_doc()</a></code> function provides a way to draw all the
+functions of a package and store them in an <em>html</em> report.</p>
+<p>The <code>pkg</code> argument can be any package name, from base R,
+CRAN, or other including your local packages.</p>
+<p>The <code>out</code> argument must be a path to an <em>html</em> or
+<em>md</em> file.</p>
+<p>If <code>pkg</code> is provided but <code>out</code> is left
+<code>NULL</code>, the report will be printed to a temporary file and
+will be opened automatically.</p>
+<p>If you don’t provide neither <code>pkg</code> nor <code>out</code>, a
+<code>diagrams.md</code> file will be created at the root of your
+project folder, so that you can use <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site</a></code> to
+knit it into a new section after editing the YAML file properly.</p>
+<p>The <a href="https://moodymudskipper.github.io/flow/articles/Draw-a-function.html" class="external-link">Diagrams</a>
+section of the <a href="https://moodymudskipper.github.io/flow/" class="external-link">website</a> was built
+this way, simply by using the following call :</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/moodymudskipper/flow" class="external-link">flow</a></span><span class="op">)</span>
-<span class="fu"><a href="../reference/flow_doc.html">flow_doc</a></span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"##"</span><span class="op">)</span></code></pre></div>
-<p>And the <code>_pkgdown.yml</code> file that is created by <code><a href="https://usethis.r-lib.org/reference/use_pkgdown.html" class="external-link">usethis::use_pkgdown()</a></code> is edited to contain :</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/moodymudskipper/flow" class="external-link">flow</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/flow_doc.html">flow_doc</a></span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"##"</span><span class="op">)</span></span></code></pre></div>
+<p>And the <code>_pkgdown.yml</code> file that is created by
+<code><a href="https://usethis.r-lib.org/reference/use_pkgdown.html" class="external-link">usethis::use_pkgdown()</a></code> is edited to contain :</p>
 <pre><code>navbar:
   structure:
     left:  [home, reference, articles, news, diagrams]
@@ -147,14 +159,23 @@
 <h2 id="flow_test">
 <code>flow_test()</code><a class="anchor" aria-label="anchor" href="#flow_test"></a>
 </h2>
-<p>If you’re using the package <em>{testthat}</em> for your unit tests, <code><a href="../reference/flow_test.html">flow_test()</a></code> will help you explore them.</p>
+<p>If you’re using the package <em>{testthat}</em> for your unit tests,
+<code><a href="../reference/flow_test.html">flow_test()</a></code> will help you explore them.</p>
 <div class="figure">
 <img src="flow_test.gif" alt=""><p class="caption">flow_test</p>
 </div>
-<p>Below I ran <code><a href="../reference/flow_test.html">flow::flow_test()</a></code> after opening the project of my package <em>{unglue}</em>.</p>
-<p>It built a report with a tab for each test file, then next to the code of each script we’re able to visualize the diagram of our package’s functions and the logical path taken by the code, so we can easily see what was tested and what potentially went wrong.</p>
-<p>Successful tests are showed in green, while failed ones (none in the example above) will be shown in red. To show only the failed tests, set the argument <code>failed_only</code> to <code>TRUE</code>.</p>
-<p>If its <code>out</code> parameter is left <code>NULL</code>, the report will be printed to a temporary file and will be opened automatically.</p>
+<p>Below I ran <code><a href="../reference/flow_test.html">flow::flow_test()</a></code> after opening the project
+of my package <em>{unglue}</em>.</p>
+<p>It built a report with a tab for each test file, then next to the
+code of each script we’re able to visualize the diagram of our package’s
+functions and the logical path taken by the code, so we can easily see
+what was tested and what potentially went wrong.</p>
+<p>Successful tests are showed in green, while failed ones (none in the
+example above) will be shown in red. To show only the failed tests, set
+the argument <code>failed_only</code> to <code>TRUE</code>.</p>
+<p>If its <code>out</code> parameter is left <code>NULL</code>, the
+report will be printed to a temporary file and will be opened
+automatically.</p>
 <p>Other parameters are forwarded to <code><a href="../reference/flow_view.html">flow_run()</a></code>.</p>
 </div>
   </div>
@@ -176,7 +197,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

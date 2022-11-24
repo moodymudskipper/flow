@@ -106,7 +106,7 @@
 
       
 
-      </header><script src="simple-usage_files/htmlwidgets-1.5.4/htmlwidgets.js"></script><script src="simple-usage_files/es6shim-0.35.6/es6shim.js"></script><script src="simple-usage_files/es7shim-6.0.0/es7shim.js"></script><script src="simple-usage_files/graphre-0.1.3/graphre.js"></script><script src="simple-usage_files/nomnoml-1.4.0/nomnoml.js"></script><script src="simple-usage_files/nomnoml-binding-0.2.5/nomnoml.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simple Usage</h1>
@@ -119,72 +119,89 @@
 
     
     
-<p><em>{flow}</em>’s 2 main functions are <code><a href="../reference/flow_view.html">flow_view()</a></code> and <code><a href="../reference/flow_view.html">flow_run()</a></code>, which require only one argument for the simplest use cases.</p>
+<p><em>{flow}</em>’s two main functions are <code><a href="../reference/flow_view.html">flow_view()</a></code> and
+<code><a href="../reference/flow_view.html">flow_run()</a></code>, which require only one argument for the
+simplest use cases.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/moodymudskipper/flow" class="external-link">flow</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/moodymudskipper/flow" class="external-link">flow</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="flow_view">
 <code>flow_view()</code><a class="anchor" aria-label="anchor" href="#flow_view"></a>
 </h2>
-<p><code><a href="../reference/flow_view.html">flow_view()</a></code> is used to display the logic of a function, a one item named list containing a function, a script or a quoted expression.</p>
+<p><code><a href="../reference/flow_view.html">flow_view()</a></code> is used to display the logic of a function,
+a one item named list containing a function, a script or a quoted
+expression.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># display a function's body</span>
-<span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span><span class="op">)</span> </code></pre></div>
-<div id="htmlwidget-9cf9bdfef071c4a467c9" style="width:700px;height:432.632880098888px;" class="nomnoml html-widget"></div>
-<script type="application/json" data-for="htmlwidget-9cf9bdfef071c4a467c9">{"x":{"code":"#.if: visual=rhomb fill=#e2efda align=center\n#.for: visual=rhomb fill=#ddebf7 align=center\n#.repeat: visual=rhomb fill=#fce4d6 align=center\n#.while: visual=rhomb fill=#fff2cc align=center\n#.standard: visual=class fill=#ededed align=left\n#.commented: visual=class fill=#ededed\n#.header: visual=roundrect fill=#d9e1f2 align=left\n#.return: visual=end fill=#70ad47  empty\n#.stop: visual=end fill=#ed7d31  empty\n#.break: visual=receiver fill=#ffc000 empty\n#.next: visual=transceiver fill=#5b9bd5  empty\n#arrowSize: 1\n#bendSize: 0.3\n#direction: down\n#gutter: 5\n#edgeMargin: 0\n#edges: hard\n#fill: #eee8d5\n#fillArrows: false\n#font: Courier\n#fontSize: 12\n#leading: 1.25\n#lineWidth: 3\n#padding: 16\n#spacing: 40\n#stroke: #33322E\n#title: filename\n#zoom: 1\n#acyclicer: greedy\n#ranker: network-simplex\n\n[<header>ave(x, ..., FUN = mean)]  -> [<if> 1: ;⠀ if (missing(...)) ⠀\n⠀ ⠀ ⠀]\n[<if> 1: ;⠀ if (missing(...)) ⠀\n⠀ ⠀ ⠀] y -> [<standard> 2: ;x\\[\\] <- FUN(x)]\n[<standard> 2: ;x\\[\\] <- FUN(x)]  -> [<end> -1:]\n[<if> 1: ;⠀ if (missing(...)) ⠀\n⠀ ⠀ ⠀] n -> [<standard> 3: ;g <- interaction(...)\nsplit(x, g) <- lapply(split(x, g), FUN)]\n[<standard> 3: ;g <- interaction(...)\nsplit(x, g) <- lapply(split(x, g), FUN)]  -> [<end> -1:]\n[<end> -1:]  -> [<standard> 4: ;x]\n[<standard> 4: ;x]  -> [<return> 5:]","svg":true},"evals":[],"jsHooks":[]}</script>
-
-# if non standard evaluation is an issue, use a one element named list
-fun </div>
-<script type="application/json" data-for="htmlwidget-6415bd299b5afe1262ad">{"x":{"code":"#.if: visual=rhomb fill=#e2efda align=center\n#.for: visual=rhomb fill=#ddebf7 align=center\n#.repeat: visual=rhomb fill=#fce4d6 align=center\n#.while: visual=rhomb fill=#fff2cc align=center\n#.standard: visual=class fill=#ededed align=left\n#.commented: visual=class fill=#ededed\n#.header: visual=roundrect fill=#d9e1f2 align=left\n#.return: visual=end fill=#70ad47  empty\n#.stop: visual=end fill=#ed7d31  empty\n#.break: visual=receiver fill=#ffc000 empty\n#.next: visual=transceiver fill=#5b9bd5  empty\n#arrowSize: 1\n#bendSize: 0.3\n#direction: down\n#gutter: 5\n#edgeMargin: 0\n#edges: hard\n#fill: #eee8d5\n#fillArrows: false\n#font: Courier\n#fontSize: 12\n#leading: 1.25\n#lineWidth: 3\n#padding: 16\n#spacing: 40\n#stroke: #33322E\n#title: filename\n#zoom: 1\n#acyclicer: greedy\n#ranker: network-simplex\n\n[<header>ave(x, ..., FUN = mean)]  -> [<if> 1: ;⠀ if (missing(...)) ⠀\n⠀ ⠀ ⠀]\n[<if> 1: ;⠀ if (missing(...)) ⠀\n⠀ ⠀ ⠀] y -> [<standard> 2: ;x\\[\\] <- FUN(x)]\n[<standard> 2: ;x\\[\\] <- FUN(x)]  -> [<end> -1:]\n[<if> 1: ;⠀ if (missing(...)) ⠀\n⠀ ⠀ ⠀] n -> [<standard> 3: ;g <- interaction(...)\nsplit(x, g) <- lapply(split(x, g), FUN)]\n[<standard> 3: ;g <- interaction(...)\nsplit(x, g) <- lapply(split(x, g), FUN)]  -> [<end> -1:]\n[<end> -1:]  -> [<standard> 4: ;x]\n[<standard> 4: ;x]  -> [<return> 5:]","svg":true},"evals":[],"jsHooks":[]}</script>
-
-# display script
-flow_view("../tests/testthat.R")
-<div id="htmlwidget-34e3355162702df43c83" style="width:700px;height:432.632880098888px;" class="nomnoml html-widget"></div>
-<script type="application/json" data-for="htmlwidget-34e3355162702df43c83">{"x":{"code":"#.if: visual=rhomb fill=#e2efda align=center\n#.for: visual=rhomb fill=#ddebf7 align=center\n#.repeat: visual=rhomb fill=#fce4d6 align=center\n#.while: visual=rhomb fill=#fff2cc align=center\n#.standard: visual=class fill=#ededed align=left\n#.commented: visual=class fill=#ededed\n#.header: visual=roundrect fill=#d9e1f2 align=left\n#.return: visual=end fill=#70ad47  empty\n#.stop: visual=end fill=#ed7d31  empty\n#.break: visual=receiver fill=#ffc000 empty\n#.next: visual=transceiver fill=#5b9bd5  empty\n#arrowSize: 1\n#bendSize: 0.3\n#direction: down\n#gutter: 5\n#edgeMargin: 0\n#edges: hard\n#fill: #eee8d5\n#fillArrows: false\n#font: Courier\n#fontSize: 12\n#leading: 1.25\n#lineWidth: 3\n#padding: 16\n#spacing: 40\n#stroke: #33322E\n#title: filename\n#zoom: 1\n#acyclicer: greedy\n#ranker: network-simplex\n\n[<standard> 1: ;library(testthat)\nlibrary(flow)\ntest_check(\"flow\")]  -> [<return> 2:]","svg":true},"evals":[],"jsHooks":[]}</script>
-
-# display quoted expression
-flow_view(quote(if(1 + 1 == 2) {"ok"} else {"oh no"}))
-<div id="htmlwidget-539ec9c6d48925c53658" style="width:700px;height:432.632880098888px;" class="nomnoml html-widget"></div>
-<script type="application/json" data-for="htmlwidget-539ec9c6d48925c53658">{"x":{"code":"#.if: visual=rhomb fill=#e2efda align=center\n#.for: visual=rhomb fill=#ddebf7 align=center\n#.repeat: visual=rhomb fill=#fce4d6 align=center\n#.while: visual=rhomb fill=#fff2cc align=center\n#.standard: visual=class fill=#ededed align=left\n#.commented: visual=class fill=#ededed\n#.header: visual=roundrect fill=#d9e1f2 align=left\n#.return: visual=end fill=#70ad47  empty\n#.stop: visual=end fill=#ed7d31  empty\n#.break: visual=receiver fill=#ffc000 empty\n#.next: visual=transceiver fill=#5b9bd5  empty\n#arrowSize: 1\n#bendSize: 0.3\n#direction: down\n#gutter: 5\n#edgeMargin: 0\n#edges: hard\n#fill: #eee8d5\n#fillArrows: false\n#font: Courier\n#fontSize: 12\n#leading: 1.25\n#lineWidth: 3\n#padding: 16\n#spacing: 40\n#stroke: #33322E\n#title: filename\n#zoom: 1\n#acyclicer: greedy\n#ranker: network-simplex\n\n[<if> 1: ;⠀ if (1 + 1 == 2) ⠀\n⠀ ⠀ ⠀] y -> [<standard> 2: ;\"ok\"]\n[<standard> 2: ;\"ok\"]  -> [<end> -1:]\n[<if> 1: ;⠀ if (1 + 1 == 2) ⠀\n⠀ ⠀ ⠀] n -> [<standard> 3: ;\"oh no\"]\n[<standard> 3: ;\"oh no\"]  -> [<end> -1:]\n[<end> -1:]  -> [<return> 4:]","svg":true},"evals":[],"jsHooks":[]}</script><p><code>if</code> statements always branch into two paths, whether an <code>else</code> clause is present or not. <code>for</code>, <code>while</code>, and <code>repeat</code> loops are also supported.</p>
-<p>The colored circles are exit points, orange for errors (using <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code>), green for returned values (using <code><a href="https://rdrr.io/r/base/function.html" class="external-link">return()</a></code>) or just reaching the end of the function.</p>
-<p>If you installed <em>{plantuml}</em> you can set <code>engine</code> to <code>"plantuml"</code>, <em>plantuml</em> diagrams are a bit less flexible but they often look more polished and compact.</p>
+<code class="sourceCode R"><span><span class="co"># display a function's body</span></span>
+<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpJjjh3p/flow_110cc7bd0f62d.png" width="322"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># display a function's body</span>
-<span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, engine <span class="op">=</span> <span class="st">"plantuml"</span><span class="op">)</span> </code></pre></div>
+<code class="sourceCode R"><span><span class="co"># if non standard evaluation is an issue, use a one element named list</span></span>
+<span><span class="va">fun</span> <span class="op">&lt;-</span> <span class="va">ave</span></span>
+<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ave <span class="op">=</span> <span class="va">fun</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpJjjh3p/flow_110cc790cfc6e.png" width="322"></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># display script</span></span>
+<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="st">"../tests/testthat.R"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpJjjh3p/flow_110cc63b55298.png" width="124"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># display quoted expression</span></span>
+<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="kw">if</span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fl">1</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span> <span class="op">{</span><span class="st">"ok"</span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span><span class="st">"oh no"</span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpJjjh3p/flow_110cc2e3034ab.png" width="184"></p>
+<p><code>if</code> statements always branch into two paths, whether an
+<code>else</code> clause is present or not. <code>for</code>,
+<code>while</code>, and <code>repeat</code> loops are also
+supported.</p>
+<p>The colored circles are exit points, orange for errors (using
+<code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code>), green for returned values (using
+<code><a href="https://rdrr.io/r/base/function.html" class="external-link">return()</a></code>) or just reaching the end of the function.</p>
+<p>If you installed <em>{plantuml}</em> you can set <code>engine</code>
+to <code>"plantuml"</code>, <em>plantuml</em> diagrams are a bit less
+flexible but they often look more polished and compact.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># display a function's body</span></span>
+<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, engine <span class="op">=</span> <span class="st">"plantuml"</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="plantuml.png"></p>
 </div>
 <div class="section level2">
 <h2 id="flow_run">
 <code>flow_run()</code><a class="anchor" aria-label="anchor" href="#flow_run"></a>
 </h2>
-<p><code>flow_run</code> actually executes a call to a function, and displays the logical path. It takes as a first argument an unquoted call to the function we want to dive in.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">factorial</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">is.integer</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"`x` must be integer!"</span><span class="op">)</span>
-  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fl">1</span>
-  <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">res</span> <span class="op">&lt;-</span> <span class="va">res</span> <span class="op">*</span> <span class="va">i</span>
-    <span class="kw">if</span><span class="op">(</span><span class="va">res</span> <span class="op">&gt;</span> <span class="fl">1000</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"too big!!!"</span><span class="op">)</span> 
-  <span class="op">}</span>
-  <span class="va">res</span>
-<span class="op">}</span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_view.html">flow_run</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Special.html" class="external-link">factorial</a></span><span class="op">(</span><span class="fl">5L</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 120</span></code></pre></div>
-<p><img src="flow_run_1.png" alt="" width="300"></p>
-<p><code><a href="../reference/flow_view.html">flow_run()</a></code> counts how many times code blocks were entered and these numbers are displayed next to the edges between parenthesis.</p>
-<p>It can also be used on calls that fail, which is convenient for debugging, for instance the following call fails :</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_view.html">flow_run</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Special.html" class="external-link">factorial</a></span><span class="op">(</span><span class="fl">10L</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Error in (function (x) : too big!!!</span></code></pre></div>
-<p><img src="flow_run_2.png" alt="" width="300"></p>
-<p>If you call <code><a href="../reference/flow_view.html">flow_run()</a></code> on a call to an S3 generic, the appropriate S3 method will be represented.</p>
+<p><code>flow_run</code> actually executes a call to a function, and
+displays the logical path. It takes as a first argument an unquoted call
+to the function we want to dive in.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="cn">NA</span><span class="op">)</span>
-<span class="fu"><a href="../reference/flow_view.html">flow_run</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">vec</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 2</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">factorial</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">is.integer</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"`x` must be integer!"</span><span class="op">)</span></span>
+<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span>  <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">res</span> <span class="op">&lt;-</span> <span class="va">res</span> <span class="op">*</span> <span class="va">i</span></span>
+<span>    <span class="kw">if</span><span class="op">(</span><span class="va">res</span> <span class="op">&gt;</span> <span class="fl">1000</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"too big!!!"</span><span class="op">)</span> </span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">res</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view.html">flow_run</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Special.html" class="external-link">factorial</a></span><span class="op">(</span><span class="fl">5L</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 120</span></span></code></pre></div>
+<p><img src="flow_run_1.png" alt="" width="300"></p>
+<p><code><a href="../reference/flow_view.html">flow_run()</a></code> counts how many times code blocks were
+entered and these numbers are displayed next to the edges between
+parenthesis.</p>
+<p>It can also be used on calls that fail, which is convenient for
+debugging, for instance the following call fails :</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view.html">flow_run</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Special.html" class="external-link">factorial</a></span><span class="op">(</span><span class="fl">10L</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in (function (x) : too big!!!</span></span></code></pre></div>
+<p><img src="flow_run_2.png" alt="" width="300"></p>
+<p>If you call <code><a href="../reference/flow_view.html">flow_run()</a></code> on a call to an S3 generic, the
+appropriate S3 method will be represented.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="cn">NA</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/flow_view.html">flow_run</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">vec</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 2</span></span></code></pre></div>
 <p><img src="flow_run_3.png" alt="" width="500"></p>
-<p>The <code>"plantuml"</code> engine is not supported by <code><a href="../reference/flow_view.html">flow_run()</a></code>.</p>
+<p>The <code>"plantuml"</code> engine is not supported by
+<code><a href="../reference/flow_view.html">flow_run()</a></code>.</p>
 </div>
   </div>
 
@@ -205,9 +222,16 @@ flow_view(quote(if(1 + 1 == 2) {"ok"} else {"oh no"}))
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
-</body>
+</div>
+
+  
+
+
+  
+
+  </body>
 </html>

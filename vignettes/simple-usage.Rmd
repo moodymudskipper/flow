@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-*{flow}*'s 2 main functions are `flow_view()` and `flow_run()`, which require only one argument for the simplest use cases.
+*{flow}*'s two main functions are `flow_view()` and `flow_run()`, which require only one argument for the simplest use cases.
 
 ```{r setup}
 library(flow)
@@ -27,15 +27,24 @@ expression.
 
 ```{r}
 # display a function's body
-flow_view(ave) 
+flow_view(ave)
+```
 
+
+```{r}
 # if non standard evaluation is an issue, use a one element named list
 fun <- ave
 flow_view(list(ave = fun))
+```
 
+
+```{r}
 # display script
 flow_view("../tests/testthat.R")
+```
 
+
+```{r}
 # display quoted expression
 flow_view(quote(if(1 + 1 == 2) {"ok"} else {"oh no"}))
 ```

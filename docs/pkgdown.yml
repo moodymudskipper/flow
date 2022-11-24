@@ -1,5 +1,5 @@
-pandoc: 2.14.0.3
-pkgdown: 2.0.1
+pandoc: 2.19.2
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   addins: addins.html
@@ -10,5 +10,5 @@ articles:
   nested-functions: nested-functions.html
   reports: reports.html
   simple-usage: simple-usage.html
-last_built: 2022-03-09T07:53Z
+last_built: 2022-11-24T17:43Z
 

@@ -106,7 +106,7 @@
 
       
 
-      </header><script src="experimental-functions_files/htmlwidgets-1.5.4/htmlwidgets.js"></script><script src="experimental-functions_files/es6shim-0.35.6/es6shim.js"></script><script src="experimental-functions_files/es7shim-6.0.0/es7shim.js"></script><script src="experimental-functions_files/graphre-0.1.3/graphre.js"></script><script src="experimental-functions_files/nomnoml-1.4.0/nomnoml.js"></script><script src="experimental-functions_files/nomnoml-binding-0.2.5/nomnoml.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Experimental functions</h1>
@@ -119,94 +119,124 @@
 
     
     
-<p>Version 0.1.0 features experimental functions to display different kinds of flow diagrams.</p>
-<p>These are not stable but already useful and since developing flow takes time I though it’d be useful to release them as they are for the time being. Please report issues or upvote existing ones on github if you’d like to see more work happening there.</p>
+<p>Version 0.1.0 features experimental functions to display different
+kinds of flow diagrams.</p>
+<p>These are not stable but already useful and since developing flow
+takes time I though it’d be useful to release them as they are for the
+time being. Please report issues or upvote existing ones on github if
+you’d like to see more work happening there.</p>
 <div class="section level2">
 <h2 id="flow_view_vars">
 <code>flow_view_vars()</code><a class="anchor" aria-label="anchor" href="#flow_view_vars"></a>
 </h2>
-<p><code><a href="../reference/flow_view_vars.html">flow_view_vars()</a></code> shows dependencies between variables in a function, this kind of functions cannot be made completely robust but seems to work quite well if you don’t use <code>assign</code> and don’t reuse variable names all over the place.</p>
-<p>Full lines are direct dependencies, dashed lines are dependencies through control flow. Variables are repeated when they are modified.</p>
+<p><code><a href="../reference/flow_view_vars.html">flow_view_vars()</a></code> shows dependencies between variables in
+a function, this kind of functions cannot be made completely robust but
+seems to work quite well if you don’t use <code>assign</code> and don’t
+reuse variable names all over the place.</p>
+<p>Full lines are direct dependencies, dashed lines are dependencies
+through control flow. Variables are repeated when they are modified.</p>
 <p>Let’s test it on <code><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">tidyselect::ends_with</a></code></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>
-<span class="co">#&gt; function (match, ignore.case = TRUE, vars = NULL) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     check_match(match)</span>
-<span class="co">#&gt;     vars &lt;- vars %||% peek_vars(fn = "ends_with")</span>
-<span class="co">#&gt;     if (ignore.case) {</span>
-<span class="co">#&gt;         vars &lt;- tolower(vars)</span>
-<span class="co">#&gt;         match &lt;- tolower(match)</span>
-<span class="co">#&gt;     }</span>
-<span class="co">#&gt;     length &lt;- nchar(vars)</span>
-<span class="co">#&gt;     flat_map_int(match, ends_with_impl, vars, length)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;bytecode: 0x12264e000&gt;</span>
-<span class="co">#&gt; &lt;environment: namespace:tidyselect&gt;</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span></span>
+<span><span class="co">#&gt; function (match, ignore.case = TRUE, vars = NULL) </span></span>
+<span><span class="co">#&gt; {</span></span>
+<span><span class="co">#&gt;     check_match(match)</span></span>
+<span><span class="co">#&gt;     vars &lt;- vars %||% peek_vars(fn = "ends_with")</span></span>
+<span><span class="co">#&gt;     if (ignore.case) {</span></span>
+<span><span class="co">#&gt;         vars &lt;- tolower(vars)</span></span>
+<span><span class="co">#&gt;         match &lt;- tolower(match)</span></span>
+<span><span class="co">#&gt;     }</span></span>
+<span><span class="co">#&gt;     length &lt;- nchar(vars)</span></span>
+<span><span class="co">#&gt;     flat_map_int(match, ends_with_impl, vars, length)</span></span>
+<span><span class="co">#&gt; }</span></span>
+<span><span class="co">#&gt; &lt;bytecode: 0x13849f460&gt;</span></span>
+<span><span class="co">#&gt; &lt;environment: namespace:tidyselect&gt;</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_view_vars.html">flow_view_vars</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-ccc2b36a4e9f6e6b76d7" style="width:700px;height:432.632880098888px;" class="nomnoml html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ccc2b36a4e9f6e6b76d7">{"x":{"code":"\n# direction: down\n#.fun: visual=roundrect fill=#ddebf7 title=bold\n#.arg: visual=roundrect fill=#e2efda title=bold\n#.var: visual=roundrect fill=#f0f0f0 title=bold\n#.newvar: visual=roundrect fill=#fff2cc title=bold\n#.return: visual=end fill=#70ad47  empty\n#.deadcode: visual=roundrect fill=#fce4d6 dashed title=bold\n[<fun> tidyselect::ends_with] -> [<arg> match]\n[<fun> tidyselect::ends_with] -> [<arg> ignore.case]\n[<fun> tidyselect::ends_with] -> [<arg> vars]\n[<arg> vars] -> [<var> vars*]\n[<var> vars*] -> [<var> vars**]\n[<arg> ignore.case] --> [<var> vars**]\n[<arg> match] -> [<var> match*]\n[<arg> ignore.case] --> [<var> match*]\n[<var> match*] -> [<var> match**]\n[<var> vars**] -> [<var> vars***]\n[<arg> match] -> [<var> match**]\n[<var> vars*] -> [<var> vars***]\n[<var> vars***] -> [<var> length]\n[<var> match**] -> [<return> *OUT*]\n[<var> vars***] -> [<return> *OUT*]\n[<var> length] -> [<return> *OUT*]","svg":true},"evals":[],"jsHooks":[]}</script><p>If we don’t want to repeat the variable we can set <code>expand = FALSE</code>, the resulting diagram doesn’t reflect the sequence of modifications but sums up dependencies more clearly as it is more compact.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_vars.html">flow_view_vars</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span><span class="op">)</span></span></code></pre></div>
+<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_11028fa6321f.png" width="204"></p>
+<p>If we don’t want to repeat the variable we can set
+<code>expand = FALSE</code>, the resulting diagram doesn’t reflect the
+sequence of modifications but sums up dependencies more clearly as it is
+more compact.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_view_vars.html">flow_view_vars</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, expand <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-51fb491a0fa3b142d2ee" style="width:700px;height:432.632880098888px;" class="nomnoml html-widget"></div>
-<script type="application/json" data-for="htmlwidget-51fb491a0fa3b142d2ee">{"x":{"code":"\n# direction: down\n#.fun: visual=roundrect fill=#ddebf7 title=bold\n#.arg: visual=roundrect fill=#e2efda title=bold\n#.var: visual=roundrect fill=#f0f0f0 title=bold\n#.newvar: visual=roundrect fill=#fff2cc title=bold\n#.return: visual=end fill=#70ad47  empty\n#.deadcode: visual=roundrect fill=#fce4d6 dashed title=bold\n[<fun> tidyselect::ends_with] -> [<arg> match]\n[<fun> tidyselect::ends_with] -> [<arg> ignore.case]\n[<fun> tidyselect::ends_with] -> [<arg> vars]\n[<arg> ignore.case] --> [<arg> vars]\n[<arg> ignore.case] --> [<arg> match]\n[<arg> vars] -> [<var> length]\n[<arg> match] -> [<return> *OUT*]\n[<arg> vars] -> [<return> *OUT*]\n[<var> length] -> [<return> *OUT*]","svg":true},"evals":[],"jsHooks":[]}</script><p>Use the <code>out</code> argument to export these diagrams.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_vars.html">flow_view_vars</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, expand <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_1102854acbfb8.png" width="148"></p>
+<p>Use the <code>out</code> argument to export these diagrams.</p>
 </div>
 <div class="section level2">
 <h2 id="flow_view_deps">
 <code>flow_view_deps()</code><a class="anchor" aria-label="anchor" href="#flow_view_deps"></a>
 </h2>
-<p><code><a href="../reference/flow_view_deps.html">flow_view_deps()</a></code> shows dependencies between functions in a package.</p>
-<p>Exported functions are blue, unexported are yellow, the number of lines of code is indicated between brackets (useful to detect small helpers).</p>
-<p>By default functions called from other non base packages are shown but don’t create new nodes.</p>
+<p><code><a href="../reference/flow_view_deps.html">flow_view_deps()</a></code> shows dependencies between functions in
+a package.</p>
+<p>Exported functions are blue, unexported are yellow, the number of
+lines of code is indicated between brackets (useful to detect small
+helpers).</p>
+<p>By default functions called from other non base packages are shown
+but don’t create new nodes.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-1c9a8718fa421ae89284" style="width:700px;height:432.632880098888px;" class="nomnoml html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1c9a8718fa421ae89284">{"x":{"code":"\n# direction: right\n#.expfun: visual=roundrect fill=#ddebf7 title=bold\n#.unexpfun: visual=roundrect fill=#fff2cc title=bold\n#.trimmed: visual=roundrect fill=#fce4d6 dashed title=bold\n#.expdata: visual=database fill=#e2efda title=bold\n#.unexpdata: visual=database fill=#fff2cc title=bold\n#.callroutine: visual=transceiver fill=#ededed\n\n[<expfun> ends_with (8)|rlang::`%\\|\\|%`]\n[<expfun> ends_with (8)] -> [<unexpfun> check_match (3)|rlang::abort]\n[<unexpfun> check_match (3)] -> [<unexpfun> is_character (9)|rlang::is_function|rlang::is_scalar_integerish]\n[<expfun> ends_with (8)] -> [<unexpfun> ends_with_impl (2)]\n[<unexpfun> ends_with_impl (2)] -> [<unexpfun> which_vars (1)]\n[<expfun> ends_with (8)] -> [<unexpfun> flat_map_int (2)|purrr::map|rlang::int|vctrs::vec_c]\n[<expfun> ends_with (8)] -> [<expfun> peek_vars (15)|ellipsis::check_dots_empty|glue::glue|rlang::abort]\n[<expfun> peek_vars (15)] -> [<unexpfun> glue_c (1)|glue::glue|purrr::map_chr|rlang::chr]","svg":true},"evals":[],"jsHooks":[]}</script><p>We can collapse those to show only packages :</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span><span class="op">)</span></span></code></pre></div>
+<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_1102823c13414.png" width="280"></p>
+<p>We can collapse those to show only packages :</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, show_imports <span class="op">=</span> <span class="st">"packages"</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-635ffac29a2f8cef57b1" style="width:700px;height:432.632880098888px;" class="nomnoml html-widget"></div>
-<script type="application/json" data-for="htmlwidget-635ffac29a2f8cef57b1">{"x":{"code":"\n# direction: right\n#.expfun: visual=roundrect fill=#ddebf7 title=bold\n#.unexpfun: visual=roundrect fill=#fff2cc title=bold\n#.trimmed: visual=roundrect fill=#fce4d6 dashed title=bold\n#.expdata: visual=database fill=#e2efda title=bold\n#.unexpdata: visual=database fill=#fff2cc title=bold\n#.callroutine: visual=transceiver fill=#ededed\n\n[<expfun> ends_with (8)|{rlang}]\n[<expfun> ends_with (8)] -> [<unexpfun> check_match (3)|{rlang}]\n[<unexpfun> check_match (3)] -> [<unexpfun> is_character (9)|{rlang}]\n[<expfun> ends_with (8)] -> [<unexpfun> ends_with_impl (2)]\n[<unexpfun> ends_with_impl (2)] -> [<unexpfun> which_vars (1)]\n[<expfun> ends_with (8)] -> [<unexpfun> flat_map_int (2)|{purrr}|{rlang}|{vctrs}]\n[<expfun> ends_with (8)] -> [<expfun> peek_vars (15)|{ellipsis}|{glue}|{rlang}]\n[<expfun> peek_vars (15)] -> [<unexpfun> glue_c (1)|{glue}|{purrr}|{rlang}]","svg":true},"evals":[],"jsHooks":[]}</script><p>Or not show those at all :</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, show_imports <span class="op">=</span> <span class="st">"packages"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_110287312ca83.png" width="256"></p>
+<p>Or not show those at all :</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, show_imports <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-83c3dc632e8f2173200a" style="width:700px;height:432.632880098888px;" class="nomnoml html-widget"></div>
-<script type="application/json" data-for="htmlwidget-83c3dc632e8f2173200a">{"x":{"code":"\n# direction: right\n#.expfun: visual=roundrect fill=#ddebf7 title=bold\n#.unexpfun: visual=roundrect fill=#fff2cc title=bold\n#.trimmed: visual=roundrect fill=#fce4d6 dashed title=bold\n#.expdata: visual=database fill=#e2efda title=bold\n#.unexpdata: visual=database fill=#fff2cc title=bold\n#.callroutine: visual=transceiver fill=#ededed\n\n[<expfun> ends_with (8)]\n[<expfun> ends_with (8)] -> [<unexpfun> check_match (3)]\n[<unexpfun> check_match (3)] -> [<unexpfun> is_character (9)]\n[<expfun> ends_with (8)] -> [<unexpfun> ends_with_impl (2)]\n[<unexpfun> ends_with_impl (2)] -> [<unexpfun> which_vars (1)]\n[<expfun> ends_with (8)] -> [<unexpfun> flat_map_int (2)]\n[<expfun> ends_with (8)] -> [<expfun> peek_vars (15)]\n[<expfun> peek_vars (15)] -> [<unexpfun> glue_c (1)]","svg":true},"evals":[],"jsHooks":[]}</script><p>There are many ways to tweak the output, in particular we can :</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, show_imports <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_110286595e52f.png" width="256"></p>
+<p>There are many ways to tweak the output, in particular we can :</p>
 <ul>
-<li>promote functions from other packages so they’ll have their own node</li>
+<li>promote functions from other packages so they’ll have their own
+node</li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, promote <span class="op">=</span> <span class="st">"purrr::map"</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-23871db234e12beb6416" style="width:700px;height:432.632880098888px;" class="nomnoml html-widget"></div>
-<script type="application/json" data-for="htmlwidget-23871db234e12beb6416">{"x":{"code":"\n# direction: right\n#.expfun: visual=roundrect fill=#ddebf7 title=bold\n#.unexpfun: visual=roundrect fill=#fff2cc title=bold\n#.trimmed: visual=roundrect fill=#fce4d6 dashed title=bold\n#.expdata: visual=database fill=#e2efda title=bold\n#.unexpdata: visual=database fill=#fff2cc title=bold\n#.callroutine: visual=transceiver fill=#ededed\n\n[<expfun> ends_with (8)|rlang::`%\\|\\|%`]\n[<expfun> ends_with (8)] -> [<unexpfun> check_match (3)|rlang::abort]\n[<unexpfun> check_match (3)] -> [<unexpfun> is_character (9)|rlang::is_function|rlang::is_scalar_integerish]\n[<expfun> ends_with (8)] -> [<unexpfun> ends_with_impl (2)]\n[<unexpfun> ends_with_impl (2)] -> [<unexpfun> which_vars (1)]\n[<expfun> ends_with (8)] -> [<unexpfun> flat_map_int (2)|rlang::int|vctrs::vec_c]\n[<unexpfun> flat_map_int (2)] -> [<expfun> purrr::map (2)|purrr::as_mapper]\n[<expfun> ends_with (8)] -> [<expfun> peek_vars (15)|ellipsis::check_dots_empty|glue::glue|rlang::abort]\n[<expfun> peek_vars (15)] -> [<unexpfun> glue_c (1)|glue::glue|purrr::map_chr|rlang::chr]","svg":true},"evals":[],"jsHooks":[]}</script><ul>
-<li>Demote functions from the target package to treat them as functions from other packages.</li>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, promote <span class="op">=</span> <span class="st">"purrr::map"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_1102813660a36.png" width="280"></p>
+<ul>
+<li>Demote functions from the target package to treat them as functions
+from other packages.</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, demote <span class="op">=</span> <span class="st">"peek_vars"</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-22021db631f217387db7" style="width:700px;height:432.632880098888px;" class="nomnoml html-widget"></div>
-<script type="application/json" data-for="htmlwidget-22021db631f217387db7">{"x":{"code":"\n# direction: right\n#.expfun: visual=roundrect fill=#ddebf7 title=bold\n#.unexpfun: visual=roundrect fill=#fff2cc title=bold\n#.trimmed: visual=roundrect fill=#fce4d6 dashed title=bold\n#.expdata: visual=database fill=#e2efda title=bold\n#.unexpdata: visual=database fill=#fff2cc title=bold\n#.callroutine: visual=transceiver fill=#ededed\n\n[<expfun> ends_with (8)|rlang::`%\\|\\|%`|tidyselect::peek_vars]\n[<expfun> ends_with (8)] -> [<unexpfun> check_match (3)|rlang::abort]\n[<unexpfun> check_match (3)] -> [<unexpfun> is_character (9)|rlang::is_function|rlang::is_scalar_integerish]\n[<expfun> ends_with (8)] -> [<unexpfun> ends_with_impl (2)]\n[<unexpfun> ends_with_impl (2)] -> [<unexpfun> which_vars (1)]\n[<expfun> ends_with (8)] -> [<unexpfun> flat_map_int (2)|purrr::map|rlang::int|vctrs::vec_c]","svg":true},"evals":[],"jsHooks":[]}</script><ul>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, demote <span class="op">=</span> <span class="st">"peek_vars"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_110281b9d4d83.png" width="286"></p>
+<ul>
 <li>Hide a function altogether :</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, hide <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"peek_vars"</span>, <span class="st">"purrr::map"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-52be47175777122c5bb6" style="width:700px;height:432.632880098888px;" class="nomnoml html-widget"></div>
-<script type="application/json" data-for="htmlwidget-52be47175777122c5bb6">{"x":{"code":"\n# direction: right\n#.expfun: visual=roundrect fill=#ddebf7 title=bold\n#.unexpfun: visual=roundrect fill=#fff2cc title=bold\n#.trimmed: visual=roundrect fill=#fce4d6 dashed title=bold\n#.expdata: visual=database fill=#e2efda title=bold\n#.unexpdata: visual=database fill=#fff2cc title=bold\n#.callroutine: visual=transceiver fill=#ededed\n\n[<expfun> ends_with (8)|rlang::`%\\|\\|%`]\n[<expfun> ends_with (8)] -> [<unexpfun> check_match (3)|rlang::abort]\n[<unexpfun> check_match (3)] -> [<unexpfun> is_character (9)|rlang::is_function|rlang::is_scalar_integerish]\n[<expfun> ends_with (8)] -> [<unexpfun> ends_with_impl (2)]\n[<unexpfun> ends_with_impl (2)] -> [<unexpfun> which_vars (1)]\n[<expfun> ends_with (8)] -> [<unexpfun> flat_map_int (2)|rlang::int|vctrs::vec_c]","svg":true},"evals":[],"jsHooks":[]}</script><ul>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, hide <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"peek_vars"</span>, <span class="st">"purrr::map"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_1102835ed525c.png" width="263"></p>
+<ul>
 <li>Trim to stop recursing after a given function:</li>
 </ul>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, trim <span class="op">=</span> <span class="st">"peek_vars"</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-2f5c54d098d3b8246d9f" style="width:700px;height:432.632880098888px;" class="nomnoml html-widget"></div>
-<script type="application/json" data-for="htmlwidget-2f5c54d098d3b8246d9f">{"x":{"code":"\n# direction: right\n#.expfun: visual=roundrect fill=#ddebf7 title=bold\n#.unexpfun: visual=roundrect fill=#fff2cc title=bold\n#.trimmed: visual=roundrect fill=#fce4d6 dashed title=bold\n#.expdata: visual=database fill=#e2efda title=bold\n#.unexpdata: visual=database fill=#fff2cc title=bold\n#.callroutine: visual=transceiver fill=#ededed\n\n[<expfun> ends_with (8)|rlang::`%\\|\\|%`]\n[<expfun> ends_with (8)] -> [<unexpfun> check_match (3)|rlang::abort]\n[<unexpfun> check_match (3)] -> [<unexpfun> is_character (9)|rlang::is_function|rlang::is_scalar_integerish]\n[<expfun> ends_with (8)] -> [<unexpfun> ends_with_impl (2)]\n[<unexpfun> ends_with_impl (2)] -> [<unexpfun> which_vars (1)]\n[<expfun> ends_with (8)] -> [<unexpfun> flat_map_int (2)|purrr::map|rlang::int|vctrs::vec_c]\n[<expfun> ends_with (8)] -> [<trimmed> peek_vars (15)|ellipsis::check_dots_empty|glue::glue|rlang::abort]","svg":true},"evals":[],"jsHooks":[]}</script><p>Use the <code>out</code> argument to export these diagrams.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, trim <span class="op">=</span> <span class="st">"peek_vars"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_110283203ffdf.png" width="280"></p>
+<p>Use the <code>out</code> argument to export these diagrams.</p>
 </div>
 <div class="section level2">
 <h2 id="flow_view_shiny">
 <code>flow_view_shiny()</code><a class="anchor" aria-label="anchor" href="#flow_view_shiny"></a>
 </h2>
-<p><code><a href="../reference/flow_view_shiny.html">flow_view_shiny()</a></code> is a wrapper around <code><a href="../reference/flow_view_deps.html">flow_view_deps()</a></code> to show the structure of a shiny app. It works nicely on apps built with {golem} or follow the same kind of structure (good practice basically). Apps that use <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code> are not well supported but it might come as we found it’s quite common (though probably not good practice).</p>
+<p>#’ This function displays a shiny app’s module structure, . If you
+call for instance <code><a href="../reference/flow_view_shiny.html">flow_view_shiny()</a></code> on a function that runs
+the app and #’ uses both the maon server and ui functions, you’ll
+display the full graph of server and ui modules.</p>
+<p><code><a href="../reference/flow_view_shiny.html">flow_view_shiny()</a></code> is a wrapper around
+<code><a href="../reference/flow_view_deps.html">flow_view_deps()</a></code> to show the structure of a shiny app. It
+assumes the app is built on top of module functions named a certain way
+(adjustable through the <code>pattern</code> argument).</p>
+<p>It works nicely on apps built with {golem} or follow the same kind of
+structure (good practice basically), such as those that you’d build
+following the recommendations in Hadley Wickham’s “Mestering Shiny”.</p>
+<p>Apps that use <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code> are not well supported but it
+might come as we found it’s quite common (though probably not good
+practice).</p>
 <p>Here’s an example using the great {esquisser} app.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_view_shiny.html">flow_view_shiny</a></span><span class="op">(</span><span class="fu">esquisse</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/esquisse/man/esquisser.html" class="external-link">esquisser</a></span>, show_imports <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-ef0f4a8310214b6b2487" style="width:700px;height:432.632880098888px;" class="nomnoml html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ef0f4a8310214b6b2487">{"x":{"code":"\n# direction: right\n#.expfun: visual=roundrect fill=#ddebf7 title=bold\n#.unexpfun: visual=roundrect fill=#fff2cc title=bold\n#.trimmed: visual=roundrect fill=#fce4d6 dashed title=bold\n#.expdata: visual=database fill=#e2efda title=bold\n#.unexpdata: visual=database fill=#fff2cc title=bold\n#.callroutine: visual=transceiver fill=#ededed\n\n[<expfun> esquisser (29)]\n[<expfun> esquisser (29)] -> [<expfun> esquisse_server (224)]\n[<expfun> esquisse_server (224)] -> [<unexpfun> controls_server (242)]\n[<unexpfun> controls_server (242)] -> [<unexpfun> palette_server (77)]\n[<expfun> esquisse_server (224)] -> [<expfun> render_ggplot (56)]\n[<expfun> render_ggplot (56)] -> [<expfun> save_ggplot_modal (9)]\n[<expfun> save_ggplot_modal (9)] -> [<expfun> save_ggplot_ui (22)]\n[<expfun> render_ggplot (56)] -> [<expfun> save_ggplot_server (34)]\n[<expfun> esquisser (29)] -> [<expfun> esquisse_ui (30)]\n[<expfun> esquisse_ui (30)] -> [<unexpfun> controls_ui (41)]\n[<unexpfun> controls_ui (41)] -> [<unexpfun> controls_appearance (35)]\n[<unexpfun> controls_appearance (35)] -> [<unexpfun> palette_ui (10)]","svg":true},"evals":[],"jsHooks":[]}</script><p>Use the <code>out</code> argument to export these diagrams.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_shiny.html">flow_view_shiny</a></span><span class="op">(</span><span class="fu">esquisse</span><span class="fu">::</span><span class="va"><a href="https://dreamrs.github.io/esquisse/reference/esquisser.html" class="external-link">esquisser</a></span>, show_imports <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_1102843817d30.png" width="523"></p>
+<p>Use the <code>out</code> argument to export these diagrams.</p>
 </div>
   </div>
 
@@ -227,7 +257,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
