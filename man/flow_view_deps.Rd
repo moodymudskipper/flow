@@ -45,6 +45,10 @@ if a regular path is used the format will be guessed from the extension.}
 \item{include_formals}{Whether to fetch dependencies in the default values of the
 function's arguments}
 }
+\value{
+\code{flow_view_deps()} returns a \code{"flow_diagram"} object by default, and the output path invisibly if \code{out} is not
+\code{NULL} (called for side effects).
+}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }

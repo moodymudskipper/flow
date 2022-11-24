@@ -26,7 +26,8 @@ extract_strings <- function(call) {
 #'   match those to files found in `paths`
 #' @inheritParams flow_view
 #'
-#' @return Returns invisibly a data, called for side effects.
+#' @return `flow_view_source_calls()` returns a `"flow_diagram"` object by default, and the output path invisibly if `out` is not
+#' `NULL` (called for side effects). `flow_run()` returns the output of the wrapped call.
 #' @export
 flow_view_source_calls <- function(paths = ".", recursive = TRUE, basename = TRUE, extension = FALSE, smart = TRUE, out = NULL) {
   paths <- flatten_paths(paths)
@@ -90,7 +91,7 @@ flow_view_source_calls <- function(paths = ".", recursive = TRUE, basename = TRU
   if (identical(out, "code")) return(nomnoml_code)
   out <- save_nomnoml(nomnoml_code, svg, out)
   if (inherits(out, "htmlwidget"))
-    out
+    as_flow_diagram(out, data = graph, code = nomnoml_code)
   else invisible(out)
 }
 

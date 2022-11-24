@@ -15,11 +15,44 @@ flow_view_nomnoml <- function(
 
   ## build code from data
   code <- do.call(build_nomnoml_code, c(list(data,code = code)))
+  class(code) <- "flow_code"
 
   if(identical(out, "code")) return(code)
 
   out <- save_nomnoml(code, svg, out)
-  if(inherits(out, "htmlwidget")) out else invisible(out)
+  if(inherits(out, "htmlwidget")) as_flow_diagram(out, data, code) else invisible(out)
+}
+
+as_flow_diagram <- function(widget, data, code) {
+  out <- list(widget = widget, data = data, code = code)
+  class(out) <- "flow_diagram"
+  out
+}
+
+#' @export
+print.flow_diagram <- function(x, ...) {
+  if(isTRUE(getOption('knitr.in.progress'))) {
+    widget <- x$widget
+    widget$x$svg <- FALSE
+    png <- tempfile("flow_", fileext = ".png")
+    html <- tempfile("flow_", fileext = ".html")
+    do.call(htmlwidgets::saveWidget, c(list(widget, html, FALSE)))
+    webshot::webshot(html, png, selector = "canvas")
+    #FIXME: printing should return the input, but couldn't find another way here
+    return(knitr::include_graphics(png))
+  } else {
+    print(x$widget)
+  }
+ invisible(x)
+}
+
+#' @export
+print.flow_code <- function(x, out = NULL, ...) {
+  # FIXME: it would be nice to color the [<foo> ] with block color, and item number in another color
+  #  but not super crucial as this won't be used that much, we might also have an option to describe
+  #  how to deal with the braille character: show, hide, show as UTF8
+  writeLines(x)
+  invisible(x)
 }
 
 save_nomnoml <- function(code, svg, out) {

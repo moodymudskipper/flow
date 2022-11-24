@@ -25,7 +25,8 @@ export the object to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
 }
 \value{
-Called for side effects
+\code{flow_vars()} returns a \code{"flow_diagram"} object by default, and the output path invisibly if \code{out} is not
+\code{NULL} (called for side effects).
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

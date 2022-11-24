@@ -32,7 +32,7 @@
 #'   if a regular path is used the format will be guessed from the extension.
 #' @param engine either `"nomnoml"` (default) or `"plantuml"` (experimental), if
 #'   the latter, arguments `prefix`, `narrow`, and `code`
-#' @return `flow_view()` returns `NULL` invisibly, or the output path invisibly if `out` is not
+#' @return `flow_view()` returns a `"flow_diagram"` object by default, and the output path invisibly if `out` is not
 #' `NULL` (called for side effects). `flow_run()` returns the output of the wrapped call.
 #' @export
 #' @examples
