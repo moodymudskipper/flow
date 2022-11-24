@@ -55,8 +55,20 @@ function's arguments}
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
-Exported functions are shown in blue, unexported functions are shown in yellow.
+Exported objects are shown in blue, unexported objects are shown in yellow.
+
+Regular expressions can be used in \code{trim}, \code{promote}, \code{demote} and \code{hide},
+they will be used on function names in the form \code{pkg::fun} or \code{pkg:::fun}
+where \code{pkg} can be any package mentionned in these arguments, the namespace
+of the explored function, or any of the direct dependencies of the package.
 }
 \examples{
-flow_view_deps(flow_view_deps)
+flow_view_deps(here::i_am)
+flow_view_deps(here::i_am, demote = "format_dr_here")
+flow_view_deps(here::i_am, trim = "format_dr_here")
+flow_view_deps(here::i_am, hide = "format_dr_here")
+flow_view_deps(here::i_am, promote = "rprojroot::get_root_desc")
+flow_view_deps(here::i_am, promote = c(pattern = ".*::g"))
+flow_view_deps(here::i_am, promote = c(pattern = "rprojroot::.*"))
+flow_view_deps(here::i_am, hide = c(pattern = "here:::s"))
 }

@@ -3,7 +3,12 @@
 
 #' Show dependency graph of a function
 #'
-#' Exported functions are shown in blue, unexported functions are shown in yellow.
+#' Exported objects are shown in blue, unexported objects are shown in yellow.
+#'
+#' Regular expressions can be used in `trim`, `promote`, `demote` and `hide`,
+#' they will be used on function names in the form `pkg::fun` or `pkg:::fun`
+#' where `pkg` can be any package mentionned in these arguments, the namespace
+#' of the explored function, or any of the direct dependencies of the package.
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
@@ -24,7 +29,14 @@
 #' @return `flow_view_deps()` returns a `"flow_diagram"` object by default, and the output path invisibly if `out` is not
 #' `NULL` (called for side effects).
 #' @examples
-#' flow_view_deps(flow_view_deps)
+#' flow_view_deps(here::i_am)
+#' flow_view_deps(here::i_am, demote = "format_dr_here")
+#' flow_view_deps(here::i_am, trim = "format_dr_here")
+#' flow_view_deps(here::i_am, hide = "format_dr_here")
+#' flow_view_deps(here::i_am, promote = "rprojroot::get_root_desc")
+#' flow_view_deps(here::i_am, promote = c(pattern = ".*::g"))
+#' flow_view_deps(here::i_am, promote = c(pattern = "rprojroot::.*"))
+#' flow_view_deps(here::i_am, hide = c(pattern = "here:::s"))
 #' @export
 flow_view_deps <- function(
   fun,
@@ -175,16 +187,20 @@ flow_view_deps_df <- function(target_fun_name, target_fun, trim, promote, demote
   } else {
     fallback_ns <- asNamespace(fallback_ns_nm)
   }
-  funs_raw <- unique(c(target_fun_name, trim, promote, demote, hide))
+  edit0 <- list(trim = trim, promote = promote, demote = demote, hide = hide)
+  patterns <- lapply(edit0, function(x) x[names(x) == "pattern"])
+  edit <- lapply(edit0, function(x) if(is.null(names(x))) x else x[names(x) == ""])
+
+  funs_raw <- unique(c(target_fun_name, unlist(edit)))
   namespaced_funs_lgl <- grepl("::", funs_raw)
   obj_names <- sub("^[^:]+[:]{2,3}`?([^`]+)`?", "\\1", funs_raw)
   namespaces <- sapply(funs_raw, namespace_name, default_env, fallback_ns, USE.NAMES = FALSE)
 
+  all_pkgs <- unique(c(namespaces, deps(fallback_ns_nm)))
   objs <- do.call(
     rbind,
-    lapply(unique(namespaces), get_ns_obj_df, lines = lines)
+    lapply(all_pkgs, get_ns_obj_df, lines = lines)
   )
-  edit <- list(trim = trim, promote = promote, demote = demote, hide = hide)
   edit_df <- data.frame(
     ns_nm = namespaces[-1],
     nm = obj_names[-1],
@@ -210,6 +226,25 @@ flow_view_deps_df <- function(target_fun_name, target_fun, trim, promote, demote
   objs$promote <- !is.na(objs$promote)
   objs$demote  <- !is.na(objs$demote)
   objs$hide    <- !is.na(objs$hide)
+
+  full_nms <- sprintf("%s%s%s", objs$ns_nm, ifelse(startsWith(objs$style, "unexp"), ":::", "::"), objs$nm)
+  for (pattern in patterns$trim) {
+    objs$trim <- objs$trim | grepl(pattern, full_nms) &
+      !objs$promote & !objs$demote & !objs$hide
+  }
+  for (pattern in patterns$promote) {
+    objs$promote <- objs$promote | grepl(pattern, full_nms) &
+      !objs$trim & !objs$demote & !objs$hide
+  }
+  for (pattern in patterns$demote) {
+    objs$demote <- objs$demote | grepl(pattern, full_nms) &
+      !objs$trim & !objs$promote & !objs$hide
+  }
+  for (pattern in patterns$hide) {
+    objs$hide <- objs$hide | grepl(pattern, full_nms) &
+      !objs$trim & !objs$promote & !objs$demote
+  }
+
   objs$covered <- objs$trim
 
   objs$in_target_ns <- objs$ns_nm == fallback_ns_nm
@@ -230,8 +265,15 @@ flow_view_deps_df <- function(target_fun_name, target_fun, trim, promote, demote
   objs
 }
 
-get_ns_obj_df <- function(ns_nm, lines) {
+deps <- function(pkg) {
+  ip <- installed.packages()
+  setdiff(trimws(union(
+    strsplit(gsub("\\(.*?\\)", "", ip[pkg, "Imports"]), "\\s?,\\s?")[[1]],
+    strsplit(gsub("\\(.*?\\)", "", ip[pkg, "Depends"]), "\\s?,\\s?")[[1]]
+  )), c("R", NA))
+}
 
+get_ns_obj_df <- function(ns_nm, lines) {
   if (ns_nm == "R_GlobalEnv") {
     ns <- globalenv()
   } else {
