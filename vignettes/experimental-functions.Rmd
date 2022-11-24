@@ -109,10 +109,17 @@ Use the `out` argument to export these diagrams.
 
 ## `flow_view_shiny()`
 
+#' This function displays a shiny app's module structure, . If you call for instance `flow_view_shiny()` on a function that runs the app and
+#' uses both the maon server and ui functions, you'll display the full graph of server and ui modules.
+
 `flow_view_shiny()` is a wrapper around `flow_view_deps()` to show the structure
-of a shiny app. It works nicely on apps built with {golem} or follow the same
-kind of structure (good practice basically). Apps that use `source()`
-are not well supported but it might come as we found it's quite common (though
+of a shiny app. It assumes the app is built on top of module functions named a certain way (adjustable through the `pattern` argument). 
+
+It works nicely on apps built with {golem} or follow the same
+kind of structure (good practice basically), such as those that you'd build following the
+recommendations in Hadley Wickham's "Mestering Shiny". 
+
+Apps that use `source()` are not well supported but it might come as we found it's quite common (though
 probably not good practice).
 
 Here's an example using the great {esquisser} app.

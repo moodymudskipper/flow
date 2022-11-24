@@ -1,9 +1,15 @@
 #' Visualize a shiny app's dependency graph
 #'
-#' A wrapper around `flow_view_deps` which demotes every object that is not
+#' This function displays a shiny app's module structure, assuming it is built
+#' on top of module functions named a certain way (adjustable through the `pattern` argument) and
+#' calling each other. If you call for instance `flow_view_shiny()` on a function that runs the app and
+#' uses both the maon server and ui functions, you'll display the full graph of server and ui modules.
+#'
+#' It is  wrapper around `flow_view_deps()` which demotes every object that is not
 #' a server function, a ui function or a function calling either. What is or isn't considered as a
 #' server or ui function depends on a regular expression provided through the `pattern`
-#' argument.
+#' argument. For a more general way of displaying all dependencies (not focused on modules),
+#' use `flow_view_deps()`.
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
