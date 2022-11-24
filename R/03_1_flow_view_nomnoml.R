@@ -15,6 +15,7 @@ flow_view_nomnoml <- function(
 
   ## build code from data
   code <- do.call(build_nomnoml_code, c(list(data,code = code)))
+  class(code) <- "flow_code"
 
   if(identical(out, "code")) return(code)
 
@@ -44,6 +45,16 @@ print.flow_diagram <- function(x, ...) {
   }
  invisible(x)
 }
+
+#' @export
+print.flow_code <- function(x, out = NULL, ...) {
+  # FIXME: it would be nice to color the [<foo> ] with block color, and item number in another color
+  #  but not super crucial as this won't be used that much, we might also have an option to describe
+  #  how to deal with the braille character: show, hide, show as UTF8
+  writeLines(x)
+  invisible(x)
+}
+
 save_nomnoml <- function(code, svg, out) {
   ## buildwidget
   x <- list(code = code, svg = svg)
