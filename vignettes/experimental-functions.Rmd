@@ -129,3 +129,16 @@ flow_view_shiny(esquisse::esquisser, show_imports = "none")
 ```
 
 Use the `out` argument to export these diagrams.
+
+## `flow_view_uses()`
+
+`flow_view_uses()` is basically `flow_view_deps()` in reverse, it shows all
+functions that call directly or indirectly on another function. It is not
+very robust yet but it's already useful.
+
+```{r}
+flow_view_uses(purrr:::accum_index)
+```
+
+
+
