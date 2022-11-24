@@ -3,7 +3,12 @@
 
 #' Show dependency graph of a function
 #'
-#' Exported functions are shown in blue, unexported functions are shown in yellow.
+#' Exported objects are shown in blue, unexported objects are shown in yellow.
+#'
+#' Regular expressions can be used in `trim`, `promote`, `demote` and `hide`,
+#' they will be used on function names in the form `pkg::fun` or `pkg:::fun`
+#' where `pkg` can be any package mentionned in these arguments, the namespace
+#' of the explored function, or any of the direct dependencies of the package.
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
@@ -24,7 +29,14 @@
 #' @return `flow_view_deps()` returns a `"flow_diagram"` object by default, and the output path invisibly if `out` is not
 #' `NULL` (called for side effects).
 #' @examples
-#' flow_view_deps(flow_view_deps)
+#' flow_view_deps(here::i_am)
+#' flow_view_deps(here::i_am, demote = "format_dr_here")
+#' flow_view_deps(here::i_am, trim = "format_dr_here")
+#' flow_view_deps(here::i_am, hide = "format_dr_here")
+#' flow_view_deps(here::i_am, promote = "rprojroot::get_root_desc")
+#' flow_view_deps(here::i_am, promote = c(pattern = ".*::g"))
+#' flow_view_deps(here::i_am, promote = c(pattern = "rprojroot::.*"))
+#' flow_view_deps(here::i_am, hide = c(pattern = "here:::s"))
 #' @export
 flow_view_deps <- function(
   fun,
