@@ -52,7 +52,9 @@ x that we wish to inspect}
 \item{out}{a path to save the diagram to.
 Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 export the object to a temp file of the relevant format and open it,
-if a regular path is used the format will be guessed from the extension.}
+if a regular path is used the format will be guessed from the extension. Other
+special values "data" and "code" can be used for respectively retrieving the
+graph data as a data frame and the diagram code.}
 
 \item{engine}{either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental), if
 the latter, arguments \code{prefix}, \code{narrow}, and \code{code}}
