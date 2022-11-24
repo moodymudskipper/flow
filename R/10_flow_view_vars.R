@@ -79,7 +79,7 @@ flow_view_vars <- function(x, expand = TRUE, refactor = c("refactored", "origina
   # output ---------------------------------------------------------------------
   svg <- is.null(out) || endsWith(out, ".html") || endsWith(out,".html")
   out <- save_nomnoml(nomnoml_code, svg, out)
-  if(inherits(out, "htmlwidget")) out else invisible(out)
+  if(inherits(out, "htmlwidget")) as_flow_diagram(out, data = df, code = nomnoml_code)  else invisible(out)
 }
 
 flow_view_vars..build_fun <- function(x, x_lng, env) {

@@ -90,7 +90,7 @@ flow_view_source_calls <- function(paths = ".", recursive = TRUE, basename = TRU
   if (identical(out, "code")) return(nomnoml_code)
   out <- save_nomnoml(nomnoml_code, svg, out)
   if (inherits(out, "htmlwidget"))
-    out
+    as_flow_diagram(out, data = graph, code = nomnoml_code)
   else invisible(out)
 }
 

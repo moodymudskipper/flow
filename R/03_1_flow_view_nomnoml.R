@@ -19,9 +19,31 @@ flow_view_nomnoml <- function(
   if(identical(out, "code")) return(code)
 
   out <- save_nomnoml(code, svg, out)
-  if(inherits(out, "htmlwidget")) out else invisible(out)
+  if(inherits(out, "htmlwidget")) as_flow_diagram(out, data, code) else invisible(out)
 }
 
+as_flow_diagram <- function(widget, data, code) {
+  out <- list(widget = widget, data = data, code = code)
+  class(out) <- "flow_diagram"
+  out
+}
+
+#' @export
+print.flow_diagram <- function(x, ...) {
+  if(isTRUE(getOption('knitr.in.progress'))) {
+    widget <- x$widget
+    widget$x$svg <- FALSE
+    png <- tempfile("flow_", fileext = ".png")
+    html <- tempfile("flow_", fileext = ".html")
+    do.call(htmlwidgets::saveWidget, c(list(widget, html, FALSE)))
+    webshot::webshot(html, png, selector = "canvas")
+    #FIXME: printing should return the input, but couldn't find another way here
+    return(knitr::include_graphics(png))
+  } else {
+    print(x$widget)
+  }
+ invisible(x)
+}
 save_nomnoml <- function(code, svg, out) {
   ## buildwidget
   x <- list(code = code, svg = svg)

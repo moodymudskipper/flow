@@ -150,7 +150,7 @@ flow_view_deps <- function(
 
   svg <- is.null(out) || endsWith(out, ".html") || endsWith(out, ".htm")
   out <- save_nomnoml(nomnoml_code, svg, out)
-  if(inherits(out, "htmlwidget")) out else invisible(out)
+  if(inherits(out, "htmlwidget")) as_flow_diagram(out, data = nomnoml_data, cod = nomnoml_code)  else invisible(out)
 }
 
 # A data frame containing all functions from all namespaces found in functions mentionned
