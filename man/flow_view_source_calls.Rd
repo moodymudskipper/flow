@@ -32,7 +32,8 @@ export the object to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
 }
 \value{
-Returns invisibly a data, called for side effects.
+\code{flow_view_source_calls()} returns a \code{"flow_diagram"} object by default, and the output path invisibly if \code{out} is not
+\code{NULL} (called for side effects). \code{flow_run()} returns the output of the wrapped call.
 }
 \description{
 Assuming a project where files source each other, draw their dependency graph.

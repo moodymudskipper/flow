@@ -62,7 +62,7 @@ can also be a vector of block ids, in this case \code{browser()} calls will be
 inserted at the start of these blocks}
 }
 \value{
-\code{flow_view()} returns \code{NULL} invisibly, or the output path invisibly if \code{out} is not
+\code{flow_view()} returns a \code{"flow_diagram"} object by default, and the output path invisibly if \code{out} is not
 \code{NULL} (called for side effects). \code{flow_run()} returns the output of the wrapped call.
 }
 \description{
