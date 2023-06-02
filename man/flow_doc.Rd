@@ -37,7 +37,7 @@ is defined by special comments}
 file will be created and opened.}
 
 \item{engine}{either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental), if
-the latter, arguments \code{prefix}, \code{narrow}, and \code{code}}
+the latter, arguments \code{prefix}, \code{narrow}, and \code{code} are ignored}
 }
 \value{
 Returns \code{NULL} invisibly (called for side effects).

@@ -1,14 +1,19 @@
 #' View function as flow chart
 #'
-#' `flow_view()` shows the code of a function as a flow diagram, `flow_run()`
-#' runs a call and draws the logical path taken by the code.
+#' * `flow_view()` shows the code of a function as a flow diagram
+#' * `flow_run()` runs a call and draws the logical path taken by the code.
+#' * `flow_compare_runs()` shows on the same diagrams 2 calls to the same functions,
+#'   code blocks that are only touched by the `ref` call are colored green, code blocks
+#'   that are only touched by the `x` call are colored orange.
 #'
-#' On some system the output might sometimes display the box character when using
+#' On some systems the output might sometimes display the box character when using
 #' the nomnoml engine, this is due to the system not recognizing the Braille
-#' character `\u2800`. This character is used to circumvent a nomnoml shortcoming:
+#' character `\u2800`. This character is used to circumvent a shortcoming of the
+#' nomnoml library:
 #' lines can't start with a standard space and multiple subsequent spaces might be collapsed.
 #' To choose another character, set the option `flow.indenter`, for instance :
-#' `options(flow.indenter = "\u00b7")`.
+#' `options(flow.indenter = "\u00b7")`. Setting the `options(flow.svg = FALSE)`
+#' might also help.
 #'
 #' @param x a call, a function, or a path to a script
 #' @param prefix prefix to use for special comments in our code used as block headers,
@@ -33,13 +38,19 @@
 #'   special values "data" and "code" can be used for respectively retrieving the
 #'   graph data as a data frame and the diagram code.
 #' @param engine either `"nomnoml"` (default) or `"plantuml"` (experimental), if
-#'   the latter, arguments `prefix`, `narrow`, and `code`
-#' @return `flow_view()` returns a `"flow_diagram"` object by default, and the output path invisibly if `out` is not
-#' `NULL` (called for side effects). `flow_run()` returns the output of the wrapped call.
+#'   the latter, arguments `prefix`, `narrow`, and `code` are ignored
+#' @return depending on `out` :
+#'  * `NULL` (default) : `flow_view()` and `flow_compare_runs()` return a `"flow_diagram"`
+#'   object, `flow_run()` returns the output of the call.
+#'  * An output path or a file extension : the path where the file is saved
+#'  * `"data"`:  a list of 2 data frames "nodes" and "edges"
+#'  * `"code"`: A character vector of class "flow_code"
+#'
 #' @export
 #' @examples
 #' flow_view(rle)
 #' flow_run(rle(c(1, 2, 2, 3)))
+#' flow_compare_runs(rle(NULL), rle(c(1, 2, 2, 3)))
 flow_view <- function(
   x,
   prefix = NULL,

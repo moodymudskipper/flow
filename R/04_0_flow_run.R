@@ -89,6 +89,9 @@ flow_run <-
 
       nomnoml_code  <-
         do.call(build_nomnoml_code, c(list(data, code = code)))
+
+      if (isTRUE(out %in% c("data", "code"))) return(invisible(NULL))
+
       widget_params <- list(code = nomnoml_code, svg = svg)
       widget <- do.call(
         htmlwidgets::createWidget,
@@ -117,7 +120,7 @@ flow_run <-
         message(sprintf("The diagram was saved to '%s'", gsub("\\\\","/", out)))
         browseURL(out)
       }
-      out
+      as_flow_diagram(out, data = data, code = nomnoml_code)
     }
 
     ## add it to the layer
@@ -149,40 +152,53 @@ flow_run <-
 
     ## run the given call using modified function
     call[[1]] <- fun
-    res <- eval.parent(call)
+    res <- try(eval.parent(call),silent = TRUE)
+    if (!inherits(res, "try-error")) {
+      # finish the flow to the end after last flow:::update call
+      ## undash all walked edges following last update() call
+      repeat {
+        ## flag the edges starting from last node
+        next_edge_lgl <- data_env[[layer_id]]$edges$from == data_env[[layer_id]]$last_node
 
-    # finish the flow to the end after last flow:::update call
-    ## undash all walked edges following last update() call
-    repeat {
-      ## flag the edges starting from last node
-      next_edge_lgl <- data_env[[layer_id]]$edges$from == data_env[[layer_id]]$last_node
+        ## is there any ?
+        if(!any(next_edge_lgl)) break
 
-       ## is there any ?
-      if(!any(next_edge_lgl)) break
+        # there could be several candidate, standard blocks are dismissed as
+        # they would have been dealt with by previous update calls
+        if(sum(next_edge_lgl) > 1) {
+          candidate_nodes <- data_env[[layer_id]]$edges$to[next_edge_lgl]
+          chosen_candidate_lgl <-
+            with(data_env[[layer_id]]$nodes,
+                 block_type[id %in% candidate_nodes] != "standard")
+          chosen_candidate <- candidate_nodes[chosen_candidate_lgl]
+          next_edge_lgl <-
+            with(data_env[[layer_id]],
+                 edges$from == last_node & edges$to == chosen_candidate)
+        }
 
-      # there could be several candidate, standard blocks are dismissed as
-      # they would have been dealt with by previous update calls
-      if(sum(next_edge_lgl) > 1) {
-        candidate_nodes <- data_env[[layer_id]]$edges$to[next_edge_lgl]
-        chosen_candidate_lgl <-
-          with(data_env[[layer_id]]$nodes,
-               block_type[id %in% candidate_nodes] != "standard")
-        chosen_candidate <- candidate_nodes[chosen_candidate_lgl]
-        next_edge_lgl <-
-          with(data_env[[layer_id]],
-               edges$from == last_node & edges$to == chosen_candidate)
+        # undash
+        data_env[[layer_id]]$edges$arrow[next_edge_lgl] <- "->"
+
+        # increment edge passes
+        data_env[[layer_id]]$edges$passes[next_edge_lgl] <-
+          data_env[[layer_id]]$edges$passes[next_edge_lgl] + 1
+
+        # update last node
+        data_env[[layer_id]]$last_node <- data_env[[layer_id]]$edges$to[next_edge_lgl]
+
       }
-
-      # undash
-      data_env[[layer_id]]$edges$arrow[next_edge_lgl] <- "->"
-
-      # increment edge passes
-      data_env[[layer_id]]$edges$passes[next_edge_lgl] <-
-        data_env[[layer_id]]$edges$passes[next_edge_lgl] + 1
-
-      # update last node
-      data_env[[layer_id]]$last_node <- data_env[[layer_id]]$edges$to[next_edge_lgl]
-
+    } else {
+      if (!out %in% c("code", "data")) {
+        stop(res)
+      }
+    }
+    data <- data_env[[layer_id]][c("nodes", "edges")]
+    if (identical(out, "code")) {
+      nomnoml_code <- do.call(build_nomnoml_code, c(list(data, code = code)))
+      return(nomnoml_code)
+    }
+    if (identical(out, "data")) {
+      return(data)
     }
     res
   }
