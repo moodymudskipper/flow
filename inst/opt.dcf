@@ -1,0 +1,2 @@
+svg: if (!is.logical(value) || length(value) != 1 || is.na(value)) stop("The `flow.svg` option should be boolean.", call. = FALSE)
+indenter: if (!is.character(value) || length(value) != 1 || is.na(value)) stop("The `flow.indenter` option should be s string", call. = FALSE)
