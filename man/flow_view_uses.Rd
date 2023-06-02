@@ -30,5 +30,5 @@ that call it directly or indirectly.
 The function is not very robust yet, but already useful for many usecases.
 }
 \examples{
-flow_view_uses(flow_view_deps)
+flow_view_uses(flow_run)
 }

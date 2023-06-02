@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' flow_view_uses(flow_view_deps)
+#' flow_view_uses(flow_run)
 flow_view_uses <- function(x, pkg = NULL, out = NULL) {
   nm <- deparse(substitute(x))
   # FIXME: undocumented and unfinished
