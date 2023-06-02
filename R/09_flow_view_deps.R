@@ -162,8 +162,7 @@ flow_view_deps <- function(
   nomnoml_code <- paste(c(nomnoml_setup, nomnoml_data$code), collapse = "\n")
   if (identical(out, "code")) return(nomnoml_code)
 
-  svg <- is.null(out) || endsWith(out, ".html") || endsWith(out, ".htm")
-  out <- save_nomnoml(nomnoml_code, svg, out)
+  out <- save_nomnoml(nomnoml_code, out)
   if(inherits(out, "htmlwidget")) as_flow_diagram(out, data = nomnoml_data, code = nomnoml_code)  else invisible(out)
 }
 

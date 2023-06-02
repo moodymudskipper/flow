@@ -1,5 +1,5 @@
 flow_view_nomnoml <- function(
-  f_chr, x, prefix, truncate, nested_fun, swap, narrow, code, out, svg,
+  f_chr, x, prefix, truncate, nested_fun, swap, narrow, code, out,
   engine) {
 
   ## build data
@@ -19,7 +19,7 @@ flow_view_nomnoml <- function(
 
   if(identical(out, "code")) return(code)
 
-  out <- save_nomnoml(code, svg, out)
+  out <- save_nomnoml(code, out)
   if(inherits(out, "htmlwidget")) as_flow_diagram(out, data, code) else invisible(out)
 }
 
@@ -55,7 +55,11 @@ print.flow_code <- function(x, out = NULL, ...) {
   invisible(x)
 }
 
-save_nomnoml <- function(code, svg, out) {
+save_nomnoml <- function(code, out) {
+  ## set svg to TRUE if flow.svg is TRUE and output to viewer or html
+  svg <- getOption("flow.svg") &&
+    (is.null(out) || out %in% c("htm", "html") || endsWith(out, ".htm") || endsWith(out, ".html"))
+
   ## buildwidget
   x <- list(code = code, svg = svg)
   widget <- do.call(

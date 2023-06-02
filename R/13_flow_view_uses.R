@@ -77,6 +77,6 @@ flow_view_uses <- function(x, pkg = NULL, out = NULL) {
   if (identical(out, "code")) return(nomnoml_code)
 
   svg <- is.null(out) || endsWith(out, ".html") || endsWith(out, ".htm")
-  out <- save_nomnoml(nomnoml_code, svg, out)
+  out <- save_nomnoml(nomnoml_code, out)
   if(inherits(out, "htmlwidget")) as_flow_diagram(out, data = data, code = nomnoml_code)  else invisible(out)
 }

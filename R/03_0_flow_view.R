@@ -51,8 +51,7 @@ flow_view <- function(
   out = NULL,
   engine = c("nomnoml", "plantuml")) {
 
-  engine = match.arg(engine)
-  svg <- is.null(out) || endsWith(out, ".html") || endsWith(out, ".html")
+  engine <- match.arg(engine)
 
     ## fetch fun name from quoted input
 
@@ -106,7 +105,6 @@ flow_view <- function(
       narrow = narrow,
       code = code,
       out = out,
-      svg = svg,
       engine = engine)
 }
 

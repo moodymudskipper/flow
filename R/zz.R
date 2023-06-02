@@ -17,7 +17,8 @@ NULL
 
   op <- options()
   op.flow <- list(
-    flow.indenter = "\u2800"
+    flow.indenter = "\u2800",
+    flow.svg = TRUE
   )
   toset <- !(names(op.flow) %in% names(op))
   if(any(toset)) options(op.flow[toset])
