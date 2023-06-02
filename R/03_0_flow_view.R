@@ -52,71 +52,71 @@
 #' flow_run(rle(c(1, 2, 2, 3)))
 #' flow_compare_runs(rle(NULL), rle(c(1, 2, 2, 3)))
 flow_view <- function(
-  x,
-  prefix = NULL,
-  code = TRUE,
-  narrow = FALSE,
-  truncate = NULL,
-  nested_fun = NULL,
-  swap = TRUE,
-  out = NULL,
-  engine = c("nomnoml", "plantuml")) {
+    x,
+    prefix = NULL,
+    code = TRUE,
+    narrow = FALSE,
+    truncate = NULL,
+    nested_fun = NULL,
+    swap = TRUE,
+    out = NULL,
+    engine = c("nomnoml", "plantuml")) {
 
   engine <- match.arg(engine)
 
-    ## fetch fun name from quoted input
+  ## fetch fun name from quoted input
 
-    f_chr <- deparse1(substitute(x))
-    is_valid_named_list <-
-      is.list(x) && length(x) == 1 && !is.null(names(x))
+  f_chr <- deparse1(substitute(x))
+  is_valid_named_list <-
+    is.list(x) && length(x) == 1 && !is.null(names(x))
 
-    ## is `x` a named list ?
-    if(is_valid_named_list) {
-      ## replace fun name and set the new `x`
-      f_chr <- names(x)
-      x <- x[[1]]
+  ## is `x` a named list ?
+  if(is_valid_named_list) {
+    ## replace fun name and set the new `x`
+    f_chr <- names(x)
+    x <- x[[1]]
+  }
+
+  ## is the engine "plantuml" ?
+  if(engine == "plantuml") {
+    if(!length(find.package("plantuml", quiet = TRUE)))
+      stop("The package plantuml needs to be installed to use this feature. ",
+           'To install it run `remotes::install_github("rkrug/plantuml")`, ',
+           "You might also need to install java ('https://www.java.com'), ",
+           "ghostcript ('https://www.ghostcript.com'), ",
+           "and graphViz ('https://graphviz.org/')")
+
+    ## are any unsupported argument not missing ?
+    if(!is.null(prefix) ||
+       narrow || !code) {
+      ## warn that they will be ignored
+      warning("The following arguments are ignored if `engine` is set to ",
+              "\"plantuml\" : `prefix`, `narrow`, `code`")
     }
 
-    ## is the engine "plantuml" ?
-    if(engine == "plantuml") {
-      if(!length(find.package("plantuml", quiet = TRUE)))
-        stop("The package plantuml needs to be installed to use this feature. ",
-             'To install it run `remotes::install_github("rkrug/plantuml")`, ',
-             "You might also need to install java ('https://www.java.com'), ",
-             "ghostcript ('https://www.ghostcript.com'), ",
-             "and graphViz ('https://graphviz.org/')")
-
-      ## are any unsupported argument not missing ?
-      if(!is.null(prefix) ||
-         narrow || !code) {
-        ## warn that they will be ignored
-        warning("The following arguments are ignored if `engine` is set to ",
-                "\"plantuml\" : `prefix`, `narrow`, `code`")
-      }
-
-      ## run flow_view_plantuml
-      return(flow_view_plantuml(
-        x_chr = f_chr,
-        x = x,
-        prefix = prefix,
-        truncate = truncate,
-        nested_fun = nested_fun,
-        swap = swap,
-        out = out))
-    }
-
-    ## run flow_view_nomnoml
-    flow_view_nomnoml(
-      f_chr = f_chr,
-      x  = x,
-      prefix  = prefix,
+    ## run flow_view_plantuml
+    return(flow_view_plantuml(
+      x_chr = f_chr,
+      x = x,
+      prefix = prefix,
       truncate = truncate,
       nested_fun = nested_fun,
       swap = swap,
-      narrow = narrow,
-      code = code,
-      out = out,
-      engine = engine)
+      out = out))
+  }
+
+  ## run flow_view_nomnoml
+  flow_view_nomnoml(
+    f_chr = f_chr,
+    x  = x,
+    prefix  = prefix,
+    truncate = truncate,
+    nested_fun = nested_fun,
+    swap = swap,
+    narrow = narrow,
+    code = code,
+    out = out,
+    engine = engine)
 }
 
 
