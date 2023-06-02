@@ -1,5 +1,6 @@
 #' Visualize a shiny app's dependency graph
 #'
+#' `r lifecycle::badge("experimental")`
 #' This function displays a shiny app's module structure, assuming it is built
 #' on top of module functions named a certain way (adjustable through the `pattern` argument) and
 #' calling each other. If you call for instance `flow_view_shiny()` on a function that runs the app and
@@ -11,8 +12,6 @@
 #' argument. For a more general way of displaying all dependencies (not focused on modules),
 #' use `flow_view_deps()`.
 #'
-#' @description
-#' `r lifecycle::badge("experimental")`
 #' @param fun The function that runs the app
 #' @param pattern A regular expression used to detect ui and server functions
 #' @inheritParams flow_view_deps
