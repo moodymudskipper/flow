@@ -286,6 +286,8 @@ get_binding_environment <- function(fun_name, env = parent.frame()) {
   if (identical(env, emptyenv())) {
     stop("Can't find `", fun_name, "`.", call. = FALSE)
   } else if (exists(fun_name, env, inherits = FALSE)) {
+    # Normaly it means we've found the env, but devtools places shims in the
+    # package:: env,
     env
   } else {
     get_binding_environment(fun_name, parent.env(env))
