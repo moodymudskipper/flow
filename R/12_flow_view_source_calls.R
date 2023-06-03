@@ -99,7 +99,7 @@ flatten_paths <- function (paths, recursive = TRUE) {
   paths_are_dirs <- sapply(paths, dir.exists)
   dirs <- paths[paths_are_dirs]
   paths_from_dirs <- unlist(lapply(dirs, list.files, recursive = recursive,
-                                   pattern = "\\.[rR]$"))
+                                   pattern = "\\.[rR]$", full.names = TRUE))
   paths <- c(paths[!paths_are_dirs], paths_from_dirs)
   paths
 }
