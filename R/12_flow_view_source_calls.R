@@ -95,3 +95,11 @@ flow_view_source_calls <- function(paths = ".", recursive = TRUE, basename = TRU
   else invisible(out)
 }
 
+flatten_paths <- function (paths, recursive = TRUE) {
+  paths_are_dirs <- sapply(paths, dir.exists)
+  dirs <- paths[paths_are_dirs]
+  paths_from_dirs <- unlist(lapply(dirs, list.files, recursive = recursive,
+                                   pattern = "\\.[rR]$"))
+  paths <- c(paths[!paths_are_dirs], paths_from_dirs)
+  paths
+}
