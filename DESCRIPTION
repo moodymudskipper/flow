@@ -7,10 +7,8 @@ Authors@R:
            role = c("aut", "cre"),
            email = "antoine.fabri@gmail.com")
 Description: Visualize as flow diagrams the logic of functions, expressions or 
-  scripts in a static way or when running a call, and ease debugging. Advanced
-  features include analogs to 'debug' and 'debugonce' to target specific functions to draw,
-  an utility to draw the calls used in the tests of the package in a markdown report, 
-  and an utility to draw all the functions of one package in a markdown report.
+  scripts in a static way or when running a call, visualize the dependencies between
+  functions or between modules in a shiny app, and more..
 License: GPL-3
 URL: https://github.com/moodymudskipper/flow, https://moodymudskipper.github.io/flow/
 BugReports: https://github.com/moodymudskipper/flow/issues
@@ -31,7 +29,8 @@ Imports:
     styler,
     methods,
     here,
-    lifecycle
+    lifecycle,
+    purrr
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
