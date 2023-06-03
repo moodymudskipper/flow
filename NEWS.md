@@ -1,7 +1,25 @@
+# flow 0.1.0.900
+
+* A new functions `flow_view_source_calls()` draws the dependencies between files sourcing each other.
+* `flow_view_deps()` gains an `include_formals` arg, `TRUE` by default, so it
+  displays dependencies used in formals.
+* `flow_view_deps()` accepts a list of functions as input, to display a diagram
+  that starts from several functions.
+* Diagram drawing functions now return by default a "flow_diagram" object, it
+  contains the widget, the code and the data of the diagram and has a print()
+  method that displays the diagram. FIXME: do we need these data and code values
+* `flow_view_deps()`'s `trim`, `promote`, `demote`, `trim` arguments support
+  regular rexpressions. FIXME: document
+* `flow_view_uses()` displays functions that recursively call its input, basically it 
+  does the opposite of `flow_view_deps()`
+* `flow_compare_runs()` displays 2 calls on the same diagram, making it easy to
+  observe their divergence
+
+
 # flow 0.1.0
 
 We provide new experimental functions, these might be subjected to non trivial
-breaking changes in the features and they have some known issues but we decided
+breaking changes in the future and they have some known issues but we decided
 to release them in the wild already:
 
 * `flow_view_vars()` shows dependencies between variables within a function
