@@ -13,13 +13,6 @@ License: GPL-3
 URL: https://github.com/moodymudskipper/flow, https://moodymudskipper.github.io/flow/
 BugReports: https://github.com/moodymudskipper/flow/issues
 Encoding: UTF-8
-Suggests: 
-    testthat (>= 3.0.0),
-    covr,
-    knitr,
-    rmarkdown,
-    esquisse,
-    tidyselect
 Imports: 
     nomnoml,
     utils,
@@ -29,7 +22,14 @@ Imports:
     styler,
     methods,
     here,
-    lifecycle,
+    lifecycle
+Suggests: 
+    testthat (>= 3.0.0),
+    covr,
+    knitr,
+    rmarkdown,
+    esquisse,
+    tidyselect,
     purrr
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
