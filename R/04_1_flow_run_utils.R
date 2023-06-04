@@ -171,7 +171,7 @@ data_env <- new.env()
 #' Draw Diagram From Debugger
 #'
 #' `flow_draw()` should only be used in the debugger triggered by a call
-#' to `flow_run()`, or following a call to `flow_debug()` or `flow_debugonce()`.
+#' to `flow_run()`, or following a call to `flow_debug()`.
 #' `d` is an active binding to `flow_draw()`, it means you can just type `d`
 #' (without parentheses) instead of `flow_draw()`.
 #'

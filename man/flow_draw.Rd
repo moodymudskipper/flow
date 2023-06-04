@@ -14,7 +14,7 @@ Returns \code{NULL} invisibly (called for side effects)
 }
 \description{
 \code{flow_draw()} should only be used in the debugger triggered by a call
-to \code{flow_run()}, or following a call to \code{flow_debug()} or \code{flow_debugonce()}.
+to \code{flow_run()}, or following a call to \code{flow_debug()}.
 \code{d} is an active binding to \code{flow_draw()}, it means you can just type \code{d}
 (without parentheses) instead of \code{flow_draw()}.
 }

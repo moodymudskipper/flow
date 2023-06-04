@@ -2,22 +2,10 @@
 % Please edit documentation in R/05_flow_debug.R
 \name{flow_debug}
 \alias{flow_debug}
-\alias{flow_debugonce}
 \alias{flow_undebug}
 \title{Debug With Flow Diagrams}
 \usage{
 flow_debug(
-  f,
-  prefix = NULL,
-  code = TRUE,
-  narrow = FALSE,
-  truncate = NULL,
-  swap = TRUE,
-  out = NULL,
-  browse = FALSE
-)
-
-flow_debugonce(
   f,
   prefix = NULL,
   code = TRUE,
@@ -61,14 +49,12 @@ inserted at the start of these blocks}
 These functions return \code{NULL} invisibly (called for side effects)
 }
 \description{
-These functions are named after the base functions \code{debug()}, \code{undebug()} and
-\code{debugonce()}. \code{flow_debug()} will call \code{flow_run()}, with the same additional arguments, on all the following
-calls to \code{f()} until \code{flow_undebug()} is called. \code{flow_debugonce()} will only
-call \code{flow_run()} on the next call to \code{f()}.
+These functions are named after the base functions \code{debug()} and \code{undebug()}.
+\code{flow_debug()} will call \code{flow_run()}, with the same additional arguments, on
+all the following calls to \code{f()} until \code{flow_undebug()} is called.
 }
 \details{
-By default, unlike \code{debug()} and \code{debugonce()}, \code{flow_debug()} and
-\code{flow_debugonce()} don't trigger a debugger but only draw diagrams, this is
-consistent with \code{flow_run()}'s defaults. To browse through the code, use
-the \code{browse} argument.
+By default, unlike \code{debug()}, \code{flow_debug()} doesn't trigger a debugger but
+only draw diagrams, this is consistent with \code{flow_run()}'s defaults. To browse
+through the code, use the \code{browse} argument.
 }
