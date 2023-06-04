@@ -7,8 +7,9 @@
 #'
 #' Regular expressions can be used in `trim`, `promote`, `demote` and `hide`,
 #' they will be used on function names in the form `pkg::fun` or `pkg:::fun`
-#' where `pkg` can be any package mentionned in these arguments, the namespace
+#' where `pkg` can be any package mentioned in these arguments, the namespace
 #' of the explored function, or any of the direct dependencies of the package.
+#' These arguments must be named, using the name "pattern". See examples below.
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
