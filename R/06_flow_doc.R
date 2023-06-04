@@ -1,5 +1,4 @@
-
-
+# nocov start
 
 #' Draw Flow Diagrams for an Entire Package
 #'
@@ -255,12 +254,4 @@ append_function_diagrams <- function(
   close(pb)
 }
 
-
-
-
-
-
-
-
-
-
+# nocov end

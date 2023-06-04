@@ -1,3 +1,4 @@
+# nocov start
 
 #' Build Report From Tests
 #'
@@ -243,10 +244,7 @@ call_apply <- function(call, find, replace = NULL, output = c("call", "list", "i
     replace <- as.function(c(
       alist(call=, ind=), quote(call[[ind]])))
   lapply(indices, function(ind) replace(call, ind))
-
 }
-
-
 
 eval_silent <- function(call, env = parent.frame()) {
   sink_file <- file(tempfile(), open = "w")
@@ -258,3 +256,5 @@ eval_silent <- function(call, env = parent.frame()) {
   })
   suppressWarnings(!inherits(try(eval(call, env), silent = TRUE), "try-error"))
 }
+
+# nocov end
