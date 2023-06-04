@@ -1,5 +1,6 @@
 # flow 0.2.0
 
+* The LICENSE was switched from GPL-3 to MIT
 * New function: `flow_compare_runs()` displays 2 calls on the same diagram, making it easy to
   observe their divergence
 * New function: `flow_view_uses()` displays functions that recursively call its input, basically it 
