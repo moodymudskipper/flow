@@ -304,7 +304,7 @@ namespace_name.environment <- function(x, env, ...) {
 }
 
 #' @export
-namespace_name.character <- function(x, env, fallback_ns = NULL, fail_if_not_found = TRUE) {
+namespace_name.character <- function(x, env, fallback_ns = NULL, fail_if_not_found = TRUE, ...) {
 
   if (identical(x, "::")) return("base")
   if (identical(x, ":::")) return("base")
