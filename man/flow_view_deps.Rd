@@ -38,9 +38,7 @@ one you'd create with \code{dplyr::lst()}, for instance \code{lst(fun1, pkg::fun
 \item{out}{a path to save the diagram to.
 Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 export the object to a temp file of the relevant format and open it,
-if a regular path is used the format will be guessed from the extension. Other
-special values "data" and "code" can be used for respectively retrieving the
-graph data as a data frame and the diagram code.}
+if a regular path is used the format will be guessed from the extension.}
 
 \item{lines}{Whether to show the number of lines of code next to the function name}
 
@@ -59,8 +57,9 @@ Exported objects are shown in blue, unexported objects are shown in yellow.
 
 Regular expressions can be used in \code{trim}, \code{promote}, \code{demote} and \code{hide},
 they will be used on function names in the form \code{pkg::fun} or \code{pkg:::fun}
-where \code{pkg} can be any package mentionned in these arguments, the namespace
+where \code{pkg} can be any package mentioned in these arguments, the namespace
 of the explored function, or any of the direct dependencies of the package.
+These arguments must be named, using the name "pattern". See examples below.
 }
 \examples{
 flow_view_deps(here::i_am)

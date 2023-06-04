@@ -11,7 +11,7 @@ navbar:
     home: ~
     diagrams:
      text: Diagrams
-     href: diagrams.htmlß
+     href: diagrams.html
 
 articles:
 - title: All articles
