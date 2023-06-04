@@ -36,17 +36,21 @@ Let's test it on `tidyselect::ends_with`
 tidyselect::ends_with
 ```
 
-```{r}
+```{r, eval = FALSE}
 flow_view_vars(tidyselect::ends_with)
 ```
+<img src="flow_view_vars_1.png" alt="" width="300"/>
+
 
 If we don't want to repeat the variable we can set `expand = FALSE`, the resulting
 diagram doesn't reflect the sequence of modifications but sums up dependencies
 more clearly as it is more compact.
 
-```{r}
+```{r, eval = FALSE}
 flow_view_vars(tidyselect::ends_with, expand = FALSE)
 ```
+
+<img src="flow_view_vars_2.png" alt="" width="300"/>
 
 Use the `out` argument to export these diagrams.
 
@@ -60,49 +64,56 @@ is indicated between brackets (useful to detect small helpers).
 By default functions called from other non base packages are shown but don't
 create new nodes.
 
-```{r}
+```{r, eval = FALSE}
 flow_view_deps(tidyselect::ends_with)
 ```
+<img src="flow_view_deps_1.png" alt="" width="300"/>
 
 We can collapse those to show only packages : 
 
-```{r}
+```{r, eval = FALSE}
 flow_view_deps(tidyselect::ends_with, show_imports = "packages")
 ```
+<img src="flow_view_deps_2.png" alt="" width="300"/>
 
 Or not show those at all :
 
-```{r}
+```{r, eval = FALSE}
 flow_view_deps(tidyselect::ends_with, show_imports = "none")
 ```
+<img src="flow_view_deps_3.png" alt="" width="300"/>
 
 There are many ways to tweak the output, in particular we can :
 
 * promote functions from other packages so they'll have their own node
 
-```{r}
+```{r, eval = FALSE}
 flow_view_deps(tidyselect::ends_with, promote = "purrr::map")
 ```
+<img src="flow_view_deps_4.png" alt="" width="300"/>
 
 * Demote functions from the target package to treat them as functions from other packages.
 
-```{r}
+```{r, eval = FALSE}
 flow_view_deps(tidyselect::ends_with, demote = "peek_vars")
 ```
 
+<img src="flow_view_deps_5.png" alt="" width="300"/>
 
 * Hide a function altogether :
 
-```{r}
+```{r, eval = FALSE}
 flow_view_deps(tidyselect::ends_with, hide = c("peek_vars", "purrr::map"))
 ```
+<img src="flow_view_deps_6.png" alt="" width="300"/>
 
 * Trim to stop recursing after a given function:
 
-```{r}
+```{r, eval = FALSE}
 flow_view_deps(tidyselect::ends_with, trim = "peek_vars")
 ```
 
+<img src="flow_view_deps_7.png" alt="" width="300"/>
 
 Use the `out` argument to export these diagrams.
 
@@ -124,9 +135,11 @@ probably not good practice).
 
 Here's an example using the great {esquisser} app.
 
-```{r}
+```{r, eval = FALSE}
 flow_view_shiny(esquisse::esquisser, show_imports = "none")
 ```
+
+<img src="flow_view_shiny.png" alt="" width="300"/>
 
 Use the `out` argument to export these diagrams.
 
@@ -136,9 +149,11 @@ Use the `out` argument to export these diagrams.
 functions that call directly or indirectly on another function. It is not
 very robust yet but it's already useful.
 
-```{r}
+```{r, eval = FALSE}
 flow_view_uses(purrr:::accum_index)
 ```
+
+<img src="flow_view_uses.png" alt="" width="300"/>
 
 ## `flow_compare_runs()`
 
@@ -147,9 +162,11 @@ flow_view_uses(purrr:::accum_index)
 Whenever the calls diverge we color the blocks differently (orange for `x`,
 green for the `ref`) and we count separately the passes on the edges.
 
-```{r}
+```{r, eval = FALSE}
 flow_compare_runs(rle(NULL), rle(c(1, 2, 2, 3)))
 ```
+
+<img src="flow_compare_runs.png" alt="" width="300"/>
 
 ## `flow_embed()`
 
@@ -175,8 +192,6 @@ add_or_subtract <- function(x, y, what = c("add", "subtract")) {
     x - y
   }
 }
-
-flow_compare_runs(rle(NULL), rle(c(1, 2, 2, 3)))
 ```
 
 

@@ -1,4 +1,4 @@
-# flow 0.1.0.900
+# flow 0.2.0
 
 * New function: `flow_compare_runs()` displays 2 calls on the same diagram, making it easy to
   observe their divergence
@@ -13,6 +13,7 @@
   regular rexpressions.
 * `flow_view_doc()` and `flow_view_doc()` were simplified to output only html since
   the md output was rarely used and brittle.
+* `flow_debugonce()` is deprecated, use `flow_debug()` and `flow_undebug()`
 * Diagram drawing functions now return by default a "flow_diagram" object, it
   contains the widget, the code and the data of the diagram and has a print()
   method that displays the diagram.

@@ -59,9 +59,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<li>
-  <a href="../diagrams.html%C3%9F">Diagrams</a>
-</li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/moodymudskipper/flow/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
@@ -102,7 +99,7 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>pkg</dt>
-<dd><p>package name as a string</p></dd>
+<dd><p>package name as a string, or <code>NULL</code> to signify currently developed package.</p></dd>
 
 
 <dt>prefix</dt>
@@ -131,13 +128,14 @@ is defined by special comments</p></dd>
 
 
 <dt>out</dt>
-<dd><p>path to output (<code>.html</code> or <code>.md</code>), if left <code>NULL</code> a temp <em>html</em>
-file will be created and opened.</p></dd>
+<dd><p>path to html output, if left <code>NULL</code> a temp <em>html</em>
+file will be created and opened</p></dd>
 
 
 <dt>engine</dt>
-<dd><p>either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental), if
-the latter, arguments <code>prefix</code>, <code>narrow</code>, and <code>code</code></p></dd>
+<dd><p>either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental, brittle
+mostly for reasons out of our control), if the latter, arguments <code>prefix</code>,
+<code>narrow</code>, and <code>code</code> are ignored</p></dd>
 
 </dl></div>
     <div id="value">
@@ -145,12 +143,6 @@ the latter, arguments <code>prefix</code>, <code>narrow</code>, and <code>code</
     
 
 <p>Returns <code>NULL</code> invisibly (called for side effects).</p>
-    </div>
-    <div id="details">
-    <h2>Details</h2>
-    <p>if <code>pkg</code> and <code>out</code> are both left <code>NULL</code>, a vignette <code>diagrams.md</code> will be built
-in the root, so that <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site</a></code> will use it as an additional page.
-See also the vignette <em>"Build reports to document functions and unit tests"</em>.</p>
     </div>
 
   </div>

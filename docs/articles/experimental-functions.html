@@ -85,9 +85,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<li>
-  <a href="../diagrams.html%C3%9F">Diagrams</a>
-</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -149,18 +146,18 @@ through control flow. Variables are repeated when they are modified.</p>
 <span><span class="co">#&gt;     length &lt;- nchar(vars)</span></span>
 <span><span class="co">#&gt;     flat_map_int(match, ends_with_impl, vars, length)</span></span>
 <span><span class="co">#&gt; }</span></span>
-<span><span class="co">#&gt; &lt;bytecode: 0x13849f460&gt;</span></span>
+<span><span class="co">#&gt; &lt;bytecode: 0x1238c09e8&gt;</span></span>
 <span><span class="co">#&gt; &lt;environment: namespace:tidyselect&gt;</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_vars.html">flow_view_vars</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_11028fa6321f.png" width="204"></p>
+<p><img src="flow_view_vars_1.png" alt="" width="300"></p>
 <p>If we don’t want to repeat the variable we can set
 <code>expand = FALSE</code>, the resulting diagram doesn’t reflect the
 sequence of modifications but sums up dependencies more clearly as it is
 more compact.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_vars.html">flow_view_vars</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, expand <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_1102854acbfb8.png" width="148"></p>
+<p><img src="flow_view_vars_2.png" alt="" width="300"></p>
 <p>Use the <code>out</code> argument to export these diagrams.</p>
 </div>
 <div class="section level2">
@@ -176,15 +173,15 @@ helpers).</p>
 but don’t create new nodes.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_1102823c13414.png" width="280"></p>
+<p><img src="flow_view_deps_1.png" alt="" width="300"></p>
 <p>We can collapse those to show only packages :</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, show_imports <span class="op">=</span> <span class="st">"packages"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_110287312ca83.png" width="256"></p>
+<p><img src="flow_view_deps_2.png" alt="" width="300"></p>
 <p>Or not show those at all :</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, show_imports <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_110286595e52f.png" width="256"></p>
+<p><img src="flow_view_deps_3.png" alt="" width="300"></p>
 <p>There are many ways to tweak the output, in particular we can :</p>
 <ul>
 <li>promote functions from other packages so they’ll have their own
@@ -192,26 +189,26 @@ node</li>
 </ul>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, promote <span class="op">=</span> <span class="st">"purrr::map"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_1102813660a36.png" width="280"></p>
+<p><img src="flow_view_deps_4.png" alt="" width="300"></p>
 <ul>
 <li>Demote functions from the target package to treat them as functions
 from other packages.</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, demote <span class="op">=</span> <span class="st">"peek_vars"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_110281b9d4d83.png" width="286"></p>
+<p><img src="flow_view_deps_5.png" alt="" width="300"></p>
 <ul>
 <li>Hide a function altogether :</li>
 </ul>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, hide <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"peek_vars"</span>, <span class="st">"purrr::map"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_1102835ed525c.png" width="263"></p>
+<p><img src="flow_view_deps_6.png" alt="" width="300"></p>
 <ul>
 <li>Trim to stop recursing after a given function:</li>
 </ul>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_deps.html">flow_view_deps</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span>, trim <span class="op">=</span> <span class="st">"peek_vars"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_110283203ffdf.png" width="280"></p>
+<p><img src="flow_view_deps_7.png" alt="" width="300"></p>
 <p>Use the <code>out</code> argument to export these diagrams.</p>
 </div>
 <div class="section level2">
@@ -235,8 +232,60 @@ practice).</p>
 <p>Here’s an example using the great {esquisser} app.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_shiny.html">flow_view_shiny</a></span><span class="op">(</span><span class="fu">esquisse</span><span class="fu">::</span><span class="va"><a href="https://dreamrs.github.io/esquisse/reference/esquisser.html" class="external-link">esquisser</a></span>, show_imports <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmprLEJH6/flow_1102843817d30.png" width="523"></p>
+<p><img src="flow_view_shiny.png" alt="" width="300"></p>
 <p>Use the <code>out</code> argument to export these diagrams.</p>
+</div>
+<div class="section level2">
+<h2 id="flow_view_uses">
+<code>flow_view_uses()</code><a class="anchor" aria-label="anchor" href="#flow_view_uses"></a>
+</h2>
+<p><code><a href="../reference/flow_view_uses.html">flow_view_uses()</a></code> is basically
+<code><a href="../reference/flow_view_deps.html">flow_view_deps()</a></code> in reverse, it shows all functions that
+call directly or indirectly on another function. It is not very robust
+yet but it’s already useful.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_uses.html">flow_view_uses</a></span><span class="op">(</span><span class="fu">purrr</span><span class="fu">:::</span><span class="va">accum_index</span><span class="op">)</span></span></code></pre></div>
+<p><img src="flow_view_uses.png" alt="" width="300"></p>
+</div>
+<div class="section level2">
+<h2 id="flow_compare_runs">
+<code>flow_compare_runs()</code><a class="anchor" aria-label="anchor" href="#flow_compare_runs"></a>
+</h2>
+<p><code><a href="../reference/flow_view.html">flow_compare_runs()</a></code> compares two calls to the same
+function.</p>
+<p>Whenever the calls diverge we color the blocks differently (orange
+for <code>x</code>, green for the <code>ref</code>) and we count
+separately the passes on the edges.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view.html">flow_compare_runs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rle.html" class="external-link">rle</a></span><span class="op">(</span><span class="cn">NULL</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rle.html" class="external-link">rle</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="flow_compare_runs.png" alt="" width="300"></p>
+</div>
+<div class="section level2">
+<h2 id="flow_embed">
+<code>flow_embed()</code><a class="anchor" aria-label="anchor" href="#flow_embed"></a>
+</h2>
+<p><code><a href="../reference/flow_embed.html">flow_embed()</a></code> can be used to embed flow diagrams into
+your roxygen documentation</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#' Add or subtract</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' This is a useless function that adds or subtract numbers</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' See its logic in this flow diagram:</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' `r flow_embed(flow_view(add_or_subtract), "add_or_subtract")`</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' @param x string</span></span>
+<span><span class="co">#' @param y string</span></span>
+<span><span class="co">#' @param what "add" or "subtract"</span></span>
+<span><span class="va">add_or_subtract</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">what</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"add"</span>, <span class="st">"subtract"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">what</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.arg.html" class="external-link">match.arg</a></span><span class="op">(</span><span class="va">what</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">what</span> <span class="op">==</span> <span class="st">"add"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">x</span> <span class="op">-</span> <span class="va">y</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
   </div>
 

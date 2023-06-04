@@ -21,16 +21,24 @@ a way to visualize those.
 When using flow on the main function, a message will signify what nested functions
 can be viewed. The base function `bquote` is a good example.
 
-```{r}
+```{r, eval = FALSE}
 library(flow)
 flow_view(bquote)
 ```
 
+<img src="nested_1.png" alt="" width="300"/>
+
 We can then inspect those by using the `nested_fun` argument, with a numeric id
 or a name (if unambiguous)
 
-```{r}
+```{r, eval = FALSE}
 flow_view(bquote, nested_fun = "unquote")
+```
 
+<img src="nested_2.png" alt="" width="300"/>
+
+```{r, eval = FALSE}
 flow_view(bquote, nested_fun = 3)
 ```
+
+<img src="nested_3.png" alt="" width="300"/>

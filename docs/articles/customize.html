@@ -85,9 +85,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<li>
-  <a href="../diagrams.html%C3%9F">Diagrams</a>
-</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -152,7 +149,7 @@ code blocks, it must start with <code>"#"</code>.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">factorial</span>, prefix <span class="op">=</span> <span class="st">"##"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpWlPmPx/flow_10feb6a6226ab.png" width="342"></p>
+<p><img src="customize_1.png" alt="" width="300"></p>
 <ul>
 <li>
 <code>prefix</code> can be of length &gt; 1 in which case all given
@@ -179,15 +176,13 @@ code blocks or only the header, if <code>NA</code> the code will be
 displayed only if no header is defined by special comments.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">factorial</span>, code <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpWlPmPx/flow_10feb64e8fe7c.png" width="342"></p>
+<p><img src="customize_2.png" alt="" width="300"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">factorial</span>, prefix <span class="op">=</span> <span class="st">"##"</span>, code <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpWlPmPx/flow_10feb51edae8c.png" width="342"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">factorial</span>, prefix <span class="op">=</span> <span class="st">"##"</span>, code <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="customize_3.png" alt="" width="300"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">factorial</span>, prefix <span class="op">=</span> <span class="st">"##"</span>, code <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="co"># pay attention to the last block</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpWlPmPx/flow_10feb2e1bdeb7.png" width="262"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">factorial</span>, prefix <span class="op">=</span> <span class="st">"##"</span>, code <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="co"># pay attention to the last block</span></span></code></pre></div>
+<p><img src="customize_4.png" alt="" width="300"></p>
 <p>This argument is ignored when using the <em>plantuml</em> engine.</p>
 </div>
 <div class="section level2">
@@ -208,11 +203,10 @@ be easier to display on web pages for instance.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">kg_to_lb</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpWlPmPx/flow_10feb46eace44.png" width="380"></p>
+<p><img src="customize_5.png" alt="" width="300"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">kg_to_lb</span>, narrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpWlPmPx/flow_10feb2bf3a105.png" width="304"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">kg_to_lb</span>, narrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="customize_6.png" alt="" width="300"></p>
 <p>This argument is ignored when using the <em>plantuml</em> engine.</p>
 </div>
 <div class="section level2">
@@ -229,10 +223,10 @@ characters to be printed per line, it works for code and headers.</p>
 <span>  <span class="va">x</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">fun</span>, prefix <span class="op">=</span> <span class="st">"##"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpWlPmPx/flow_10febd7ba3ab.png" width="373"></p>
+<p><img src="customize_7.png" alt="" width="300"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">fun</span>, truncate <span class="op">=</span> <span class="fl">15</span>, prefix <span class="op">=</span> <span class="st">"##"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpWlPmPx/flow_10feb3731d75b.png" width="124"></p>
+<p><img src="customize_8.png" alt="" width="300"></p>
 </div>
 <div class="section level2">
 <h2 id="swap">
@@ -251,11 +245,10 @@ logic in a proper diagram.</p>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">fun</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpWlPmPx/flow_10feb1b24572.png" width="159"></p>
+<p><img src="customize_9.png" alt="" width="300"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">fun</span>, swap <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpWlPmPx/flow_10feb2a1453d4.png" width="176"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">fun</span>, swap <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="customize_10.png" alt="" width="300"></p>
 </div>
   </div>
 

@@ -22,7 +22,7 @@ that affect the way the diagrams are displayed.
 `prefix` is used to display special comments on top of code blocks, it must start 
 with `"#"`.
 
-```{r}
+```{r, eval = FALSE}
 library(flow)
 
 factorial <- function(x) {
@@ -48,6 +48,8 @@ factorial <- function(x) {
 flow_view(factorial, prefix = "##")
 ```
 
+<img src="customize_1.png" alt="" width="300"/>
+
 * `prefix` can be of length > 1 in which case all given prefixes are considered
 * The unprefixed comments are ignored.
 * Prefixed comments right before control flow calls (here `if`) will serve
@@ -65,13 +67,23 @@ This argument is ignored when using the *plantuml* engine.
 header, if `NA` the code will be displayed only if no header is defined by 
 special comments.
 
-```{r}
+```{r, eval = FALSE}
 flow_view(factorial, code = FALSE)
+```
 
+<img src="customize_2.png" alt="" width="300"/>
+
+```{r, eval = FALSE}
 flow_view(factorial, prefix = "##", code = FALSE)
+```
 
+<img src="customize_3.png" alt="" width="300"/>
+
+```{r, eval = FALSE}
 flow_view(factorial, prefix = "##", code = NA) # pay attention to the last block
 ```
+
+<img src="customize_4.png" alt="" width="300"/>
 
 This argument is ignored when using the *plantuml* engine.
 
@@ -81,7 +93,7 @@ This argument is ignored when using the *plantuml* engine.
 it will be longer but won't shift, which might be easier to display
 on web pages for instance.
 
-```{r}
+```{r, eval = FALSE}
 kg_to_lb <- function(mass) {
   if(mass < 0) {
     stop("mass should not be negative!")
@@ -92,9 +104,15 @@ kg_to_lb <- function(mass) {
 }
 
 flow_view(kg_to_lb)
+```
 
+<img src="customize_5.png" alt="" width="300"/>
+
+```{r, eval = FALSE}
 flow_view(kg_to_lb, narrow = TRUE)
 ```
+
+<img src="customize_6.png" alt="" width="300"/>
 
 This argument is ignored when using the *plantuml* engine.
 
@@ -103,7 +121,7 @@ This argument is ignored when using the *plantuml* engine.
 `truncate` is used to provide the maximum number of characters to be printed per 
 line, it works for code and headers.
 
-```{r}
+```{r, eval = FALSE}
 fun <- function() {
   ## short header
   x <- "__________________________long string__________________________"
@@ -111,8 +129,15 @@ fun <- function() {
   x
 }
 flow_view(fun, prefix = "##")
+```
+
+<img src="customize_7.png" alt="" width="300"/>
+
+```{r, eval = FALSE}
 flow_view(fun, truncate = 15, prefix = "##")
 ```
+
+<img src="customize_8.png" alt="" width="300"/>
 
 ## `swap`
 
@@ -121,14 +146,19 @@ By default calls like `x <- if(cond) a else b` are automatically transformed int
 
 If this is not acceptable this can be turned off by setting `swap` to `FALSE`.
 
-```{r}
+```{r, eval = FALSE}
 fun <- function(cond) {
   x <- if(cond) this else that
   x
 }
 
 flow_view(fun)
+```
 
+<img src="customize_9.png" alt="" width="300"/>
+
+```{r, eval = FALSE}
 flow_view(fun, swap = FALSE)
 ```
 
+<img src="customize_10.png" alt="" width="300"/>

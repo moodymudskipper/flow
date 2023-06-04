@@ -85,9 +85,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<li>
-  <a href="../diagrams.html%C3%9F">Diagrams</a>
-</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -127,60 +124,16 @@ nested functions can be viewed. The base function <code>bquote</code> is
 a good example.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/moodymudskipper/flow" class="external-link">flow</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">bquote</span><span class="op">)</span></span>
-<span><span class="co">#&gt; We found function definitions in this code, use the argument nested_fun to inspect them</span></span>
-<span><span class="co">#&gt; $unquote</span></span>
-<span><span class="co">#&gt; function(e) {</span></span>
-<span><span class="co">#&gt;     if (is.pairlist(e)) </span></span>
-<span><span class="co">#&gt;         as.pairlist(lapply(e, unquote))</span></span>
-<span><span class="co">#&gt;     else if (is.call(e)) {</span></span>
-<span><span class="co">#&gt;         if (is.name(e[[1L]]) &amp;&amp; as.character(e[[1]]) == ".") </span></span>
-<span><span class="co">#&gt;             eval(e[[2L]], where)</span></span>
-<span><span class="co">#&gt;         else if (splice) {</span></span>
-<span><span class="co">#&gt;             if (is.name(e[[1L]]) &amp;&amp; as.character(e[[1L]]) == </span></span>
-<span><span class="co">#&gt;                 "..") </span></span>
-<span><span class="co">#&gt;                 stop("can only splice inside a call", call. = FALSE)</span></span>
-<span><span class="co">#&gt;             else as.call(unquote.list(e))</span></span>
-<span><span class="co">#&gt;         }</span></span>
-<span><span class="co">#&gt;         else as.call(lapply(e, unquote))</span></span>
-<span><span class="co">#&gt;     }</span></span>
-<span><span class="co">#&gt;     else e</span></span>
-<span><span class="co">#&gt; }</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $is.splice.macro</span></span>
-<span><span class="co">#&gt; function(e) is.call(e) &amp;&amp; is.name(e[[1L]]) &amp;&amp; as.character(e[[1L]]) == </span></span>
-<span><span class="co">#&gt;     ".."</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $unquote.list</span></span>
-<span><span class="co">#&gt; function(e) {</span></span>
-<span><span class="co">#&gt;     p &lt;- Position(is.splice.macro, e, nomatch = NULL)</span></span>
-<span><span class="co">#&gt;     if (is.null(p)) </span></span>
-<span><span class="co">#&gt;         lapply(e, unquote)</span></span>
-<span><span class="co">#&gt;     else {</span></span>
-<span><span class="co">#&gt;         n &lt;- length(e)</span></span>
-<span><span class="co">#&gt;         head &lt;- if (p == 1) </span></span>
-<span><span class="co">#&gt;             NULL</span></span>
-<span><span class="co">#&gt;         else e[1:(p - 1)]</span></span>
-<span><span class="co">#&gt;         tail &lt;- if (p == n) </span></span>
-<span><span class="co">#&gt;             NULL</span></span>
-<span><span class="co">#&gt;         else e[(p + 1):n]</span></span>
-<span><span class="co">#&gt;         macro &lt;- e[[p]]</span></span>
-<span><span class="co">#&gt;         mexp &lt;- eval(macro[[2L]], where)</span></span>
-<span><span class="co">#&gt;         if (!is.vector(mexp) &amp;&amp; !is.expression(mexp)) </span></span>
-<span><span class="co">#&gt;             stop("can only splice vectors")</span></span>
-<span><span class="co">#&gt;         c(lapply(head, unquote), mexp, as.list(unquote.list(tail)))</span></span>
-<span><span class="co">#&gt;     }</span></span>
-<span><span class="co">#&gt; }</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpyZatR8/flow_1108f7eb873e4.png" width="340"></p>
+<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">bquote</span><span class="op">)</span></span></code></pre></div>
+<p><img src="nested_1.png" alt="" width="300"></p>
 <p>We can then inspect those by using the <code>nested_fun</code>
 argument, with a numeric id or a name (if unambiguous)</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">bquote</span>, nested_fun <span class="op">=</span> <span class="st">"unquote"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpyZatR8/flow_1108f55e1d4b7.png" width="984"></p>
+<p><img src="nested_2.png" alt="" width="300"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">bquote</span>, nested_fun <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="../../../../../private/var/folders/mp/qvg2y_jx63bgk_s0xxh2zr140000gp/T/RtmpyZatR8/flow_1108f5010adf9.png" width="554"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">bquote</span>, nested_fun <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="nested_3.png" alt="" width="300"></p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

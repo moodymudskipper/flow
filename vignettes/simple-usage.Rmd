@@ -25,29 +25,34 @@ library(flow)
 `flow_view()` is used to display the logic of a function, a one item named list containing a function, a script or a quoted
 expression.
 
-```{r}
+```{r, eval = FALSE}
 # display a function's body
 flow_view(ave)
 ```
 
+<img src="flow_view_1.png" alt="" width="300"/>
 
-```{r}
+```{r, eval = FALSE}
 # if non standard evaluation is an issue, use a one element named list
 fun <- ave
 flow_view(list(ave = fun))
 ```
 
+<img src="flow_view_2.png" alt="" width="300"/>
 
-```{r}
+```{r, eval = FALSE}
 # display script
 flow_view("../tests/testthat.R")
 ```
 
+<img src="flow_view_3.png" alt="" width="300"/>
 
-```{r}
+```{r, eval = FALSE}
 # display quoted expression
 flow_view(quote(if(1 + 1 == 2) {"ok"} else {"oh no"}))
 ```
+
+<img src="flow_view_4.png" alt="" width="300"/>
 
 `if` statements always branch into two paths, whether an `else` clause is present
 or not. `for`, `while`, and `repeat` loops are also supported.
