@@ -61,6 +61,7 @@ flow_view_uses <- function(x, pkg = NULL, out = NULL) {
   }
 
   data$code <- sprintf("[<%s> %s] -> [<%s> %s]", data$style1, data$fun, data$style2, data$vars)
+  row.names(data) <- NULL
 
   if (identical(out, "data")) return(data)
 
