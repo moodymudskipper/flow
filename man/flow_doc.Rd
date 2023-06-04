@@ -36,8 +36,9 @@ is defined by special comments}
 \item{out}{path to html output, if left \code{NULL} a temp \emph{html}
 file will be created and opened}
 
-\item{engine}{either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental), if
-the latter, arguments \code{prefix}, \code{narrow}, and \code{code} are ignored}
+\item{engine}{either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental, brittle
+mostly for reasons out of our control), if the latter, arguments \code{prefix},
+\code{narrow}, and \code{code} are ignored}
 }
 \value{
 Returns \code{NULL} invisibly (called for side effects).

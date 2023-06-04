@@ -67,8 +67,9 @@ Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 export the object to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
 
-\item{engine}{either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental), if
-the latter, arguments \code{prefix}, \code{narrow}, and \code{code} are ignored}
+\item{engine}{either \code{"nomnoml"} (default) or \code{"plantuml"} (experimental, brittle
+mostly for reasons out of our control), if the latter, arguments \code{prefix},
+\code{narrow}, and \code{code} are ignored}
 
 \item{browse}{whether to debug step by step (block by block),
 can also be a vector of block ids, in this case \code{browser()} calls will be

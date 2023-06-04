@@ -35,8 +35,9 @@
 #'   Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
 #'   export the object to a temp file of the relevant format and open it,
 #'   if a regular path is used the format will be guessed from the extension.
-#' @param engine either `"nomnoml"` (default) or `"plantuml"` (experimental), if
-#'   the latter, arguments `prefix`, `narrow`, and `code` are ignored
+#' @param engine either `"nomnoml"` (default) or `"plantuml"` (experimental, brittle
+#'   mostly for reasons out of our control), if the latter, arguments `prefix`,
+#'   `narrow`, and `code` are ignored
 #' @return depending on `out` :
 #'  * `NULL` (default) : `flow_view()` and `flow_compare_runs()` return a `"flow_diagram"`
 #'   object, containing the diagram, the diagram's code and the data used to build
