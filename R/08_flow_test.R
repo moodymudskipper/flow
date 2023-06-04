@@ -5,7 +5,7 @@
 #' functions, and where they fail if they do.
 #' See also the vignette *"Build reports to document functions and unit tests"*.
 #'
-#' @param out path to output (`.html` or `.md`), if left `NULL` a temp *html*
+#' @param out path to html output, if left `NULL` a temp *html*
 #'   file will be created and opened.
 #' @param failed_only whether to restrict the report to failing tests only
 #' @inheritParams flow_run
@@ -13,13 +13,13 @@
 #' @return Returns `NULL` invisibly (called for side effects)
 #' @export
 flow_test <- function(
-  prefix = NULL,
-  code = TRUE,
-  narrow = FALSE,
-  truncate = NULL,
-  swap = TRUE,
-  out = NULL,
-  failed_only = FALSE) {
+    prefix = NULL,
+    code = TRUE,
+    narrow = FALSE,
+    truncate = NULL,
+    swap = TRUE,
+    out = NULL,
+    failed_only = FALSE) {
   scripts <- list.files(
     path = "tests/testthat",
     pattern = "\\.r$",
@@ -35,6 +35,7 @@ flow_test <- function(
   } else {
     missing_output <- FALSE
   }
+  out <- here::here(out)
 
 
   ## fetch pkgname from root folder
@@ -77,7 +78,7 @@ library(%s)
 
   n_test_that_calls <- sum(
     sapply(scripts, function(x) sum(all.names(parse(file = x)) == "test_that"))
-    )
+  )
 
   ## setup progress bar
   pb = txtProgressBar(min = 0, max = n_test_that_calls, initial = 0)
@@ -142,32 +143,37 @@ library(%s)
 
 
         if(!failed_only || !success) {
-        #success <- if(success) "passed" else "failed"
+          #success <- if(success) "passed" else "failed"
 
-        chunk_code <- paste(styler::style_text(robust_deparse(call)), collapse = "\n")
-        desc <- eval(match.call(testthat::test_that, call)[["desc"]], e)
+          chunk_code <- paste(styler::style_text(robust_deparse(call)), collapse = "\n")
+          desc <- eval(match.call(testthat::test_that, call)[["desc"]], e)
 
-        if(success) {
-          desc <- sprintf('<span style="color: green;">%s</span>', desc)
-        } else {
-          desc <- sprintf('<span style="color: red;">%s</span>', desc)
-        }
+          if(success) {
+            desc <- sprintf('<span style="color: green;">%s</span>', desc)
+          } else {
+            desc <- sprintf('<span style="color: red;">%s</span>', desc)
+          }
 
-        ## print test description as title 3
-        cat(
-          file = rmd_output,
-          sprintf("### %s {.tabset}\n\n", desc),
-          append = TRUE)
+          ## print test description as title 3
+          cat(
+            file = rmd_output,
+            sprintf("### %s {.tabset}\n\n", desc),
+            append = TRUE)
 
-        ## print code as first title 4
-        code_section <- sprintf("#### code\n\n```{r, eval = FALSE}\n%s\n```\n\n", chunk_code)
-        cat(file = rmd_output, code_section, append = TRUE)
+          ## print code as first title 4
+          code_section <- sprintf("#### code\n\n```{r, eval = FALSE}\n%s\n```\n\n", chunk_code)
+          cat(file = rmd_output, code_section, append = TRUE)
 
+          img_paths <- sprintf("%s/%s_%s.png", tmp_dir, script_short, i2)
+          # FIXME: not sure why some images are not produced
 
-        diagram_sections <- sprintf(
-          "#### %s\n\n![](%s/%s_%s.png)\n\n", inspected_funs, tmp_dir, script_short, i2)
+          inspected_funs <- inspected_funs[file.exists(img_paths)]
+          img_paths <- img_paths[file.exists(img_paths)]
 
-        cat(file = rmd_output, diagram_sections, append = TRUE, sep= "")
+          if (length(img_paths)) {
+            diagram_sections <- sprintf("#### %s\n\n![](%s)\n\n", inspected_funs, img_paths)
+            cat(file = rmd_output, diagram_sections, append = TRUE, sep= "")
+          }
         }
       }
     }
