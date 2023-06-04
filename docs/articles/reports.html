@@ -125,32 +125,12 @@ tests</h1>
 functions of a package and store them in an <em>html</em> report.</p>
 <p>The <code>pkg</code> argument can be any package name, from base R,
 CRAN, or other including your local packages.</p>
-<p>The <code>out</code> argument must be a path to an <em>html</em> or
-<em>md</em> file.</p>
-<p>If <code>pkg</code> is provided but <code>out</code> is left
-<code>NULL</code>, the report will be printed to a temporary file and
-will be opened automatically.</p>
-<p>If you don’t provide neither <code>pkg</code> nor <code>out</code>, a
-<code>diagrams.md</code> file will be created at the root of your
-project folder, so that you can use <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site</a></code> to
-knit it into a new section after editing the YAML file properly.</p>
-<p>The <a href="https://moodymudskipper.github.io/flow/articles/Draw-a-function.html" class="external-link">Diagrams</a>
-section of the <a href="https://moodymudskipper.github.io/flow/" class="external-link">website</a> was built
-this way, simply by using the following call :</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/moodymudskipper/flow" class="external-link">flow</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/flow_doc.html">flow_doc</a></span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"##"</span><span class="op">)</span></span></code></pre></div>
-<p>And the <code>_pkgdown.yml</code> file that is created by
-<code><a href="https://usethis.r-lib.org/reference/use_pkgdown.html" class="external-link">usethis::use_pkgdown()</a></code> is edited to contain :</p>
-<pre><code>navbar:
-  structure:
-    left:  [home, reference, articles, news, diagrams]
-    right: [github]
-  components:
-    home: ~
-    diagrams:
-     text: Diagrams
-     href: diagrams.html</code></pre>
+<p>The <code>out</code> argument must be a path to an <em>html</em>
+file.</p>
+<p>If <code>out</code> is left <code>NULL</code>, the report will be
+printed to a temporary file and will be opened automatically.</p>
+<p>If you don’t provide <code>pkg</code> the currently developed package
+will be considered.</p>
 </div>
 <div class="section level2">
 <h2 id="flow_test">

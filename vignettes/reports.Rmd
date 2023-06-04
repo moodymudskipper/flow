@@ -22,38 +22,12 @@ and store them in an *html* report.
 The `pkg` argument can be any package name, from base R, CRAN, or other 
 including your local packages.
 
-The `out` argument must be a path to an *html* or *md* file.
+The `out` argument must be a path to an *html* file.
 
-If `pkg` is provided but `out` is left `NULL`, the report will be printed to
+If `out` is left `NULL`, the report will be printed to
 a temporary file and will be opened automatically.
 
-If you don't provide neither `pkg` nor `out`, a `diagrams.md` file will be created
-at the root of your project folder, so that you can use `pkgdown::build_site`
-to knit it into a new section after editing the YAML file properly.
-
-The [Diagrams](https://moodymudskipper.github.io/flow/articles/Draw-a-function.html)
-section of the [website](https://moodymudskipper.github.io/flow/)
-was built this way, simply by using the following call :
-
-```{r, eval = FALSE}
-library(flow)
-flow_doc(prefix = "##")
-```
-
-And the `_pkgdown.yml` file that is created by `usethis::use_pkgdown()` is edited
-to contain :
-
-```
-navbar:
-  structure:
-    left:  [home, reference, articles, news, diagrams]
-    right: [github]
-  components:
-    home: ~
-    diagrams:
-     text: Diagrams
-     href: diagrams.html
-```
+If you don't provide `pkg` the currently developed package will be considered.
 
 ## `flow_test()`
 

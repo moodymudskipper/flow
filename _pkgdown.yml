@@ -5,7 +5,6 @@ navbar:
     - reference
     - articles
     - news
-    - diagrams
     right: [github]
   components:
     home: ~
