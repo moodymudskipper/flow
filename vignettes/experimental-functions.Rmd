@@ -140,5 +140,44 @@ very robust yet but it's already useful.
 flow_view_uses(purrr:::accum_index)
 ```
 
+## `flow_compare_runs()`
+
+`flow_compare_runs()` compares two calls to the same function. 
+
+Whenever the calls diverge we color the blocks differently (orange for `x`,
+green for the `ref`) and we count separately the passes on the edges.
+
+```{r}
+flow_compare_runs(rle(NULL), rle(c(1, 2, 2, 3)))
+```
+
+## `flow_embed()`
+
+`flow_embed()` can be used to embed flow diagrams into your roxygen documentation
+
+```{r}
+#' Add or subtract
+#' 
+#' This is a useless function that adds or subtract numbers
+#' 
+#' See its logic in this flow diagram:
+#' 
+#' `r flow_embed(flow_view(add_or_subtract), "add_or_subtract")`
+#' 
+#' @param x string
+#' @param y string
+#' @param what "add" or "subtract"
+add_or_subtract <- function(x, y, what = c("add", "subtract")) {
+  what <- match.arg(what)
+  if (what == "add") {
+    x + y
+  } else {
+    x - y
+  }
+}
+
+flow_compare_runs(rle(NULL), rle(c(1, 2, 2, 3)))
+```
+
 
 
