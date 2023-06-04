@@ -3,14 +3,10 @@
 
 #' Draw Flow Diagrams for an Entire Package
 #'
-#' @param pkg package name as a string
-#' @param out path to output (`.html` or `.md`), if left `NULL` a temp *html*
-#'   file will be created and opened.
+#' @param pkg package name as a string, or `NULL` to signify currently developed package.
+#' @param out path to html output, if left `NULL` a temp *html*
+#'   file will be created and opened
 #' @inheritParams flow_view
-#' @details
-#' if `pkg` and `out` are both left `NULL`, a vignette `diagrams.md` will be built
-#' in the root, so that `pkgdown::build_site` will use it as an additional page.
-#' See also the vignette *"Build reports to document functions and unit tests"*.
 #' @return Returns `NULL` invisibly (called for side effects).
 #' @export
 flow_doc <- function(
@@ -28,36 +24,23 @@ flow_doc <- function(
     f <- function(...) environment()$...
     do.call(f, as.list(x))
   }
+  if (is.null(pkg)) {
+    pkg <- read.dcf("DESCRIPTION")[,"Package"][[1]]
+  }
 
   ## define pkgdown flags
-  pkgdown <- is.null(pkg)
-  missing_out <- FALSE
-
+  missing_out <- is.null(out)
 
   ## did we specify an output?
-  if(is.null(out)) {
-    ## did we specify a package?
-    if(pkgdown) {
-      ## set output so pkgdown::build_site adds report to website
-      out <- "diagrams.md"
-    } else {
+  if(missing_out) {
       ## default output
-      missing_out <- TRUE
       out <- tempfile(fileext = ".html")
-    }
   }
+  out <- here::here(out)
 
   ext <- sub("^.*?\\.(.*?)", "\\1", out)
 
-  ## did we specify a package?
-  if(pkgdown) {
-    ## guess pkg from working dir and exported funs from NAMESPACE
-    pkg <- basename(getwd())
-    exported <- gsub("export\\((.*?)\\)", "\\1", grep("^export", readLines("NAMESPACE"), value = TRUE))
-  } else {
-    ## fetch exported functions
-    exported <- getNamespaceExports(pkg)
-  }
+  exported <- getNamespaceExports(pkg)
 
   ## discard reexported funs from other NS and split into exp and unexp
   all_funs <- lsf.str(asNamespace(pkg))
@@ -134,11 +117,7 @@ flow_doc <- function(
 
   cat("knitting")
 
-  rmarkdown::render(rmd_output, output_file = here::here(out))
-  if(ext == "md") {
-    # remove the "<!DOCTYPE html>" line
-    writeLines(readLines(out)[-1], out)
-  }
+  rmarkdown::render(rmd_output, output_file = out, output_format = "html_document")
 
   if(missing_out) {
     browseURL(out)
