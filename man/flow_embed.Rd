@@ -9,12 +9,12 @@ flow_embed(call, name, width = 1, alt = name)
 \arguments{
 \item{call}{A call to a flow function, prefixed with \verb{flow::}}
 
+\item{name}{A name for the png file that will be created under 'man/figures',
+without extension.}
+
 \item{width}{width, relative if < 1, pixels otherwise}
 
 \item{alt}{alt text}
-
-\item{file}{A name for the png file that will be created under 'man/figures',
-without extension.}
 }
 \value{
 Called for side effects, should only be used in roxygen doc

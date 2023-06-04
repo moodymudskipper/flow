@@ -15,7 +15,7 @@
 #'   the file first.
 #'
 #' @param call A call to a flow function, prefixed with `flow::`
-#' @param file A name for the png file that will be created under 'man/figures',
+#' @param name A name for the png file that will be created under 'man/figures',
 #'   without extension.
 #' @param width width, relative if < 1, pixels otherwise
 #' @param alt alt text
