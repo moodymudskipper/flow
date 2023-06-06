@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -59,9 +59,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<li>
-  <a href="../diagrams.html%C3%9F">Diagrams</a>
-</li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/moodymudskipper/flow/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
@@ -87,53 +84,65 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">flow_doc</span><span class="op">(</span>
-  pkg <span class="op">=</span> <span class="cn">NULL</span>,
-  prefix <span class="op">=</span> <span class="cn">NULL</span>,
-  code <span class="op">=</span> <span class="cn">TRUE</span>,
-  narrow <span class="op">=</span> <span class="cn">FALSE</span>,
-  truncate <span class="op">=</span> <span class="cn">NULL</span>,
-  swap <span class="op">=</span> <span class="cn">TRUE</span>,
-  out <span class="op">=</span> <span class="cn">NULL</span>,
-  engine <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nomnoml"</span>, <span class="st">"plantuml"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">flow_doc</span><span class="op">(</span></span>
+<span>  pkg <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  prefix <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  code <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  narrow <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  truncate <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  swap <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  out <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  engine <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nomnoml"</span>, <span class="st">"plantuml"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>pkg</dt>
-<dd><p>package name as a string</p></dd>
+<dd><p>package name as a string, or <code>NULL</code> to signify currently developed package.</p></dd>
+
+
 <dt>prefix</dt>
 <dd><p>prefix to use for special comments in our code used as block headers,
 must start with <code>"#"</code>, several prefixes can be provided</p></dd>
+
+
 <dt>code</dt>
 <dd><p>Whether to display the code in code blocks or only the header,
 to be more compact, if <code>NA</code>, the code will be displayed only if no header
 is defined by special comments</p></dd>
+
+
 <dt>narrow</dt>
 <dd><p><code>TRUE</code> makes sure the diagram stays centered on one column
 (they'll be longer but won't shift to the right)</p></dd>
+
+
 <dt>truncate</dt>
 <dd><p>maximum number of characters to be printed per line</p></dd>
+
+
 <dt>swap</dt>
 <dd><p>whether to change <code>var &lt;- if(cond) expr</code> into
 <code>if(cond) var &lt;- expr</code> so the diagram displays better</p></dd>
+
+
 <dt>out</dt>
-<dd><p>path to output (<code>.html</code> or <code>.md</code>), if left <code>NULL</code> a temp <em>html</em>
-file will be created and opened.</p></dd>
+<dd><p>path to html output, if left <code>NULL</code> a temp <em>html</em>
+file will be created and opened</p></dd>
+
+
 <dt>engine</dt>
-<dd><p>either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental), if
-the latter, arguments <code>prefix</code>, <code>narrow</code>, and <code>code</code></p></dd>
+<dd><p>either <code>"nomnoml"</code> (default) or <code>"plantuml"</code> (experimental, brittle
+mostly for reasons out of our control), if the latter, arguments <code>prefix</code>,
+<code>narrow</code>, and <code>code</code> are ignored</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns <code>NULL</code> invisibly (called for side effects).</p>
-    </div>
-    <div id="details">
-    <h2>Details</h2>
-    <p>if <code>pkg</code> and <code>out</code> are both left <code>NULL</code>, a vignette <code>diagrams.md</code> will be built
-in the root, so that <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site</a></code> will use it as an additional page.
-See also the vignette <em>"Build reports to document functions and unit tests"</em>.</p>
+    
+
+<p>Returns <code>NULL</code> invisibly (called for side effects).</p>
     </div>
 
   </div>
@@ -148,7 +157,7 @@ See also the vignette <em>"Build reports to document functions and unit tests"</
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer></div>

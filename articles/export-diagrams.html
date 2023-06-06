@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -85,9 +85,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<li>
-  <a href="../diagrams.html%C3%9F">Diagrams</a>
-</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -119,21 +116,28 @@
 
     
     
-<p>By default diagrams are shown in the viewer window. This might be enough, especially if you are lucky enough to have a touch screen to zoom in and out on the relevant subparts, but you might want to export your diagram to share it or to explore it more conveniently.</p>
-<p>This is done by using the <code>out</code> parameter of <code><a href="../reference/flow_view.html">flow_view()</a></code> and <code><a href="../reference/flow_view.html">flow_run()</a></code>.</p>
-<p>The format will be inferred from the file extension so you might do :</p>
+<p>By default diagrams are shown in the viewer window. This might be
+enough, especially if you are lucky enough to have a touch screen to
+zoom in and out on the relevant subparts, but you might want to export
+your diagram to share it or to explore it more conveniently.</p>
+<p>This is done by using the <code>out</code> parameter of
+<code><a href="../reference/flow_view.html">flow_view()</a></code> and <code><a href="../reference/flow_view.html">flow_run()</a></code>.</p>
+<p>The format will be inferred from the file extension so you might do
+:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/moodymudskipper/flow" class="external-link">flow</a></span><span class="op">)</span>
-<span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"ave.png"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"ave.html"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"some_folder/ave.pdf"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"C:/some_folder/ave.jpeg"</span><span class="op">)</span></code></pre></div>
-<p>If your goal is to explore rather than archive you might want to use the following shorthands, which will save the output as a temp file and open it with your default application.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/moodymudskipper/flow" class="external-link">flow</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"ave.png"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"ave.html"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"some_folder/ave.pdf"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"C:/some_folder/ave.jpeg"</span><span class="op">)</span></span></code></pre></div>
+<p>If your goal is to explore rather than archive you might want to use
+the following shorthands, which will save the output as a temp file and
+open it with your default application.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"png"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"pdf"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"jpeg"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"png"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"pdf"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/flow_view.html">flow_view</a></span><span class="op">(</span><span class="va">ave</span>, out <span class="op">=</span> <span class="st">"jpeg"</span><span class="op">)</span></span></code></pre></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -151,7 +155,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer>

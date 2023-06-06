@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -85,9 +85,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<li>
-  <a href="../diagrams.html%C3%9F">Diagrams</a>
-</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -119,30 +116,51 @@
 
     
     
-<p>This section introduces the <code>browse</code> argument of <code><a href="../reference/flow_view.html">flow_run()</a></code> and the functions <code><a href="../reference/flow_debug.html">flow_debug()</a></code> and <code><a href="../reference/flow_debug.html">flow_debugonce()</a></code></p>
+<p>This section introduces the <code>browse</code> argument of
+<code><a href="../reference/flow_view.html">flow_run()</a></code> and the functions <code><a href="../reference/flow_debug.html">flow_debug()</a></code> and
+<code><a href="../reference/flow_debugonce.html">flow_debugonce()</a></code></p>
 <div class="section level2">
 <h2 id="browse">
 <code>browse</code><a class="anchor" aria-label="anchor" href="#browse"></a>
 </h2>
-<p><code><a href="../reference/flow_view.html">flow_run()</a></code> runs a call and displays the logical path that was taken, but what if we’d like to walk through the code step by step, as we would by inserting a <code><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser()</a></code> call in our function’s body or calling <code>debug</code> or <code>debugonce</code> on our function ?</p>
-<p>In these cases we can use the <code>browse</code> argument, set it to <code>TRUE</code> and you’ll be able to browse through the function as it’s run. And refresh the diagram by typing <code>d</code> or the equivalent <code><a href="../reference/flow_draw.html">flow_draw()</a></code></p>
+<p><code><a href="../reference/flow_view.html">flow_run()</a></code> runs a call and displays the logical path
+that was taken, but what if we’d like to walk through the code step by
+step, as we would by inserting a <code><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser()</a></code> call in our
+function’s body or calling <code><a href="https://rdrr.io/r/base/debug.html" class="external-link">debug()</a></code> or
+<code><a href="https://rdrr.io/r/base/debug.html" class="external-link">debugonce()</a></code> on our function ?</p>
+<p>In these cases we can use the <code>browse</code> argument, set it to
+<code>TRUE</code> and you’ll be able to browse through the function as
+it’s run. And refresh the diagram by typing <code>d</code> or the
+equivalent <code><a href="../reference/flow_draw.html">flow_draw()</a></code></p>
 </div>
 <div class="section level2">
-<h2 id="flow_debug-and-flow_debugonce">
-<code>flow_debug</code> and <code>flow_debugonce</code><a class="anchor" aria-label="anchor" href="#flow_debug-and-flow_debugonce"></a>
+<h2 id="flow_debug">
+<code>flow_debug()</code><a class="anchor" aria-label="anchor" href="#flow_debug"></a>
 </h2>
-<p><code>flow_run</code> is convenient to inspect the logic of a function that we call directly, sometimes we might want to inspect a call that’s part of another function’s body.</p>
-<p>In this situation we can use <code>flow_debug</code> and <code>flow_debug_once</code>. These work a lot like <code>debug</code> and <code>debugonce</code> when using <code>browse = TRUE</code>.</p>
+<p><code>flow_run</code> is convenient to inspect the logic of a
+function that we call directly, sometimes we might want to inspect a
+call that’s part of another function’s body.</p>
+<p>In this situation we can use <code><a href="../reference/flow_debug.html">flow_debug()</a></code>. These work a
+lot like <code><a href="https://rdrr.io/r/base/debug.html" class="external-link">debug()</a></code> when using <code>browse = TRUE</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/moodymudskipper/flow" class="external-link">flow</a></span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/flow_debug.html">flow_debugonce</a></span><span class="op">(</span><span class="va">factorial</span><span class="op">)</span>
-<span class="va">factorial5</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">5L</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/Special.html" class="external-link">factorial</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="fu">factorial5</span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; [1] 120</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/moodymudskipper/flow" class="external-link">flow</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/flow_debug.html">flow_debug</a></span><span class="op">(</span><span class="va">factorial</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Tracing function "factorial" in package "base"</span></span>
+<span><span class="va">factorial5</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">5L</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Special.html" class="external-link">factorial</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu">factorial5</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in normalizePath(Sys.getenv("TMPDIR", Sys.getenv("TMP"))): path[1]="":</span></span>
+<span><span class="co">#&gt; No such file or directory</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in normalizePath(Sys.getenv("TMPDIR", Sys.getenv("TMP"))): path[1]="":</span></span>
+<span><span class="co">#&gt; No such file or directory</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in normalizePath(Sys.getenv("TMPDIR", Sys.getenv("TMP"))): path[1]="":</span></span>
+<span><span class="co">#&gt; No such file or directory</span></span>
+<span><span class="co">#&gt; [1] 120</span></span></code></pre></div>
 <p><img src="flow_debugonce.png" alt="" width="300"></p>
 </div>
   </div>
@@ -164,7 +182,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer>

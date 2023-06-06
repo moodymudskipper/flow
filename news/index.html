@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -59,9 +59,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<li>
-  <a href="../diagrams.html%C3%9F">Diagrams</a>
-</li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/moodymudskipper/flow/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
@@ -82,8 +79,29 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.2.0" id="flow-020">flow 0.2.0<small>2023-06-06</small><a class="anchor" aria-label="anchor" href="#flow-020"></a></h2>
+<ul><li>The LICENSE was switched from GPL-3 to MIT</li>
+<li>New function: <code><a href="../reference/flow_view.html">flow_compare_runs()</a></code> displays 2 calls on the same diagram, making it easy to observe their divergence</li>
+<li>New function: <code><a href="../reference/flow_view_uses.html">flow_view_uses()</a></code> displays functions that recursively call its input, basically it does the opposite of <code><a href="../reference/flow_view_deps.html">flow_view_deps()</a></code>
+</li>
+<li>New function: <code><a href="../reference/flow_view_source_calls.html">flow_view_source_calls()</a></code> draws the dependencies between files sourcing each other.</li>
+<li>
+<code><a href="../reference/flow_view_deps.html">flow_view_deps()</a></code> gains an <code>include_formals</code> arg, <code>TRUE</code> by default, so it displays dependencies used in formals.</li>
+<li>
+<code><a href="../reference/flow_view_deps.html">flow_view_deps()</a></code> accepts a list of functions as input, to display a diagram that starts from several functions.</li>
+<li>
+<code><a href="../reference/flow_view_deps.html">flow_view_deps()</a></code>’s <code>trim</code>, <code>promote</code>, <code>demote</code>, <code>trim</code> arguments support regular rexpressions.</li>
+<li>
+<code>flow_view_doc()</code> and <code>flow_view_doc()</code> were simplified to output only html since the md output was rarely used and brittle.</li>
+<li>
+<code><a href="../reference/flow_debugonce.html">flow_debugonce()</a></code> is deprecated, use <code><a href="../reference/flow_debug.html">flow_debug()</a></code> and <code><a href="../reference/flow_debug.html">flow_undebug()</a></code>
+</li>
+<li>Diagram drawing functions now return by default a “flow_diagram” object, it contains the widget, the code and the data of the diagram and has a print() method that displays the diagram.</li>
+<li>Bug fixes</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0" id="flow-010">flow 0.1.0<small>2022-03-08</small><a class="anchor" aria-label="anchor" href="#flow-010"></a></h2>
-<p>We provide new experimental functions, these might be subjected to non trivial breaking changes in the features and they have some known issues but we decided to release them in the wild already:</p>
+<p>We provide new experimental functions, these might be subjected to non trivial breaking changes in the future and they have some known issues but we decided to release them in the wild already:</p>
 <ul><li>
 <code><a href="../reference/flow_view_vars.html">flow_view_vars()</a></code> shows dependencies between variables within a function</li>
 <li>
@@ -121,7 +139,7 @@
 <li>The argument <code>show_passes</code> was added to <code><a href="../reference/flow_view.html">flow_run()</a></code> to display the number of passes through each continuous edge of the diagram.</li>
 <li>When setting <code>browse = TRUE</code>, the diagrams are not drawn automatically, instead we now use <code>d</code> or <code><a href="../reference/flow_draw.html">flow_draw()</a></code> to redraw the diagram at the chosen step. running <code>flow_draw(always = TRUE)</code> in the debugger makes sure they’re drawn automatically at each step of the run.</li>
 </ul><p>Moreover:</p>
-<ul><li>New functions <code><a href="../reference/flow_debug.html">flow_debug()</a></code> and <code><a href="../reference/flow_debug.html">flow_debugonce()</a></code> make it convenient to call <code>debug_run()</code> indirectly through another call.</li>
+<ul><li>New functions <code><a href="../reference/flow_debug.html">flow_debug()</a></code> and <code><a href="../reference/flow_debugonce.html">flow_debugonce()</a></code> make it convenient to call <code>debug_run()</code> indirectly through another call.</li>
 <li>The engine “plantuml” was added, it is not as flexible as “nomnoml” (not all features are supported) but is more polished and more compact.</li>
 <li>The new function <code><a href="../reference/flow_doc.html">flow_doc()</a></code> draws the diagrams of all the functions of a package to an <em>html</em> file.</li>
 </ul></div>
@@ -139,7 +157,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer></div>

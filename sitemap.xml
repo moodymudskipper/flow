@@ -4,6 +4,12 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>/LICENSE.html</loc>
+  </url>
+  <url>
     <loc>/articles/addins.html</loc>
   </url>
   <url>
@@ -34,9 +40,6 @@
     <loc>/authors.html</loc>
   </url>
   <url>
-    <loc>/diagrams.html</loc>
-  </url>
-  <url>
     <loc>/index.html</loc>
   </url>
   <url>
@@ -49,10 +52,16 @@
     <loc>/reference/flow_debug.html</loc>
   </url>
   <url>
+    <loc>/reference/flow_debugonce.html</loc>
+  </url>
+  <url>
     <loc>/reference/flow_doc.html</loc>
   </url>
   <url>
     <loc>/reference/flow_draw.html</loc>
+  </url>
+  <url>
+    <loc>/reference/flow_embed.html</loc>
   </url>
   <url>
     <loc>/reference/flow_test.html</loc>
@@ -65,6 +74,12 @@
   </url>
   <url>
     <loc>/reference/flow_view_shiny.html</loc>
+  </url>
+  <url>
+    <loc>/reference/flow_view_source_calls.html</loc>
+  </url>
+  <url>
+    <loc>/reference/flow_view_uses.html</loc>
   </url>
   <url>
     <loc>/reference/flow_view_vars.html</loc>

@@ -1,6 +1,6 @@
-pandoc: 2.14.2
-pkgdown: 2.0.2.9000
-pkgdown_sha: 9aae87398abdbe1cd5af5ff6f168d2e142d531c9
+pandoc: 2.19.2
+pkgdown: 2.0.7.9000
+pkgdown_sha: 39083f38bbb2de2e1126529392bddf3e6e262ab4
 articles:
   addins: addins.html
   advanced-debugging: advanced-debugging.html
@@ -10,5 +10,5 @@ articles:
   nested-functions: nested-functions.html
   reports: reports.html
   simple-usage: simple-usage.html
-last_built: 2022-03-09T08:06Z
+last_built: 2023-06-06T15:01Z
 
