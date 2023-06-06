@@ -49,7 +49,7 @@ A flow diagram object.
 This function displays a shiny app's module structure, assuming it is built
 on top of module functions named a certain way (adjustable through the \code{pattern} argument) and
 calling each other. If you call for instance \code{flow_view_shiny()} on a function that runs the app and
-uses both the maon server and ui functions, you'll display the full graph of server and ui modules.
+uses both the main server and ui functions, you'll display the full graph of server and ui modules.
 }
 \details{
 It is  wrapper around \code{flow_view_deps()} which demotes every object that is not

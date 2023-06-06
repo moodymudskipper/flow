@@ -11,7 +11,7 @@
 * `flow_view_deps()` accepts a list of functions as input, to display a diagram
   that starts from several functions.
 * `flow_view_deps()`'s `trim`, `promote`, `demote`, `trim` arguments support
-  regular rexpressions.
+  regular expressions.
 * `flow_view_doc()` and `flow_view_doc()` were simplified to output only html since
   the md output was rarely used and brittle.
 * `flow_debugonce()` is deprecated, use `flow_debug()` and `flow_undebug()`
