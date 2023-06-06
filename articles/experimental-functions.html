@@ -146,7 +146,7 @@ through control flow. Variables are repeated when they are modified.</p>
 <span><span class="co">#&gt;     length &lt;- nchar(vars)</span></span>
 <span><span class="co">#&gt;     flat_map_int(match, ends_with_impl, vars, length)</span></span>
 <span><span class="co">#&gt; }</span></span>
-<span><span class="co">#&gt; &lt;bytecode: 0x56290d8c11a8&gt;</span></span>
+<span><span class="co">#&gt; &lt;bytecode: 0x55fc0ebb0468&gt;</span></span>
 <span><span class="co">#&gt; &lt;environment: namespace:tidyselect&gt;</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view_vars.html">flow_view_vars</a></span><span class="op">(</span><span class="fu">tidyselect</span><span class="fu">::</span><span class="va"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">ends_with</a></span><span class="op">)</span></span></code></pre></div>
@@ -217,7 +217,7 @@ from other packages.</li>
 </h2>
 <p>#’ This function displays a shiny app’s module structure, . If you
 call for instance <code><a href="../reference/flow_view_shiny.html">flow_view_shiny()</a></code> on a function that runs
-the app and #’ uses both the maon server and ui functions, you’ll
+the app and #’ uses both the main server and ui functions, you’ll
 display the full graph of server and ui modules.</p>
 <p><code><a href="../reference/flow_view_shiny.html">flow_view_shiny()</a></code> is a wrapper around
 <code><a href="../reference/flow_view_deps.html">flow_view_deps()</a></code> to show the structure of a shiny app. It
@@ -225,7 +225,7 @@ assumes the app is built on top of module functions named a certain way
 (adjustable through the <code>pattern</code> argument).</p>
 <p>It works nicely on apps built with {golem} or follow the same kind of
 structure (good practice basically), such as those that you’d build
-following the recommendations in Hadley Wickham’s “Mestering Shiny”.</p>
+following the recommendations in Hadley Wickham’s “Mastering Shiny”.</p>
 <p>Apps that use <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code> are not well supported but it
 might come as we found it’s quite common (though probably not good
 practice).</p>
