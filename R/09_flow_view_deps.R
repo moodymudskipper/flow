@@ -266,11 +266,11 @@ flow_view_deps_df <- function(target_fun_name, target_fun, trim, promote, demote
 }
 
 deps <- function(pkg) {
-  ip <- installed.packages()
-  setdiff(trimws(union(
-    strsplit(gsub("\\(.*?\\)", "", ip[pkg, "Imports"]), "\\s?,\\s?")[[1]],
-    strsplit(gsub("\\(.*?\\)", "", ip[pkg, "Depends"]), "\\s?,\\s?")[[1]]
-  )), c("R", NA))
+  desc <- read.dcf(system.file("DESCRIPTION", package = pkg))
+  desc <- desc[,intersect(c("Imports", "Depends"), colnames(desc))]
+  setdiff(trimws(unique(unlist(
+    strsplit(gsub("\\(.*?\\)", "", desc), "\\s?,\\s?")
+  ))), c("R", NA))
 }
 
 get_ns_obj_df <- function(ns_nm, lines) {

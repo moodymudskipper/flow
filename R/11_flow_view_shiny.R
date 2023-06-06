@@ -16,6 +16,7 @@
 #' @param pattern A regular expression used to detect ui and server functions
 #' @inheritParams flow_view_deps
 #' @export
+#' @return A flow diagram object.
 #' @examples
 #' if (requireNamespace("esquisse", quietly = TRUE)) {
 #'   flow_view_shiny(esquisse::esquisser, show_imports = "none")

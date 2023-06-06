@@ -9,6 +9,9 @@ flow_debugonce(...)
 \arguments{
 \item{...}{...}
 }
+\value{
+Fails with deprecation error
+}
 \description{
 Deprecated
 }

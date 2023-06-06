@@ -14,3 +14,4 @@
 ^\.github$
 ^CRAN-SUBMISSION$
 ^LICENSE\.md$
+^ignored$

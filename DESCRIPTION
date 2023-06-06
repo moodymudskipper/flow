@@ -8,7 +8,7 @@ Authors@R:
            email = "antoine.fabri@gmail.com")
 Description: Visualize as flow diagrams the logic of functions, expressions or 
   scripts in a static way or when running a call, visualize the dependencies between
-  functions or between modules in a shiny app, and more..
+  functions or between modules in a shiny app, and more.
 License: MIT + file LICENSE
 URL: https://github.com/moodymudskipper/flow, https://moodymudskipper.github.io/flow/
 BugReports: https://github.com/moodymudskipper/flow/issues

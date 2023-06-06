@@ -59,7 +59,8 @@ flow_undebug <- function(f){
 #' @param ... ...
 #' @keywords internal
 #' @export
+#' @return Fails with deprecation error
 flow_debugonce <- function(...) {
-  stop("`flow_debugonce()` is deprecated, use `flow_debug()`")
+  stop("`flow_debugonce()` is defunct, use `flow_debug()`")
 }
 

@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Visualize as flow diagrams the logic of functions, expressions or scripts in a static way or when running a call, visualize the dependencies between functions or between modules in a shiny app, and more..
+Visualize as flow diagrams the logic of functions, expressions or scripts in a static way or when running a call, visualize the dependencies between functions or between modules in a shiny app, and more.
 }
 \seealso{
 Useful links:

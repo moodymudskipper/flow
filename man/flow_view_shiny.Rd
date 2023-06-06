@@ -41,6 +41,9 @@ if a regular path is used the format will be guessed from the extension.}
 
 \item{pattern}{A regular expression used to detect ui and server functions}
 }
+\value{
+A flow diagram object.
+}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 This function displays a shiny app's module structure, assuming it is built
