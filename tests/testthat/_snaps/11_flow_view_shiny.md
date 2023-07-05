@@ -2,6 +2,8 @@
 
     Code
       flow_view_shiny(esquisse::esquisser, out = "data")
+    Warning <simpleWarning>
+      invalid non-character version specification 'x' (type: double)
     Output
                      child_header
       1            esquisser (28)
