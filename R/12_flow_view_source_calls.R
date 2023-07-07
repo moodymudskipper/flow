@@ -44,7 +44,7 @@ flow_view_source_calls <- function(paths = ".", recursive = TRUE, basename = TRU
     )
     if (!length(source_calls)) return(NULL)
     # attempt to eval the second argument
-    paths <- sapply(source_calls, function(x) {
+    paths <- lapply(source_calls, function(x) {
       tryCatch({
         # if we can eval, format and use
         file <- eval(x[[2]], env)
@@ -79,6 +79,8 @@ flow_view_source_calls <- function(paths = ".", recursive = TRUE, basename = TRU
       }
       )
     })
+    paths <- unlist(paths)
+    if (!length(paths)) return(NULL)
     data.frame(parent = file, child = paths)
   }
 
