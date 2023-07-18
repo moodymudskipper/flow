@@ -128,6 +128,54 @@ flow_data <-
     id <- get_last_id(data) + 1
     data <- add_node(data, id, "return")
 
+    # extract nested control flow
+    is_cf_call <- function(x) {
+      is.call(x) && list(x[[1]]) %in% c(quote(`if`), quote(`repeat`), quote(`for`), quote(`while`))
+    }
+    localize_control_flow <- function(call, i = integer()) {
+      if (!is.call(call)) return(0)
+      if (is_cf_call(call[[1]])) return(i)
+      if (identical(call[[1]], quote(`{`)) && any(sapply(as.list(call[-1]), is_cf_call))) {
+        return(i)
+      }
+      inds <- Map(localize_control_flow, call = call, i = seq_along(call))
+      keep <- Filter(function(x) !identical(x[[length(x)]], 0), inds)
+      if (!length(keep)) return(0)
+      lapply(keep, function(x) c(i, unlist(x)))
+    }
+
+    block_inds <- which(data$nodes$block_type == "standard")
+    for (i in block_inds) {
+      block <- str2lang(paste0("{", data$nodes$code_str[[i]], "}"))
+      cf_inds <- localize_control_flow(block)
+      if (identical(cf_inds, 0)) next
+      for (j in seq_along(cf_inds)) {
+        sub_data <- flow_data(list(f=as.function(list(block[[cf_inds[[j]]]]))))
+        sub_data$edges <- sub_data$edges[-1,]
+        sub_data$nodes <- sub_data$nodes[-1,]
+        sub_code <- do.call(build_nomnoml_code, c(list(sub_data,code = TRUE, header = FALSE)))
+
+        block[[cf_inds[[j]]]] <- "`\U{2194}\U{FE0F}`"
+        # create new block and new edge
+        from <- data$nodes$id[[i]]
+        to <- paste0(from, strrep("*", j))
+
+        data$nodes <- rbind(
+          data$nodes,
+          data.frame(id = to, block_type = "nested", code_str = sub_code, label = "")
+          )
+        data$edges <- rbind(
+          data$edges,
+          data.frame(from = from, to = to, edge_label = "", arrow = "--")
+        )
+      }
+      code_str <- sapply(as.list(block)[-1], robust_deparse)
+      code_str <- styler::style_text(code_str)
+      code_str <- paste(code_str, collapse = "\n")
+      data$nodes$code_str[[i]] <- code_str
+    }
+    data$nodes$code_str <- gsub('"`\U{2194}\U{FE0F}`"', "{\U{2194}\U{FE0F}}", data$nodes$code_str)
+
     # we remove the remaining `#`() calls, not super clean but does the job
 
     ## remove misplaced special comments
