@@ -54,7 +54,7 @@ build_nomnoml_code <- function(
   edge_data <- data$edges
 
   # escape pipes characters and square brackets
-  node_data$code_str <- escape_pipes_and_brackets(node_data$code_str)
+  node_data$code_str <- ifelse(node_data$block_type == "nested", node_data$code_str, escape_pipes_and_brackets(node_data$code_str))
   node_data$label    <- escape_pipes_and_brackets(node_data$label)
 
   ## was `code` set to `NA` ?
