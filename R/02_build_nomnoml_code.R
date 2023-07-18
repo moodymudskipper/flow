@@ -112,6 +112,7 @@ build_nomnoml_code <- function(
     "#.standard: visual=class fill=#ededed align=left\n",
     "#.standardg: visual=class fill=#70ad47 align=left\n",
     "#.standardr: visual=class fill=#ed7d31 align=left\n",
+    "#.nested: visual=class fill=#eee8df align=left\n",
     "#.commented: visual=class fill=#ededed\n",
     "#.header: visual=roundrect fill=#d9e1f2 align=left\n",
     "#.return: visual=end fill=#70ad47  empty\n",
