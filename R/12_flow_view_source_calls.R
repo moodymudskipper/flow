@@ -31,27 +31,47 @@ extract_strings <- function(call) {
 #' @export
 flow_view_source_calls <- function(paths = ".", recursive = TRUE, basename = TRUE, extension = FALSE, smart = TRUE, out = NULL) {
   paths <- flatten_paths(paths)
-
   svg <- is.null(out) || endsWith(out, ".html") || endsWith(out, ".html")
   env <- parent.frame()
   fetch_source <- function(file) {
     code <- as.list(parse(file))
-    source_calls <- Filter(function(x) is.call(x) && identical(x[[1]], quote(source)), code)
+    # FIXME: not only looking at the top level, recurse into code to find the calls
+    source_calls <- Filter(function(x) is.call(x) && (
+      identical(x[[1]], quote(source)) ||
+        identical(x[[1]], quote(sourceDirectory)) ||
+        identical(x[[1]], call("::", quote(R.utils), quote(sourceDirectory)))) ,
+      code
+    )
     if (!length(source_calls)) return(NULL)
+    # attempt to eval the second argument
     paths <- sapply(source_calls, function(x) {
       tryCatch({
-        child <- eval(x[[2]], env)
-        if(basename) child <- basename(child)
-        if(!extension) child <- sub("\\.[rR]$", "", child)
-        child
+        # if we can eval, format and use
+        file <- eval(x[[2]], env)
+        # if we used sourceDirectory fetch all paths
+        if (!identical(x[[1]], quote(source))) {
+          file <- scripts_from_sourceDir(path = file, call = x, env = env)
+        }
+        basename_extension(file, basename, extension)
       },
       error = function(e) {
+        # If we can't eval, check if it contains a path,
+        #   as in file.path(foo, "bar.R") for instance
         if (smart) {
           strings <- extract_strings(x)
           file <- grep("\\.[rR]$", strings, value = TRUE)
           if(length(file) == 1) {
+            # find if we have a matching file in paths and if so, format and use
             file <- paths[basename(file) == basename(paths)]
-            if (length(file) == 1) return(file)
+            if (length(file) == 1) {
+              return(basename_extension(file, basename, extension))
+            }
+          } else {
+            folder <- strings[strings == basename(dirname(paths))]
+            if (length(folder) == 1) {
+              files <- scripts_from_sourceDir(path = folder, call = x, env = env)
+              return(basename_extension(files, basename, extension))
+            }
           }
         }
         #"UNKNOWN"
@@ -102,4 +122,29 @@ flatten_paths <- function (paths, recursive = TRUE) {
                                    pattern = "\\.[rR]$", full.names = TRUE))
   paths <- c(paths[!paths_are_dirs], paths_from_dirs)
   paths
+}
+
+scripts_from_sourceDir <- function(path, call, env) {
+  matched_call <- match.call(
+    function(path, pattern, recursive, envir, onError, modifiedOnly, ..., verbose) {},
+    call
+  )
+  recursive <- tryCatch(
+    eval(matched_call$recursive, env),
+    error = function(e) TRUE
+  ) %||% TRUE
+
+  pattern <- tryCatch(
+    eval(matched_call$pattern, env),
+    error = function(e) ".*[.](r|R|s|S|q)([.](lnk|LNK))*$"
+  ) %||% ".*[.](r|R|s|S|q)([.](lnk|LNK))*$"
+
+  path <- list.files(path, pattern = pattern, recursive = recursive)
+  path
+}
+
+basename_extension <- function(x, basename, extension) {
+  if (basename) x <- basename(x)
+  if (!extension) x <- sub("\\.[rR]$", "", x)
+  x
 }
