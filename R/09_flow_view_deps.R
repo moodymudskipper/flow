@@ -274,7 +274,7 @@ deps <- function(pkg) {
 }
 
 get_ns_obj_df <- function(ns_nm, lines) {
-  if (ns_nm == "R_GlobalEnv") {
+  if (isTRUE(ns_nm == "R_GlobalEnv")) {
     ns <- globalenv()
   } else {
     ns <- asNamespace(ns_nm)
@@ -302,7 +302,7 @@ get_ns_obj_df <- function(ns_nm, lines) {
 
 get_dependency_df <- function(row, objs, include_formals) {
   ns_nm <- hide <- NULL # for notes
-  if(row$ns_nm == "R_GlobalEnv") {
+  if(isTRUE(row$ns_nm == "R_GlobalEnv")) {
     obj <- get(row$nm, globalenv())
   } else {
     obj <- getFromNamespace(row$nm, row$ns_nm)
