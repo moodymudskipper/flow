@@ -30,7 +30,9 @@ build_nomnoml_code <- function(
   fillArrows = FALSE,
   acyclicer = "greedy",
   gutter = 5,
-  edgeMargin = 0){
+  edgeMargin = 0,
+  header = TRUE
+  ){
 
   ## check/preprocess parameters
 
@@ -102,7 +104,7 @@ build_nomnoml_code <- function(
 
   ## build header and combine all into code string
 
-  header <- paste0(
+  header_code <- paste0(
     "#.if: visual=rhomb fill=#e2efda align=center\n",
     "#.for: visual=rhomb fill=#ddebf7 align=center\n",
     "#.repeat: visual=rhomb fill=#fce4d6 align=center\n",
@@ -138,7 +140,9 @@ build_nomnoml_code <- function(
   )
 
   nomnoml_code <- paste(edge_data$nomnoml_code, collapse = "\n")
-  nomnoml_code <- paste0(header,"\n", nomnoml_code)
+  if (header) {
+    nomnoml_code <- paste0(header_code,"\n", nomnoml_code)
+  }
 
   nomnoml_code
 }
