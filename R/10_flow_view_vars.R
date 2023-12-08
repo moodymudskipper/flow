@@ -324,7 +324,7 @@ flow_view_vars..format_deps <- function(var_deps, fun_name, fun_args, expand) {
 
 flow_view_vars..build_nomnoml_code <- function(df, fun_name, fun_args) {
   nomnoml_code <- "
-# direction: down
+#direction: down
 #.fun: visual=roundrect fill=#ddebf7 title=bold
 #.arg: visual=roundrect fill=#e2efda title=bold
 #.var: visual=roundrect fill=#f0f0f0 title=bold
