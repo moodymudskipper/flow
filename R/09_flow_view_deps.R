@@ -70,7 +70,7 @@ flow_view_deps <- function(
   show_imports <- match.arg(show_imports)
 
   nomnoml_setup <- c(
-    "# direction: right",
+    "#direction: right",
     "#.expfun: visual=roundrect fill=#ddebf7 title=bold",
     "#.unexpfun: visual=roundrect fill=#fff2cc title=bold",
     "#.trimmed: visual=roundrect fill=#fce4d6 dashed title=bold",

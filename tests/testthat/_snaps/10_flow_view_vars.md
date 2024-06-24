@@ -3,7 +3,7 @@
     Code
       flow_view_vars(ave, out = "code")
     Output
-      [1] "\n# direction: down\n#.fun: visual=roundrect fill=#ddebf7 title=bold\n#.arg: visual=roundrect fill=#e2efda title=bold\n#.var: visual=roundrect fill=#f0f0f0 title=bold\n#.newvar: visual=roundrect fill=#fff2cc title=bold\n#.return: visual=end fill=#70ad47  empty\n#.deadcode: visual=roundrect fill=#fce4d6 dashed title=bold\n[<fun> ave] -> [<arg> x]\n[<fun> ave] -> [<arg> ...]\n[<fun> ave] -> [<arg> FUN]\n[<arg> FUN] -> [<var> x*]\n[<arg> x] -> [<var> x*]\n[<arg> x] -> [<var> x*]\n[<arg> ...] --> [<var> x*]\n[<arg> ...] -> [<var> g]\n[<arg> x] -> [<var> x**]\n[<var> g] -> [<var> x**]\n[<arg> FUN] -> [<var> x**]\n[<arg> x] -> [<var> x**]\n[<arg> ...] --> [<var> x**]\n[<var> x*] -> [<var> x***]\n[<var> x**] -> [<var> x***]\n[<var> x***] -> [<return> *OUT*]"
+      [1] "\n#direction: down\n#.fun: visual=roundrect fill=#ddebf7 title=bold\n#.arg: visual=roundrect fill=#e2efda title=bold\n#.var: visual=roundrect fill=#f0f0f0 title=bold\n#.newvar: visual=roundrect fill=#fff2cc title=bold\n#.return: visual=end fill=#70ad47  empty\n#.deadcode: visual=roundrect fill=#fce4d6 dashed title=bold\n[<fun> ave] -> [<arg> x]\n[<fun> ave] -> [<arg> ...]\n[<fun> ave] -> [<arg> FUN]\n[<arg> FUN] -> [<var> x*]\n[<arg> x] -> [<var> x*]\n[<arg> x] -> [<var> x*]\n[<arg> ...] --> [<var> x*]\n[<arg> ...] -> [<var> g]\n[<arg> x] -> [<var> x**]\n[<var> g] -> [<var> x**]\n[<arg> FUN] -> [<var> x**]\n[<arg> x] -> [<var> x**]\n[<arg> ...] --> [<var> x**]\n[<var> x*] -> [<var> x***]\n[<var> x**] -> [<var> x***]\n[<var> x***] -> [<return> *OUT*]"
     Code
       flow_view_vars(ave, out = "data")
     Output

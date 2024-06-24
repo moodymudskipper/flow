@@ -66,7 +66,7 @@ flow_view_uses <- function(x, pkg = NULL, out = NULL) {
   if (identical(out, "data")) return(data)
 
   nomnoml_setup <- c(
-    "# direction: right",
+    "#direction: right",
     "#.expfun: visual=roundrect fill=#ddebf7 title=bold",
     "#.unexpfun: visual=roundrect fill=#fff2cc title=bold",
     "#.trimmed: visual=roundrect fill=#fce4d6 dashed title=bold",
