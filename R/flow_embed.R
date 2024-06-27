@@ -7,7 +7,7 @@
 #'
 #' * As with images in general the image might not be visible when viewing
 #' temp doc with the devtools workflow.
-#' * Don't forget to add {flow} to Suggests in your DESCRIPTION file.
+#' * Don't forget to add \pkg{flow} to Suggests in your DESCRIPTION file.
 #' * We don't monitor files created under 'man/figures', so if you remove a
 #'   diagram from the doc make sure to also remove it from the folder.
 #' * We also don't overwrite created files, so we don't slow down the documentation

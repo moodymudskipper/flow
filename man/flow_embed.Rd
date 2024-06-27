@@ -27,7 +27,7 @@ included.
 \itemize{
 \item As with images in general the image might not be visible when viewing
 temp doc with the devtools workflow.
-\item Don't forget to add {flow} to Suggests in your DESCRIPTION file.
+\item Don't forget to add \pkg{flow} to Suggests in your DESCRIPTION file.
 \item We don't monitor files created under 'man/figures', so if you remove a
 diagram from the doc make sure to also remove it from the folder.
 \item We also don't overwrite created files, so we don't slow down the documentation
