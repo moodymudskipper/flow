@@ -42,8 +42,11 @@ Assuming a project where files source each other, draw their dependency graph.
 This evaluates the \code{file} argument of \code{source} in the global environment,
 when this fails, as it might with constructs like \code{for (file in files) source(file)}
 the unevaluated argument is printed instead between backticks. Since this messes
-up the relationships in the graph, an warning is thus issued. In a case like \verb{source(file.path(my_dir, "foo.R")}
+up the relationships in the graph, an warning is thus issued. In a case like \code{source(file.path(my_dir, "foo.R"))}
 defining \code{my_dir} will be enough to solve the issue.
 In the latter case, if \code{smart} is \code{TRUE}, the function will check in all the paths in scope
 if any script is named "foo.R" and will consider it if a single fitting candidate is found.
+
+\verb{c(c(1)}
+\code{c(c(1))}
 }

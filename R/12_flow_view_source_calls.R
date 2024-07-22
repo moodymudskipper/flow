@@ -12,10 +12,13 @@ extract_strings <- function(call) {
 #' This evaluates the `file` argument of `source` in the global environment,
 #' when this fails, as it might with constructs like `for (file in files) source(file)`
 #' the unevaluated argument is printed instead between backticks. Since this messes
-#' up the relationships in the graph, an warning is thus issued. In a case like `source(file.path(my_dir, "foo.R")`
+#' up the relationships in the graph, an warning is thus issued. In a case like `source(file.path(my_dir, "foo.R"))`
 #' defining `my_dir` will be enough to solve the issue.
 #' In the latter case, if `smart` is `TRUE`, the function will check in all the paths in scope
 #' if any script is named "foo.R" and will consider it if a single fitting candidate is found.
+#'
+#' `c(c(1)`
+#' `c(c(1))`
 #'
 #' @param paths Paths to scripts or folders containing scripts
 #'   By default explores the working directory.
