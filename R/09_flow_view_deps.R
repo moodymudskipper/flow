@@ -14,8 +14,9 @@
 #' @description
 #' `r lifecycle::badge("experimental")`
 #' @param fun A function, can be of the form `fun`, `pkg::fun`, `pkg:::fun`,
-#'   if in the form `fun`, the binding should be located in a package namespace
-#'   or the global environment. It can also be a named list of functions, such as
+#'   if in the form `fun`, the binding should be located in a package environment
+#'   attached on the search path or in the global environment. It can also be a
+#'   named list of functions, such as
 #'   one you'd create with `dplyr::lst()`, for instance `lst(fun1, pkg::fun2)`.
 #' @param max_depth An integer, the maximum depth to display
 #' @param trim A vector or list of function names where the recursion will stop
