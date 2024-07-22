@@ -32,7 +32,7 @@
 #'   can also be a vector of block ids, in this case `browser()` calls will be
 #'   inserted at the start of these blocks
 #' @param out a path to save the diagram to.
-#'   Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
+#'   Special values "html", "htm", "png", "pdf", "jpg", "jpeg" and "webp" can be used to
 #'   export the object to a temp file of the relevant format and open it,
 #'   if a regular path is used the format will be guessed from the extension.
 #' @param engine either `"nomnoml"` (default) or `"plantuml"` (experimental, brittle

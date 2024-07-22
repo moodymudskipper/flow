@@ -102,7 +102,7 @@ flow_run <-
       # hence the following call
       nomnoml::nomnoml_validate()
 
-      is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg")
+      is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg", "webp")
       if (is_tmp) {
         out <- tempfile("flow_", fileext = paste0(".", out))
       }

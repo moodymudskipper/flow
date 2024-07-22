@@ -78,7 +78,7 @@ save_nomnoml <- function(code, out) {
   }
 
   ## flag if out is a temp file shorthand
-  is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg")
+  is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg", "webp")
 
   ## is it ?
   if (is_tmp) {

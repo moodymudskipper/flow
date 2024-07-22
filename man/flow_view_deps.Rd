@@ -36,7 +36,7 @@ one you'd create with \code{dplyr::lst()}, for instance \code{lst(fun1, pkg::fun
 \item{show_imports}{Whether to show imported "functions", only "packages", or "none"}
 
 \item{out}{a path to save the diagram to.
-Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
+Special values "html", "htm", "png", "pdf", "jpg", "jpeg" and "webp" can be used to
 export the object to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
 
