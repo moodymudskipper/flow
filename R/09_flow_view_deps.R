@@ -266,6 +266,7 @@ flow_view_deps_df <- function(target_fun_name, target_fun, trim, promote, demote
 }
 
 deps <- function(pkg) {
+  if (pkg == "R_GlobalEnv") return(character())
   desc <- read.dcf(system.file("DESCRIPTION", package = pkg))
   desc <- desc[,intersect(c("Imports", "Depends"), colnames(desc))]
   setdiff(trimws(unique(unlist(
