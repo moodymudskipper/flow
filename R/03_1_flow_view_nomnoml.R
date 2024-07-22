@@ -37,7 +37,12 @@ print.flow_diagram <- function(x, ...) {
     png <- tempfile("flow_", fileext = ".png")
     html <- tempfile("flow_", fileext = ".html")
     do.call(htmlwidgets::saveWidget, c(list(widget, html, FALSE)))
-    webshot::webshot(html, png, selector = "canvas")
+    if (isFALSE(getOption("flow.webshot2"))) {
+      webshot::webshot(html, png, selector = "canvas")
+    } else {
+      webshot2::webshot(html, png, selector = "canvas")
+    }
+
     #FIXME: printing should return the input, but couldn't find another way here
     return(knitr::include_graphics(png))
   } else {
@@ -92,7 +97,11 @@ save_nomnoml <- function(code, out) {
     ## save to a temp html file then convert to required output
     html <- tempfile("flow_", fileext = ".html")
     do.call(htmlwidgets::saveWidget, c(list(widget, html)))
-    webshot::webshot(html, out, selector = "canvas")
+    if (isFALSE(getOption("flow.webshot2"))) {
+      webshot::webshot(html, out, selector = "canvas")
+    } else {
+      webshot2::webshot(html, out, selector = "canvas")
+    }
   }
 
   ## was the out argument a temp file shorthand ?

@@ -113,7 +113,11 @@ flow_run <-
       } else {
         html <- tempfile("flow_", fileext = ".html")
         do.call(htmlwidgets::saveWidget, c(list(widget, html)))
-        webshot::webshot(html, out, selector = "canvas")
+        if (isFALSE(getOption("flow.webshot2"))) {
+          webshot::webshot(html, out, selector = "canvas")
+        } else {
+          webshot2::webshot(html, out, selector = "canvas")
+        }
       }
 
       if (is_tmp) {
