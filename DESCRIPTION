@@ -31,7 +31,8 @@ Suggests:
     esquisse,
     tidyselect,
     purrr,
-    webshot
+    webshot,
+    purrr
 RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
