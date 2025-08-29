@@ -371,3 +371,48 @@ raw_fun_name <- function(call) {
   if(length(call) > 1) stop("invalid name")
   as.character(call)
 }
+
+# Helper to resolve re-exports for labelling in diagrams (made with Cursor)
+resolve_reexport_label <- function(f_chr, fn) {
+  if (!is.function(fn)) return(f_chr)
+  m <- regexec("^([A-Za-z0-9.]+)::([A-Za-z0-9_.]+)$", f_chr)
+  g <- regmatches(f_chr, m)[[1]]
+  if (length(g) != 3) return(f_chr)
+  provided_pkg <- g[2]
+  provided_fun <- g[3]
+  fn_env <- environment(fn)
+  if (is.null(fn_env) || !isNamespace(fn_env)) return(f_chr)
+  orig_pkg <- getNamespaceName(fn_env)
+  if (identical(provided_pkg, orig_pkg)) return(f_chr)
+  if (exists(provided_fun, envir = asNamespace(orig_pkg), inherits = FALSE)) {
+    original_sym <- get(provided_fun, envir = asNamespace(orig_pkg), inherits = FALSE)
+    if (isTRUE(identical(fn, original_sym))) return(paste0(orig_pkg, "::", provided_fun))
+  }
+  f_chr
+}
+
+# Helper to resolve re-exports for namespaced calls (made with Cursor)
+resolve_reexport_call <- function(fun_call, env) {
+  is_namespaced_call <- is.call(fun_call) && length(fun_call) == 3 && (
+    identical(fun_call[[1]], quote(`::`)) || identical(fun_call[[1]], quote(`:::`))
+  )
+  if (!is_namespaced_call) return(list(call = fun_call, value = NULL, changed = FALSE))
+  provided_pkg <- as.character(fun_call[[2]])
+  provided_fun <- as.character(fun_call[[3]])
+  evaled <- try(eval(fun_call, envir = env), silent = TRUE)
+  if (inherits(evaled, "try-error") || !is.function(evaled)) {
+    return(list(call = fun_call, value = if (inherits(evaled, "try-error")) NULL else evaled, changed = FALSE))
+  }
+  fn_env <- environment(evaled)
+  if (is.null(fn_env) || !isNamespace(fn_env)) return(list(call = fun_call, value = evaled, changed = FALSE))
+  orig_pkg <- getNamespaceName(fn_env)
+  if (identical(orig_pkg, provided_pkg)) return(list(call = fun_call, value = evaled, changed = FALSE))
+  if (exists(provided_fun, envir = asNamespace(orig_pkg), inherits = FALSE)) {
+    original_sym <- get(provided_fun, envir = asNamespace(orig_pkg), inherits = FALSE)
+    if (isTRUE(identical(evaled, original_sym))) {
+      new_call <- str2lang(paste0(orig_pkg, "::", provided_fun))
+      return(list(call = new_call, value = original_sym, changed = TRUE))
+    }
+  }
+  list(call = fun_call, value = evaled, changed = FALSE)
+}
