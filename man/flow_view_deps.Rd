@@ -19,8 +19,9 @@ flow_view_deps(
 }
 \arguments{
 \item{fun}{A function, can be of the form \code{fun}, \code{pkg::fun}, \code{pkg:::fun},
-if in the form \code{fun}, the binding should be located in a package namespace
-or the global environment. It can also be a named list of functions, such as
+if in the form \code{fun}, the binding should be located in a package environment
+attached on the search path or in the global environment. It can also be a
+named list of functions, such as
 one you'd create with \code{dplyr::lst()}, for instance \code{lst(fun1, pkg::fun2)}.}
 
 \item{max_depth}{An integer, the maximum depth to display}
