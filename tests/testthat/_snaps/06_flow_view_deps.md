@@ -328,7 +328,7 @@
       21           rprojroot::find_root (17)         NULL      expfun
       22    rprojroot::as_root_criterion (1)         NULL      expfun
       23      rprojroot:::get_start_path (8)         NULL    unexpfun
-      24             rprojroot:::is_root (2)         NULL    unexpfun
+      24          rprojroot:::is_fs_root (2)         NULL    unexpfun
       25    rprojroot:::is_absolute_path (1)         NULL    unexpfun
       26               rprojroot:::path (15)         NULL    unexpfun
       27 rprojroot:::make_fix_root_file (17)         NULL    unexpfun
@@ -390,7 +390,7 @@
       21                 [<expfun> rprojroot::find_root_file (12)] -> [<expfun> rprojroot::find_root (17)]
       22               [<expfun> rprojroot::find_root (17)] -> [<expfun> rprojroot::as_root_criterion (1)]
       23               [<expfun> rprojroot::find_root (17)] -> [<unexpfun> rprojroot:::get_start_path (8)]
-      24                      [<expfun> rprojroot::find_root (17)] -> [<unexpfun> rprojroot:::is_root (2)]
+      24                   [<expfun> rprojroot::find_root (17)] -> [<unexpfun> rprojroot:::is_fs_root (2)]
       25        [<expfun> rprojroot::find_root_file (12)] -> [<unexpfun> rprojroot:::is_absolute_path (1)]
       26            [<unexpfun> rprojroot:::make_find_root_file (4)] -> [<unexpfun> rprojroot:::path (15)]
       27     [<expfun> rprojroot::root_criterion (13)] -> [<unexpfun> rprojroot:::make_fix_root_file (17)]
