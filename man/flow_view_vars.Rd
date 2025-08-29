@@ -20,7 +20,7 @@ flow_view_vars(
 \item{refactor}{If using 'refactor' package, whether to consider original or refactored code}
 
 \item{out}{a path to save the diagram to.
-Special values "html", "htm", "png", "pdf", "jpg" and "jpeg" can be used to
+Special values "html", "htm", "png", "pdf", "jpg", "jpeg" and "webp" can be used to
 export the object to a temp file of the relevant format and open it,
 if a regular path is used the format will be guessed from the extension.}
 }

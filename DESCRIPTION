@@ -18,7 +18,7 @@ Imports:
     utils,
     htmlwidgets,
     rstudioapi,
-    webshot,
+    webshot2,
     styler,
     methods,
     here,
@@ -30,6 +30,8 @@ Suggests:
     rmarkdown,
     esquisse,
     tidyselect,
+    purrr,
+    webshot,
     purrr
 RoxygenNote: 7.3.2.9000
 Roxygen: list(markdown = TRUE)

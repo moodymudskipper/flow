@@ -166,7 +166,7 @@ build_plantuml_code_from_c <- function(x, fun = NULL, out = NULL) {
         }
 
         ## flag if out is a temp file shorthand
-        is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg")
+        is_tmp <- out %in% c("html", "htm", "png", "pdf", "jpg", "jpeg", "webp")
 
         ## is it ?
         if (is_tmp) {
