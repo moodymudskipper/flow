@@ -2,38 +2,37 @@ Package: flow
 Title: View and Browse Code Using Flow Diagrams
 Version: 0.2.0.9000
 Authors@R: 
-    person(given = "Antoine",
-           family = "Fabri",
-           role = c("aut", "cre"),
-           email = "antoine.fabri@gmail.com")
-Description: Visualize as flow diagrams the logic of functions, expressions or 
-  scripts in a static way or when running a call, visualize the dependencies between
-  functions or between modules in a shiny app, and more.
+    person("Antoine", "Fabri", , "antoine.fabri@gmail.com", role = c("aut", "cre"))
+Description: Visualize as flow diagrams the logic of functions,
+    expressions or scripts in a static way or when running a call,
+    visualize the dependencies between functions or between modules in a
+    shiny app, and more.
 License: MIT + file LICENSE
-URL: https://github.com/moodymudskipper/flow, https://moodymudskipper.github.io/flow/
+URL: https://github.com/moodymudskipper/flow,
+    https://moodymudskipper.github.io/flow/
 BugReports: https://github.com/moodymudskipper/flow/issues
-Encoding: UTF-8
 Imports: 
-    nomnoml,
-    utils,
-    htmlwidgets,
-    rstudioapi,
-    webshot2,
-    styler,
-    methods,
     here,
-    lifecycle
+    htmlwidgets,
+    lifecycle,
+    methods,
+    nomnoml,
+    rstudioapi,
+    styler,
+    utils,
+    webshot2
 Suggests: 
-    testthat (>= 3.0.0),
     covr,
-    knitr,
-    rmarkdown,
     esquisse,
-    tidyselect,
+    knitr,
     purrr,
-    webshot,
-    purrr
-RoxygenNote: 7.3.3.9000
-Roxygen: list(markdown = TRUE)
-VignetteBuilder: knitr
+    rmarkdown,
+    testthat (>= 3.0.0),
+    tidyselect,
+    webshot
+VignetteBuilder: 
+    knitr
 Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3.9000
