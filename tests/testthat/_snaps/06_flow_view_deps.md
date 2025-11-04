@@ -8,7 +8,7 @@
       2                    dr_here (1)                     NULL      expfun
       3             format_dr_here (5)                     NULL    unexpfun
       4              format_reason (9) rprojroot::get_root_desc    unexpfun
-      5 format_root_criteria_items (3)                     NULL    unexpfun
+      5 format_root_criteria_items (4)                     NULL    unexpfun
       6                       here (1)                     NULL      expfun
       7             mockable_getwd (6)                     NULL    unexpfun
       8                set_fix_fun (5)                     NULL    unexpfun
@@ -28,7 +28,7 @@
       2                                             [<expfun> i_am (14)] -> [<expfun> dr_here (1)]
       3                                  [<expfun> dr_here (1)] -> [<unexpfun> format_dr_here (5)]
       4 [<unexpfun> format_dr_here (5)] -> [<unexpfun> format_reason (9)|rprojroot::get_root_desc]
-      5              [<unexpfun> format_reason (9)] -> [<unexpfun> format_root_criteria_items (3)]
+      5              [<unexpfun> format_reason (9)] -> [<unexpfun> format_root_criteria_items (4)]
       6                                     [<unexpfun> format_dr_here (5)] -> [<expfun> here (1)]
       7                                    [<expfun> i_am (14)] -> [<unexpfun> mockable_getwd (6)]
       8                                       [<expfun> i_am (14)] -> [<unexpfun> set_fix_fun (5)]
@@ -41,7 +41,7 @@
       2                    dr_here (1)                     NULL      expfun
       3             format_dr_here (5)                     NULL    unexpfun
       4              format_reason (9) rprojroot::get_root_desc    unexpfun
-      5 format_root_criteria_items (3)                     NULL    unexpfun
+      5 format_root_criteria_items (4)                     NULL    unexpfun
       6                       here (1)                     NULL      expfun
       7             mockable_getwd (6)                     NULL    unexpfun
       8                set_fix_fun (5)                     NULL    unexpfun
@@ -61,7 +61,7 @@
       2                                             [<expfun> i_am (14)] -> [<expfun> dr_here (1)]
       3                                  [<expfun> dr_here (1)] -> [<unexpfun> format_dr_here (5)]
       4 [<unexpfun> format_dr_here (5)] -> [<unexpfun> format_reason (9)|rprojroot::get_root_desc]
-      5              [<unexpfun> format_reason (9)] -> [<unexpfun> format_root_criteria_items (3)]
+      5              [<unexpfun> format_reason (9)] -> [<unexpfun> format_root_criteria_items (4)]
       6                                     [<unexpfun> format_dr_here (5)] -> [<expfun> here (1)]
       7                                    [<expfun> i_am (14)] -> [<unexpfun> mockable_getwd (6)]
       8                                       [<expfun> i_am (14)] -> [<unexpfun> set_fix_fun (5)]
@@ -121,7 +121,7 @@
       2                     dr_here (1)
       3              format_dr_here (5)
       4               format_reason (9)
-      5  format_root_criteria_items (3)
+      5  format_root_criteria_items (4)
       6                        here (1)
       7              mockable_getwd (6)
       8                 set_fix_fun (5)
@@ -154,7 +154,7 @@
       2                                                                                                                                         [<expfun> i_am (14)] -> [<expfun> dr_here (1)]
       3                                                                                                                              [<expfun> dr_here (1)] -> [<unexpfun> format_dr_here (5)]
       4                                                                                             [<unexpfun> format_dr_here (5)] -> [<unexpfun> format_reason (9)|rprojroot::get_root_desc]
-      5                                                                                                          [<unexpfun> format_reason (9)] -> [<unexpfun> format_root_criteria_items (3)]
+      5                                                                                                          [<unexpfun> format_reason (9)] -> [<unexpfun> format_root_criteria_items (4)]
       6                                                                                                                                 [<unexpfun> format_dr_here (5)] -> [<expfun> here (1)]
       7                                                                                                                                [<expfun> i_am (14)] -> [<unexpfun> mockable_getwd (6)]
       8                                                                                                                                   [<expfun> i_am (14)] -> [<unexpfun> set_fix_fun (5)]
@@ -210,7 +210,7 @@
       2                    dr_here (1)         NULL      expfun          i_am (14)
       3             format_dr_here (5)         NULL    unexpfun        dr_here (1)
       4              format_reason (9)  {rprojroot}    unexpfun format_dr_here (5)
-      5 format_root_criteria_items (3)         NULL    unexpfun  format_reason (9)
+      5 format_root_criteria_items (4)         NULL    unexpfun  format_reason (9)
       6                       here (1)         NULL      expfun format_dr_here (5)
       7             mockable_getwd (6)         NULL    unexpfun          i_am (14)
       8                set_fix_fun (5)         NULL    unexpfun          i_am (14)
@@ -230,7 +230,7 @@
       2                                [<expfun> i_am (14)] -> [<expfun> dr_here (1)]
       3                     [<expfun> dr_here (1)] -> [<unexpfun> format_dr_here (5)]
       4 [<unexpfun> format_dr_here (5)] -> [<unexpfun> format_reason (9)|{rprojroot}]
-      5 [<unexpfun> format_reason (9)] -> [<unexpfun> format_root_criteria_items (3)]
+      5 [<unexpfun> format_reason (9)] -> [<unexpfun> format_root_criteria_items (4)]
       6                        [<unexpfun> format_dr_here (5)] -> [<expfun> here (1)]
       7                       [<expfun> i_am (14)] -> [<unexpfun> mockable_getwd (6)]
       8                          [<expfun> i_am (14)] -> [<unexpfun> set_fix_fun (5)]
@@ -243,7 +243,7 @@
       2                    dr_here (1)         NULL      expfun          i_am (14)
       3             format_dr_here (5)         NULL    unexpfun        dr_here (1)
       4              format_reason (9)         NULL    unexpfun format_dr_here (5)
-      5 format_root_criteria_items (3)         NULL    unexpfun  format_reason (9)
+      5 format_root_criteria_items (4)         NULL    unexpfun  format_reason (9)
       6                       here (1)         NULL      expfun format_dr_here (5)
       7             mockable_getwd (6)         NULL    unexpfun          i_am (14)
       8                set_fix_fun (5)         NULL    unexpfun          i_am (14)
@@ -263,7 +263,7 @@
       2                                [<expfun> i_am (14)] -> [<expfun> dr_here (1)]
       3                     [<expfun> dr_here (1)] -> [<unexpfun> format_dr_here (5)]
       4             [<unexpfun> format_dr_here (5)] -> [<unexpfun> format_reason (9)]
-      5 [<unexpfun> format_reason (9)] -> [<unexpfun> format_root_criteria_items (3)]
+      5 [<unexpfun> format_reason (9)] -> [<unexpfun> format_root_criteria_items (4)]
       6                        [<unexpfun> format_dr_here (5)] -> [<expfun> here (1)]
       7                       [<expfun> i_am (14)] -> [<unexpfun> mockable_getwd (6)]
       8                          [<expfun> i_am (14)] -> [<unexpfun> set_fix_fun (5)]
@@ -309,7 +309,7 @@
       2                          dr_here (1)         NULL      expfun
       3                   format_dr_here (5)         NULL    unexpfun
       4                    format_reason (9)         NULL    unexpfun
-      5       format_root_criteria_items (3)         NULL    unexpfun
+      5       format_root_criteria_items (4)         NULL    unexpfun
       6         rprojroot::get_root_desc (7)         NULL      expfun
       7                             here (1)         NULL      expfun
       8                   mockable_getwd (6)         NULL    unexpfun
@@ -371,7 +371,7 @@
       2                                                     [<expfun> i_am (14)] -> [<expfun> dr_here (1)]
       3                                          [<expfun> dr_here (1)] -> [<unexpfun> format_dr_here (5)]
       4                                  [<unexpfun> format_dr_here (5)] -> [<unexpfun> format_reason (9)]
-      5                      [<unexpfun> format_reason (9)] -> [<unexpfun> format_root_criteria_items (3)]
+      5                      [<unexpfun> format_reason (9)] -> [<unexpfun> format_root_criteria_items (4)]
       6                          [<unexpfun> format_reason (9)] -> [<expfun> rprojroot::get_root_desc (7)]
       7                                             [<unexpfun> format_dr_here (5)] -> [<expfun> here (1)]
       8                                            [<expfun> i_am (14)] -> [<unexpfun> mockable_getwd (6)]
