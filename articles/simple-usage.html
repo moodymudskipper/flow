@@ -185,7 +185,8 @@ parenthesis.</p>
 debugging, for instance the following call fails :</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flow_view.html">flow_run</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Special.html" class="external-link">factorial</a></span><span class="op">(</span><span class="fl">10L</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in if (!out %in% c("code", "data")) {: argument is of length zero</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `if (!out %in% c("code", "data")) ...`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> argument is of length zero</span></span></code></pre></div>
 <p><img src="flow_run_2.png" alt="" width="300"></p>
 <p>If you call <code><a href="../reference/flow_view.html">flow_run()</a></code> on a call to an S3 generic, the
 appropriate S3 method will be represented.</p>
