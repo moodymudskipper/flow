@@ -402,17 +402,17 @@
       out = "data")
     Output
                    child_header external_ref child_style parent_header parent_style
-      1 signal_experimental (1)         NULL     trimmed            NA           NA
+      1 signal_experimental (3)         NULL     trimmed            NA           NA
                                        code
-      1 [<trimmed> signal_experimental (1)]
+      1 [<trimmed> signal_experimental (3)]
     Code
       flow_view_deps(lifecycle::signal_experimental, max_depth = 1, include_formals = TRUE,
       out = "data")
     Output
                    child_header      external_ref child_style parent_header
-      1 signal_experimental (1) rlang::caller_env     trimmed            NA
+      1 signal_experimental (3) rlang::caller_env     trimmed            NA
         parent_style                                                  code
-      1           NA [<trimmed> signal_experimental (1)|rlang::caller_env]
+      1           NA [<trimmed> signal_experimental (3)|rlang::caller_env]
     Code
       flow_view_deps(`%in%`, out = "data")
     Output
