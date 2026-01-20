@@ -77,6 +77,9 @@ flow_view <- function(
     x <- x[[1]]
   }
 
+  ## re-export handling (made with Cursor)
+  f_chr <- resolve_reexport_label(f_chr, x)
+
   ## is the engine "plantuml" ?
   if(engine == "plantuml") {
     if(!length(find.package("plantuml", quiet = TRUE)))
