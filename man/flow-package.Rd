@@ -22,5 +22,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Antoine Fabri \email{antoine.fabri@gmail.com}
 
+Authors:
+\itemize{
+  \item Antoine Fabri \email{antoine.fabri@gmail.com}
+}
+
 }
 \keyword{internal}
