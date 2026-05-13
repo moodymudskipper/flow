@@ -5,3 +5,4 @@ doc
 inst/doc
 Meta
 ignored
+.ccache/
