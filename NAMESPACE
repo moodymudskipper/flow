@@ -22,15 +22,19 @@ export(flow_view_vars)
 importFrom(graphics,plot)
 importFrom(lifecycle,deprecated)
 importFrom(methods,formalArgs)
-importFrom(stats,aggregate)
-importFrom(stats,setNames)
-importFrom(utils,browseURL)
-importFrom(utils,capture.output)
-importFrom(utils,getFromNamespace)
-importFrom(utils,getS3method)
-importFrom(utils,head)
-importFrom(utils,installed.packages)
-importFrom(utils,lsf.str)
-importFrom(utils,setTxtProgressBar)
-importFrom(utils,tail)
-importFrom(utils,txtProgressBar)
+importFrom(stats,
+  aggregate,
+  setNames
+)
+importFrom(utils,
+  browseURL,
+  capture.output,
+  getFromNamespace,
+  getS3method,
+  head,
+  installed.packages,
+  lsf.str,
+  setTxtProgressBar,
+  tail,
+  txtProgressBar
+)
