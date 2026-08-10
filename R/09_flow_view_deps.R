@@ -54,6 +54,11 @@ flow_view_deps <- function(
   fun_lng <- substitute(fun)
   call_env <- parent.frame()
 
+  ## Re-export handling (made with Cursor)
+  rr <- resolve_reexport_call(fun_lng, call_env)
+  fun_lng <- rr$call
+  if (isTRUE(rr$changed)) fun <- rr$value
+
   if (is.list(fun)) {
     objs <- Map(flow_view_deps_df, names(fun), fun, MoreArgs = list(trim, promote, demote, hide, lines, default_env = call_env))
     objs <- do.call(rbind, objs)
