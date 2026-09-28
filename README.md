@@ -46,7 +46,10 @@ Using default nomnoml engine
 flow_view(rle)
 ```
 
-![nomnoml](man/figures/README_nomnoml.png)
+<figure>
+<img src="man/figures/README_nomnoml.png" alt="nomnoml" />
+<figcaption aria-hidden="true">nomnoml</figcaption>
+</figure>
 
 Using plantuml engine (make sure the
 [{plantuml}](https://github.com/rkrug/plantuml) package is installed).
@@ -55,7 +58,10 @@ Using plantuml engine (make sure the
 flow_view(rle, engine = "plantuml")
 ```
 
-![plantuml](man/figures/README_plantuml.png)
+<figure>
+<img src="man/figures/README_plantuml.png" alt="plantuml" />
+<figcaption aria-hidden="true">plantuml</figcaption>
+</figure>
 
 ## Additional functions
 
