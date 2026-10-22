@@ -371,3 +371,45 @@ raw_fun_name <- function(call) {
   if(length(call) > 1) stop("invalid name")
   as.character(call)
 }
+
+# Re-exports -------------------------------------------------------------------
+
+# Find where a function exported as `pkg::name` really comes from, so that
+# e.g. `dplyr::lst` is shown as `tibble::lst` and `methods::functionBody` as
+# `base::body`. Returns a `pkg::name` call, or NULL if `fn` isn't a re-export.
+original_fun_call <- function(fn, pkg, name) {
+  if (!is.function(fn)) return(NULL)
+  fn_env <- environment(fn)
+  if (is.null(fn_env) || !isNamespace(fn_env)) return(NULL)
+  orig_pkg <- getNamespaceName(fn_env)
+  if (identical(orig_pkg, pkg)) return(NULL)
+  orig_ns <- asNamespace(orig_pkg)
+  # same name first, then look for an alias
+  candidates <- if (orig_pkg == "base") ls(orig_ns, all.names = TRUE) else getNamespaceExports(orig_ns)
+  candidates <- unique(c(name, candidates))
+  for (candidate in candidates) {
+    if (!exists(candidate, envir = orig_ns, inherits = FALSE)) next
+    if (identical(get(candidate, envir = orig_ns, inherits = FALSE), fn)) {
+      return(call("::", as.symbol(orig_pkg), as.symbol(candidate)))
+    }
+  }
+  NULL
+}
+
+# Helper to resolve re-exports for labelling in diagrams
+resolve_reexport_label <- function(f_chr, fn) {
+  call <- tryCatch(str2lang(f_chr), error = function(e) NULL)
+  if (!is_namespaced(call)) return(f_chr)
+  orig_call <- original_fun_call(fn, as.character(call[[2]]), as.character(call[[3]]))
+  if (is.null(orig_call)) return(f_chr)
+  paste0(as.character(orig_call[[2]]), "::", as.character(orig_call[[3]]))
+}
+
+# Helper to resolve re-exports for namespaced calls
+resolve_reexport_call <- function(fun_call, env) {
+  if (!is_namespaced(fun_call)) return(list(call = fun_call, value = NULL, changed = FALSE))
+  evaled <- tryCatch(eval(fun_call, envir = env), error = function(e) NULL)
+  orig_call <- original_fun_call(evaled, as.character(fun_call[[2]]), as.character(fun_call[[3]]))
+  if (is.null(orig_call)) return(list(call = fun_call, value = evaled, changed = FALSE))
+  list(call = orig_call, value = evaled, changed = TRUE)
+}
