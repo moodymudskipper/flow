@@ -1,14 +1,13 @@
-# Made with Cursor
+# `methods::functionBody` is a re-export of `base::body` under another name
 test_that("reexports are resolved in flow_view", {
-  code_tibble <- flow_view(tibble::lst, out = "code")
-  code_dplyr  <- flow_view(dplyr::lst,  out = "code")
-  expect_identical(code_dplyr, code_tibble)
+  code_methods <- flow_view(methods::functionBody, out = "code")
+  code_base <- flow_view(base::body, out = "code")
+  expect_identical(code_methods, code_base)
 })
 
 test_that("reexports are resolved in flow_view_deps", {
-  expect_snapshot({
-    flow_view_deps(dplyr::lst, out = "data")
-  })
+  expect_identical(
+    flow_view_deps(methods::functionBody, out = "data"),
+    flow_view_deps(base::body, out = "data")
+  )
 })
-
-
