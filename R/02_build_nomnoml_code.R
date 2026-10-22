@@ -30,7 +30,9 @@ build_nomnoml_code <- function(
   fillArrows = FALSE,
   acyclicer = "greedy",
   gutter = 5,
-  edgeMargin = 0){
+  edgeMargin = 0,
+  header = TRUE
+  ){
 
   ## check/preprocess parameters
 
@@ -52,7 +54,7 @@ build_nomnoml_code <- function(
   edge_data <- data$edges
 
   # escape pipes characters and square brackets
-  node_data$code_str <- escape_pipes_and_brackets(node_data$code_str)
+  node_data$code_str <- ifelse(node_data$block_type == "nested", node_data$code_str, escape_pipes_and_brackets(node_data$code_str))
   node_data$label    <- escape_pipes_and_brackets(node_data$label)
 
   ## was `code` set to `NA` ?
@@ -102,7 +104,7 @@ build_nomnoml_code <- function(
 
   ## build header and combine all into code string
 
-  header <- paste0(
+  header_code <- paste0(
     "#.if: visual=rhomb fill=#e2efda align=center\n",
     "#.for: visual=rhomb fill=#ddebf7 align=center\n",
     "#.repeat: visual=rhomb fill=#fce4d6 align=center\n",
@@ -110,6 +112,7 @@ build_nomnoml_code <- function(
     "#.standard: visual=class fill=#ededed align=left\n",
     "#.standardg: visual=class fill=#70ad47 align=left\n",
     "#.standardr: visual=class fill=#ed7d31 align=left\n",
+    "#.nested: visual=class fill=#eee8df align=left\n",
     "#.commented: visual=class fill=#ededed\n",
     "#.header: visual=roundrect fill=#d9e1f2 align=left\n",
     "#.return: visual=end fill=#70ad47  empty\n",
@@ -138,7 +141,9 @@ build_nomnoml_code <- function(
   )
 
   nomnoml_code <- paste(edge_data$nomnoml_code, collapse = "\n")
-  nomnoml_code <- paste0(header,"\n", nomnoml_code)
+  if (header) {
+    nomnoml_code <- paste0(header_code,"\n", nomnoml_code)
+  }
 
   nomnoml_code
 }
