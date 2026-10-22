@@ -11,8 +11,6 @@ test_that("flow_view_deps works", {
     flow_view_deps(here::i_am, show_imports = "none", out = "data")
     flow_view_deps(here::i_am, lines = FALSE, out = "data")
     flow_view_deps(here::i_am, promote= c(pattern = "rprojroot::.*") , out = "data")
-    flow_view_deps(lifecycle::signal_experimental, max_depth = 1, include_formals = FALSE, out = "data")
-    flow_view_deps(lifecycle::signal_experimental, max_depth = 1, include_formals = TRUE, out = "data")
     flow_view_deps(`%in%`, out = "data")
     flow_view_deps(`%in%`, out = "data")
     })
@@ -20,3 +18,17 @@ test_that("flow_view_deps works", {
 
 
 #
+
+test_that("flow_view_deps include_formals works", {
+  # use a function we own so the snapshot doesn't depend on other packages' code
+  assign(
+    "fun_with_formals",
+    function(x, n = utils::head(x)) x,
+    envir = globalenv()
+  )
+  on.exit(rm("fun_with_formals", envir = globalenv()))
+  expect_snapshot({
+    flow_view_deps(fun_with_formals, include_formals = FALSE, out = "data")
+    flow_view_deps(fun_with_formals, include_formals = TRUE, out = "data")
+  })
+})

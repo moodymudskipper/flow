@@ -1,17 +1,17 @@
 # flow_run
 
     Code
-      flow_run(ave(1:10), out = "data")
+      flow_run(fun_to_run(1:10), out = "data")
     Output
       $nodes
-        id block_type                                                       code_str
-      1  0     header                                        ave(x, ..., FUN = mean)
-      2  1         if                                   ⠀ if (missing(...)) ⠀\n⠀ ⠀ ⠀
-      3  2   standard                                                  x[] <- FUN(x)
-      4  3   standard g <- interaction(...)\nsplit(x, g) <- lapply(split(x, g), FUN)
-      5 -1        end                                                               
-      6  4   standard                                                              x
-      7  5     return                                                               
+        id block_type                                                        code_str
+      1  0     header                                              fun_to_run(x, ...)
+      2  1         if                                    ⠀ if (missing(...)) ⠀\n⠀ ⠀ ⠀
+      3  2   standard                                                  x[] <- mean(x)
+      4  3   standard g <- interaction(...)\nsplit(x, g) <- lapply(split(x, g), mean)
+      5 -1        end                                                                
+      6  4   standard                                                               x
+      7  5     return                                                                
         label passes
       1            0
       2            1

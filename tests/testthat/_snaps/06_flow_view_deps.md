@@ -398,22 +398,6 @@
       29 [<unexpfun> rprojroot:::make_fix_root_file (17)] -> [<unexpfun> rprojroot:::is_absolute_path (1)]
       30                   [<expfun> rprojroot::root_criterion (13)] -> [<unexpfun> rprojroot:::path (15)]
     Code
-      flow_view_deps(lifecycle::signal_experimental, max_depth = 1, include_formals = FALSE,
-      out = "data")
-    Output
-                   child_header external_ref child_style parent_header parent_style
-      1 signal_experimental (3)         NULL     trimmed            NA           NA
-                                       code
-      1 [<trimmed> signal_experimental (3)]
-    Code
-      flow_view_deps(lifecycle::signal_experimental, max_depth = 1, include_formals = TRUE,
-      out = "data")
-    Output
-                   child_header      external_ref child_style parent_header
-      1 signal_experimental (3) rlang::caller_env     trimmed            NA
-        parent_style                                                  code
-      1           NA [<trimmed> signal_experimental (3)|rlang::caller_env]
-    Code
       flow_view_deps(`%in%`, out = "data")
     Output
         child_header external_ref child_style parent_header parent_style
@@ -427,4 +411,21 @@
       1     %in% (1)         NULL      expfun            NA           NA
                        code
       1 [<expfun> %in% (1)]
+
+# flow_view_deps include_formals works
+
+    Code
+      flow_view_deps(fun_with_formals, include_formals = FALSE, out = "data")
+    Output
+                child_header external_ref child_style parent_header parent_style
+      1 fun_with_formals (1)         NULL      expfun            NA           NA
+                                   code
+      1 [<expfun> fun_with_formals (1)]
+    Code
+      flow_view_deps(fun_with_formals, include_formals = TRUE, out = "data")
+    Output
+                child_header external_ref child_style parent_header parent_style
+      1 fun_with_formals (1)  utils::head      expfun            NA           NA
+                                               code
+      1 [<expfun> fun_with_formals (1)|utils::head]
 
