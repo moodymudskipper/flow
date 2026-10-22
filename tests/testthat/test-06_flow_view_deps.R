@@ -21,14 +21,18 @@ test_that("flow_view_deps works", {
 
 test_that("flow_view_deps include_formals works", {
   # use a function we own so the snapshot doesn't depend on other packages' code
-  assign(
-    "fun_with_formals",
-    function(x, n = utils::head(x)) x,
-    envir = globalenv()
-  )
-  on.exit(rm("fun_with_formals", envir = globalenv()))
+  fun_with_formals <- function(x, n = utils::head(x)) x
   expect_snapshot({
     flow_view_deps(fun_with_formals, include_formals = FALSE, out = "data")
     flow_view_deps(fun_with_formals, include_formals = TRUE, out = "data")
+  })
+})
+
+test_that("flow_view_deps works on functions defined in a local env", {
+  callee <- function(x) x
+  caller <- function(x) callee(utils::head(x))
+  expect_snapshot({
+    flow_view_deps(caller, out = "data")
+    flow_view_deps(list(caller = caller), out = "data")
   })
 })

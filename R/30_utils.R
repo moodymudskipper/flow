@@ -294,11 +294,45 @@ get_binding_environment <- function(fun_name, env = parent.frame()) {
   }
 }
 
+# Functions can be defined outside of namespaces: in the global env, or in a
+# local env (e.g. in the body of a function or of a test). We label those with
+# "R_GlobalEnv" or with the env's address in place of a namespace name, and
+# keep the local envs here to find them back from their label.
+local_envs <- new.env(parent = emptyenv())
+
+register_local_env <- function(fun_name, env) {
+  if (grepl("::", fun_name) || !exists(fun_name, envir = env)) return(invisible())
+  bind_env <- get_binding_environment(fun_name, env)
+  if (environmentName(bind_env) != "") return(invisible())
+  label <- format(bind_env)
+  local_envs[[label]] <- bind_env
+  invisible(label)
+}
+
+local_env_label <- function(env) {
+  for (label in ls(local_envs)) {
+    if (identical(local_envs[[label]], env)) return(label)
+  }
+  ""
+}
+
+is_local_env_nm <- function(ns_nm) {
+  ns_nm == "R_GlobalEnv" || ns_nm %in% ls(local_envs)
+}
+
+ns_env <- function(ns_nm) {
+  if (ns_nm == "R_GlobalEnv") return(globalenv())
+  if (ns_nm %in% ls(local_envs)) return(local_envs[[ns_nm]])
+  asNamespace(ns_nm)
+}
+
 namespace_name <- function(x, ...) UseMethod("namespace_name")
 
 #' @export
 namespace_name.environment <- function(x, env, ...) {
   if(identical(x, globalenv())) return("R_GlobalEnv")
+  local_env_nm <- local_env_label(x)
+  if(nzchar(local_env_nm)) return(local_env_nm)
   if(!isNamespace(x)) stop("The provided environment isn't a namespace")
   sub("^namespace:", "", environmentName(x))
 }
@@ -339,9 +373,10 @@ namespace_name.character <- function(x, env, fallback_ns = NULL, fail_if_not_fou
   } else if (bind_env_nm == "base") {
     namespace_name <- "base"
   } else if (bind_env_nm == "") {
+    # the local env where the target function is defined, or else
     # an anonymous closure environment
     # FIXME: deal with those cleanly, should be hidden from diagram
-    namespace_name <- "" # capture.output(bind_env)
+    namespace_name <- local_env_label(bind_env)
   } else {
     namespace_name <- namespace_name(bind_env)
   }
@@ -350,7 +385,7 @@ namespace_name.character <- function(x, env, fallback_ns = NULL, fail_if_not_fou
 }
 
 get_namespace_exports <- function(ns) {
-  if (identical(ns, globalenv())) return(ls(globalenv()))
+  if (is.environment(ns) && !isNamespace(ns)) return(ls(ns))
   if(!file.exists("DESCRIPTION")) return(getNamespaceExports(ns))
   current_pkg <- sub("^Package: (.*)$", "\\1", readLines("DESCRIPTION")[[1]])
   if(is.environment(ns)) ns <- sub("^namespace:", "", environmentName(ns))
