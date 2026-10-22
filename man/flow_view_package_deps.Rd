@@ -4,10 +4,21 @@
 \alias{flow_view_package_deps}
 \title{View package dependencies as a flow diagram}
 \usage{
-flow_view_package_deps(pkg, demote_nodep = FALSE, base = FALSE, out = NULL)
+flow_view_package_deps(
+  pkg,
+  db = NULL,
+  demote_nodep = FALSE,
+  base = FALSE,
+  out = NULL
+)
 }
 \arguments{
 \item{pkg}{Character vector of package names to analyze}
+
+\item{db}{A matrix of package metadata as returned by
+\code{\link[utils:available.packages]{utils::available.packages()}}, passed to \code{\link[tools:package_dependencies]{tools::package_dependencies()}}.
+By default the package index of the repositories set in
+\code{getOption("repos")} is used, which requires an internet connection.}
 
 \item{demote_nodep}{Logical. If TRUE, packages with no dependencies are shown
 with a "+" prefix in the diagram}
@@ -16,9 +27,8 @@ with a "+" prefix in the diagram}
 the dependency graph}
 
 \item{out}{Output specification. If NULL, returns a flow_diagram object.
-Can be "html", "png", "pdf", etc. for file output}
-
-\item{engine}{Diagram engine to use ("nomnoml" or "plantuml")}
+Can be "html", "png", "pdf", etc. for file output, or "data" to return
+the dependency data}
 }
 \value{
 A flow_diagram object containing the dependency graph, or the
@@ -32,15 +42,24 @@ The function recursively resolves package dependencies and generates
 a nomnoml diagram.
 }
 \examples{
-# View dependencies for a single package
-flow_view_package_deps("dplyr")
-
-# View dependencies for multiple packages
-flow_view_package_deps(c("dplyr", "ggplot2"))
+# a toy package database, to run offline
+db <- cbind(
+  Package = c("pkgA", "pkgB", "pkgC"),
+  Depends = c("R (>= 4.0)", NA, NA),
+  Imports = c("pkgB, utils", "pkgC", NA),
+  LinkingTo = NA
+)
+flow_view_package_deps("pkgA", db = db)
 
 # Include base packages
-flow_view_package_deps("dplyr", base = TRUE)
+flow_view_package_deps("pkgA", db = db, base = TRUE)
 
-# Show packages with no dependencies
-flow_view_package_deps("dplyr", demote_nodep = TRUE)
+# Show packages with no dependencies inside their dependent's box
+flow_view_package_deps("pkgA", db = db, demote_nodep = TRUE)
+
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+# Use the CRAN package index
+flow_view_package_deps("dplyr")
+flow_view_package_deps(c("dplyr", "ggplot2"))
+\dontshow{\}) # examplesIf}
 }

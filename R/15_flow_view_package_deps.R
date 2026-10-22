@@ -8,35 +8,50 @@
 #' a nomnoml diagram.
 #'
 #' @param pkg Character vector of package names to analyze
+#' @param db A matrix of package metadata as returned by
+#'   [utils::available.packages()], passed to [tools::package_dependencies()].
+#'   By default the package index of the repositories set in
+#'   `getOption("repos")` is used, which requires an internet connection.
 #' @param demote_nodep Logical. If TRUE, packages with no dependencies are shown
 #'   with a "+" prefix in the diagram
 #' @param base Logical. If FALSE (default), base packages are excluded from
 #'   the dependency graph
 #' @param out Output specification. If NULL, returns a flow_diagram object.
-#'   Can be "html", "png", "pdf", etc. for file output
-#' @param engine Diagram engine to use ("nomnoml" or "plantuml")
+#'   Can be "html", "png", "pdf", etc. for file output, or "data" to return
+#'   the dependency data
 #'
 #' @return A flow_diagram object containing the dependency graph, or the
 #'   output path if out is specified
 #'
 #' @export
 #' @examples
-#' # View dependencies for a single package
-#' flow_view_package_deps("dplyr")
-#' 
-#' # View dependencies for multiple packages
-#' flow_view_package_deps(c("dplyr", "ggplot2"))
-#' 
+#' # a toy package database, to run offline
+#' db <- cbind(
+#'   Package = c("pkgA", "pkgB", "pkgC"),
+#'   Depends = c("R (>= 4.0)", NA, NA),
+#'   Imports = c("pkgB, utils", "pkgC", NA),
+#'   LinkingTo = NA
+#' )
+#' flow_view_package_deps("pkgA", db = db)
+#'
 #' # Include base packages
-#' flow_view_package_deps("dplyr", base = TRUE)
-#' 
-#' # Show packages with no dependencies
-#' flow_view_package_deps("dplyr", demote_nodep = TRUE)
-flow_view_package_deps <- function(pkg, demote_nodep = FALSE, base = FALSE, 
+#' flow_view_package_deps("pkgA", db = db, base = TRUE)
+#'
+#' # Show packages with no dependencies inside their dependent's box
+#' flow_view_package_deps("pkgA", db = db, demote_nodep = TRUE)
+#'
+#' @examplesIf interactive()
+#' # Use the CRAN package index
+#' flow_view_package_deps("dplyr")
+#' flow_view_package_deps(c("dplyr", "ggplot2"))
+flow_view_package_deps <- function(pkg, db = NULL, demote_nodep = FALSE, base = FALSE,
                                   out = NULL) {
-  
+
+  # fetch the package index once rather than at every iteration
+  if (is.null(db)) db <- utils::available.packages()
+
   # Initialize dependencies data frame
-  all_deps <- tools::package_dependencies(pkg)
+  all_deps <- tools::package_dependencies(pkg, db = db)
   deps <- data.frame(
     pkg = rep(names(all_deps), lengths(all_deps)),
     dep = unlist(all_deps, use.names = FALSE)
@@ -45,7 +60,7 @@ flow_view_package_deps <- function(pkg, demote_nodep = FALSE, base = FALSE,
   # Recursively resolve dependencies
   todo <- setdiff(deps$dep, c(deps$pkg, NA))
   while (length(todo)) {
-    dep <- tools::package_dependencies(todo[[1]])[[1]]
+    dep <- tools::package_dependencies(todo[[1]], db = db)[[1]]
     if (!length(dep)) dep <- NA
     new <- data.frame(pkg = todo[[1]], dep = dep)
     deps <- rbind(deps, new)
@@ -54,8 +69,7 @@ flow_view_package_deps <- function(pkg, demote_nodep = FALSE, base = FALSE,
   
   # Filter out base packages if requested
   if (!base) {
-    base_pkgs <- rownames(installed.packages(priority = c("base")))
-    deps <- subset(deps, ! dep %in% base_pkgs & ! pkg %in% base_pkgs)
+    deps <- deps[!deps$dep %in% base_packages & !deps$pkg %in% base_packages, ]
   }
   
   # Remove NA dependencies
@@ -64,8 +78,11 @@ flow_view_package_deps <- function(pkg, demote_nodep = FALSE, base = FALSE,
   # Handle packages with no dependencies if demote_nodep is TRUE
   if (demote_nodep) {
     nodep_pkgs <- setdiff(deps$dep, deps$pkg)
-    deps2 <- subset(deps, dep %in% nodep_pkgs) |> 
-      aggregate(dep ~ pkg, FUN = function(x) paste("+", x, collapse = "\n"))
+    deps2 <- aggregate(
+      dep ~ pkg,
+      data = deps[deps$dep %in% nodep_pkgs, ],
+      FUN = function(x) paste("+", x, collapse = "\n")
+    )
     deps2$pkg2 <- paste0(deps2$pkg, "\n", deps2$dep)
     deps$pkg2 <- deps2$pkg2[match(deps$pkg, deps2$pkg)]
     deps$dep2 <- deps2$pkg2[match(deps$dep, deps2$pkg)]
@@ -123,14 +140,20 @@ flow_view_package_deps <- function(pkg, demote_nodep = FALSE, base = FALSE,
   # Create flow diagram
   if (is.null(out)) {
     widget <- nomnoml::nomnoml(code)
-    return(flow:::as_flow_diagram(widget, list(nodes = deps), code))
+    return(as_flow_diagram(widget, list(nodes = deps), code))
   } else {
     # Use existing save_nomnoml infrastructure
     out <- save_nomnoml(code, out)
     if (inherits(out, "htmlwidget")) {
-      return(flow:::as_flow_diagram(out, list(nodes = deps), code))
+      return(as_flow_diagram(out, list(nodes = deps), code))
     } else {
       return(invisible(out))
     }
   }
 }
+
+# packages with priority "base", hardcoded to avoid calling installed.packages()
+base_packages <- c(
+  "base", "compiler", "datasets", "graphics", "grDevices", "grid", "methods",
+  "parallel", "splines", "stats", "stats4", "tcltk", "tools", "utils"
+)
