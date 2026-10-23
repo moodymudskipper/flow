@@ -1,6 +1,6 @@
 Package: flow
 Title: View and Browse Code Using Flow Diagrams
-Version: 0.2.0.9000
+Version: 0.3.0
 Authors@R: 
     person("Antoine", "Fabri", , "antoine.fabri@gmail.com", role = c("aut", "cre"))
 Description: Visualize as flow diagrams the logic of functions,

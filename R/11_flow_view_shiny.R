@@ -18,8 +18,10 @@
 #' @export
 #' @return A flow diagram object.
 #' @examples
+#' \donttest{
 #' if (requireNamespace("esquisse", quietly = TRUE)) {
 #'   flow_view_shiny(esquisse::esquisser, show_imports = "none")
+#' }
 #' }
 flow_view_shiny <- function(
   fun,
