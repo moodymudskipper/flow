@@ -54,10 +54,16 @@ flow_view_deps <- function(
   fun_lng <- substitute(fun)
   call_env <- parent.frame()
 
+  # functions defined in a local env are handled like those of the global env
+  on.exit(rm(list = ls(local_envs), envir = local_envs), add = TRUE)
+
   ## Re-export handling (made with Cursor)
   rr <- resolve_reexport_call(fun_lng, call_env)
   fun_lng <- rr$call
   if (isTRUE(rr$changed)) fun <- rr$value
+
+  target_fun_names <- if (is.list(fun)) names(fun) else deparse(fun_lng)
+  for (target_fun_name in target_fun_names) register_local_env(target_fun_name, call_env)
 
   if (is.list(fun)) {
     objs <- Map(flow_view_deps_df, names(fun), fun, MoreArgs = list(trim, promote, demote, hide, lines, default_env = call_env))
@@ -188,11 +194,7 @@ flow_view_deps_df <- function(target_fun_name, target_fun, trim, promote, demote
   # make a data.frame with every fun from every namespace
 
   fallback_ns_nm <- namespace_name(target_fun_name, default_env)
-  if(fallback_ns_nm == "R_GlobalEnv") {
-    fallback_ns <- globalenv()
-  } else {
-    fallback_ns <- asNamespace(fallback_ns_nm)
-  }
+  fallback_ns <- ns_env(fallback_ns_nm)
   edit0 <- list(trim = trim, promote = promote, demote = demote, hide = hide)
   patterns <- lapply(edit0, function(x) x[names(x) == "pattern"])
   edit <- lapply(edit0, function(x) if(is.null(names(x))) x else x[names(x) == ""])
@@ -272,7 +274,7 @@ flow_view_deps_df <- function(target_fun_name, target_fun, trim, promote, demote
 }
 
 deps <- function(pkg) {
-  if (pkg == "R_GlobalEnv") return(character())
+  if (is_local_env_nm(pkg)) return(character())
   desc <- read.dcf(system.file("DESCRIPTION", package = pkg))
   desc <- desc[,intersect(c("Imports", "Depends"), colnames(desc))]
   setdiff(trimws(unique(unlist(
@@ -281,11 +283,7 @@ deps <- function(pkg) {
 }
 
 get_ns_obj_df <- function(ns_nm, lines) {
-  if (isTRUE(ns_nm == "R_GlobalEnv")) {
-    ns <- globalenv()
-  } else {
-    ns <- asNamespace(ns_nm)
-  }
+  ns <- ns_env(ns_nm)
 
   objs <- data.frame(
     ns_nm = ns_nm,
@@ -309,8 +307,8 @@ get_ns_obj_df <- function(ns_nm, lines) {
 
 get_dependency_df <- function(row, objs, include_formals) {
   ns_nm <- hide <- NULL # for notes
-  if(isTRUE(row$ns_nm == "R_GlobalEnv")) {
-    obj <- get(row$nm, globalenv())
+  if(is_local_env_nm(row$ns_nm)) {
+    obj <- get(row$nm, ns_env(row$ns_nm))
   } else {
     obj <- getFromNamespace(row$nm, row$ns_nm)
   }

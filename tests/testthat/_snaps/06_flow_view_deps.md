@@ -429,3 +429,24 @@
                                                code
       1 [<expfun> fun_with_formals (1)|utils::head]
 
+# flow_view_deps works on functions defined in a local env
+
+    Code
+      flow_view_deps(caller, out = "data")
+    Output
+        child_header external_ref child_style parent_header parent_style
+      1   caller (1)  utils::head      expfun            NA           NA
+      2   callee (1)         NULL      expfun    caller (1)       expfun
+                                                  code
+      1              [<expfun> caller (1)|utils::head]
+      2 [<expfun> caller (1)] -> [<expfun> callee (1)]
+    Code
+      flow_view_deps(list(caller = caller), out = "data")
+    Output
+        child_header external_ref child_style parent_header parent_style
+      1   caller (1)  utils::head      expfun            NA           NA
+      2   callee (1)         NULL      expfun    caller (1)       expfun
+                                                  code
+      1              [<expfun> caller (1)|utils::head]
+      2 [<expfun> caller (1)] -> [<expfun> callee (1)]
+
