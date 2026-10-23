@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">flow</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
       </span>
     </div>
 
@@ -79,8 +79,19 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="development version" id="flow-development-version">flow (development version)<a class="anchor" aria-label="anchor" href="#flow-development-version"></a></h2>
-</div>
+<h2 class="page-header" data-toc-text="0.3.0" id="flow-030">flow 0.3.0<a class="anchor" aria-label="anchor" href="#flow-030"></a></h2>
+<ul><li>New function: <code><a href="../reference/flow_view_package_deps.html">flow_view_package_deps()</a></code> draws the recursive dependency graph of packages, from the CRAN package index or from a custom <code>db</code> (<a href="https://github.com/moodymudskipper/flow/issues/227" class="external-link">#227</a>)</li>
+<li>
+<code><a href="../reference/flow_view_deps.html">flow_view_deps()</a></code> and <code><a href="../reference/flow_view.html">flow_view()</a></code> show re-exported functions under their original package, e.g. <code><a href="https://tibble.tidyverse.org/reference/lst.html" class="external-link">dplyr::lst</a></code> is shown as <code><a href="https://tibble.tidyverse.org/reference/lst.html" class="external-link">tibble::lst</a></code> and <code><a href="https://rdrr.io/r/methods/methodUtilities.html" class="external-link">methods::functionBody</a></code> as <code><a href="https://rdrr.io/r/base/body.html" class="external-link">base::body</a></code> (<a href="https://github.com/moodymudskipper/flow/issues/163" class="external-link">#163</a>, <a href="https://github.com/moodymudskipper/flow/issues/215" class="external-link">#215</a>)</li>
+<li>
+<code><a href="../reference/flow_view_deps.html">flow_view_deps()</a></code> works on functions defined in the global env (<a href="https://github.com/moodymudskipper/flow/issues/181" class="external-link">#181</a>) and in local envs, e.g. in the body of a function or of a test (<a href="https://github.com/moodymudskipper/flow/issues/228" class="external-link">#228</a>)</li>
+<li>
+<code><a href="../reference/flow_view_source_calls.html">flow_view_source_calls()</a></code> supports <code>sourceDirectory()</code> calls (<a href="https://github.com/moodymudskipper/flow/issues/158" class="external-link">#158</a>)</li>
+<li>‘webshot2’ is now used by default to export diagrams to png or pdf, set <code>options(flow.webshot2 = FALSE)</code> to use ‘webshot’ (<a href="https://github.com/moodymudskipper/flow/issues/179" class="external-link">#179</a>)</li>
+<li>
+<code><a href="../reference/flow_view_deps.html">flow_view_deps()</a></code>, <code><a href="../reference/flow_view_vars.html">flow_view_vars()</a></code> and <code><a href="../reference/flow_view_uses.html">flow_view_uses()</a></code> respect the <code>#direction: right</code> directive again with recent versions of ‘nomnoml’ (<a href="https://github.com/moodymudskipper/flow/issues/169" class="external-link">#169</a>)</li>
+<li>Fixed Rd NOTEs about lost braces</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.0" id="flow-020">flow 0.2.0<small>2023-06-06</small><a class="anchor" aria-label="anchor" href="#flow-020"></a></h2>
 <ul><li>The LICENSE was switched from GPL-3 to MIT</li>
