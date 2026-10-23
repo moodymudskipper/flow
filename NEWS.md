@@ -1,4 +1,18 @@
-# flow (development version)
+# flow 0.3.0
+
+* New function: `flow_view_package_deps()` draws the recursive dependency graph
+  of packages, from the CRAN package index or from a custom `db` (#227)
+* `flow_view_deps()` and `flow_view()` show re-exported functions under their
+  original package, e.g. `dplyr::lst` is shown as `tibble::lst` and
+  `methods::functionBody` as `base::body` (#163, #215)
+* `flow_view_deps()` works on functions defined in the global env (#181) and in
+  local envs, e.g. in the body of a function or of a test (#228)
+* `flow_view_source_calls()` supports `sourceDirectory()` calls (#158)
+* 'webshot2' is now used by default to export diagrams to png or pdf, set
+  `options(flow.webshot2 = FALSE)` to use 'webshot' (#179)
+* `flow_view_deps()`, `flow_view_vars()` and `flow_view_uses()` respect the
+  `#direction: right` directive again with recent versions of 'nomnoml' (#169)
+* Fixed Rd NOTEs about lost braces
 
 # flow 0.2.0
 

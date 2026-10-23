@@ -59,7 +59,9 @@ argument. For a more general way of displaying all dependencies (not focused on 
 use \code{flow_view_deps()}.
 }
 \examples{
+\donttest{
 if (requireNamespace("esquisse", quietly = TRUE)) {
   flow_view_shiny(esquisse::esquisser, show_imports = "none")
+}
 }
 }
